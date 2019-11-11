@@ -14,13 +14,14 @@ class CreateMaterialsTable extends Migration
     public function up()
     {
         Schema::create('materials', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->increments('id_material');
+            $table->string('kode');
             $table->string('name');
-            $table->string('unit');
             $table->string('type');
-            $table->string('spesification');
-            $table->integer('coefficient');
-            $table->string('conversion');
+            $table->string('spesification_1');
+            $table->string('spesification_2');
+            $table->double('price');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

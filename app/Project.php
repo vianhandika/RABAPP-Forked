@@ -9,11 +9,21 @@ class Project extends Model
 {
     //
     use SoftDeletes;
-    
+
+    protected $table = 'projects';
+    protected $primaryKey = 'id_project';
+    public $timestamp = true;
+
     protected $fillable = [
-        'name', 'date','address','contact' 
+        'kode','name', 'address', 'owner','date','no_telp','phone', 'type', 'nominal'
     ];
+    
     protected $dates = [
         'created_at', 'deleted_at','updated_at'
     ];
+
+    public function rab()
+    {
+        return $this->hasMany('App\RAB','id_rab');
+    }
 }

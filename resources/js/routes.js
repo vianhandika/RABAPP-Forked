@@ -4,6 +4,10 @@ import Login from './components/LoginComponent'
 import Dashboard from './components/DashboardComponent'
 import Project from './components/ProjectComponent'
 import Job from './components/JobComponent'
+import Material from './components/MaterialsComponent'
+import Transaction from './components/RABComponent'
+import AHS from './components/AHSComponent'
+import Home from './components/HomeComponent'
 import VueRouter from 'vue-router';
 
 export const routes = [
@@ -26,6 +30,26 @@ export const routes = [
         path: '/job',
         name: 'job',
         component: Job,
+      },
+      {
+        path: '/materials',
+        name: 'materials',
+        component: Material,
+      },
+      {
+        path: '/transaction',
+        name: 'transaction',
+        component: Transaction,
+      },
+      {
+        path: '/analisa',
+        name: 'analisa',
+        component: AHS
+      },
+      {
+        path: '/home',
+        name: 'home',
+        component: Home
       }
     ]
   },

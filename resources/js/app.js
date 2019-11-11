@@ -12,7 +12,7 @@ import Vuetify from 'vuetify';
 // import auth from './service/Auth'
 // import store from './store'
 import axios from 'axios';
-//import Vuelidate from 'vuelidate';
+import Vuelidate from 'vuelidate';
 //import http from './service/Http'
 import { routes } from './routes'
 
@@ -28,7 +28,7 @@ import App from './components/App'
 //setupComponents(Vue);
 Vue.use(VueRouter);
 Vue.use(Vuetify);
-//Vue.use(Vuelidate);
+Vue.use(Vuelidate);
 // Vue.component('apexchart', VueApexCharts)
 
 const router = new VueRouter({

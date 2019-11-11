@@ -1,14 +1,14 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="job"
+    :items="material"
     :search="search"
     sort-by="date"
     class="elevation-1"
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>Task</v-toolbar-title>
+        <v-toolbar-title>Materials/Labor</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
@@ -34,7 +34,7 @@
           </template>
           <v-card>
             <v-card-title>
-              <span class="headline">New Task</span>
+              <span class="headline">New Materials/Labor</span>
             </v-card-title>
             
           <Vform>
@@ -42,8 +42,8 @@
               <v-layout>
                 <v-flex>
                   <v-text-field 
-                    v-model="Job.kode" 
-                    label="ID Task"
+                    v-model="Material.kode" 
+                    label="ID Material"
                   >
                   </v-text-field>
                 </v-flex>
@@ -52,7 +52,7 @@
               <v-layout>
                   <v-flex>
                     <v-text-field 
-                      v-model="Job.name" 
+                      v-model="Material.name" 
                       label="Name"
                       required
                     >
@@ -60,23 +60,48 @@
                   </v-flex>
                 </v-layout>
 
-                <v-select
-                  v-model="Job.satuan"
-                  v-validate="'required'"
-                  :items="items"
-                  label="Satuan"
-                  required
-                ></v-select>
+                <v-layout>
+                    <v-flex>
+                        <v-text-field
+                        v-model="Material.type"
+                        label="Type"
+                        required
+                        >
+                        </v-text-field>
+                    </v-flex>
+                </v-layout>
 
                 <v-layout>
                   <v-flex>
                     <v-text-field 
-                      v-model="Job.details" 
-                      label="Spesification"
+                      v-model="Material.spesification_1" 
+                      label="Spesification I"
                       required
                     >
                       </v-text-field>
                   </v-flex>
+                </v-layout>
+
+                <v-layout>
+                  <v-flex>
+                    <v-text-field 
+                      v-model="Material.spesification_2" 
+                      label="Spesification II"
+                      required
+                    >
+                      </v-text-field>
+                  </v-flex>
+                </v-layout>
+
+                <v-layout>
+                    <v-flex>
+                        <v-text-field 
+                        v-model="Material.price"
+                        label="Price"
+                        required
+                        >
+                        </v-text-field>
+                    </v-flex>
                 </v-layout>
 
             </v-card-text>
@@ -108,7 +133,7 @@
         </template>
           <v-card>
             <v-card-title>
-              <span class="headline">Edit Task</span>
+              <span class="headline">Edit Material/Labor</span>
             </v-card-title>
           
             <Vform>
@@ -116,8 +141,8 @@
                 <v-layout>
                   <v-flex>
                     <v-text-field 
-                      v-model="Job.kode" 
-                      label="ID Task"
+                      v-model="Material.kode" 
+                      label="ID Material"
                     >
                     </v-text-field>
                   </v-flex>
@@ -126,7 +151,7 @@
                 <v-layout>
                   <v-flex>
                     <v-text-field 
-                      v-model="Job.name" 
+                      v-model="Material.name" 
                       label="Name"
                       required
                     >
@@ -134,23 +159,48 @@
                   </v-flex>
                 </v-layout>
 
-                <v-select
-                  v-model="Job.satuan"
-                  v-validate="'required'"
-                  :items="items"
-                  label="Satuan"
-                  required
-                ></v-select>
+                <v-layout>
+                    <v-flex>
+                        <v-text-field
+                        v-model="Material.type"
+                        label="Type"
+                        required
+                        >
+                        </v-text-field>
+                    </v-flex>
+                </v-layout>
 
                 <v-layout>
                   <v-flex>
                     <v-text-field 
-                      v-model="Job.details" 
-                      label="Spesification"
+                      v-model="Material.spesification_1" 
+                      label="Spesification I"
                       required
                     >
                       </v-text-field>
                   </v-flex>
+                </v-layout>
+
+                <v-layout>
+                  <v-flex>
+                    <v-text-field 
+                      v-model="Material.spesification_2" 
+                      label="Spesification II"
+                      required
+                    >
+                      </v-text-field>
+                  </v-flex>
+                </v-layout>
+
+                <v-layout>
+                    <v-flex>
+                        <v-text-field 
+                        v-model="Material.price"
+                        label="Price"
+                        required
+                        >
+                        </v-text-field>
+                    </v-flex>
                 </v-layout>
 
               </v-card-text>
@@ -159,7 +209,7 @@
             <v-card-actions>
               <div class="flex-grow-1"></div>
               <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Job.id_job)">Save</v-btn>
+              <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Material.id_material)">Save</v-btn>
             </v-card-actions>
           </v-card>
       </v-dialog>
@@ -177,21 +227,20 @@
         </template>
             <v-card>
               <v-card-title class="headline">Confirmation</v-card-title>
-                <v-card-text>Are you sure want to delete this task?</v-card-text>
+                <v-card-text>Are you sure want to delete this material/labor?</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Job.id_job)">Yes</v-btn>
+                <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Material.id_material)">Yes</v-btn>
                 <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
               </v-card-actions>
             </v-card>
       </v-dialog>
     </template>
-
   </v-data-table>
 </template>
 
 <script>
-import Controller from './../service/Job'
+import Controller from './../service/Material'
 
   export default {
     data: () => ({
@@ -201,46 +250,64 @@ import Controller from './../service/Job'
       menu: false,
       select: null,
       search:'',
-      name: '',
-      satuan: '',
-      details: '',
+      id_material: '',
       kode:'',
-      job: [],
-      Job: {
-        kode:'',
+      name:'',
+      type: '',
+      price: 0,
+      spesification_1: '',
+      spesification_2: '',
+      material: [],
+      Material: {
+        id_material: '',
+        kode: '',
         name:'',
-        satuan: '',
-        details: '',
-        id_job: '',
+        type: '',
+        price: 0,
+        spesification_1: '',
+        spesification_2: '',
       },
       items: [
         'm',
         'm2',
         'm3',
-        'unit',
-        'ls'
+        'btg',
+        'bh',
+        'kg',
+        'Oh'
       ],
       headers: [
         {
-          text : 'ID',
+          text: 'ID',
+          align: 'left',
           sortable: false,
-          value : 'kode'
+          value: 'kode',
         },
         {
-          text: 'Item',
+          text: 'Name',
           align: 'left',
           sortable: false,
           value: 'name',
         },
         { 
           sortable: false,
-          text: 'Satuan', 
-          value: 'satuan'
+          text: 'Type', 
+          value: 'type'
+        },
+        {
+          sortable: false,
+          text: 'Spesification I',
+          value: 'spesification_1'
+        },
+        {
+          sortable: false,
+          text: 'Spesification II',
+          value: 'spesification_2'
         },
         { 
           sortable: false,
-          text: 'Spesification', 
-          value: 'details'
+          text: 'Price', 
+          value: 'price'
         },
         { 
           text: 'Actions', 
@@ -253,16 +320,16 @@ import Controller from './../service/Job'
       this.getallItem()
     },
     computed: {
-      filteredJob:function(){
-        return this.job.filter((jobData)=>{
-          jobData.name.match(this.search)
+      filteredMaterials:function(){
+        return this.material.filter((materialData)=>{
+          materialData.name.match(this.search);
         });
       }
     },
     methods: {
       async getallItem(){
         try{
-          this.job = (await Controller.getallItem()).data
+          this.material = (await Controller.getallItem()).data
         }catch(err){
           console.log(err)
         }
@@ -270,10 +337,14 @@ import Controller from './../service/Job'
       async addItem(){
         try{
           const payload = {
-            kode        : this.Job.kode,
-            name        : this.Job.name,
-            satuan      : this.Job.satuan,
-            details     : this.Job.details,
+            kode            : this.Material.kode,
+            name            : this.Material.name,
+            price           : this.Material.price,
+            type            : this.Material.type,
+            coefficient     : this.Material.coefficient,
+            sat_conversion  : this.Material.sat_conversion,
+            spesification_1 : this.Material.spesification_1,
+            spesification_2 : this.Material.spesification_2
           }
           await Controller.addItem(payload)
           this.getallItem()
@@ -286,10 +357,14 @@ import Controller from './../service/Job'
       async updateItem(id){
         try{
             const payload = {
-              kode        : this.Job.kode,
-              name        : this.Job.name,
-              satuan      : this.Job.satuan,
-              details     : this.Job.details,
+                kode            : this.Material.kode,
+                name            : this.Material.name,
+                price           : this.Material.price,
+                type            : this.Material.type,
+                coefficient     : this.Material.coefficient,
+                sat_conversion  : this.Material.sat_conversion,
+                spesification_1 : this.Material.spesification_1,
+                spesification_2 : this.Material.spesification_2
             } 
             await Controller.updateItem(payload,id)
             this.getallItem()
@@ -308,13 +383,17 @@ import Controller from './../service/Job'
         }
       },
       itemHandler(item){
-        this.Job = item
+        this.Material = item
       },
       refresh(){
-        this.Job.kode = '';
-        this.Job.name     = '';
-        this.Job.details  = '';
-        this.Job.satuan  = '';
+        this.Material.kode     = '';
+        this.Material.name     = '';
+        this.Material.price  = 0;
+        this.Material.type = '',
+        this.Material.coefficient = 0,
+        this.Material.sat_conversion= '',
+        this.Material.spesification_1 = ''
+        this.Material.spesification_2 = ''
       },
       close () {
         this.dialog = false
