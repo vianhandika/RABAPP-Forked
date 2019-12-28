@@ -30,6 +30,18 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item @click="store">
+          <v-list-item-action>
+            <v-btn icon>
+              <v-icon>store</v-icon>
+            </v-btn>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>Store</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item @click="job">
           <v-list-item-action>
             <v-btn icon>
@@ -151,7 +163,10 @@
         this.$router.push({name: 'analisa'})
       },
       home(){
-        this.$router.push({name: 'analisa'})
+        this.$router.push({name: 'home'})
+      },
+      store(){
+        this.$router.push({name: 'store'})
       }
     }
   }

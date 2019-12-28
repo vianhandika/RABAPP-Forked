@@ -13,7 +13,7 @@ class Job extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'kode','name','satuan','details' 
+        'kode','name','satuan','status','details' 
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'

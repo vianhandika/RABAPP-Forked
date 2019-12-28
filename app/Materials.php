@@ -14,9 +14,14 @@ class Materials extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'kode','name', 'type','spesification_1', 'spesification_2','price' 
+        'id_store', 'kode', 'name', 'type', 'spesification', 'price','satuan',
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'
     ];
+
+    public function stores()
+    {
+        return $this->belongsTo('App\Store','id_store');
+    }
 }

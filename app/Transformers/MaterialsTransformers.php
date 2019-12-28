@@ -14,9 +14,11 @@ class MaterialsTransformers extends TransformerAbstract
             'id_material'       => $material->id_material,
             'name'              => $material->name,
             'type'              => $material->type,
-            'spesification_1'   => $material->spesification_1,
-            'spesification_2'   => $material->spesification_2,
+            'satuan'            => $material->satuan,
+            'status'            => $material->status,
             'price'             => $material->price,
+            'spesification'     => $material->spesification,
+            'store'             => $material->stores->name,
         ];
     }
 }

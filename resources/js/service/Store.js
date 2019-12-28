@@ -1,19 +1,6 @@
 import Http from '../http'
 
 export default {
-    getSatuan(){
-        return new Promise((resolve, reject) => {
-            
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/satuans', successCallback, errorCallback)
-        })
-    },
     getItem(){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
@@ -25,7 +12,7 @@ export default {
                 reject(err)
             }
 
-            Http.get('/api/materials/show/'+id, payload, successCallback, errorCallback)
+            Http.get('/api/stores/show/'+id, payload, successCallback, errorCallback)
         })
     },
     getallItem(){
@@ -38,7 +25,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/materials', successCallback, errorCallback)
+            Http.get('/api/stores', successCallback, errorCallback)
         })
     },
     addItem(payload) {
@@ -50,19 +37,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.post('/api/materials/store', payload, successCallback, errorCallback)
-        })
-    },
-    addSatuan(payload) {
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.post('/api/satuans/store', payload, successCallback, errorCallback)
+            Http.post('/api/stores/store', payload, successCallback, errorCallback)
         })
     },
     updateItem(payload,id){
@@ -76,7 +51,7 @@ export default {
                 reject(err)
             }
 
-            Http.patch('/api/materials/update/'+id, payload, successCallback, errorCallback)
+            Http.patch('/api/stores/update/'+id, payload, successCallback, errorCallback)
         })
     },
     deleteItem(id){
@@ -88,7 +63,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.delete('/api/materials/delete/'+id, successCallback, errorCallback)
+            Http.delete('/api/stores/delete/'+id, successCallback, errorCallback)
         })
     }
 }

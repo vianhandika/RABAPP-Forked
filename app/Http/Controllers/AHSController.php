@@ -54,14 +54,14 @@ class AHSController extends RestController
         {
             if(AHSDetails::where('id_ahs',$id)->get() != null)
                 $delete = AHSDetails::where('id_ahs',$id)->delete();
-                $ahs->total = 0;
+                //$ahs->total = 0;
         }
         
         $detail_ahs = $request->get('detail');
     
         $ahs=AHS::findOrFail($id);
         $ahs->kode      = $request->get('kode');
-        $ahs->id_job    = $request->get('id_job');
+        //$ahs->id_job    = $request->get('id_job');
         $ahs->total     = $request->get('total');
         $ahs->save();
 
@@ -90,5 +90,11 @@ class AHSController extends RestController
             'status' => $status,
             'message' => $status ? 'Deleted' : 'Error Delete'
         ]);
+    }
+
+    public function showbyID($id)
+    {
+        $ahs = AHS::findOrFail($id);
+        return response()->json($ahs,200);
     }
 }

@@ -1,12 +1,6 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="ahs"
-    :search="search"
-    sort-by="date"
-    class="elevation-1"
-  >
-    <template v-slot:top>
+  <div>
+    <template>
       <v-toolbar flat color="white">
         <v-toolbar-title>AHS</v-toolbar-title>
         <v-divider
@@ -173,214 +167,467 @@
         </v-dialog>
       </v-toolbar>
     </template>
-    
-    <template v-slot:item.action="{ item }">
-      <v-dialog v-model="dialog3" max-width="500px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            class="mr-2"
-            color="green"
-            @click="itemHandler2(item)"
-            v-on="on"
+
+    <v-dialog v-model="dialog3" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Edit AHS</span>
+        </v-card-title>
+      
+        <Vform>
+          <v-card-text>
+            <v-layout>
+            <v-flex>
+              <v-text-field 
+                v-model="AHS.kode" 
+                label="ID AHS"
+              >
+              </v-text-field>
+            </v-flex>
+          </v-layout>
+
+            <v-layout>
+                <v-select
+                    v-model="AHS.id_job"
+                    label="Task"
+                    :items="job"
+                    item-text="name"
+                    item-value="id_job"
+                    disabled
+                    :return-object="false"
+                ></v-select>
+            </v-layout>
+
+          <VBtn
+            depressed
+            color="primary"
+            @click="tambah=true"
           >
-            edit
-          </v-icon>
-        </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">Edit AHS</span>
-            </v-card-title>
-          
-            <Vform>
-              <v-card-text>
-                <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="AHS.kode" 
-                    label="ID AHS"
-                  >
-                  </v-text-field>
-                </v-flex>
+          Add Material
+          </VBtn>
+
+          <v-flex class="text-md-center" sm12 mt-2>
+              <VCard
+                v-for="detail in details"
+                :key="detail.id_material"
+              > 
+                <v-card-title>
+                <v-btn 
+                    icon
+                    color="red"
+                    dark @click="deleteList(detail.id_material)"
+                    >
+                    <v-icon>remove_circle</v-icon>
+                </v-btn>
+                  <v-flex>
+                    <v-select
+                      label="Material" 
+                      class="pa-1"
+                      v-model="detail.id_material"
+                      item-text="name"
+                      item-value="id_material"
+                      :items="material"
+                      @change="getSelectedIndex"
+                      required 
+                    ></v-select>
+                  </v-flex>
+                  
+                  <v-flex xs12 sm4 md4>
+                      <v-text-field
+                      label="Coefficient*" 
+                      class="pa-1"
+                      v-model="detail.coefficient"
+                      required
+                      ></v-text-field>
+                    </v-flex>
+                </v-card-title>
+              </Vcard>
+            </v-flex>
+            
+              <V-layout v-if="tambah">
+                <VCard> 
+                <v-card-title>
+                <v-btn 
+                    icon
+                    color="red"
+                    dark @click="tambah=false"
+                    >
+                    <v-icon>remove_circle</v-icon>
+                </v-btn>
+                <v-btn 
+                    icon
+                    color="green"
+                    dark @click="addList()"
+                    >
+                    <v-icon>add_circle</v-icon>
+                </v-btn>
+                  <v-flex>
+                    <v-select
+                      label="Material" 
+                      class="pa-1"
+                      v-model="Material.id_material"
+                      item-text="name"
+                      item-value="id_material"
+                      :return-object="false"
+                      :items="material"
+                      required 
+                      @change="getSelectedIndex"
+                    ></v-select>
+                  </v-flex>
+                  
+                    <v-flex xs12 sm4 md4>
+                      <v-text-field
+                      label="Coefficient*" 
+                      class="pa-1"
+                      v-model="ahs_details.coefficient"
+                      required
+                      ></v-text-field>
+                    </v-flex>
+                  </v-card-title>
+              </Vcard>
               </v-layout>
 
-                <v-layout>
-                    <v-select
-                        v-model="AHS.id_job"
-                        label="Task"
-                        :items="job"
-                        item-text="name"
-                        item-value="id_job"
-                        :return-object="false"
-                    ></v-select>
-                </v-layout>
+            <v-layout>
+              <v-flex>
+                <v-text-field 
+                  v-model="AHS.total" 
+                  label="Total"
+                  required
+                >
+                </v-text-field>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </Vform>
 
-              <VBtn
-                depressed
-                color="primary"
-                @click="tambah=true"
-              >
-              Add Material
-              </VBtn>
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+          <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(AHS.id_ahs)">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
 
-              <v-flex class="text-md-center" sm12 mt-2>
-                  <VCard
-                   v-for="detail in details"
-                   :key="detail.id_material"
-                  > 
-                    <v-card-title>
-                    <v-btn 
-                        icon
-                        color="red"
-                        dark @click="deleteList(detail.id_material)"
-                        >
-                        <v-icon>remove_circle</v-icon>
-                    </v-btn>
-                     <v-flex>
-                        <v-select
-                          label="Material" 
-                          class="pa-1"
-                          v-model="detail.id_material"
-                          item-text="name"
-                          item-value="id_material"
-                          :items="material"
-                          @change="getSelectedIndex"
-                          required 
-                        ></v-select>
-                      </v-flex>
-                      
-                      <v-flex xs12 sm4 md4>
-                          <v-text-field
-                          label="Coefficient*" 
-                          class="pa-1"
-                          v-model="detail.coefficient"
-                          required
-                          ></v-text-field>
-                        </v-flex>
-                    </v-card-title>
-                  </Vcard>
-                </v-flex>
-                
-                 <V-layout v-if="tambah">
-                    <VCard> 
-                    <v-card-title>
-                    <v-btn 
-                        icon
-                        color="red"
-                        dark @click="tambah=false"
-                        >
-                        <v-icon>remove_circle</v-icon>
-                    </v-btn>
-                    <v-btn 
-                        icon
-                        color="green"
-                        dark @click="addList()"
-                        >
-                        <v-icon>add_circle</v-icon>
-                    </v-btn>
-                     <v-flex>
-                        <v-select
-                          label="Material" 
-                          class="pa-1"
-                          v-model="Material.id_material"
-                          item-text="name"
-                          item-value="id_material"
-                          :return-object="false"
-                          :items="material"
-                          required 
-                          @change="getSelectedIndex"
-                        ></v-select>
-                      </v-flex>
-                      
-                        <v-flex xs12 sm4 md4>
-                          <v-text-field
-                          label="Coefficient*" 
-                          class="pa-1"
-                          v-model="ahs_details.coefficient"
-                          required
-                          ></v-text-field>
-                        </v-flex>
-                      </v-card-title>
-                  </Vcard>
-                 </v-layout>
-
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="AHS.total" 
-                      label="Total"
-                      required
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-card-text>
-            </Vform>
-
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(AHS.id_ahs)">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="dialog4" max-width="600px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            color="blue"
-            v-on="on"
-            @click="itemHandler(item)"
-          >
-            remove_red_eye
-          </v-icon>
-        </template>
-            <template>
-            <div>
-              <v-data-table
-                :headers="headers2"
-                :items="ahs_details"
-                class="elevation-1"
-              ></v-data-table>
-            </div>
-          </template>
-      </v-dialog>
-
-      <v-dialog v-model="dialog2" max-width="290px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            color="red"
-            v-on="on"
-            @click="itemHandler2(item)"
-          >
-            delete
-          </v-icon>
-        </template>
-            <v-card>
-              <v-card-title class="headline">Confirmation</v-card-title>
-                <v-card-text>Are you sure want to delete this AHS?</v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(AHS.id_ahs)">Yes</v-btn>
-                <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
-              </v-card-actions>
-            </v-card>
-      </v-dialog>
+    <v-dialog v-model="dialog4" max-width="600px">
+      <template>
+      <div>
+        <v-data-table
+          :headers="headers2"
+          :items="ahs_details"
+          class="elevation-1"
+        ></v-data-table>
+      </div>
     </template>
-  
-  
-  
-  
-  </v-data-table>
+    </v-dialog>
+
+    <v-row justify="center">
+      <v-expansion-panels accordion>
+        <v-expansion-panel>
+            <v-data-table 
+              :headers="headers"
+              :items="ahs"
+              :search="search"
+              class="my-data-table"
+            >
+            <template v-slot:item.action="{ item }">
+              <v-expansion-panel-header>
+              <v-dialog v-model="dialog3" max-width="500px">
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    class="mr-2"
+                    color="green"
+                    @click="itemHandler2(item)"
+                    v-on="on"
+                  >
+                    edit
+                  </v-icon>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">Edit AHS</span>
+                  </v-card-title>
+          
+                  <Vform>
+                    <v-card-text>
+                      <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="AHS.kode" 
+                          label="ID AHS"
+                        >
+                        </v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                      <v-layout>
+                          <v-select
+                              v-model="AHS.id_job"
+                              label="Task"
+                              :items="job"
+                              item-text="name"
+                              item-value="id_job"
+                              disabled
+                              :return-object="false"
+                          ></v-select>
+                      </v-layout>
+
+                    <VBtn
+                      depressed
+                      color="primary"
+                      @click="tambah=true"
+                    >
+                    Add Material
+                    </VBtn>
+
+                    <v-flex class="text-md-center" sm12 mt-2>
+                        <VCard
+                          v-for="detail in details"
+                          :key="detail.id_material"
+                        > 
+                          <v-card-title>
+                          <v-btn 
+                              icon
+                              color="red"
+                              dark @click="deleteList(detail.id_material)"
+                              >
+                              <v-icon>remove_circle</v-icon>
+                          </v-btn>
+                            <v-flex>
+                              <v-select
+                                label="Material" 
+                                class="pa-1"
+                                v-model="detail.id_material"
+                                item-text="name"
+                                item-value="id_material"
+                                :items="material"
+                                @change="getSelectedIndex"
+                                required 
+                              ></v-select>
+                            </v-flex>
+                            
+                            <v-flex xs12 sm4 md4>
+                                <v-text-field
+                                label="Coefficient*" 
+                                class="pa-1"
+                                v-model="detail.coefficient"
+                                required
+                                ></v-text-field>
+                              </v-flex>
+                          </v-card-title>
+                        </Vcard>
+                      </v-flex>
+                      
+                        <V-layout v-if="tambah">
+                          <VCard> 
+                          <v-card-title>
+                          <v-btn 
+                              icon
+                              color="red"
+                              dark @click="tambah=false"
+                              >
+                              <v-icon>remove_circle</v-icon>
+                          </v-btn>
+                          <v-btn 
+                              icon
+                              color="green"
+                              dark @click="addList()"
+                              >
+                              <v-icon>add_circle</v-icon>
+                          </v-btn>
+                            <v-flex>
+                              <v-select
+                                label="Material" 
+                                class="pa-1"
+                                v-model="Material.id_material"
+                                item-text="name"
+                                item-value="id_material"
+                                :return-object="false"
+                                :items="material"
+                                required 
+                                @change="getSelectedIndex"
+                              ></v-select>
+                            </v-flex>
+                            
+                              <v-flex xs12 sm4 md4>
+                                <v-text-field
+                                label="Coefficient*" 
+                                class="pa-1"
+                                v-model="ahs_details.coefficient"
+                                required
+                                ></v-text-field>
+                              </v-flex>
+                            </v-card-title>
+                        </Vcard>
+                        </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="AHS.total" 
+                            label="Total"
+                            required
+                          >
+                          </v-text-field>
+                        </v-flex>
+                      </v-layout>
+                    </v-card-text>
+                  </Vform>
+
+                  <v-card-actions>
+                    <div class="flex-grow-1"></div>
+                    <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                    <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(AHS.id_ahs)">Save</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog v-model="dialog2" max-width="290px">
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    color="red"
+                    v-on="on"
+                    @click="itemHandler2(item)"
+                  >
+                    delete
+                  </v-icon>
+                </template>
+                    <v-card>
+                      <v-card-title class="headline">Confirmation</v-card-title>
+                        <v-card-text>Are you sure want to delete this AHS?</v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(AHS.id_ahs)">Yes</v-btn>
+                        <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                      </v-card-actions>
+                    </v-card>
+              </v-dialog>
+
+              <v-icon
+                small
+                color="blue"
+                @click="itemHandler(item)"
+              >
+                remove_red_eye
+              </v-icon>
+              </v-expansion-panel-header>
+              
+            </template>
+            </v-data-table>
+          
+          <v-expansion-panel-content>
+            <template>
+              <div>
+                <v-data-table
+                  :headers="headers2"
+                  :items="ahs_details"
+                  class="elevation-1"
+                >
+                <template v-slot:item.action="{ item }">
+                  <v-dialog v-model="dialog5" max-width="500px">
+                    <template v-slot:activator="{ on }">
+                      <v-icon
+                        small
+                        class="mr-2"
+                        color="green"
+                        @click="itemDetailHandler(item)"
+                        v-on="on"
+                      >
+                        edit
+                      </v-icon>
+                    </template>
+
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">Edit Detail</span>
+                      </v-card-title>
+                  
+                      <Vform>
+                        <v-card-text>
+                          <v-layout>
+                            <v-select
+                              v-model="detail.id_material"
+                              label="Material/Labor"
+                              :items="material"
+                              item-text="name"
+                              item-value="id_material"
+                              :return-object="false"
+                              @change="getSelectedIndexD"
+                            ></v-select>
+                          </v-layout>
+
+                          <v-layout>
+                            <v-select
+                              v-model="detail.id_material"
+                              label="Price"
+                              :items="material"
+                              item-text="price"
+                              item-value="id_material"
+                              :return-object="false"
+                              @change="getSelectedIndexD"
+                            ></v-select>
+                          </v-layout>
+
+                        <v-layout>
+                          <v-flex>
+                            <v-text-field 
+                              v-model="detail.coefficient" 
+                              label="Coefficient"
+                              required
+                            >
+                            </v-text-field>
+                          </v-flex>
+                        </v-layout>
+                        </v-card-text>
+                      </Vform>
+
+                      <v-card-actions>
+                        <div class="flex-grow-1"></div>
+                        <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                        <v-btn class="ma-2" rounded color="orange" dark @click="updateDetail(detail.id_ahs_details)">Save</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  
+                  <v-dialog v-model="dialog6" max-width="290px">
+                    <template v-slot:activator="{ on }">
+                      <v-icon
+                        small
+                        color="red"
+                        v-on="on"
+                        @click="itemDetailHandler(item)"
+                      >
+                        delete
+                      </v-icon>
+                    </template>
+                        <v-card>
+                          <v-card-title class="headline">Confirmation</v-card-title>
+                            <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(detail.id_ahs_details)">Yes</v-btn>
+                            <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                  </v-dialog>
+                </template>
+
+                </v-data-table>
+              </div>
+            </template>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-row>
+  </div>
 </template>
 
 <script>
 import Controller from './../service/Job'
 import materialController from './../service/Material'
 import ahsController from './../service/AHS'
-import { async } from 'q'
+import detailController from './../service/Details'
 
   export default {
     data: () => ({
@@ -388,6 +635,8 @@ import { async } from 'q'
       dialog2: false,
       dialog3: false,
       dialog4: false,
+      dialog5: false,
+      dialog6: false,
       menu: false,
       tambah: false,
       select: null,
@@ -405,6 +654,11 @@ import { async } from 'q'
       material:[],
       details:[],
       detailsData:[],
+      detail: {
+        id_material:'',
+        coefficient:'',
+        sub_total:''
+      },
       Job: {
         name:'',
         satuan: '',
@@ -467,6 +721,9 @@ import { async } from 'q'
           text: 'ID Material/Labor', align: 'left', sortable: false, value: 'kode',
         },
         { 
+          text: 'Item', align: 'left', sortable: false, value: 'name',
+        },
+        { 
           text: 'Price', align: 'left', sortable: false, value: 'price',
         },
         { 
@@ -474,6 +731,9 @@ import { async } from 'q'
         },
         { 
           text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total',
+        },
+        {
+          text: 'Actions', align: 'left', sortable: false, value: 'action'
         },
       ],
     }),
@@ -493,8 +753,11 @@ import { async } from 'q'
       },
       itemHandler2(item){
         this.AHS = item
-        this.AHS.total = 0
-        //this.details = item.ahs_details.data;
+        this.details = item.ahs_details.data;
+      },
+      itemDetailHandler(item){
+        this.detail = item
+        console.log(this.detail)
       },
       async addList()
       {
@@ -525,6 +788,10 @@ import { async } from 'q'
       },
       getSelectedIndex(){
         this.index = this.material.map(function(e) { return e.id_material; }).indexOf(this.Material.id_material);
+        console.log(this.index)
+      },
+      getSelectedIndexD(){
+        this.index = this.material.map(function(e) { return e.id_material; }).indexOf(this.detail.id_material);
         console.log(this.index)
       },
       async getallDetails(){
@@ -576,7 +843,7 @@ import { async } from 'q'
         try{
             const payload = {
               kode    : this.AHS.kode,
-              id_job  : this.AHS.id_job,
+              //id_job  : this.AHS.id_job,
               total   : this.AHS.total,
               detail  : this.details
             } 
@@ -588,6 +855,20 @@ import { async } from 'q'
           console.log(err);
         }
       },
+      async updateDetail(id){
+        try{
+            const payload = {
+              id_material   : this.detail.id_material,
+              coefficient   : this.detail.coefficient,
+              sub_total     : this.detail.price * this.detail.coefficient
+            } 
+            await detailController.updateDetail(payload,id)
+            this.close()
+            this.getallDetails()
+        }catch(err){
+          console.log(err);
+        }
+      }, 
       async deleteItem(id){
         try{
           await ahsController.deleteItem(id).data
@@ -596,17 +877,29 @@ import { async } from 'q'
           console.log(err)
         }
       },
+      async deleteDetail(id){
+        try{
+          await detailController.deleteItem(id).data
+          this.getallDetails()
+        }catch(err){
+          console.log(err)
+        }
+      },
       refresh(){
-        this.AHS.kode             =''
-        this.AHS.id_job           =''
-        this.AHS.total            =0
-        this.details              =''
-        this.Material.id_material =''
+        // this.AHS.kode             =''
+        // this.AHS.id_job           =''
+        // this.AHS.total            =0
+        // this.details              =''
+        // this.Material.id_material =''
+        window.location.reload()
+
       },
       close () {
         this.dialog = false
         this.dialog3 = false
+        this.dialog5 = false
+        this.dialog6 = false
       },
-    },
+    }
   }
 </script>

@@ -40,8 +40,12 @@ Route::get('/ahs','AHSController@index');
 Route::post('/ahs/store','AHSController@store');
 Route::patch('/ahs/update/{id}','AHSController@update');
 Route::delete('/ahs/delete/{id}','AHSController@destroy');
+Route::get('/ahs/show/{id}', 'AHSController@showByID');
 //AHS Details
 Route::get('/ahs_details','AHSDetailsController@index');
+Route::patch('/ahs_details/update/{id}','AHSDetailsController@update');
+Route::delete('/ahs_details/delete/{id}', 'AHSDetailsController@destroy');
+Route::get('/ahs_details/show/{id}', 'AHSDetailsController@showByID');
 //Material Details
 Route::get('/material_details','MaterialDetailsController@index');
 Route::post('/material_details/store','MaterialDetailsController@store');
@@ -52,3 +56,12 @@ Route::patch('/rabs/update/{id}','RABController@update');
 Route::delete('/rabs/delete/{id}','RABController@destroy');
 //RAB Details
 Route::get('/rab_details','RABDetailsController@index');
+//Store
+Route::get('/stores','StoreController@index');
+Route::post('/stores/store', 'StoreController@store');
+Route::patch('/stores/update/{id}', 'StoreController@update');
+Route::delete('/stores/delete/{id}', 'StoreController@destroy');
+Route::get('/stores/show/{id}', 'StoreController@showByID');
+//Satuan
+Route::get('/satuans','SatuanController@index');
+Route::post('/satuans/store', 'SatuanController@store');

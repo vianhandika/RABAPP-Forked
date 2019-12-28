@@ -60,13 +60,51 @@
                   </v-flex>
                 </v-layout>
 
-                <v-select
-                  v-model="Job.satuan"
-                  v-validate="'required'"
-                  :items="items"
-                  label="Satuan"
-                  required
-                ></v-select>
+                <v-container row>
+                  <v-select row
+                    v-model="Job.satuan"
+                    :items="satuan"
+                    item-text="name"
+                    item-value="name"
+                    label="Satuan"
+                    required
+                  ></v-select>
+                  <v-btn 
+                    width="50px" 
+                    color="blue" 
+                    @click="dialog4=true"
+                  > 
+                  Add
+                  </v-btn>
+                </v-container>
+
+                <template>
+                <v-dialog v-model="dialog4" width="300px" style="color: blue">
+                  <v-card-text>
+                    <v-layout>
+                      <v-text-field
+                        label="Satuan"
+                        v-model="name">
+                      </v-text-field>
+                    </v-layout>
+                    <div class="flex-grow-1"></div>
+                      <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
+                      <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
+                  </v-card-text>
+                </v-dialog>
+                </template>
+
+                <!-- <v-radio-group v-model="Job.status" row> 
+                  <v-radio label="Volume" value="v"></v-radio>
+                  <v-radio label="Price" value="p"></v-radio>
+                </v-radio-group> -->
+
+                <v-select row
+                    v-model="Job.status"
+                    :items="items"
+                    label="Status"
+                    required
+                  ></v-select>
 
                 <v-layout>
                   <v-flex>
@@ -75,10 +113,9 @@
                       label="Spesification"
                       required
                     >
-                      </v-text-field>
+                    </v-text-field>
                   </v-flex>
                 </v-layout>
-
             </v-card-text>
           </Vform>
 
@@ -134,13 +171,47 @@
                   </v-flex>
                 </v-layout>
 
-                <v-select
-                  v-model="Job.satuan"
-                  v-validate="'required'"
+                <v-container row>
+                  <v-select row
+                    v-model="Job.satuan"
+                    :items="satuan"
+                    item-text="name"
+                    item-value="name"
+                    label="Satuan"
+                    required
+                  ></v-select>
+                  <v-btn 
+                    width="50px" 
+                    color="blue" 
+                    @click="dialog4=true"
+                  > 
+                  Add
+                  </v-btn>
+                </v-container>
+
+                <template>
+                <v-dialog v-model="dialog4" width="300px" style="color: blue">
+                  <v-card-text>
+                    <v-layout>
+                      <v-text-field
+                        label="Satuan"
+                        v-model="name">
+                      </v-text-field>
+                    </v-layout>
+                    <div class="flex-grow-1"></div>
+                      <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
+                      <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
+                  </v-card-text>
+                </v-dialog>
+                </template>
+
+                <v-select row
+                  v-model="Job.status"
                   :items="items"
-                  label="Satuan"
+                  label="Status"
                   required
-                ></v-select>
+                >
+                </v-select>
 
                 <v-layout>
                   <v-flex>
@@ -198,13 +269,16 @@ import Controller from './../service/Job'
       dialog: false,
       dialog2: false,
       dialog3: false,
+      dialog4: false,
       menu: false,
       select: null,
+      row: null,
       search:'',
-      name: '',
-      satuan: '',
-      details: '',
-      kode:'',
+      satuan:'',
+      items : [
+        'Volume',
+        'Price'
+      ],
       job: [],
       Job: {
         kode:'',
@@ -212,14 +286,9 @@ import Controller from './../service/Job'
         satuan: '',
         details: '',
         id_job: '',
+        status: ''
       },
-      items: [
-        'm',
-        'm2',
-        'm3',
-        'unit',
-        'ls'
-      ],
+      satuan: [],
       headers: [
         {
           text : 'ID',
@@ -237,6 +306,11 @@ import Controller from './../service/Job'
           text: 'Satuan', 
           value: 'satuan'
         },
+        {
+          sortable: false,
+          text: 'Status',
+          value: 'status'
+        },
         { 
           sortable: false,
           text: 'Spesification', 
@@ -250,6 +324,7 @@ import Controller from './../service/Job'
       ],
     }),
     mounted(){
+      this.getSatuan()
       this.getallItem()
     },
     computed: {
@@ -260,6 +335,14 @@ import Controller from './../service/Job'
       }
     },
     methods: {
+      async getSatuan()
+      {
+        try{
+          this.satuan = (await Controller.getSatuan()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
       async getallItem(){
         try{
           this.job = (await Controller.getallItem()).data
@@ -273,6 +356,7 @@ import Controller from './../service/Job'
             kode        : this.Job.kode,
             name        : this.Job.name,
             satuan      : this.Job.satuan,
+            status      : this.Job.status,
             details     : this.Job.details,
           }
           await Controller.addItem(payload)
@@ -283,12 +367,27 @@ import Controller from './../service/Job'
           console.log(err);
         }
       },
+      async addSatuan()
+      {
+        try{
+          const payload = {
+            name :  this.name,
+          }
+          await Controller.addSatuan(payload)
+          this.getSatuan()
+          this.dialog4 = false
+          this.name = ''
+        }catch(err){
+          console.log(err)
+        }
+      },
       async updateItem(id){
         try{
             const payload = {
               kode        : this.Job.kode,
               name        : this.Job.name,
               satuan      : this.Job.satuan,
+              status      : this.Job.status,
               details     : this.Job.details,
             } 
             await Controller.updateItem(payload,id)

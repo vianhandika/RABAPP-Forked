@@ -8,6 +8,8 @@ import Material from './components/MaterialsComponent'
 import Transaction from './components/RABComponent'
 import AHS from './components/AHSComponent'
 import Home from './components/HomeComponent'
+import Store from './components/StoreComponent'
+
 import VueRouter from 'vue-router';
 
 export const routes = [
@@ -50,6 +52,11 @@ export const routes = [
         path: '/home',
         name: 'home',
         component: Home
+      },
+      {
+        path: '/store',
+        name: 'store',
+        component: Store
       }
     ]
   },

@@ -15,6 +15,7 @@ class AHSDetailsTransformers extends TransformerAbstract
             'coefficient'        => $ahs_details->coefficient,
             'sub_total'          => $ahs_details->sub_total,
             'kode'               => $ahs_details->materials->kode,
+            'name'               => $ahs_details->materials->name,
             'price'              => $ahs_details->materials->price,
         ];
     }

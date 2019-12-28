@@ -15,14 +15,19 @@ class CreateMaterialsTable extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->increments('id_material');
+            $table->unsignedInteger('id_store');
             $table->string('kode');
+           // $table->string('status');
             $table->string('name');
             $table->string('type');
-            $table->string('spesification_1');
-            $table->string('spesification_2');
+            $table->string('satuan');
             $table->double('price');
+            $table->string('spesification');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('id_store')->references('id_store')->on('stores');
+
         });
     }
 

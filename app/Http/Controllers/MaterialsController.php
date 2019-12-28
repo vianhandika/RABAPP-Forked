@@ -21,11 +21,13 @@ class MaterialsController extends RestController
     {
         $material = Materials::create([
             'kode' => $request->kode,
+            'id_store' => $request->id_store,
             'name' => $request->name,
             'type' => $request->type,
-            'spesification_1' => $request->spesification_1,
-            'spesification_2' => $request->spesification_2,
+            'satuan' => $request->satuan,
+            'spesification' => $request->spesification,
             'price' => $request->price,
+            //'status' => $request->status,
         ]);
 
         return response()->json([
@@ -39,20 +41,24 @@ class MaterialsController extends RestController
     {
         $this->validateWith([
             'kode' => 'required|max:255',
+            'id_store' => 'required|max:255',
             'name' => 'required|max:255',
             'type' => 'required|max:255',
             'price' => 'required|max:255',
-            'spesification_1' => 'required|max:255',
-            'spesification_2' => 'required|max:255',
+            'spesification' => 'required|max:255',
+            //'status' => 'required|max:255',
+            'satuan' => 'required|max:255',
         ]);
 
         $material = Materials::findOrFail($id);
         $material->kode = $request->kode;
+        $material->id_store = $request->id_store;
         $material->name = $request->name;
         $material->type = $request->type;
         $material->price = $request->price;
-        $material->spesification_1 = $request->spesification_1;
-        $material->spesification_2 = $request->spesification_2;
+        $material->spesification = $request->spesification;
+        //$material->status = $request->status;
+        $material->satuan = $request->satuan;
         
         $material->save();
 

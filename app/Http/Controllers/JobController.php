@@ -22,8 +22,9 @@ class JobController extends RestController
         $job = Job::create([
             'kode' => $request->kode,
             'name' => $request->name, 
-           'satuan' => $request->satuan, 
-           'details' => $request->details, 
+            'satuan' => $request->satuan, 
+            'status' => $request->status, 
+            'details' => $request->details, 
         ]);
 
         return response()->json([
@@ -39,6 +40,7 @@ class JobController extends RestController
             'kode' => 'required|max:255',
             'name' => 'required|max:255',
             'satuan' => 'required|max:255',
+            'status' => 'required|max:255',
             'details' => 'required|max:255',
         ]);
 
@@ -46,6 +48,7 @@ class JobController extends RestController
         $job->kode = $request->kode;
         $job->name = $request->name;
         $job->satuan = $request->satuan;
+        $job->status = $request->status;
         $job->details = $request->details;
         $job->save();
 

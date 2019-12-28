@@ -509,6 +509,7 @@ import validators from './../validations/Project'
       },
       itemHandler(item){
         this.Project = item
+        console.log(this.Project)
       },
       refresh(){
         this.Project.kode     = '';
