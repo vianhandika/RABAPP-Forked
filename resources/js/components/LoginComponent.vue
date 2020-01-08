@@ -25,7 +25,6 @@
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn
-                      :href="source"
                       icon
                       large
                       target="_blank"
@@ -41,7 +40,6 @@
                     <v-btn
                       icon
                       large
-                      href="https://codepen.io/johnjleider/pen/pMvGQO"
                       target="_blank"
                       v-on="on"
                     >
@@ -54,13 +52,15 @@
               <v-card-text>
                 <v-form>
                   <v-text-field
-                    label="Username"
-                    name="login"
+                    v-model="email"
+                    label="email"
+                    name="email"
                     prepend-icon="person"
                     type="text"
                   ></v-text-field>
 
                   <v-text-field
+                    v-model="password"
                     id="password"
                     label="Password"
                     name="password"
@@ -72,8 +72,7 @@
               <v-card-actions>
                 <div class="flex-grow-1"></div>
                 <v-btn color="light-blue"
-                @click="loginHandler"
-                type="submit"
+                @click="login"
                 >Login</v-btn>
               </v-card-actions>
             </v-card>
@@ -85,21 +84,40 @@
 </template>
 
 <script>
+import { mapGetters, mapState, mapActions } from 'vuex'
+
   export default {
     name: 'LoginComponent',
     data () {
       return{
+        email:'',
+        password: '',
+
       }
     },
+    props: {
+      source: String,
+    },
+    computed: {
+      ...mapState({
+        loading: state => state.Token.loading,
+        error: state => state.Token.error,
+        token: state => state.Token.token,
+      }),
+    },
     methods: {
-      async loginHandler () {
-        try{
-          this.$router.push({path:'/dashboard'});
-        }catch(err){
-
+      ...mapActions({
+        retrieveToken: 'Token/retrieveToken'
+      }),
+      async login () {
+        const payload = {
+          email : this.email,
+          password : this.password
         }
+        await this.retrieveToken(payload)
+        this.$router.push({name: 'dashboard'})
       }
-    }
+    },
   }
 </script>
 

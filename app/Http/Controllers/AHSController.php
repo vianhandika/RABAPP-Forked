@@ -14,7 +14,8 @@ class AHSController extends RestController
 
     public function index()
     {
-        $ahs = AHS::orderBy('id_ahs','DESC')->get();
+        //$ahs = AHS::orderBy('id_ahs','DESC')->get();
+        $ahs = AHS::all();
         $response = $this->generateCollection($ahs);
         return $this->sendResponse($response,200);
     }

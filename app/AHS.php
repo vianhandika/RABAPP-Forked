@@ -24,7 +24,7 @@ class AHS extends Model
     { 
         return $this->hasMany('App\AHSDetails','id_ahs');
     }
-
+    
     public function jobs()
     { 
         return $this->belongsTo('App\Job','id_job');

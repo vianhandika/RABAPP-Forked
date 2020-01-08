@@ -1,4 +1,4 @@
-//import middleware, { auth } from './middleware'
+import middleware, { auth } from './middleware'
 import App from './components/App'
 import Login from './components/LoginComponent'
 import Dashboard from './components/DashboardComponent'
@@ -27,36 +27,57 @@ export const routes = [
         path: '/project',
         name: 'project',
         component: Project,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/job',
         name: 'job',
         component: Job,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/materials',
         name: 'materials',
         component: Material,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/transaction',
         name: 'transaction',
         component: Transaction,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/analisa',
         name: 'analisa',
-        component: AHS
+        component: AHS,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/home',
         name: 'home',
-        component: Home
+        component: Home,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/store',
         name: 'store',
-        component: Store
+        component: Store,
+        beforeEnter: middleware([
+          auth
+        ])
       }
     ]
   },

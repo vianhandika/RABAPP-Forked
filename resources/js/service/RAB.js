@@ -1,6 +1,19 @@
 import Http from '../http'
 
 export default {
+    getGroup(){
+        return new Promise((resolve, reject) => {
+            
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/groups', successCallback, errorCallback)
+        })
+    },
     getallDetails(){
         return new Promise((resolve, reject) => {
             

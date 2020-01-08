@@ -1,54 +1,43 @@
 import { required, minLength, maxLength, numeric } from 'vuelidate/lib/validators'
 
 export default {
-    Project: {
-        kode: {
+    Store : {
+        kode:{
             required,
             minLength: minLength(4),
-            maxLength: maxLength(255),
+            maxLength: maxLength(4)
         },
         name: {
             required,
             minLength: minLength(10),
             maxLength: maxLength(255),
         },
-        date: {
-            required
-        },
         address : {
             required,
             minLength: minLength(10),
             maxLength: maxLength(255),
         },
-        contact:{
+        type : {
             required,
-            minLength: minLength(10),
+            minLength: minLength(5),
             maxLength: maxLength(255),
         },
-        phone : {
-            required,
-            numeric,
-            minLength: minLength(10),
-            maxLength: maxLength(15),
-        },
-        owner : {
-            required,
-            minLength: minLength(10),
-            maxLength: maxLength(255),
-        },
-        no_telp : {
+        no_telp: {
             required,
             numeric,
             minLength: minLength(10),
             maxLength: maxLength(15)
         },
-        type:{
-            required,
-            maxLength: maxLength(255),
-        },
-        nominal: {
+        phone: {
             required,
             numeric,
+            minLength: minLength(10),
+            maxLength: maxLength(15)
+        },
+        owner:{
+            required,
+            minLength: minLength(10),
+            maxLength: maxLength(255)
         }
-    },
+    }
 }

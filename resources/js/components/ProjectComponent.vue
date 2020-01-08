@@ -44,6 +44,9 @@
                   <v-text-field 
                     v-model="Project.kode" 
                     label="ID Project"
+                    :error-messages="idErrors"
+                    @input="$v.Project.kode.$touch()"
+                    @blur="$v.Project.kode.$touch()"
                   >
                   </v-text-field>
                 </v-flex>
@@ -54,6 +57,9 @@
                   <v-text-field 
                     v-model="Project.name" 
                     label="Project"
+                    :error-messages="nameErrors"
+                    @input="$v.Project.name.$touch()"
+                    @blur="$v.Project.name.$touch()"
                   >
                   </v-text-field>
                 </v-flex>
@@ -64,6 +70,9 @@
                   <v-text-field
                     v-model="Project.address"
                     label="Address"
+                    :error-messages="addressErrors"
+                    @input="$v.Project.address.$touch()"
+                    @blur="$v.Project.address.$touch()"
                     ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -73,6 +82,9 @@
                   <v-text-field 
                     v-model="Project.owner" 
                     label="Owner"
+                    :error-messages="ownerErrors"
+                    @input="$v.Project.owner.$touch()"
+                    @blur="$v.Project.owner.$touch()"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -98,6 +110,9 @@
                     label="Date"
                     required
                     v-on="on"
+                    :error-messages="dateErrors"
+                    @input="$v.Project.date.$touch()"
+                    @blur="$v.Project.date.$touch()"
                   ></v-text-field>
                 </template>
                   <v-date-picker v-model="Project.date" no-title @input="menu1 = false"></v-date-picker>
@@ -110,6 +125,9 @@
                   <v-text-field 
                     v-model="Project.no_telp" 
                     label="Telp Number"
+                    :error-messages="noErrors"
+                    @input="$v.Project.no_telp.$touch()"
+                    @blur="$v.Project.no_telp.$touch()"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -119,6 +137,9 @@
                   <v-text-field 
                     v-model="Project.phone" 
                     label="Phone Number"
+                    :error-messages="phoneErrors"
+                    @input="$v.Project.phone.$touch()"
+                    @blur="$v.Project.phone.$touch()"
                   >
                     </v-text-field>
                 </v-flex>
@@ -129,6 +150,9 @@
                   <v-text-field
                     v-model="Project.type"
                     label="Type"
+                    :error-messages="typeErrors"
+                    @input="$v.Project.type.$touch()"
+                    @blur="$v.Project.type.$touch()"
                     ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -138,6 +162,9 @@
                   <v-text-field
                     v-model="Project.nominal"
                     label="Nominal"
+                    :error-messages="nominalErrors"
+                    @input="$v.Project.nominal.$touch()"
+                    @blur="$v.Project.nominal.$touch()"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -180,6 +207,9 @@
                     <v-text-field 
                       v-model="Project.kode" 
                       label="ID Project"
+                      :error-messages="idErrors"
+                      @input="$v.Project.kode.$touch()"
+                      @blur="$v.Project.kode.$touch()"
                     >
                     </v-text-field>
                   </v-flex>
@@ -190,6 +220,9 @@
                   <v-text-field 
                     v-model="Project.name" 
                     label="Project"
+                    :error-messages="nameErrors"
+                    @input="$v.Project.name.$touch()"
+                    @blur="$v.Project.name.$touch()"
                   >
                   </v-text-field>
                 </v-flex>
@@ -200,6 +233,9 @@
                   <v-text-field
                     v-model="Project.address"
                     label="Address"
+                    :error-messages="addressErrors"
+                    @input="$v.Project.address.$touch()"
+                    @blur="$v.Project.address.$touch()"
                     ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -209,6 +245,9 @@
                   <v-text-field 
                     v-model="Project.owner" 
                     label="Owner"
+                    :error-messages="ownerErrors"
+                    @input="$v.Project.owner.$touch()"
+                    @blur="$v.Project.owner.$touch()"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -234,6 +273,9 @@
                     label="Date"
                     required
                     v-on="on"
+                    :error-messages="dateErrors"
+                    @input="$v.Project.date.$touch()"
+                    @blur="$v.Project.date.$touch()"
                   ></v-text-field>
                 </template>
                   <v-date-picker v-model="Project.date" no-title @input="menu1 = false"></v-date-picker>
@@ -246,6 +288,9 @@
                   <v-text-field 
                     v-model="Project.no_telp" 
                     label="Telp Number"
+                    :error-messages="noErrors"
+                    @input="$v.Project.no_telp.$touch()"
+                    @blur="$v.Project.no_telp.$touch()"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -255,6 +300,9 @@
                   <v-text-field 
                     v-model="Project.phone" 
                     label="Phone Number"
+                    :error-messages="phoneErrors"
+                    @input="$v.Project.phone.$touch()"
+                    @blur="$v.Project.phone.$touch()"
                   >
                     </v-text-field>
                 </v-flex>
@@ -265,6 +313,9 @@
                   <v-text-field
                     v-model="Project.type"
                     label="Type"
+                    :error-messages="typeErrors"
+                    @input="$v.Project.type.$touch()"
+                    @blur="$v.Project.type.$touch()"
                     ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -274,6 +325,9 @@
                   <v-text-field
                     v-model="Project.nominal"
                     label="Nominal"
+                    :error-messages="nominalErrors"
+                    @input="$v.Project.nominal.$touch()"
+                    @blur="$v.Project.nominal.$touch()"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -415,6 +469,14 @@ import validators from './../validations/Project'
           projectData.name.match(this.search);
         });
       },
+      idErrors(){
+        const errors = []
+        if(!this.$v.Project.kode.$dirty) return errors 
+        !this.$v.Project.kode.maxLength && errors.push('ID must be at most 255 characters long')
+        !this.$v.Project.kode.minLength && errors.push('ID must be at least 4 characters long')
+        !this.$v.Project.kode.required && errors.push('ID is required')
+        return errors
+      },
       nameErrors(){
         const errors = []
         if(!this.$v.Project.name.$dirty) return errors 
@@ -429,13 +491,21 @@ import validators from './../validations/Project'
         !this.$v.Project.address.maxLength && errors.push('Address must be at most 255 characters long')
         !this.$v.Project.address.minLength && errors.push('Address must be at least 10 characters long')
         !this.$v.Project.address.required && errors.push('Address is required')
-        return errros
+        return errors
+      },
+      ownerErrors(){
+        const errors = []
+        if(!this.$v.Project.owner.$dirty) return errors
+        !this.$v.Project.owner.maxLength && errors.push('Project must be at most 255 characters long')
+        !this.$v.Project.owner.minLength && errors.push('Project must be at least 10 characters long')
+        !this.$v.Project.owner.required && errors.push('Project is required')
+        return errors
       },
       contactErrors(){
         const errors = []
-        if(!this.$v.Project.address.$dirty) return errors
-        !this.$v.Project.address.maxLength && errors.push('Owner must be at most 255 characters long')
-        !this.$v.Project.address.minLength && errors.push('Owner must be at least 10 characters long')
+        if(!this.$v.Project.contact.$dirty) return errors
+        !this.$v.Project.contact.maxLength && errors.push('Owner must be at most 255 characters long')
+        !this.$v.Project.contact.minLength && errors.push('Owner must be at least 10 characters long')
         !this.$v.Project.contact.required && errors.push('Owner is required')
         return errors
       },
@@ -446,7 +516,36 @@ import validators from './../validations/Project'
         !this.$v.Project.phone.minLength && errors.push('Phone number must be at least 10 characters long')
         !this.$v.Project.phone.required && errors.push('Phone number is required')
         !this.$v.Project.phone.numeric && errors.push('Phone number must be numeric')
-        return errros
+        return errors
+      },
+      dateErrors(){
+        const errors = []
+        if(!this.$v.Project.date.$dirty) return errors
+        !this.$v.Project.date.required && errors.push('Date is required')
+        return errors
+      },
+      noErrors(){
+        const errors = []
+        if(!this.$v.Project.no_telp.$dirty) return errors
+        !this.$v.Project.no_telp.required && errors.push('Telp number is required')
+        !this.$v.Project.no_telp.numeric && errors.push('Telp number must be numeric')
+        !this.$v.Project.no_telp.maxLength && errors.push('Telp number must be at most 15 characters long')
+        !this.$v.Project.no_telp.minLength && errors.push('Telp number must be at least 10 characters long')
+        return errors
+      },
+      typeErrors(){
+        const errors = []
+        if(!this.$v.Project.type.$dirty) return errors
+        !this.$v.Project.type.maxLength && errors.push('Type must be at most 255 characters long')
+        !this.$v.Project.type.required && errors.push('Type is required')
+        return errors
+      },
+      nominalErrors(){
+        const errors = []
+        if(!this.$v.Project.nominal.$dirty) return errors
+        !this.$v.Project.nominal.required && errors.push('Nominal is required')
+        !this.$v.Project.nominal.numeric && errors.push('Nominal must be numeric')
+        return errors
       }
     },
     methods: {

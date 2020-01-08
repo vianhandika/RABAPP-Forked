@@ -3035,12 +3035,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return deleteDetail;
     }(),
     refresh: function refresh() {
-      // this.AHS.kode             =''
-      // this.AHS.id_job           =''
-      // this.AHS.total            =0
-      // this.details              =''
-      // this.Material.id_material =''
-      window.location.reload();
+      this.AHS.kode = '';
+      this.AHS.id_job = '';
+      this.AHS.total = 0;
+      this.details = '';
+      this.Material.id_material = ''; // window.location.reload()
     },
     close: function close() {
       this.dialog = false;
@@ -3062,6 +3061,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -3202,6 +3216,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     source: String
@@ -3211,7 +3231,52 @@ __webpack_require__.r(__webpack_exports__);
       drawer: null
     };
   },
-  methods: {
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+    loading: function loading(state) {
+      return state.Token.loading;
+    },
+    error: function error(state) {
+      return state.Token.error;
+    },
+    token: function token(state) {
+      return state.Token.token;
+    }
+  })),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])({
+    destroyToken: 'Token/deleteToken'
+  }), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapGetters"])({
+    loggedIn: 'Token/loggedIn'
+  }), {
+    logout: function () {
+      var _logout = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return this.destroyToken();
+
+              case 2:
+                this.$router.push({
+                  name: 'login'
+                });
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function logout() {
+        return _logout.apply(this, arguments);
+      }
+
+      return logout;
+    }(),
     project: function project() {
       this.$router.push({
         name: 'project'
@@ -3247,7 +3312,7 @@ __webpack_require__.r(__webpack_exports__);
         name: 'store'
       });
     }
-  }
+  })
 });
 
 /***/ }),
@@ -4452,6 +4517,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _service_Job__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../service/Job */ "./resources/js/service/Job.js");
+/* harmony import */ var _validations_Job__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../validations/Job */ "./resources/js/validations/Job.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -4723,8 +4789,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  validations: _validations_Job__WEBPACK_IMPORTED_MODULE_2__["default"],
   data: function data() {
     var _ref;
 
@@ -4786,6 +4881,42 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return this.job.filter(function (jobData) {
         jobData.name.match(_this.search);
       });
+    },
+    idErrors: function idErrors() {
+      var errors = [];
+      if (!this.$v.Job.kode.$dirty) return errors;
+      !this.$v.Job.kode.maxLength && errors.push('ID must be at most 255 characters long');
+      !this.$v.Job.kode.minLength && errors.push('ID must be at least 4 characters long');
+      !this.$v.Job.kode.required && errors.push('ID is required');
+      return errors;
+    },
+    nameErrors: function nameErrors() {
+      var errors = [];
+      if (!this.$v.Job.name.$dirty) return errors;
+      !this.$v.Job.name.maxLength && errors.push('Name must be at most 255 characters long');
+      !this.$v.Job.name.minLength && errors.push('Name must be at least 10 characters long');
+      !this.$v.Job.name.required && errors.push('Name is required');
+      return errors;
+    },
+    satuanErrors: function satuanErrors() {
+      var errors = [];
+      if (!this.$v.Job.satuan.$dirty) return errors;
+      !this.$v.Job.satuan.required && errors.push('Satuan is required');
+      return errors;
+    },
+    detailsErrors: function detailsErrors() {
+      var errors = [];
+      if (!this.$v.Job.details.$dirty) return errors;
+      !this.$v.Job.details.maxLength && errors.push('Details must be at most 255 characters long');
+      !this.$v.Job.details.minLength && errors.push('Details must be at least 10 characters long');
+      !this.$v.Job.details.required && errors.push('Details is required');
+      return errors;
+    },
+    statusErrors: function statusErrors() {
+      var errors = [];
+      if (!this.$v.Job.status.$dirty) return errors;
+      !this.$v.Job.status.required && errors.push('Status is required');
+      return errors;
     }
   },
   methods: {
@@ -5060,12 +5191,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -5151,28 +5289,54 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'LoginComponent',
   data: function data() {
-    return {};
+    return {
+      email: '',
+      password: ''
+    };
   },
-  methods: {
-    loginHandler: function () {
-      var _loginHandler = _asyncToGenerator(
+  props: {
+    source: String
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+    loading: function loading(state) {
+      return state.Token.loading;
+    },
+    error: function error(state) {
+      return state.Token.error;
+    },
+    token: function token(state) {
+      return state.Token.token;
+    }
+  })),
+  methods: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapActions"])({
+    retrieveToken: 'Token/retrieveToken'
+  }), {
+    login: function () {
+      var _login = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var payload;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                try {
-                  this.$router.push({
-                    path: '/dashboard'
-                  });
-                } catch (err) {}
+                payload = {
+                  email: this.email,
+                  password: this.password
+                };
+                _context.next = 3;
+                return this.retrieveToken(payload);
 
-              case 1:
+              case 3:
+                this.$router.push({
+                  name: 'dashboard'
+                });
+
+              case 4:
               case "end":
                 return _context.stop();
             }
@@ -5180,13 +5344,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee, this);
       }));
 
-      function loginHandler() {
-        return _loginHandler.apply(this, arguments);
+      function login() {
+        return _login.apply(this, arguments);
       }
 
-      return loginHandler;
+      return login;
     }()
-  }
+  })
 });
 
 /***/ }),
@@ -6283,6 +6447,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -6375,6 +6593,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         projectData.name.match(_this.search);
       });
     },
+    idErrors: function idErrors() {
+      var errors = [];
+      if (!this.$v.Project.kode.$dirty) return errors;
+      !this.$v.Project.kode.maxLength && errors.push('ID must be at most 255 characters long');
+      !this.$v.Project.kode.minLength && errors.push('ID must be at least 4 characters long');
+      !this.$v.Project.kode.required && errors.push('ID is required');
+      return errors;
+    },
     nameErrors: function nameErrors() {
       var errors = [];
       if (!this.$v.Project.name.$dirty) return errors;
@@ -6389,13 +6615,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       !this.$v.Project.address.maxLength && errors.push('Address must be at most 255 characters long');
       !this.$v.Project.address.minLength && errors.push('Address must be at least 10 characters long');
       !this.$v.Project.address.required && errors.push('Address is required');
-      return errros;
+      return errors;
+    },
+    ownerErrors: function ownerErrors() {
+      var errors = [];
+      if (!this.$v.Project.owner.$dirty) return errors;
+      !this.$v.Project.owner.maxLength && errors.push('Project must be at most 255 characters long');
+      !this.$v.Project.owner.minLength && errors.push('Project must be at least 10 characters long');
+      !this.$v.Project.owner.required && errors.push('Project is required');
+      return errors;
     },
     contactErrors: function contactErrors() {
       var errors = [];
-      if (!this.$v.Project.address.$dirty) return errors;
-      !this.$v.Project.address.maxLength && errors.push('Owner must be at most 255 characters long');
-      !this.$v.Project.address.minLength && errors.push('Owner must be at least 10 characters long');
+      if (!this.$v.Project.contact.$dirty) return errors;
+      !this.$v.Project.contact.maxLength && errors.push('Owner must be at most 255 characters long');
+      !this.$v.Project.contact.minLength && errors.push('Owner must be at least 10 characters long');
       !this.$v.Project.contact.required && errors.push('Owner is required');
       return errors;
     },
@@ -6406,7 +6640,36 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       !this.$v.Project.phone.minLength && errors.push('Phone number must be at least 10 characters long');
       !this.$v.Project.phone.required && errors.push('Phone number is required');
       !this.$v.Project.phone.numeric && errors.push('Phone number must be numeric');
-      return errros;
+      return errors;
+    },
+    dateErrors: function dateErrors() {
+      var errors = [];
+      if (!this.$v.Project.date.$dirty) return errors;
+      !this.$v.Project.date.required && errors.push('Date is required');
+      return errors;
+    },
+    noErrors: function noErrors() {
+      var errors = [];
+      if (!this.$v.Project.no_telp.$dirty) return errors;
+      !this.$v.Project.no_telp.required && errors.push('Telp number is required');
+      !this.$v.Project.no_telp.numeric && errors.push('Telp number must be numeric');
+      !this.$v.Project.no_telp.maxLength && errors.push('Telp number must be at most 15 characters long');
+      !this.$v.Project.no_telp.minLength && errors.push('Telp number must be at least 10 characters long');
+      return errors;
+    },
+    typeErrors: function typeErrors() {
+      var errors = [];
+      if (!this.$v.Project.type.$dirty) return errors;
+      !this.$v.Project.type.maxLength && errors.push('Type must be at most 255 characters long');
+      !this.$v.Project.type.required && errors.push('Type is required');
+      return errors;
+    },
+    nominalErrors: function nominalErrors() {
+      var errors = [];
+      if (!this.$v.Project.nominal.$dirty) return errors;
+      !this.$v.Project.nominal.required && errors.push('Nominal is required');
+      !this.$v.Project.nominal.numeric && errors.push('Nominal must be numeric');
+      return errors;
     }
   },
   methods: {
@@ -7060,6 +7323,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -7077,6 +7351,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       ahs: [],
       RAB: [],
       detailsData: [],
+      groupData: [],
       rab_details: {
         id_rab_details: '',
         id_rab: '',
@@ -7094,7 +7369,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         id_ahs: '',
         coefficient: 1,
         total_rab: 0,
-        kode: ''
+        kode: '',
+        id_group: ''
       },
       Project: {
         name: '',
@@ -7154,6 +7430,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.getallAHS();
     this.getallRAB();
     this.getallDetails();
+    this.getGroup();
   },
   computed: {},
   methods: {
@@ -7226,8 +7503,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }).indexOf(this.AHS.id_ahs);
       console.log(this.index);
     },
-    getallDetails: function () {
-      var _getallDetails = _asyncToGenerator(
+    getGroup: function () {
+      var _getGroup = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
@@ -7236,10 +7513,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context2.prev = 0;
                 _context2.next = 3;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getallDetails();
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getGroup();
 
               case 3:
-                this.detailsData = _context2.sent.data;
+                this.groupData = _context2.sent.data;
                 _context2.next = 9;
                 break;
 
@@ -7256,14 +7533,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee2, this, [[0, 6]]);
       }));
 
-      function getallDetails() {
-        return _getallDetails.apply(this, arguments);
+      function getGroup() {
+        return _getGroup.apply(this, arguments);
       }
 
-      return getallDetails;
+      return getGroup;
     }(),
-    getallAHS: function () {
-      var _getallAHS = _asyncToGenerator(
+    getallDetails: function () {
+      var _getallDetails = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
@@ -7272,10 +7549,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context3.prev = 0;
                 _context3.next = 3;
-                return _service_AHS__WEBPACK_IMPORTED_MODULE_2__["default"].getallItem();
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getallDetails();
 
               case 3:
-                this.ahs = _context3.sent.data;
+                this.detailsData = _context3.sent.data;
                 _context3.next = 9;
                 break;
 
@@ -7292,14 +7569,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee3, this, [[0, 6]]);
       }));
 
-      function getallAHS() {
-        return _getallAHS.apply(this, arguments);
+      function getallDetails() {
+        return _getallDetails.apply(this, arguments);
       }
 
-      return getallAHS;
+      return getallDetails;
     }(),
-    getallItem: function () {
-      var _getallItem = _asyncToGenerator(
+    getallAHS: function () {
+      var _getallAHS = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
@@ -7308,10 +7585,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context4.prev = 0;
                 _context4.next = 3;
-                return _service_Project__WEBPACK_IMPORTED_MODULE_1__["default"].getallItem();
+                return _service_AHS__WEBPACK_IMPORTED_MODULE_2__["default"].getallItem();
 
               case 3:
-                this.project = _context4.sent.data;
+                this.ahs = _context4.sent.data;
                 _context4.next = 9;
                 break;
 
@@ -7328,14 +7605,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4, this, [[0, 6]]);
       }));
 
-      function getallItem() {
-        return _getallItem.apply(this, arguments);
+      function getallAHS() {
+        return _getallAHS.apply(this, arguments);
       }
 
-      return getallItem;
+      return getallAHS;
     }(),
-    getallRAB: function () {
-      var _getallRAB = _asyncToGenerator(
+    getallItem: function () {
+      var _getallItem = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
@@ -7344,10 +7621,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context5.prev = 0;
                 _context5.next = 3;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getallItem();
+                return _service_Project__WEBPACK_IMPORTED_MODULE_1__["default"].getallItem();
 
               case 3:
-                this.RAB = _context5.sent.data;
+                this.project = _context5.sent.data;
                 _context5.next = 9;
                 break;
 
@@ -7364,6 +7641,42 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5, this, [[0, 6]]);
       }));
 
+      function getallItem() {
+        return _getallItem.apply(this, arguments);
+      }
+
+      return getallItem;
+    }(),
+    getallRAB: function () {
+      var _getallRAB = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.prev = 0;
+                _context6.next = 3;
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getallItem();
+
+              case 3:
+                this.RAB = _context6.sent.data;
+                _context6.next = 9;
+                break;
+
+              case 6:
+                _context6.prev = 6;
+                _context6.t0 = _context6["catch"](0);
+                console.log(_context6.t0);
+
+              case 9:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this, [[0, 6]]);
+      }));
+
       function getallRAB() {
         return _getallRAB.apply(this, arguments);
       }
@@ -7373,54 +7686,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     addItem: function () {
       var _addItem = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        var payload;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
-          while (1) {
-            switch (_context6.prev = _context6.next) {
-              case 0:
-                _context6.prev = 0;
-                payload = {
-                  id_project: this.rab.id_project,
-                  id_ahs: this.rab.id_ahs,
-                  kode: this.rab.kode,
-                  coefficient: this.rab.coefficient,
-                  total_rab: this.rab.total_rab * this.rab.coefficient,
-                  detail: this.details
-                };
-                _context6.next = 4;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].addItem(payload);
-
-              case 4:
-                this.getallRAB();
-                this.refresh();
-                this.close();
-                _context6.next = 12;
-                break;
-
-              case 9:
-                _context6.prev = 9;
-                _context6.t0 = _context6["catch"](0);
-                console.log(_context6.t0);
-
-              case 12:
-              case "end":
-                return _context6.stop();
-            }
-          }
-        }, _callee6, this, [[0, 9]]);
-      }));
-
-      function addItem() {
-        return _addItem.apply(this, arguments);
-      }
-
-      return addItem;
-    }(),
-    updateItem: function () {
-      var _updateItem = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7(id) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
         var payload;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
           while (1) {
@@ -7436,12 +7702,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   detail: this.details
                 };
                 _context7.next = 4;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].updateItem(payload, id);
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].addItem(payload);
 
               case 4:
                 this.getallRAB();
-                this.close();
                 this.refresh();
+                this.close();
                 _context7.next = 12;
                 break;
 
@@ -7458,6 +7724,53 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee7, this, [[0, 9]]);
       }));
 
+      function addItem() {
+        return _addItem.apply(this, arguments);
+      }
+
+      return addItem;
+    }(),
+    updateItem: function () {
+      var _updateItem = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(id) {
+        var payload;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+          while (1) {
+            switch (_context8.prev = _context8.next) {
+              case 0:
+                _context8.prev = 0;
+                payload = {
+                  id_project: this.rab.id_project,
+                  id_ahs: this.rab.id_ahs,
+                  kode: this.rab.kode,
+                  coefficient: this.rab.coefficient,
+                  total_rab: this.rab.total_rab * this.rab.coefficient,
+                  detail: this.details
+                };
+                _context8.next = 4;
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].updateItem(payload, id);
+
+              case 4:
+                this.getallRAB();
+                this.close();
+                this.refresh();
+                _context8.next = 12;
+                break;
+
+              case 9:
+                _context8.prev = 9;
+                _context8.t0 = _context8["catch"](0);
+                console.log(_context8.t0);
+
+              case 12:
+              case "end":
+                return _context8.stop();
+            }
+          }
+        }, _callee8, this, [[0, 9]]);
+      }));
+
       function updateItem(_x) {
         return _updateItem.apply(this, arguments);
       }
@@ -7467,32 +7780,32 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     deleteItem: function () {
       var _deleteItem = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(id) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9(id) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context8.prev = _context8.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
-                _context8.prev = 0;
-                _context8.next = 3;
+                _context9.prev = 0;
+                _context9.next = 3;
                 return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].deleteItem(id).data;
 
               case 3:
                 this.getallRAB();
                 this.refresh();
-                _context8.next = 10;
+                _context9.next = 10;
                 break;
 
               case 7:
-                _context8.prev = 7;
-                _context8.t0 = _context8["catch"](0);
-                console.log(_context8.t0);
+                _context9.prev = 7;
+                _context9.t0 = _context9["catch"](0);
+                console.log(_context9.t0);
 
               case 10:
               case "end":
-                return _context8.stop();
+                return _context9.stop();
             }
           }
-        }, _callee8, this, [[0, 7]]);
+        }, _callee9, this, [[0, 7]]);
       }));
 
       function deleteItem(_x2) {
@@ -7531,6 +7844,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _service_Store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../service/Store */ "./resources/js/service/Store.js");
+/* harmony import */ var _validations_Store__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../validations/Store */ "./resources/js/validations/Store.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -7801,8 +8115,40 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  validations: _validations_Store__WEBPACK_IMPORTED_MODULE_2__["default"],
   data: function data() {
     return {
       dialog: false,
@@ -7868,6 +8214,63 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return this.store.filter(function (storeData) {
         storeData.name.match(_this.search);
       });
+    },
+    idErrors: function idErrors() {
+      var errors = [];
+      if (!this.$v.Store.kode.$dirty) return errors;
+      !this.$v.Store.kode.maxLength && errors.push('ID must be at most 255 characters long');
+      !this.$v.Store.kode.minLength && errors.push('ID must be at least 4 characters long');
+      !this.$v.Store.kode.required && errors.push('ID is required');
+      return errors;
+    },
+    nameErrors: function nameErrors() {
+      var errors = [];
+      if (!this.$v.Store.name.$dirty) return errors;
+      !this.$v.Store.name.maxLength && errors.push('Name must be at most 255 characters long');
+      !this.$v.Store.name.minLength && errors.push('Name must be at least 10 characters long');
+      !this.$v.Store.name.required && errors.push('Name is required');
+      return errors;
+    },
+    addressErrors: function addressErrors() {
+      var errors = [];
+      if (!this.$v.Store.address.$dirty) return errors;
+      !this.$v.Store.address.maxLength && errors.push('Address must be at most 255 characters long');
+      !this.$v.Store.address.minLength && errors.push('Address must be at least 10 characters long');
+      !this.$v.Store.address.required && errors.push('Address is required');
+      return errors;
+    },
+    typeErrors: function typeErrors() {
+      var errors = [];
+      if (!this.$v.Store.type.$dirty) return errors;
+      !this.$v.Store.type.maxLength && errors.push('Type must be at most 255 characters long');
+      !this.$v.Store.type.required && errors.push('Type is required');
+      return errors;
+    },
+    phoneErrors: function phoneErrors() {
+      var errors = [];
+      if (!this.$v.Store.phone.$dirty) return errors;
+      !this.$v.Store.phone.maxLength && errors.push('Phone number must be at most 15 characters long');
+      !this.$v.Store.phone.minLength && errors.push('Phone number must be at least 10 characters long');
+      !this.$v.Store.phone.required && errors.push('Phone number is required');
+      !this.$v.Store.phone.numeric && errors.push('Phone number must be numeric');
+      return errors;
+    },
+    noErrors: function noErrors() {
+      var errors = [];
+      if (!this.$v.Store.no_telp.$dirty) return errors;
+      !this.$v.Store.no_telp.required && errors.push('Telp number is required');
+      !this.$v.Store.no_telp.numeric && errors.push('Telp number must be numeric');
+      !this.$v.Store.no_telp.maxLength && errors.push('Telp number must be at most 15 characters long');
+      !this.$v.Store.no_telp.minLength && errors.push('Telp number must be at least 10 characters long');
+      return errors;
+    },
+    ownerErrors: function ownerErrors() {
+      var errors = [];
+      if (!this.$v.Store.owner.$dirty) return errors;
+      !this.$v.Store.owner.maxLength && errors.push('Project must be at most 255 characters long');
+      !this.$v.Store.owner.minLength && errors.push('Project must be at least 10 characters long');
+      !this.$v.Store.owner.required && errors.push('Project is required');
+      return errors;
     }
   },
   methods: {
@@ -12188,7 +12591,29 @@ var render = function() {
           _vm._v(" "),
           _c("v-toolbar-title", { staticStyle: { width: "100px" } }, [
             _vm._v("\n      VCP\n    ")
-          ])
+          ]),
+          _vm._v(" "),
+          _c("v-spacer"),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "logout" },
+            [
+              _c(
+                "v-btn",
+                {
+                  attrs: { outlined: "", color: "white" },
+                  on: { click: _vm.logout }
+                },
+                [
+                  _c("v-icon", [_vm._v("logout")]),
+                  _vm._v("\n          Log Out\n        ")
+                ],
+                1
+              )
+            ],
+            1
+          )
         ],
         1
       ),
@@ -14696,7 +15121,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "ID Task" },
+                                          attrs: {
+                                            label: "ID Task",
+                                            "error-messages": _vm.idErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Job.kode.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Job.kode.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Job.kode,
                                             callback: function($$v) {
@@ -14721,7 +15157,15 @@ var render = function() {
                                         _c("v-text-field", {
                                           attrs: {
                                             label: "Name",
-                                            required: ""
+                                            "error-messages": _vm.nameErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Job.name.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Job.name.$touch()
+                                            }
                                           },
                                           model: {
                                             value: _vm.Job.name,
@@ -14749,7 +15193,15 @@ var render = function() {
                                         "item-text": "name",
                                         "item-value": "name",
                                         label: "Satuan",
-                                        required: ""
+                                        "error-messages": _vm.satuanErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Job.satuan.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Job.satuan.$touch()
+                                        }
                                       },
                                       model: {
                                         value: _vm.Job.satuan,
@@ -14867,7 +15319,15 @@ var render = function() {
                                     row: "",
                                     items: _vm.items,
                                     label: "Status",
-                                    required: ""
+                                    "error-messages": _vm.statusErrors
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      return _vm.$v.Job.status.$touch()
+                                    },
+                                    blur: function($event) {
+                                      return _vm.$v.Job.status.$touch()
+                                    }
                                   },
                                   model: {
                                     value: _vm.Job.status,
@@ -14887,7 +15347,15 @@ var render = function() {
                                         _c("v-text-field", {
                                           attrs: {
                                             label: "Spesification",
-                                            required: ""
+                                            "error-messages": _vm.detailsErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Job.details.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Job.details.$touch()
+                                            }
                                           },
                                           model: {
                                             value: _vm.Job.details,
@@ -15033,7 +15501,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "ID Task" },
+                                      attrs: {
+                                        label: "ID Task",
+                                        "error-messages": _vm.idErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Job.kode.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Job.kode.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Job.kode,
                                         callback: function($$v) {
@@ -15056,7 +15535,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Name", required: "" },
+                                      attrs: {
+                                        label: "Name",
+                                        "error-messages": _vm.nameErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Job.name.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Job.name.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Job.name,
                                         callback: function($$v) {
@@ -15083,7 +15573,15 @@ var render = function() {
                                     "item-text": "name",
                                     "item-value": "name",
                                     label: "Satuan",
-                                    required: ""
+                                    "error-messages": _vm.satuanErrors
+                                  },
+                                  on: {
+                                    input: function($event) {
+                                      return _vm.$v.Job.satuan.$touch()
+                                    },
+                                    blur: function($event) {
+                                      return _vm.$v.Job.satuan.$touch()
+                                    }
                                   },
                                   model: {
                                     value: _vm.Job.satuan,
@@ -15106,7 +15604,7 @@ var render = function() {
                                   },
                                   [
                                     _vm._v(
-                                      " \n                Add\n                "
+                                      " \n                  Add\n                  "
                                     )
                                   ]
                                 )
@@ -15199,7 +15697,15 @@ var render = function() {
                                 row: "",
                                 items: _vm.items,
                                 label: "Status",
-                                required: ""
+                                "error-messages": _vm.statusErrors
+                              },
+                              on: {
+                                input: function($event) {
+                                  return _vm.$v.Job.status.$touch()
+                                },
+                                blur: function($event) {
+                                  return _vm.$v.Job.status.$touch()
+                                }
                               },
                               model: {
                                 value: _vm.Job.status,
@@ -15219,7 +15725,15 @@ var render = function() {
                                     _c("v-text-field", {
                                       attrs: {
                                         label: "Spesification",
-                                        required: ""
+                                        "error-messages": _vm.detailsErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Job.details.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Job.details.$touch()
+                                        }
                                       },
                                       model: {
                                         value: _vm.Job.details,
@@ -15454,7 +15968,6 @@ var render = function() {
                                             _vm._g(
                                               {
                                                 attrs: {
-                                                  href: _vm.source,
                                                   icon: "",
                                                   large: "",
                                                   target: "_blank"
@@ -15494,8 +16007,6 @@ var render = function() {
                                                 attrs: {
                                                   icon: "",
                                                   large: "",
-                                                  href:
-                                                    "https://codepen.io/johnjleider/pen/pMvGQO",
                                                   target: "_blank"
                                                 }
                                               },
@@ -15527,10 +16038,17 @@ var render = function() {
                                 [
                                   _c("v-text-field", {
                                     attrs: {
-                                      label: "Username",
-                                      name: "login",
+                                      label: "email",
+                                      name: "email",
                                       "prepend-icon": "person",
                                       type: "text"
+                                    },
+                                    model: {
+                                      value: _vm.email,
+                                      callback: function($$v) {
+                                        _vm.email = $$v
+                                      },
+                                      expression: "email"
                                     }
                                   }),
                                   _vm._v(" "),
@@ -15541,6 +16059,13 @@ var render = function() {
                                       name: "password",
                                       "prepend-icon": "lock",
                                       type: "password"
+                                    },
+                                    model: {
+                                      value: _vm.password,
+                                      callback: function($$v) {
+                                        _vm.password = $$v
+                                      },
+                                      expression: "password"
                                     }
                                   })
                                 ],
@@ -15558,11 +16083,8 @@ var render = function() {
                               _c(
                                 "v-btn",
                                 {
-                                  attrs: {
-                                    color: "light-blue",
-                                    type: "submit"
-                                  },
-                                  on: { click: _vm.loginHandler }
+                                  attrs: { color: "light-blue" },
+                                  on: { click: _vm.login }
                                 },
                                 [_vm._v("Login")]
                               )
@@ -16655,7 +17177,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "ID Project" },
+                                          attrs: {
+                                            label: "ID Project",
+                                            "error-messages": _vm.idErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Project.kode.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Project.kode.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Project.kode,
                                             callback: function($$v) {
@@ -16678,7 +17211,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "Project" },
+                                          attrs: {
+                                            label: "Project",
+                                            "error-messages": _vm.nameErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Project.name.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Project.name.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Project.name,
                                             callback: function($$v) {
@@ -16701,7 +17245,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "Address" },
+                                          attrs: {
+                                            label: "Address",
+                                            "error-messages": _vm.addressErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Project.address.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Project.address.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Project.address,
                                             callback: function($$v) {
@@ -16728,7 +17283,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "Owner" },
+                                          attrs: {
+                                            label: "Owner",
+                                            "error-messages": _vm.ownerErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Project.owner.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Project.owner.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Project.owner,
                                             callback: function($$v) {
@@ -16781,7 +17347,21 @@ var render = function() {
                                                         {
                                                           attrs: {
                                                             label: "Date",
-                                                            required: ""
+                                                            required: "",
+                                                            "error-messages":
+                                                              _vm.dateErrors
+                                                          },
+                                                          on: {
+                                                            input: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.$v.Project.date.$touch()
+                                                            },
+                                                            blur: function(
+                                                              $event
+                                                            ) {
+                                                              return _vm.$v.Project.date.$touch()
+                                                            }
                                                           },
                                                           model: {
                                                             value:
@@ -16852,7 +17432,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "Telp Number" },
+                                          attrs: {
+                                            label: "Telp Number",
+                                            "error-messages": _vm.noErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Project.no_telp.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Project.no_telp.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Project.no_telp,
                                             callback: function($$v) {
@@ -16879,7 +17470,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "Phone Number" },
+                                          attrs: {
+                                            label: "Phone Number",
+                                            "error-messages": _vm.phoneErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Project.phone.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Project.phone.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Project.phone,
                                             callback: function($$v) {
@@ -16906,7 +17508,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "Type" },
+                                          attrs: {
+                                            label: "Type",
+                                            "error-messages": _vm.typeErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Project.type.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Project.type.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Project.type,
                                             callback: function($$v) {
@@ -16929,7 +17542,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "Nominal" },
+                                          attrs: {
+                                            label: "Nominal",
+                                            "error-messages": _vm.nominalErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Project.nominal.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Project.nominal.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Project.nominal,
                                             callback: function($$v) {
@@ -17078,7 +17702,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "ID Project" },
+                                      attrs: {
+                                        label: "ID Project",
+                                        "error-messages": _vm.idErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Project.kode.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Project.kode.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Project.kode,
                                         callback: function($$v) {
@@ -17101,7 +17736,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Project" },
+                                      attrs: {
+                                        label: "Project",
+                                        "error-messages": _vm.nameErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Project.name.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Project.name.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Project.name,
                                         callback: function($$v) {
@@ -17124,7 +17770,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Address" },
+                                      attrs: {
+                                        label: "Address",
+                                        "error-messages": _vm.addressErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Project.address.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Project.address.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Project.address,
                                         callback: function($$v) {
@@ -17147,7 +17804,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Owner" },
+                                      attrs: {
+                                        label: "Owner",
+                                        "error-messages": _vm.ownerErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Project.owner.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Project.owner.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Project.owner,
                                         callback: function($$v) {
@@ -17197,7 +17865,21 @@ var render = function() {
                                                       {
                                                         attrs: {
                                                           label: "Date",
-                                                          required: ""
+                                                          required: "",
+                                                          "error-messages":
+                                                            _vm.dateErrors
+                                                        },
+                                                        on: {
+                                                          input: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.$v.Project.date.$touch()
+                                                          },
+                                                          blur: function(
+                                                            $event
+                                                          ) {
+                                                            return _vm.$v.Project.date.$touch()
+                                                          }
                                                         },
                                                         model: {
                                                           value:
@@ -17267,7 +17949,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Telp Number" },
+                                      attrs: {
+                                        label: "Telp Number",
+                                        "error-messages": _vm.noErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Project.no_telp.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Project.no_telp.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Project.no_telp,
                                         callback: function($$v) {
@@ -17290,7 +17983,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Phone Number" },
+                                      attrs: {
+                                        label: "Phone Number",
+                                        "error-messages": _vm.phoneErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Project.phone.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Project.phone.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Project.phone,
                                         callback: function($$v) {
@@ -17313,7 +18017,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Type" },
+                                      attrs: {
+                                        label: "Type",
+                                        "error-messages": _vm.typeErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Project.type.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Project.type.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Project.type,
                                         callback: function($$v) {
@@ -17336,7 +18051,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Nominal" },
+                                      attrs: {
+                                        label: "Nominal",
+                                        "error-messages": _vm.nominalErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Project.nominal.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Project.nominal.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Project.nominal,
                                         callback: function($$v) {
@@ -17635,6 +18361,29 @@ var render = function() {
                                           _vm.$set(_vm.rab, "id_project", $$v)
                                         },
                                         expression: "rab.id_project"
+                                      }
+                                    })
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "v-layout",
+                                  [
+                                    _c("v-select", {
+                                      attrs: {
+                                        label: "Sub Project",
+                                        items: _vm.groupData,
+                                        "item-text": "name",
+                                        "item-value": "id_group",
+                                        "return-object": false
+                                      },
+                                      model: {
+                                        value: _vm.rab.id_group,
+                                        callback: function($$v) {
+                                          _vm.$set(_vm.rab, "id_group", $$v)
+                                        },
+                                        expression: "rab.id_group"
                                       }
                                     })
                                   ],
@@ -18867,7 +19616,18 @@ var render = function() {
                                       "v-flex",
                                       [
                                         _c("v-text-field", {
-                                          attrs: { label: "ID Store" },
+                                          attrs: {
+                                            label: "ID Store",
+                                            "error-messages": _vm.idErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Store.kode.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Store.kode.$touch()
+                                            }
+                                          },
                                           model: {
                                             value: _vm.Store.kode,
                                             callback: function($$v) {
@@ -18892,7 +19652,15 @@ var render = function() {
                                         _c("v-text-field", {
                                           attrs: {
                                             label: "Name",
-                                            required: ""
+                                            "error-messages": _vm.nameErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Store.name.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Store.name.$touch()
+                                            }
                                           },
                                           model: {
                                             value: _vm.Store.name,
@@ -18918,7 +19686,15 @@ var render = function() {
                                         _c("v-text-field", {
                                           attrs: {
                                             label: "Address",
-                                            required: ""
+                                            "error-messages": _vm.addressErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Store.address.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Store.address.$touch()
+                                            }
                                           },
                                           model: {
                                             value: _vm.Store.address,
@@ -18948,7 +19724,15 @@ var render = function() {
                                         _c("v-text-field", {
                                           attrs: {
                                             label: "Type of Material",
-                                            required: ""
+                                            "error-messages": _vm.typeErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Store.type.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Store.type.$touch()
+                                            }
                                           },
                                           model: {
                                             value: _vm.Store.type,
@@ -18974,7 +19758,15 @@ var render = function() {
                                         _c("v-text-field", {
                                           attrs: {
                                             label: "Telp Number",
-                                            required: ""
+                                            "error-messages": _vm.noErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Store.no_telp.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Store.no_telp.$touch()
+                                            }
                                           },
                                           model: {
                                             value: _vm.Store.no_telp,
@@ -19004,7 +19796,15 @@ var render = function() {
                                         _c("v-text-field", {
                                           attrs: {
                                             label: "Phone Number",
-                                            required: ""
+                                            "error-messages": _vm.phoneErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Store.phone.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Store.phone.$touch()
+                                            }
                                           },
                                           model: {
                                             value: _vm.Store.phone,
@@ -19030,7 +19830,15 @@ var render = function() {
                                         _c("v-text-field", {
                                           attrs: {
                                             label: "Owner",
-                                            required: ""
+                                            "error-messages": _vm.ownerErrors
+                                          },
+                                          on: {
+                                            input: function($event) {
+                                              return _vm.$v.Store.owner.$touch()
+                                            },
+                                            blur: function($event) {
+                                              return _vm.$v.Store.owner.$touch()
+                                            }
                                           },
                                           model: {
                                             value: _vm.Store.owner,
@@ -19176,7 +19984,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "ID Store" },
+                                      attrs: {
+                                        label: "ID Store",
+                                        "error-messages": _vm.idErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Store.kode.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Store.kode.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Store.kode,
                                         callback: function($$v) {
@@ -19199,7 +20018,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Name", required: "" },
+                                      attrs: {
+                                        label: "Name",
+                                        "error-messages": _vm.nameErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Store.name.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Store.name.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Store.name,
                                         callback: function($$v) {
@@ -19222,7 +20052,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Address", required: "" },
+                                      attrs: {
+                                        label: "Address",
+                                        "error-messages": _vm.addressErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Store.address.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Store.address.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Store.address,
                                         callback: function($$v) {
@@ -19247,7 +20088,15 @@ var render = function() {
                                     _c("v-text-field", {
                                       attrs: {
                                         label: "Type of Material",
-                                        required: ""
+                                        "error-messages": _vm.typeErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Store.type.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Store.type.$touch()
+                                        }
                                       },
                                       model: {
                                         value: _vm.Store.type,
@@ -19273,7 +20122,15 @@ var render = function() {
                                     _c("v-text-field", {
                                       attrs: {
                                         label: "Telp Number",
-                                        required: ""
+                                        "error-messages": _vm.noErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Store.no_telp.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Store.no_telp.$touch()
+                                        }
                                       },
                                       model: {
                                         value: _vm.Store.no_telp,
@@ -19299,7 +20156,15 @@ var render = function() {
                                     _c("v-text-field", {
                                       attrs: {
                                         label: "Phone Number",
-                                        required: ""
+                                        "error-messages": _vm.phoneErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Store.phone.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Store.phone.$touch()
+                                        }
                                       },
                                       model: {
                                         value: _vm.Store.phone,
@@ -19323,7 +20188,18 @@ var render = function() {
                                   "v-flex",
                                   [
                                     _c("v-text-field", {
-                                      attrs: { label: "Owner", required: "" },
+                                      attrs: {
+                                        label: "Owner",
+                                        "error-messages": _vm.ownerErrors
+                                      },
+                                      on: {
+                                        input: function($event) {
+                                          return _vm.$v.Store.owner.$touch()
+                                        },
+                                        blur: function($event) {
+                                          return _vm.$v.Store.owner.$touch()
+                                        }
+                                      },
                                       model: {
                                         value: _vm.Store.owner,
                                         callback: function($$v) {
@@ -73668,6 +74544,1037 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/vuex/dist/vuex.esm.js":
+/*!********************************************!*\
+  !*** ./node_modules/vuex/dist/vuex.esm.js ***!
+  \********************************************/
+/*! exports provided: default, Store, install, mapState, mapMutations, mapGetters, mapActions, createNamespacedHelpers */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Store", function() { return Store; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "install", function() { return install; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapState", function() { return mapState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapMutations", function() { return mapMutations; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapGetters", function() { return mapGetters; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mapActions", function() { return mapActions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createNamespacedHelpers", function() { return createNamespacedHelpers; });
+/**
+ * vuex v3.1.1
+ * (c) 2019 Evan You
+ * @license MIT
+ */
+function applyMixin (Vue) {
+  var version = Number(Vue.version.split('.')[0]);
+
+  if (version >= 2) {
+    Vue.mixin({ beforeCreate: vuexInit });
+  } else {
+    // override init and inject vuex init procedure
+    // for 1.x backwards compatibility.
+    var _init = Vue.prototype._init;
+    Vue.prototype._init = function (options) {
+      if ( options === void 0 ) options = {};
+
+      options.init = options.init
+        ? [vuexInit].concat(options.init)
+        : vuexInit;
+      _init.call(this, options);
+    };
+  }
+
+  /**
+   * Vuex init hook, injected into each instances init hooks list.
+   */
+
+  function vuexInit () {
+    var options = this.$options;
+    // store injection
+    if (options.store) {
+      this.$store = typeof options.store === 'function'
+        ? options.store()
+        : options.store;
+    } else if (options.parent && options.parent.$store) {
+      this.$store = options.parent.$store;
+    }
+  }
+}
+
+var target = typeof window !== 'undefined'
+  ? window
+  : typeof global !== 'undefined'
+    ? global
+    : {};
+var devtoolHook = target.__VUE_DEVTOOLS_GLOBAL_HOOK__;
+
+function devtoolPlugin (store) {
+  if (!devtoolHook) { return }
+
+  store._devtoolHook = devtoolHook;
+
+  devtoolHook.emit('vuex:init', store);
+
+  devtoolHook.on('vuex:travel-to-state', function (targetState) {
+    store.replaceState(targetState);
+  });
+
+  store.subscribe(function (mutation, state) {
+    devtoolHook.emit('vuex:mutation', mutation, state);
+  });
+}
+
+/**
+ * Get the first item that pass the test
+ * by second argument function
+ *
+ * @param {Array} list
+ * @param {Function} f
+ * @return {*}
+ */
+
+/**
+ * forEach for object
+ */
+function forEachValue (obj, fn) {
+  Object.keys(obj).forEach(function (key) { return fn(obj[key], key); });
+}
+
+function isObject (obj) {
+  return obj !== null && typeof obj === 'object'
+}
+
+function isPromise (val) {
+  return val && typeof val.then === 'function'
+}
+
+function assert (condition, msg) {
+  if (!condition) { throw new Error(("[vuex] " + msg)) }
+}
+
+function partial (fn, arg) {
+  return function () {
+    return fn(arg)
+  }
+}
+
+// Base data struct for store's module, package with some attribute and method
+var Module = function Module (rawModule, runtime) {
+  this.runtime = runtime;
+  // Store some children item
+  this._children = Object.create(null);
+  // Store the origin module object which passed by programmer
+  this._rawModule = rawModule;
+  var rawState = rawModule.state;
+
+  // Store the origin module's state
+  this.state = (typeof rawState === 'function' ? rawState() : rawState) || {};
+};
+
+var prototypeAccessors = { namespaced: { configurable: true } };
+
+prototypeAccessors.namespaced.get = function () {
+  return !!this._rawModule.namespaced
+};
+
+Module.prototype.addChild = function addChild (key, module) {
+  this._children[key] = module;
+};
+
+Module.prototype.removeChild = function removeChild (key) {
+  delete this._children[key];
+};
+
+Module.prototype.getChild = function getChild (key) {
+  return this._children[key]
+};
+
+Module.prototype.update = function update (rawModule) {
+  this._rawModule.namespaced = rawModule.namespaced;
+  if (rawModule.actions) {
+    this._rawModule.actions = rawModule.actions;
+  }
+  if (rawModule.mutations) {
+    this._rawModule.mutations = rawModule.mutations;
+  }
+  if (rawModule.getters) {
+    this._rawModule.getters = rawModule.getters;
+  }
+};
+
+Module.prototype.forEachChild = function forEachChild (fn) {
+  forEachValue(this._children, fn);
+};
+
+Module.prototype.forEachGetter = function forEachGetter (fn) {
+  if (this._rawModule.getters) {
+    forEachValue(this._rawModule.getters, fn);
+  }
+};
+
+Module.prototype.forEachAction = function forEachAction (fn) {
+  if (this._rawModule.actions) {
+    forEachValue(this._rawModule.actions, fn);
+  }
+};
+
+Module.prototype.forEachMutation = function forEachMutation (fn) {
+  if (this._rawModule.mutations) {
+    forEachValue(this._rawModule.mutations, fn);
+  }
+};
+
+Object.defineProperties( Module.prototype, prototypeAccessors );
+
+var ModuleCollection = function ModuleCollection (rawRootModule) {
+  // register root module (Vuex.Store options)
+  this.register([], rawRootModule, false);
+};
+
+ModuleCollection.prototype.get = function get (path) {
+  return path.reduce(function (module, key) {
+    return module.getChild(key)
+  }, this.root)
+};
+
+ModuleCollection.prototype.getNamespace = function getNamespace (path) {
+  var module = this.root;
+  return path.reduce(function (namespace, key) {
+    module = module.getChild(key);
+    return namespace + (module.namespaced ? key + '/' : '')
+  }, '')
+};
+
+ModuleCollection.prototype.update = function update$1 (rawRootModule) {
+  update([], this.root, rawRootModule);
+};
+
+ModuleCollection.prototype.register = function register (path, rawModule, runtime) {
+    var this$1 = this;
+    if ( runtime === void 0 ) runtime = true;
+
+  if (true) {
+    assertRawModule(path, rawModule);
+  }
+
+  var newModule = new Module(rawModule, runtime);
+  if (path.length === 0) {
+    this.root = newModule;
+  } else {
+    var parent = this.get(path.slice(0, -1));
+    parent.addChild(path[path.length - 1], newModule);
+  }
+
+  // register nested modules
+  if (rawModule.modules) {
+    forEachValue(rawModule.modules, function (rawChildModule, key) {
+      this$1.register(path.concat(key), rawChildModule, runtime);
+    });
+  }
+};
+
+ModuleCollection.prototype.unregister = function unregister (path) {
+  var parent = this.get(path.slice(0, -1));
+  var key = path[path.length - 1];
+  if (!parent.getChild(key).runtime) { return }
+
+  parent.removeChild(key);
+};
+
+function update (path, targetModule, newModule) {
+  if (true) {
+    assertRawModule(path, newModule);
+  }
+
+  // update target module
+  targetModule.update(newModule);
+
+  // update nested modules
+  if (newModule.modules) {
+    for (var key in newModule.modules) {
+      if (!targetModule.getChild(key)) {
+        if (true) {
+          console.warn(
+            "[vuex] trying to add a new module '" + key + "' on hot reloading, " +
+            'manual reload is needed'
+          );
+        }
+        return
+      }
+      update(
+        path.concat(key),
+        targetModule.getChild(key),
+        newModule.modules[key]
+      );
+    }
+  }
+}
+
+var functionAssert = {
+  assert: function (value) { return typeof value === 'function'; },
+  expected: 'function'
+};
+
+var objectAssert = {
+  assert: function (value) { return typeof value === 'function' ||
+    (typeof value === 'object' && typeof value.handler === 'function'); },
+  expected: 'function or object with "handler" function'
+};
+
+var assertTypes = {
+  getters: functionAssert,
+  mutations: functionAssert,
+  actions: objectAssert
+};
+
+function assertRawModule (path, rawModule) {
+  Object.keys(assertTypes).forEach(function (key) {
+    if (!rawModule[key]) { return }
+
+    var assertOptions = assertTypes[key];
+
+    forEachValue(rawModule[key], function (value, type) {
+      assert(
+        assertOptions.assert(value),
+        makeAssertionMessage(path, key, type, value, assertOptions.expected)
+      );
+    });
+  });
+}
+
+function makeAssertionMessage (path, key, type, value, expected) {
+  var buf = key + " should be " + expected + " but \"" + key + "." + type + "\"";
+  if (path.length > 0) {
+    buf += " in module \"" + (path.join('.')) + "\"";
+  }
+  buf += " is " + (JSON.stringify(value)) + ".";
+  return buf
+}
+
+var Vue; // bind on install
+
+var Store = function Store (options) {
+  var this$1 = this;
+  if ( options === void 0 ) options = {};
+
+  // Auto install if it is not done yet and `window` has `Vue`.
+  // To allow users to avoid auto-installation in some cases,
+  // this code should be placed here. See #731
+  if (!Vue && typeof window !== 'undefined' && window.Vue) {
+    install(window.Vue);
+  }
+
+  if (true) {
+    assert(Vue, "must call Vue.use(Vuex) before creating a store instance.");
+    assert(typeof Promise !== 'undefined', "vuex requires a Promise polyfill in this browser.");
+    assert(this instanceof Store, "store must be called with the new operator.");
+  }
+
+  var plugins = options.plugins; if ( plugins === void 0 ) plugins = [];
+  var strict = options.strict; if ( strict === void 0 ) strict = false;
+
+  // store internal state
+  this._committing = false;
+  this._actions = Object.create(null);
+  this._actionSubscribers = [];
+  this._mutations = Object.create(null);
+  this._wrappedGetters = Object.create(null);
+  this._modules = new ModuleCollection(options);
+  this._modulesNamespaceMap = Object.create(null);
+  this._subscribers = [];
+  this._watcherVM = new Vue();
+
+  // bind commit and dispatch to self
+  var store = this;
+  var ref = this;
+  var dispatch = ref.dispatch;
+  var commit = ref.commit;
+  this.dispatch = function boundDispatch (type, payload) {
+    return dispatch.call(store, type, payload)
+  };
+  this.commit = function boundCommit (type, payload, options) {
+    return commit.call(store, type, payload, options)
+  };
+
+  // strict mode
+  this.strict = strict;
+
+  var state = this._modules.root.state;
+
+  // init root module.
+  // this also recursively registers all sub-modules
+  // and collects all module getters inside this._wrappedGetters
+  installModule(this, state, [], this._modules.root);
+
+  // initialize the store vm, which is responsible for the reactivity
+  // (also registers _wrappedGetters as computed properties)
+  resetStoreVM(this, state);
+
+  // apply plugins
+  plugins.forEach(function (plugin) { return plugin(this$1); });
+
+  var useDevtools = options.devtools !== undefined ? options.devtools : Vue.config.devtools;
+  if (useDevtools) {
+    devtoolPlugin(this);
+  }
+};
+
+var prototypeAccessors$1 = { state: { configurable: true } };
+
+prototypeAccessors$1.state.get = function () {
+  return this._vm._data.$$state
+};
+
+prototypeAccessors$1.state.set = function (v) {
+  if (true) {
+    assert(false, "use store.replaceState() to explicit replace store state.");
+  }
+};
+
+Store.prototype.commit = function commit (_type, _payload, _options) {
+    var this$1 = this;
+
+  // check object-style commit
+  var ref = unifyObjectStyle(_type, _payload, _options);
+    var type = ref.type;
+    var payload = ref.payload;
+    var options = ref.options;
+
+  var mutation = { type: type, payload: payload };
+  var entry = this._mutations[type];
+  if (!entry) {
+    if (true) {
+      console.error(("[vuex] unknown mutation type: " + type));
+    }
+    return
+  }
+  this._withCommit(function () {
+    entry.forEach(function commitIterator (handler) {
+      handler(payload);
+    });
+  });
+  this._subscribers.forEach(function (sub) { return sub(mutation, this$1.state); });
+
+  if (
+     true &&
+    options && options.silent
+  ) {
+    console.warn(
+      "[vuex] mutation type: " + type + ". Silent option has been removed. " +
+      'Use the filter functionality in the vue-devtools'
+    );
+  }
+};
+
+Store.prototype.dispatch = function dispatch (_type, _payload) {
+    var this$1 = this;
+
+  // check object-style dispatch
+  var ref = unifyObjectStyle(_type, _payload);
+    var type = ref.type;
+    var payload = ref.payload;
+
+  var action = { type: type, payload: payload };
+  var entry = this._actions[type];
+  if (!entry) {
+    if (true) {
+      console.error(("[vuex] unknown action type: " + type));
+    }
+    return
+  }
+
+  try {
+    this._actionSubscribers
+      .filter(function (sub) { return sub.before; })
+      .forEach(function (sub) { return sub.before(action, this$1.state); });
+  } catch (e) {
+    if (true) {
+      console.warn("[vuex] error in before action subscribers: ");
+      console.error(e);
+    }
+  }
+
+  var result = entry.length > 1
+    ? Promise.all(entry.map(function (handler) { return handler(payload); }))
+    : entry[0](payload);
+
+  return result.then(function (res) {
+    try {
+      this$1._actionSubscribers
+        .filter(function (sub) { return sub.after; })
+        .forEach(function (sub) { return sub.after(action, this$1.state); });
+    } catch (e) {
+      if (true) {
+        console.warn("[vuex] error in after action subscribers: ");
+        console.error(e);
+      }
+    }
+    return res
+  })
+};
+
+Store.prototype.subscribe = function subscribe (fn) {
+  return genericSubscribe(fn, this._subscribers)
+};
+
+Store.prototype.subscribeAction = function subscribeAction (fn) {
+  var subs = typeof fn === 'function' ? { before: fn } : fn;
+  return genericSubscribe(subs, this._actionSubscribers)
+};
+
+Store.prototype.watch = function watch (getter, cb, options) {
+    var this$1 = this;
+
+  if (true) {
+    assert(typeof getter === 'function', "store.watch only accepts a function.");
+  }
+  return this._watcherVM.$watch(function () { return getter(this$1.state, this$1.getters); }, cb, options)
+};
+
+Store.prototype.replaceState = function replaceState (state) {
+    var this$1 = this;
+
+  this._withCommit(function () {
+    this$1._vm._data.$$state = state;
+  });
+};
+
+Store.prototype.registerModule = function registerModule (path, rawModule, options) {
+    if ( options === void 0 ) options = {};
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if (true) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+    assert(path.length > 0, 'cannot register the root module by using registerModule.');
+  }
+
+  this._modules.register(path, rawModule);
+  installModule(this, this.state, path, this._modules.get(path), options.preserveState);
+  // reset store to update getters...
+  resetStoreVM(this, this.state);
+};
+
+Store.prototype.unregisterModule = function unregisterModule (path) {
+    var this$1 = this;
+
+  if (typeof path === 'string') { path = [path]; }
+
+  if (true) {
+    assert(Array.isArray(path), "module path must be a string or an Array.");
+  }
+
+  this._modules.unregister(path);
+  this._withCommit(function () {
+    var parentState = getNestedState(this$1.state, path.slice(0, -1));
+    Vue.delete(parentState, path[path.length - 1]);
+  });
+  resetStore(this);
+};
+
+Store.prototype.hotUpdate = function hotUpdate (newOptions) {
+  this._modules.update(newOptions);
+  resetStore(this, true);
+};
+
+Store.prototype._withCommit = function _withCommit (fn) {
+  var committing = this._committing;
+  this._committing = true;
+  fn();
+  this._committing = committing;
+};
+
+Object.defineProperties( Store.prototype, prototypeAccessors$1 );
+
+function genericSubscribe (fn, subs) {
+  if (subs.indexOf(fn) < 0) {
+    subs.push(fn);
+  }
+  return function () {
+    var i = subs.indexOf(fn);
+    if (i > -1) {
+      subs.splice(i, 1);
+    }
+  }
+}
+
+function resetStore (store, hot) {
+  store._actions = Object.create(null);
+  store._mutations = Object.create(null);
+  store._wrappedGetters = Object.create(null);
+  store._modulesNamespaceMap = Object.create(null);
+  var state = store.state;
+  // init all modules
+  installModule(store, state, [], store._modules.root, true);
+  // reset vm
+  resetStoreVM(store, state, hot);
+}
+
+function resetStoreVM (store, state, hot) {
+  var oldVm = store._vm;
+
+  // bind store public getters
+  store.getters = {};
+  var wrappedGetters = store._wrappedGetters;
+  var computed = {};
+  forEachValue(wrappedGetters, function (fn, key) {
+    // use computed to leverage its lazy-caching mechanism
+    // direct inline function use will lead to closure preserving oldVm.
+    // using partial to return function with only arguments preserved in closure enviroment.
+    computed[key] = partial(fn, store);
+    Object.defineProperty(store.getters, key, {
+      get: function () { return store._vm[key]; },
+      enumerable: true // for local getters
+    });
+  });
+
+  // use a Vue instance to store the state tree
+  // suppress warnings just in case the user has added
+  // some funky global mixins
+  var silent = Vue.config.silent;
+  Vue.config.silent = true;
+  store._vm = new Vue({
+    data: {
+      $$state: state
+    },
+    computed: computed
+  });
+  Vue.config.silent = silent;
+
+  // enable strict mode for new vm
+  if (store.strict) {
+    enableStrictMode(store);
+  }
+
+  if (oldVm) {
+    if (hot) {
+      // dispatch changes in all subscribed watchers
+      // to force getter re-evaluation for hot reloading.
+      store._withCommit(function () {
+        oldVm._data.$$state = null;
+      });
+    }
+    Vue.nextTick(function () { return oldVm.$destroy(); });
+  }
+}
+
+function installModule (store, rootState, path, module, hot) {
+  var isRoot = !path.length;
+  var namespace = store._modules.getNamespace(path);
+
+  // register in namespace map
+  if (module.namespaced) {
+    store._modulesNamespaceMap[namespace] = module;
+  }
+
+  // set state
+  if (!isRoot && !hot) {
+    var parentState = getNestedState(rootState, path.slice(0, -1));
+    var moduleName = path[path.length - 1];
+    store._withCommit(function () {
+      Vue.set(parentState, moduleName, module.state);
+    });
+  }
+
+  var local = module.context = makeLocalContext(store, namespace, path);
+
+  module.forEachMutation(function (mutation, key) {
+    var namespacedType = namespace + key;
+    registerMutation(store, namespacedType, mutation, local);
+  });
+
+  module.forEachAction(function (action, key) {
+    var type = action.root ? key : namespace + key;
+    var handler = action.handler || action;
+    registerAction(store, type, handler, local);
+  });
+
+  module.forEachGetter(function (getter, key) {
+    var namespacedType = namespace + key;
+    registerGetter(store, namespacedType, getter, local);
+  });
+
+  module.forEachChild(function (child, key) {
+    installModule(store, rootState, path.concat(key), child, hot);
+  });
+}
+
+/**
+ * make localized dispatch, commit, getters and state
+ * if there is no namespace, just use root ones
+ */
+function makeLocalContext (store, namespace, path) {
+  var noNamespace = namespace === '';
+
+  var local = {
+    dispatch: noNamespace ? store.dispatch : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if ( true && !store._actions[type]) {
+          console.error(("[vuex] unknown local action type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      return store.dispatch(type, payload)
+    },
+
+    commit: noNamespace ? store.commit : function (_type, _payload, _options) {
+      var args = unifyObjectStyle(_type, _payload, _options);
+      var payload = args.payload;
+      var options = args.options;
+      var type = args.type;
+
+      if (!options || !options.root) {
+        type = namespace + type;
+        if ( true && !store._mutations[type]) {
+          console.error(("[vuex] unknown local mutation type: " + (args.type) + ", global type: " + type));
+          return
+        }
+      }
+
+      store.commit(type, payload, options);
+    }
+  };
+
+  // getters and state object must be gotten lazily
+  // because they will be changed by vm update
+  Object.defineProperties(local, {
+    getters: {
+      get: noNamespace
+        ? function () { return store.getters; }
+        : function () { return makeLocalGetters(store, namespace); }
+    },
+    state: {
+      get: function () { return getNestedState(store.state, path); }
+    }
+  });
+
+  return local
+}
+
+function makeLocalGetters (store, namespace) {
+  var gettersProxy = {};
+
+  var splitPos = namespace.length;
+  Object.keys(store.getters).forEach(function (type) {
+    // skip if the target getter is not match this namespace
+    if (type.slice(0, splitPos) !== namespace) { return }
+
+    // extract local getter type
+    var localType = type.slice(splitPos);
+
+    // Add a port to the getters proxy.
+    // Define as getter property because
+    // we do not want to evaluate the getters in this time.
+    Object.defineProperty(gettersProxy, localType, {
+      get: function () { return store.getters[type]; },
+      enumerable: true
+    });
+  });
+
+  return gettersProxy
+}
+
+function registerMutation (store, type, handler, local) {
+  var entry = store._mutations[type] || (store._mutations[type] = []);
+  entry.push(function wrappedMutationHandler (payload) {
+    handler.call(store, local.state, payload);
+  });
+}
+
+function registerAction (store, type, handler, local) {
+  var entry = store._actions[type] || (store._actions[type] = []);
+  entry.push(function wrappedActionHandler (payload, cb) {
+    var res = handler.call(store, {
+      dispatch: local.dispatch,
+      commit: local.commit,
+      getters: local.getters,
+      state: local.state,
+      rootGetters: store.getters,
+      rootState: store.state
+    }, payload, cb);
+    if (!isPromise(res)) {
+      res = Promise.resolve(res);
+    }
+    if (store._devtoolHook) {
+      return res.catch(function (err) {
+        store._devtoolHook.emit('vuex:error', err);
+        throw err
+      })
+    } else {
+      return res
+    }
+  });
+}
+
+function registerGetter (store, type, rawGetter, local) {
+  if (store._wrappedGetters[type]) {
+    if (true) {
+      console.error(("[vuex] duplicate getter key: " + type));
+    }
+    return
+  }
+  store._wrappedGetters[type] = function wrappedGetter (store) {
+    return rawGetter(
+      local.state, // local state
+      local.getters, // local getters
+      store.state, // root state
+      store.getters // root getters
+    )
+  };
+}
+
+function enableStrictMode (store) {
+  store._vm.$watch(function () { return this._data.$$state }, function () {
+    if (true) {
+      assert(store._committing, "do not mutate vuex store state outside mutation handlers.");
+    }
+  }, { deep: true, sync: true });
+}
+
+function getNestedState (state, path) {
+  return path.length
+    ? path.reduce(function (state, key) { return state[key]; }, state)
+    : state
+}
+
+function unifyObjectStyle (type, payload, options) {
+  if (isObject(type) && type.type) {
+    options = payload;
+    payload = type;
+    type = type.type;
+  }
+
+  if (true) {
+    assert(typeof type === 'string', ("expects string as the type, but found " + (typeof type) + "."));
+  }
+
+  return { type: type, payload: payload, options: options }
+}
+
+function install (_Vue) {
+  if (Vue && _Vue === Vue) {
+    if (true) {
+      console.error(
+        '[vuex] already installed. Vue.use(Vuex) should be called only once.'
+      );
+    }
+    return
+  }
+  Vue = _Vue;
+  applyMixin(Vue);
+}
+
+/**
+ * Reduce the code which written in Vue.js for getting the state.
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} states # Object's item can be a function which accept state and getters for param, you can do something for state and getters in it.
+ * @param {Object}
+ */
+var mapState = normalizeNamespace(function (namespace, states) {
+  var res = {};
+  normalizeMap(states).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedState () {
+      var state = this.$store.state;
+      var getters = this.$store.getters;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapState', namespace);
+        if (!module) {
+          return
+        }
+        state = module.context.state;
+        getters = module.context.getters;
+      }
+      return typeof val === 'function'
+        ? val.call(this, state, getters)
+        : state[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for committing the mutation
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} mutations # Object's item can be a function which accept `commit` function as the first param, it can accept anthor params. You can commit mutation and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapMutations = normalizeNamespace(function (namespace, mutations) {
+  var res = {};
+  normalizeMap(mutations).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedMutation () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // Get the commit method from store
+      var commit = this.$store.commit;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapMutations', namespace);
+        if (!module) {
+          return
+        }
+        commit = module.context.commit;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [commit].concat(args))
+        : commit.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for getting the getters
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} getters
+ * @return {Object}
+ */
+var mapGetters = normalizeNamespace(function (namespace, getters) {
+  var res = {};
+  normalizeMap(getters).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    // The namespace has been mutated by normalizeNamespace
+    val = namespace + val;
+    res[key] = function mappedGetter () {
+      if (namespace && !getModuleByNamespace(this.$store, 'mapGetters', namespace)) {
+        return
+      }
+      if ( true && !(val in this.$store.getters)) {
+        console.error(("[vuex] unknown getter: " + val));
+        return
+      }
+      return this.$store.getters[val]
+    };
+    // mark vuex getter for devtools
+    res[key].vuex = true;
+  });
+  return res
+});
+
+/**
+ * Reduce the code which written in Vue.js for dispatch the action
+ * @param {String} [namespace] - Module's namespace
+ * @param {Object|Array} actions # Object's item can be a function which accept `dispatch` function as the first param, it can accept anthor params. You can dispatch action and do any other things in this function. specially, You need to pass anthor params from the mapped function.
+ * @return {Object}
+ */
+var mapActions = normalizeNamespace(function (namespace, actions) {
+  var res = {};
+  normalizeMap(actions).forEach(function (ref) {
+    var key = ref.key;
+    var val = ref.val;
+
+    res[key] = function mappedAction () {
+      var args = [], len = arguments.length;
+      while ( len-- ) args[ len ] = arguments[ len ];
+
+      // get dispatch function from store
+      var dispatch = this.$store.dispatch;
+      if (namespace) {
+        var module = getModuleByNamespace(this.$store, 'mapActions', namespace);
+        if (!module) {
+          return
+        }
+        dispatch = module.context.dispatch;
+      }
+      return typeof val === 'function'
+        ? val.apply(this, [dispatch].concat(args))
+        : dispatch.apply(this.$store, [val].concat(args))
+    };
+  });
+  return res
+});
+
+/**
+ * Rebinding namespace param for mapXXX function in special scoped, and return them by simple object
+ * @param {String} namespace
+ * @return {Object}
+ */
+var createNamespacedHelpers = function (namespace) { return ({
+  mapState: mapState.bind(null, namespace),
+  mapGetters: mapGetters.bind(null, namespace),
+  mapMutations: mapMutations.bind(null, namespace),
+  mapActions: mapActions.bind(null, namespace)
+}); };
+
+/**
+ * Normalize the map
+ * normalizeMap([1, 2, 3]) => [ { key: 1, val: 1 }, { key: 2, val: 2 }, { key: 3, val: 3 } ]
+ * normalizeMap({a: 1, b: 2, c: 3}) => [ { key: 'a', val: 1 }, { key: 'b', val: 2 }, { key: 'c', val: 3 } ]
+ * @param {Array|Object} map
+ * @return {Object}
+ */
+function normalizeMap (map) {
+  return Array.isArray(map)
+    ? map.map(function (key) { return ({ key: key, val: key }); })
+    : Object.keys(map).map(function (key) { return ({ key: key, val: map[key] }); })
+}
+
+/**
+ * Return a function expect two param contains namespace and map. it will normalize the namespace and then the param's function will handle the new namespace and the map.
+ * @param {Function} fn
+ * @return {Function}
+ */
+function normalizeNamespace (fn) {
+  return function (namespace, map) {
+    if (typeof namespace !== 'string') {
+      map = namespace;
+      namespace = '';
+    } else if (namespace.charAt(namespace.length - 1) !== '/') {
+      namespace += '/';
+    }
+    return fn(namespace, map)
+  }
+}
+
+/**
+ * Search a special module from store by namespace. if module not exist, print error message.
+ * @param {Object} store
+ * @param {String} helper
+ * @param {String} namespace
+ * @return {Object}
+ */
+function getModuleByNamespace (store, helper, namespace) {
+  var module = store._modulesNamespaceMap[namespace];
+  if ( true && !module) {
+    console.error(("[vuex] module namespace not found in " + helper + "(): " + namespace));
+  }
+  return module
+}
+
+var index_esm = {
+  Store: Store,
+  install: install,
+  version: '3.1.1',
+  mapState: mapState,
+  mapMutations: mapMutations,
+  mapGetters: mapGetters,
+  mapActions: mapActions,
+  createNamespacedHelpers: createNamespacedHelpers
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (index_esm);
+
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
 /***/ "./node_modules/webpack/buildin/global.js":
 /*!***********************************!*\
   !*** (webpack)/buildin/global.js ***!
@@ -73713,14 +75620,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuetify */ "./node_modules/vuetify/dist/vuetify.js");
 /* harmony import */ var vuetify__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(vuetify__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
-/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
-/* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! vuetify/dist/vuetify.min.css */ "./node_modules/vuetify/dist/vuetify.min.css");
-/* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuelidate */ "./node_modules/vuelidate/lib/index.js");
+/* harmony import */ var vuelidate__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(vuelidate__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _routes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./routes */ "./resources/js/routes.js");
+/* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuetify/dist/vuetify.min.css */ "./node_modules/vuetify/dist/vuetify.min.css");
+/* harmony import */ var vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(vuetify_dist_vuetify_min_css__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -73729,7 +75637,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // import auth from './service/Auth'
-// import store from './store'
+
 
 
  //import http from './service/Http'
@@ -73743,21 +75651,21 @@ __webpack_require__.r(__webpack_exports__);
 
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]);
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuetify__WEBPACK_IMPORTED_MODULE_2___default.a);
-vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuelidate__WEBPACK_IMPORTED_MODULE_4___default.a); // Vue.component('apexchart', VueApexCharts)
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuelidate__WEBPACK_IMPORTED_MODULE_5___default.a); // Vue.component('apexchart', VueApexCharts)
 
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   base: '/',
   mode: 'history',
-  routes: _routes__WEBPACK_IMPORTED_MODULE_5__["routes"]
+  routes: _routes__WEBPACK_IMPORTED_MODULE_6__["routes"]
 });
 vue__WEBPACK_IMPORTED_MODULE_0___default.a.router = router;
 new vue__WEBPACK_IMPORTED_MODULE_0___default.a({
   el: '#app',
   router: router,
   vuetify: new vuetify__WEBPACK_IMPORTED_MODULE_2___default.a(),
-  //store,
+  store: _store__WEBPACK_IMPORTED_MODULE_3__["default"],
   render: function render(h) {
-    return h(_components_App__WEBPACK_IMPORTED_MODULE_7__["default"]);
+    return h(_components_App__WEBPACK_IMPORTED_MODULE_8__["default"]);
   },
   created: function created() {
     try {
@@ -74489,6 +76397,94 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/middleware.js":
+/*!************************************!*\
+  !*** ./resources/js/middleware.js ***!
+  \************************************/
+/*! exports provided: auth, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "auth", function() { return auth; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return middleware; });
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./store */ "./resources/js/store/index.js");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+function auth(_x, _x2, _x3) {
+  return _auth.apply(this, arguments);
+}
+
+function _auth() {
+  _auth = _asyncToGenerator(
+  /*#__PURE__*/
+  _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(to, from, next) {
+    return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            if (localStorage.getItem('access_token')) {
+              _context2.next = 3;
+              break;
+            }
+
+            next({
+              name: 'login'
+            });
+            return _context2.abrupt("return");
+
+          case 3:
+            next();
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _auth.apply(this, arguments);
+}
+
+function middleware(guards) {
+  return function (to, from, next) {
+    guards.forEach(
+    /*#__PURE__*/
+    function () {
+      var _ref = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(guard) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                _context.next = 2;
+                return guard(to, from, next);
+
+              case 2:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      return function (_x4) {
+        return _ref.apply(this, arguments);
+      };
+    }());
+  };
+}
+
+/***/ }),
+
 /***/ "./resources/js/routes.js":
 /*!********************************!*\
   !*** ./resources/js/routes.js ***!
@@ -74499,18 +76495,19 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "routes", function() { return routes; });
-/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
-/* harmony import */ var _components_LoginComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/LoginComponent */ "./resources/js/components/LoginComponent.vue");
-/* harmony import */ var _components_DashboardComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/DashboardComponent */ "./resources/js/components/DashboardComponent.vue");
-/* harmony import */ var _components_ProjectComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/ProjectComponent */ "./resources/js/components/ProjectComponent.vue");
-/* harmony import */ var _components_JobComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/JobComponent */ "./resources/js/components/JobComponent.vue");
-/* harmony import */ var _components_MaterialsComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/MaterialsComponent */ "./resources/js/components/MaterialsComponent.vue");
-/* harmony import */ var _components_RABComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/RABComponent */ "./resources/js/components/RABComponent.vue");
-/* harmony import */ var _components_AHSComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/AHSComponent */ "./resources/js/components/AHSComponent.vue");
-/* harmony import */ var _components_HomeComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/HomeComponent */ "./resources/js/components/HomeComponent.vue");
-/* harmony import */ var _components_StoreComponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/StoreComponent */ "./resources/js/components/StoreComponent.vue");
-/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
-//import middleware, { auth } from './middleware'
+/* harmony import */ var _middleware__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./middleware */ "./resources/js/middleware.js");
+/* harmony import */ var _components_App__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/App */ "./resources/js/components/App.vue");
+/* harmony import */ var _components_LoginComponent__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/LoginComponent */ "./resources/js/components/LoginComponent.vue");
+/* harmony import */ var _components_DashboardComponent__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/DashboardComponent */ "./resources/js/components/DashboardComponent.vue");
+/* harmony import */ var _components_ProjectComponent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/ProjectComponent */ "./resources/js/components/ProjectComponent.vue");
+/* harmony import */ var _components_JobComponent__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/JobComponent */ "./resources/js/components/JobComponent.vue");
+/* harmony import */ var _components_MaterialsComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/MaterialsComponent */ "./resources/js/components/MaterialsComponent.vue");
+/* harmony import */ var _components_RABComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/RABComponent */ "./resources/js/components/RABComponent.vue");
+/* harmony import */ var _components_AHSComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/AHSComponent */ "./resources/js/components/AHSComponent.vue");
+/* harmony import */ var _components_HomeComponent__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/HomeComponent */ "./resources/js/components/HomeComponent.vue");
+/* harmony import */ var _components_StoreComponent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/StoreComponent */ "./resources/js/components/StoreComponent.vue");
+/* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
+
 
 
 
@@ -74525,39 +76522,46 @@ __webpack_require__.r(__webpack_exports__);
 var routes = [{
   path: '/',
   name: 'login',
-  component: _components_LoginComponent__WEBPACK_IMPORTED_MODULE_1__["default"]
+  component: _components_LoginComponent__WEBPACK_IMPORTED_MODULE_2__["default"]
 }, {
   path: '/dashboard',
   name: 'dashboard',
-  component: _components_DashboardComponent__WEBPACK_IMPORTED_MODULE_2__["default"],
+  component: _components_DashboardComponent__WEBPACK_IMPORTED_MODULE_3__["default"],
   children: [{
     path: '/project',
     name: 'project',
-    component: _components_ProjectComponent__WEBPACK_IMPORTED_MODULE_3__["default"]
+    component: _components_ProjectComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
+    beforeEnter: Object(_middleware__WEBPACK_IMPORTED_MODULE_0__["default"])([_middleware__WEBPACK_IMPORTED_MODULE_0__["auth"]])
   }, {
     path: '/job',
     name: 'job',
-    component: _components_JobComponent__WEBPACK_IMPORTED_MODULE_4__["default"]
+    component: _components_JobComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
+    beforeEnter: Object(_middleware__WEBPACK_IMPORTED_MODULE_0__["default"])([_middleware__WEBPACK_IMPORTED_MODULE_0__["auth"]])
   }, {
     path: '/materials',
     name: 'materials',
-    component: _components_MaterialsComponent__WEBPACK_IMPORTED_MODULE_5__["default"]
+    component: _components_MaterialsComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
+    beforeEnter: Object(_middleware__WEBPACK_IMPORTED_MODULE_0__["default"])([_middleware__WEBPACK_IMPORTED_MODULE_0__["auth"]])
   }, {
     path: '/transaction',
     name: 'transaction',
-    component: _components_RABComponent__WEBPACK_IMPORTED_MODULE_6__["default"]
+    component: _components_RABComponent__WEBPACK_IMPORTED_MODULE_7__["default"],
+    beforeEnter: Object(_middleware__WEBPACK_IMPORTED_MODULE_0__["default"])([_middleware__WEBPACK_IMPORTED_MODULE_0__["auth"]])
   }, {
     path: '/analisa',
     name: 'analisa',
-    component: _components_AHSComponent__WEBPACK_IMPORTED_MODULE_7__["default"]
+    component: _components_AHSComponent__WEBPACK_IMPORTED_MODULE_8__["default"],
+    beforeEnter: Object(_middleware__WEBPACK_IMPORTED_MODULE_0__["default"])([_middleware__WEBPACK_IMPORTED_MODULE_0__["auth"]])
   }, {
     path: '/home',
     name: 'home',
-    component: _components_HomeComponent__WEBPACK_IMPORTED_MODULE_8__["default"]
+    component: _components_HomeComponent__WEBPACK_IMPORTED_MODULE_9__["default"],
+    beforeEnter: Object(_middleware__WEBPACK_IMPORTED_MODULE_0__["default"])([_middleware__WEBPACK_IMPORTED_MODULE_0__["auth"]])
   }, {
     path: '/store',
     name: 'store',
-    component: _components_StoreComponent__WEBPACK_IMPORTED_MODULE_9__["default"]
+    component: _components_StoreComponent__WEBPACK_IMPORTED_MODULE_10__["default"],
+    beforeEnter: Object(_middleware__WEBPACK_IMPORTED_MODULE_0__["default"])([_middleware__WEBPACK_IMPORTED_MODULE_0__["auth"]])
   }]
 }];
 
@@ -75047,6 +77051,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../http */ "./resources/js/http.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  getGroup: function getGroup() {
+    return new Promise(function (resolve, reject) {
+      var successCallback = function successCallback(res) {
+        var data = res.data;
+        resolve(data);
+      };
+
+      var errorCallback = function errorCallback(err) {
+        reject(err);
+      };
+
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/groups', successCallback, errorCallback);
+    });
+  },
   getallDetails: function getallDetails() {
     return new Promise(function (resolve, reject) {
       var successCallback = function successCallback(res) {
@@ -75207,6 +77225,240 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/store/index.js":
+/*!*************************************!*\
+  !*** ./resources/js/store/index.js ***!
+  \*************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var _modules__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules */ "./resources/js/store/modules/index.js");
+
+
+
+vue__WEBPACK_IMPORTED_MODULE_0___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
+/* harmony default export */ __webpack_exports__["default"] = (new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store({
+  modules: _modules__WEBPACK_IMPORTED_MODULE_2__["default"]
+}));
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/Login.js":
+/*!*********************************************!*\
+  !*** ./resources/js/store/modules/Login.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var state = {
+  isLoggedIn: !!localStorage.getItem('access_token')
+};
+var mutations = {
+  loginUser: function loginUser(state) {
+    state.isLoggedIn = true;
+  },
+  logoutUser: function logoutUser(state) {
+    state.isLoggedIn = false;
+  }
+};
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/Token.js":
+/*!*********************************************!*\
+  !*** ./resources/js/store/modules/Token.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
+var state = {
+  token: localStorage.getItem('access_token') || null,
+  loading: true,
+  error: null
+};
+var mutations = {
+  retrieveToken: function retrieveToken(state, token) {
+    state.token = token;
+  },
+  destroyToken: function destroyToken(state) {
+    state.token = null;
+  }
+};
+var getters = {
+  loggedIn: function loggedIn(state) {
+    return state.token != null;
+  }
+};
+var actions = {
+  retrieveToken: function () {
+    var _retrieveToken = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(context, credentials) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              console.log('cek 456');
+              return _context.abrupt("return", new Promise(function (resolve, reject) {
+                axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/auth/login', {
+                  email: credentials.email,
+                  password: credentials.password
+                }).then(function (response) {
+                  var token = response.data.access_token;
+                  localStorage.setItem('access_token', token);
+                  resolve(response);
+                })["catch"](function (error) {
+                  console.log(error);
+                  alert('Username atau Password salah');
+                  reject(error);
+                });
+              }));
+
+            case 2:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee);
+    }));
+
+    function retrieveToken(_x, _x2) {
+      return _retrieveToken.apply(this, arguments);
+    }
+
+    return retrieveToken;
+  }(),
+  deleteToken: function () {
+    var _deleteToken = _asyncToGenerator(
+    /*#__PURE__*/
+    _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(context) {
+      return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              axios__WEBPACK_IMPORTED_MODULE_1___default.a.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token');
+
+              if (!localStorage.getItem('access_token')) {
+                _context2.next = 3;
+                break;
+              }
+
+              return _context2.abrupt("return", new Promise(function (resolve, reject) {
+                axios__WEBPACK_IMPORTED_MODULE_1___default.a.post('/api/auth/logout').then(function (response) {
+                  localStorage.removeItem('access_token');
+                  context.commit('destroyToken');
+                  resolve(response);
+                })["catch"](function (error) {
+                  console.log(error);
+                  context.commit('destroyToken');
+                  reject(error);
+                });
+              }));
+
+            case 3:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    function deleteToken(_x3) {
+      return _deleteToken.apply(this, arguments);
+    }
+
+    return deleteToken;
+  }()
+};
+/* harmony default export */ __webpack_exports__["default"] = ({
+  namespaced: true,
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/index.js":
+/*!*********************************************!*\
+  !*** ./resources/js/store/modules/index.js ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _Token__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Token */ "./resources/js/store/modules/Token.js");
+/* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Login */ "./resources/js/store/modules/Login.js");
+/* harmony import */ var _Login__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_Login__WEBPACK_IMPORTED_MODULE_1__);
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  Token: _Token__WEBPACK_IMPORTED_MODULE_0__["default"],
+  Login: _Login__WEBPACK_IMPORTED_MODULE_1___default.a
+});
+
+/***/ }),
+
+/***/ "./resources/js/validations/Job.js":
+/*!*****************************************!*\
+  !*** ./resources/js/validations/Job.js ***!
+  \*****************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  Job: {
+    kode: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(4),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
+    name: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
+    satuan: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
+    },
+    details: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
+    status: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"]
+    }
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/validations/Project.js":
 /*!*********************************************!*\
   !*** ./resources/js/validations/Project.js ***!
@@ -75221,6 +77473,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   Project: {
+    kode: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(4),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
     name: {
       required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
       minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
@@ -75244,6 +77501,81 @@ __webpack_require__.r(__webpack_exports__);
       numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"],
       minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
       maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(15)
+    },
+    owner: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
+    no_telp: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(15)
+    },
+    type: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
+    nominal: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"]
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./resources/js/validations/Store.js":
+/*!*******************************************!*\
+  !*** ./resources/js/validations/Store.js ***!
+  \*******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vuelidate/lib/validators */ "./node_modules/vuelidate/lib/validators/index.js");
+/* harmony import */ var vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__);
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  Store: {
+    kode: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(4),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(4)
+    },
+    name: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
+    address: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
+    type: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(5),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
+    },
+    no_telp: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(15)
+    },
+    phone: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      numeric: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["numeric"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(15)
+    },
+    owner: {
+      required: vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["required"],
+      minLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["minLength"])(10),
+      maxLength: Object(vuelidate_lib_validators__WEBPACK_IMPORTED_MODULE_0__["maxLength"])(255)
     }
   }
 });

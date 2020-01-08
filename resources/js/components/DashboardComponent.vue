@@ -91,6 +91,18 @@
           </v-list-item-content>
         </v-list-item>
 
+        <!-- <v-list-item @click="">
+          <v-list-item-action>
+            <v-btn icon>
+              <v-icon>file_copy</v-icon>
+            </v-btn>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>Report</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item> -->
+
       </v-list>
     </v-navigation-drawer>
 
@@ -108,21 +120,14 @@
         VCP
       </v-toolbar-title>
       
-      <!-- <v-text-field
-        flat
-        solo-inverted
-        hide-details
-        prepend-inner-icon="search"
-        label="Search"
-        class="hidden-sm-and-down"
-      ></v-text-field>
-      <v-spacer></v-spacer> -->
+      <v-spacer></v-spacer>
 
-       <!-- <div class="logout" >
-          <v-btn @click="logoutHandler">
+       <div class="logout" >
+          <v-btn @click="logout" outlined color="white">
             <v-icon>logout</v-icon>
+            Log Out
           </v-btn>
-        </div> -->
+        </div>
     </v-app-bar>
 
     <v-content>
@@ -139,6 +144,8 @@
 </template>
 
 <script>
+import { mapGetters, mapState, mapActions } from 'vuex'
+
   export default {
     props: {
       source: String,
@@ -146,7 +153,26 @@
     data: () => ({
       drawer: null,
     }),
+    computed: {
+      ...mapState({
+          loading: state => state.Token.loading,
+          error: state => state.Token.error,
+          token: state => state.Token.token,
+        }),
+    },
     methods: {
+      ...mapActions({
+        destroyToken: 'Token/deleteToken',
+      }),
+
+      ...mapGetters({
+        loggedIn: 'Token/loggedIn',
+      }),
+      
+      async logout() {
+          await this.destroyToken()
+          this.$router.push({ name : 'login' })
+      },
       project (){
           this.$router.push({name: 'project'});
       },

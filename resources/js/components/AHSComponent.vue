@@ -886,12 +886,12 @@ import detailController from './../service/Details'
         }
       },
       refresh(){
-        // this.AHS.kode             =''
-        // this.AHS.id_job           =''
-        // this.AHS.total            =0
-        // this.details              =''
-        // this.Material.id_material =''
-        window.location.reload()
+        this.AHS.kode             =''
+        this.AHS.id_job           =''
+        this.AHS.total            =0
+        this.details              =''
+        this.Material.id_material =''
+        // window.location.reload()
 
       },
       close () {

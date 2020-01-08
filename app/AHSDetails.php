@@ -30,5 +30,4 @@ class AHSDetails extends Model
     {
         return $this->belongsTo('App\Materials','id_material');
     }
-
 }

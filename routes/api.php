@@ -17,6 +17,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+//User
+Route::group([
+    'prefix' => 'auth'
+], function () {
+    Route::post('/login','UserController@login');
+    Route::post('/register','UserController@create');
+
+    Route::group([
+      'middleware' => 'auth:api'
+    ], function() {
+        Route::post('/logout', 'UserController@logout');
+        Route::get('/user', 'UserController@user');
+    });
+});
+
 //Project
 Route::get('/projects','ProjectController@index');
 Route::post('/projects/store', 'ProjectController@store');
@@ -35,6 +50,8 @@ Route::post('/materials/store','MaterialsController@store');
 Route::patch('/materials/update/{id}', 'MaterialsController@update');
 Route::delete('/materials/delete/{id}','MaterialsController@destroy');
 Route::get('/materials/show/{id}', 'MaterialsController@show');
+//Group
+Route::get('/groups','GroupController@index');
 //AHS 
 Route::get('/ahs','AHSController@index');
 Route::post('/ahs/store','AHSController@store');

@@ -56,6 +56,17 @@
                   ></v-select>
               </v-layout>
 
+              <v-layout>
+                <v-select
+                  v-model="rab.id_group"
+                  label="Sub Project"
+                  :items="groupData"
+                  item-text="name"
+                  item-value="id_group" 
+                  :return-object="false"
+                  ></v-select>
+              </v-layout>
+
               <VBtn
                 depressed
                 color="primary"
@@ -453,6 +464,7 @@ import rabController from './../service/RAB'
       ahs: [],
       RAB:[],
       detailsData: [],
+      groupData: [],
       rab_details:{
         id_rab_details:'',
         id_rab:'',
@@ -470,7 +482,8 @@ import rabController from './../service/RAB'
         id_ahs:'',
         coefficient: 1,
         total_rab:0,
-        kode:''
+        kode:'',
+        id_group: '',
       },
       Project: {
         name:'',
@@ -528,6 +541,7 @@ import rabController from './../service/RAB'
       this.getallAHS()
       this.getallRAB()
       this.getallDetails()
+      this.getGroup()
     },
     computed: {
     },
@@ -571,6 +585,13 @@ import rabController from './../service/RAB'
       getSelectedIndex(){
         this.index = this.ahs.map(function(e) { return e.id_ahs; }).indexOf(this.AHS.id_ahs);
         console.log(this.index)
+      },
+      async getGroup(){
+        try{
+          this.groupData = (await rabController.getGroup()).data
+        }catch(err){
+          console.log(err)
+        }
       },
       async getallDetails(){
         try{

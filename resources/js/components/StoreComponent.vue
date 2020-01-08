@@ -44,6 +44,9 @@
                   <v-text-field 
                     v-model="Store.kode" 
                     label="ID Store"
+                    :error-messages="idErrors"
+                    @input="$v.Store.kode.$touch()"
+                    @blur="$v.Store.kode.$touch()"
                   >
                   </v-text-field>
                 </v-flex>
@@ -54,7 +57,9 @@
                     <v-text-field 
                       v-model="Store.name" 
                       label="Name"
-                      required
+                      :error-messages="nameErrors"
+                      @input="$v.Store.name.$touch()"
+                      @blur="$v.Store.name.$touch()"
                     >
                     </v-text-field>
                   </v-flex>
@@ -65,7 +70,9 @@
                     <v-text-field 
                       v-model="Store.address" 
                       label="Address"
-                      required
+                      :error-messages="addressErrors"
+                      @input="$v.Store.address.$touch()"
+                      @blur="$v.Store.address.$touch()"
                     >
                       </v-text-field>
                   </v-flex>
@@ -76,7 +83,9 @@
                     <v-text-field 
                       v-model="Store.type" 
                       label="Type of Material"
-                      required
+                      :error-messages="typeErrors"
+                      @input="$v.Store.type.$touch()"
+                      @blur="$v.Store.type.$touch()"
                     >
                       </v-text-field>
                   </v-flex>
@@ -87,7 +96,9 @@
                     <v-text-field 
                       v-model="Store.no_telp" 
                       label="Telp Number"
-                      required
+                      :error-messages="noErrors"
+                      @input="$v.Store.no_telp.$touch()"
+                      @blur="$v.Store.no_telp.$touch()"
                     >
                       </v-text-field>
                   </v-flex>
@@ -98,7 +109,9 @@
                     <v-text-field 
                       v-model="Store.phone" 
                       label="Phone Number"
-                      required
+                      :error-messages="phoneErrors"
+                      @input="$v.Store.phone.$touch()"
+                      @blur="$v.Store.phone.$touch()"
                     >
                       </v-text-field>
                   </v-flex>
@@ -109,7 +122,9 @@
                     <v-text-field 
                       v-model="Store.owner" 
                       label="Owner"
-                      required
+                      :error-messages="ownerErrors"
+                      @input="$v.Store.owner.$touch()"
+                      @blur="$v.Store.owner.$touch()"
                     >
                       </v-text-field>
                   </v-flex>
@@ -148,85 +163,100 @@
             </v-card-title>
           
             <Vform>
-            <v-card-text>
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Store.kode" 
-                    label="ID Store"
-                  >
-                  </v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
+              <v-card-text>
+                <v-layout>
                   <v-flex>
                     <v-text-field 
-                      v-model="Store.name" 
-                      label="Name"
-                      required
+                      v-model="Store.kode" 
+                      label="ID Store"
+                      :error-messages="idErrors"
+                      @input="$v.Store.kode.$touch()"
+                      @blur="$v.Store.kode.$touch()"
                     >
                     </v-text-field>
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.address" 
-                      label="Address"
-                      required
-                    >
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.name" 
+                        label="Name"
+                        :error-messages="nameErrors"
+                        @input="$v.Store.name.$touch()"
+                        @blur="$v.Store.name.$touch()"
+                      >
                       </v-text-field>
-                  </v-flex>
-                </v-layout>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.type" 
-                      label="Type of Material"
-                      required
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.address" 
+                        label="Address"
+                        :error-messages="addressErrors"
+                        @input="$v.Store.address.$touch()"
+                        @blur="$v.Store.address.$touch()"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.no_telp" 
-                      label="Telp Number"
-                      required
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.type" 
+                        label="Type of Material"
+                        :error-messages="typeErrors"
+                        @input="$v.Store.type.$touch()"
+                        @blur="$v.Store.type.$touch()"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.phone" 
-                      label="Phone Number"
-                      required
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.no_telp" 
+                        label="Telp Number"
+                        :error-messages="noErrors"
+                        @input="$v.Store.no_telp.$touch()"
+                        @blur="$v.Store.no_telp.$touch()"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.owner" 
-                      label="Owner"
-                      required
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.phone" 
+                        label="Phone Number"
+                        :error-messages="phoneErrors"
+                        @input="$v.Store.phone.$touch()"
+                        @blur="$v.Store.phone.$touch()"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-            </v-card-text>
-          </Vform>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.owner" 
+                        label="Owner"
+                        :error-messages="ownerErrors"
+                        @input="$v.Store.owner.$touch()"
+                        @blur="$v.Store.owner.$touch()"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
+
+              </v-card-text>
+            </Vform>
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
@@ -264,8 +294,10 @@
 
 <script>
 import Controller from './../service/Store'
+import validators from './../validations/Store'
 
   export default {
+    validations: validators,
     data: () => ({
       dialog: false,
       dialog2: false,
@@ -336,7 +368,64 @@ import Controller from './../service/Store'
         return this.store.filter((storeData)=>{
           storeData.name.match(this.search)
         });
-      }
+      },
+      idErrors(){
+        const errors = []
+        if(!this.$v.Store.kode.$dirty) return errors 
+        !this.$v.Store.kode.maxLength && errors.push('ID must be at most 255 characters long')
+        !this.$v.Store.kode.minLength && errors.push('ID must be at least 4 characters long')
+        !this.$v.Store.kode.required && errors.push('ID is required')
+        return errors
+      },
+      nameErrors(){
+        const errors = []
+        if(!this.$v.Store.name.$dirty) return errors 
+        !this.$v.Store.name.maxLength && errors.push('Name must be at most 255 characters long')
+        !this.$v.Store.name.minLength && errors.push('Name must be at least 10 characters long')
+        !this.$v.Store.name.required && errors.push('Name is required')
+        return errors
+      },
+      addressErrors(){
+        const errors = []
+        if(!this.$v.Store.address.$dirty) return errors
+        !this.$v.Store.address.maxLength && errors.push('Address must be at most 255 characters long')
+        !this.$v.Store.address.minLength && errors.push('Address must be at least 10 characters long')
+        !this.$v.Store.address.required && errors.push('Address is required')
+        return errors
+      },
+      typeErrors(){
+        const errors = []
+        if(!this.$v.Store.type.$dirty) return errors
+        !this.$v.Store.type.maxLength && errors.push('Type must be at most 255 characters long')
+        !this.$v.Store.type.required && errors.push('Type is required')
+        return errors
+      },
+      phoneErrors(){
+        const errors = []
+        if(!this.$v.Store.phone.$dirty) return errors
+        !this.$v.Store.phone.maxLength && errors.push('Phone number must be at most 15 characters long')
+        !this.$v.Store.phone.minLength && errors.push('Phone number must be at least 10 characters long')
+        !this.$v.Store.phone.required && errors.push('Phone number is required')
+        !this.$v.Store.phone.numeric && errors.push('Phone number must be numeric')
+        return errors
+      },
+      noErrors(){
+        const errors = []
+        if(!this.$v.Store.no_telp.$dirty) return errors
+        !this.$v.Store.no_telp.required && errors.push('Telp number is required')
+        !this.$v.Store.no_telp.numeric && errors.push('Telp number must be numeric')
+        !this.$v.Store.no_telp.maxLength && errors.push('Telp number must be at most 15 characters long')
+        !this.$v.Store.no_telp.minLength && errors.push('Telp number must be at least 10 characters long')
+        return errors
+      },
+      ownerErrors(){
+        const errors = []
+        if(!this.$v.Store.owner.$dirty) return errors
+        !this.$v.Store.owner.maxLength && errors.push('Project must be at most 255 characters long')
+        !this.$v.Store.owner.minLength && errors.push('Project must be at least 10 characters long')
+        !this.$v.Store.owner.required && errors.push('Project is required')
+        return errors
+      },
     },
     methods: {
       async getallItem(){

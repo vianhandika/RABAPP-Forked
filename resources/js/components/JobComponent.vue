@@ -44,6 +44,9 @@
                   <v-text-field 
                     v-model="Job.kode" 
                     label="ID Task"
+                    :error-messages="idErrors"
+                    @input="$v.Job.kode.$touch()"
+                    @blur="$v.Job.kode.$touch()"
                   >
                   </v-text-field>
                 </v-flex>
@@ -54,7 +57,9 @@
                     <v-text-field 
                       v-model="Job.name" 
                       label="Name"
-                      required
+                      :error-messages="nameErrors"
+                      @input="$v.Job.name.$touch()"
+                      @blur="$v.Job.name.$touch()"
                     >
                     </v-text-field>
                   </v-flex>
@@ -67,7 +72,9 @@
                     item-text="name"
                     item-value="name"
                     label="Satuan"
-                    required
+                    :error-messages="satuanErrors"
+                    @input="$v.Job.satuan.$touch()"
+                    @blur="$v.Job.satuan.$touch()"
                   ></v-select>
                   <v-btn 
                     width="50px" 
@@ -84,7 +91,8 @@
                     <v-layout>
                       <v-text-field
                         label="Satuan"
-                        v-model="name">
+                        v-model="name"
+                      >
                       </v-text-field>
                     </v-layout>
                     <div class="flex-grow-1"></div>
@@ -103,7 +111,9 @@
                     v-model="Job.status"
                     :items="items"
                     label="Status"
-                    required
+                    :error-messages="statusErrors"
+                    @input="$v.Job.status.$touch()"
+                    @blur="$v.Job.status.$touch()"
                   ></v-select>
 
                 <v-layout>
@@ -111,7 +121,9 @@
                     <v-text-field 
                       v-model="Job.details" 
                       label="Spesification"
-                      required
+                      :error-messages="detailsErrors"
+                      @input="$v.Job.details.$touch()"
+                      @blur="$v.Job.details.$touch()"
                     >
                     </v-text-field>
                   </v-flex>
@@ -155,75 +167,90 @@
                     <v-text-field 
                       v-model="Job.kode" 
                       label="ID Task"
+                      :error-messages="idErrors"
+                      @input="$v.Job.kode.$touch()"
+                      @blur="$v.Job.kode.$touch()"
                     >
                     </v-text-field>
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Job.name" 
-                      label="Name"
-                      required
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Job.name" 
+                        label="Name"
+                        :error-messages="nameErrors"
+                        @input="$v.Job.name.$touch()"
+                        @blur="$v.Job.name.$touch()"
+                      >
+                      </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-                <v-container row>
+                  <v-container row>
+                    <v-select row
+                      v-model="Job.satuan"
+                      :items="satuan"
+                      item-text="name"
+                      item-value="name"
+                      label="Satuan"
+                      :error-messages="satuanErrors"
+                      @input="$v.Job.satuan.$touch()"
+                      @blur="$v.Job.satuan.$touch()"
+                    ></v-select>
+                    <v-btn 
+                      width="50px" 
+                      color="blue" 
+                      @click="dialog4=true"
+                    > 
+                    Add
+                    </v-btn>
+                  </v-container>
+
+                  <template>
+                  <v-dialog v-model="dialog4" width="300px" style="color: blue">
+                    <v-card-text>
+                      <v-layout>
+                        <v-text-field
+                          label="Satuan"
+                          v-model="name"
+                        >
+                        </v-text-field>
+                      </v-layout>
+                      <div class="flex-grow-1"></div>
+                        <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
+                        <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
+                    </v-card-text>
+                  </v-dialog>
+                  </template>
+
+                  <!-- <v-radio-group v-model="Job.status" row> 
+                    <v-radio label="Volume" value="v"></v-radio>
+                    <v-radio label="Price" value="p"></v-radio>
+                  </v-radio-group> -->
+
                   <v-select row
-                    v-model="Job.satuan"
-                    :items="satuan"
-                    item-text="name"
-                    item-value="name"
-                    label="Satuan"
-                    required
-                  ></v-select>
-                  <v-btn 
-                    width="50px" 
-                    color="blue" 
-                    @click="dialog4=true"
-                  > 
-                  Add
-                  </v-btn>
-                </v-container>
+                      v-model="Job.status"
+                      :items="items"
+                      label="Status"
+                      :error-messages="statusErrors"
+                      @input="$v.Job.status.$touch()"
+                      @blur="$v.Job.status.$touch()"
+                    ></v-select>
 
-                <template>
-                <v-dialog v-model="dialog4" width="300px" style="color: blue">
-                  <v-card-text>
-                    <v-layout>
-                      <v-text-field
-                        label="Satuan"
-                        v-model="name">
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Job.details" 
+                        label="Spesification"
+                        :error-messages="detailsErrors"
+                        @input="$v.Job.details.$touch()"
+                        @blur="$v.Job.details.$touch()"
+                      >
                       </v-text-field>
-                    </v-layout>
-                    <div class="flex-grow-1"></div>
-                      <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
-                      <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
-                  </v-card-text>
-                </v-dialog>
-                </template>
-
-                <v-select row
-                  v-model="Job.status"
-                  :items="items"
-                  label="Status"
-                  required
-                >
-                </v-select>
-
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Job.details" 
-                      label="Spesification"
-                      required
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
-
+                    </v-flex>
+                  </v-layout>
               </v-card-text>
             </Vform>
 
@@ -263,8 +290,10 @@
 
 <script>
 import Controller from './../service/Job'
+import validators from './../validations/Job'
 
   export default {
+    validations: validators,
     data: () => ({
       dialog: false,
       dialog2: false,
@@ -332,7 +361,43 @@ import Controller from './../service/Job'
         return this.job.filter((jobData)=>{
           jobData.name.match(this.search)
         });
-      }
+      },
+      idErrors(){
+        const errors = []
+        if(!this.$v.Job.kode.$dirty) return errors 
+        !this.$v.Job.kode.maxLength && errors.push('ID must be at most 255 characters long')
+        !this.$v.Job.kode.minLength && errors.push('ID must be at least 4 characters long')
+        !this.$v.Job.kode.required && errors.push('ID is required')
+        return errors
+      },
+      nameErrors(){
+        const errors = []
+        if(!this.$v.Job.name.$dirty) return errors 
+        !this.$v.Job.name.maxLength && errors.push('Name must be at most 255 characters long')
+        !this.$v.Job.name.minLength && errors.push('Name must be at least 10 characters long')
+        !this.$v.Job.name.required && errors.push('Name is required')
+        return errors
+      },
+      satuanErrors(){
+        const errors = []
+        if(!this.$v.Job.satuan.$dirty) return errors 
+        !this.$v.Job.satuan.required && errors.push('Satuan is required')
+        return errors
+      },
+      detailsErrors(){
+        const errors = []
+        if(!this.$v.Job.details.$dirty) return errors 
+        !this.$v.Job.details.maxLength && errors.push('Details must be at most 255 characters long')
+        !this.$v.Job.details.minLength && errors.push('Details must be at least 10 characters long')
+        !this.$v.Job.details.required && errors.push('Details is required')
+        return errors
+      },
+      statusErrors(){
+        const errors = []
+        if(!this.$v.Job.status.$dirty) return errors 
+        !this.$v.Job.status.required && errors.push('Status is required')
+        return errors
+      },
     },
     methods: {
       async getSatuan()
