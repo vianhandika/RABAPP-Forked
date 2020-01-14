@@ -82,4 +82,14 @@ class StoreController extends RestController
             'message'=> $status ? 'Deleted' : 'Error Delete'
         ]);
     }
+
+    public function count()
+    {
+        $store = Store::all();
+        $count = count($store);
+
+        $result['data'][0]['count']=$count;
+        
+        return $result;
+    }
 }

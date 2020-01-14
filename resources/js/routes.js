@@ -9,6 +9,9 @@ import Transaction from './components/RABComponent'
 import AHS from './components/AHSComponent'
 import Home from './components/HomeComponent'
 import Store from './components/StoreComponent'
+import Report from './components/ReportsComponent'
+import SPA from './components/SPAComponent'
+import Cek from './components/Cek'
 
 import VueRouter from 'vue-router';
 
@@ -21,7 +24,12 @@ export const routes = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: Dashboard,
+    component: Dashboard
+  },
+  {
+    path: '/spa',
+    name: 'spa',
+    component: SPA,
     children:[
       {
         path: '/project',
@@ -78,7 +86,20 @@ export const routes = [
         beforeEnter: middleware([
           auth
         ])
-      }
+      },
+      {
+        path: 'reports',
+        name: 'reports',
+        component: Report,
+        beforeEnter: middleware([
+          auth
+        ])
+      },
+      {
+        path: '/cek',
+        name: 'cek',
+        component: Cek
+      },
     ]
   },
 ];

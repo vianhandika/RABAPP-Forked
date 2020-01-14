@@ -16,8 +16,9 @@ class AHSTransformers extends TransformerAbstract
             'id_ahs'    => $ahs->id_ahs,
             'id_job'    => $ahs->id_job,
             'total'     => $ahs->total,
-            // 'name'      => $ahs->jobs->name,
-            // 'satuan'    => $ahs->jobs->satuan
+            'name'      => $ahs->jobs->name,
+            'satuan'    => $ahs->jobs->satuan,
+            'status'    => $ahs->jobs->status,
         ];
     }
 

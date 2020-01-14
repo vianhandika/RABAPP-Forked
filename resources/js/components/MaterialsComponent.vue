@@ -187,13 +187,6 @@
                 </v-flex>
               </v-layout>
 
-              <!-- <v-layout>
-                <v-radio-group v-model="Material.status" row>
-                  <v-radio label="Material" value="material"></v-radio>
-                  <v-radio label="Labor" value="labor"></v-radio>
-                </v-radio-group>
-              </v-layout> -->
-
               <v-layout>
                   <v-flex>
                     <v-text-field 
@@ -206,14 +199,14 @@
                 </v-layout>
 
                 <v-layout>
-                    <v-flex>
-                        <v-text-field
-                        v-model="Material.type"
-                        label="Type"
-                        required
-                        >
-                        </v-text-field>
-                    </v-flex>
+                  <v-flex>
+                      <v-text-field
+                      v-model="Material.type"
+                      label="Type"
+                      required
+                      >
+                      </v-text-field>
+                  </v-flex>
                 </v-layout>
 
                 <v-container row>
@@ -251,14 +244,14 @@
                 </template>
 
                 <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Material.price"
-                        label="Price"
-                        required
-                      >
-                      </v-text-field>
-                    </v-flex>
+                  <v-flex>
+                    <v-text-field 
+                      v-model="Material.price"
+                      label="Price"
+                      required
+                    >
+                    </v-text-field>
+                  </v-flex>
                 </v-layout>
 
                 <v-layout>
@@ -337,7 +330,6 @@ import storeController from './../service/Store'
       store:[],
       Material: {
         store:'',
-        //status:'',
         kode: '',
         name:'',
         type: '',
@@ -367,11 +359,6 @@ import storeController from './../service/Store'
           sortable: false,
           text: 'Price',
           value: 'price'
-        },
-        {
-          sortable: false,
-          text: 'Status',
-          value: 'status'
         },
         {
           sortable: false,
@@ -438,14 +425,6 @@ import storeController from './../service/Store'
           console.log(err)
         }
       },
-      async getSatuan()
-      { 
-        try{
-          this.satuan = (await Controller.getSatuan()).data
-        }catch(err){
-          console.log(err)
-        }
-      },
       async getallItem(){
         try{
           this.material = (await Controller.getallItem()).data
@@ -503,6 +482,7 @@ import storeController from './../service/Store'
       },
       itemHandler(item){
         this.Material = item
+        this.det
         console.log(this.Material)
       },
       refresh(){

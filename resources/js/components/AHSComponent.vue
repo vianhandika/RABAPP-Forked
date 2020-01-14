@@ -44,14 +44,14 @@
               </v-layout>
 
                 <v-layout>
-                    <v-select
-                        v-model="AHS.id_job"
-                        label="Task"
-                        :items="job"
-                        item-text="name"
-                        item-value="id_job"
-                        :return-object="false"
-                    ></v-select>
+                  <v-select
+                      v-model="AHS.id_job"
+                      label="Task"
+                      :items="job"
+                      item-text="name"
+                      item-value="id_job"
+                      :return-object="false"
+                  ></v-select>
                 </v-layout>
 
               <VBtn
@@ -75,6 +75,7 @@
                         >
                         <v-icon>remove_circle</v-icon>
                     </v-btn>
+                    <!-- buat ditampilkan setelah di clik addList -->
                      <v-flex>
                         <v-select
                           label="Material" 
@@ -95,12 +96,12 @@
                           v-model="detail.coefficient"
                           required
                           ></v-text-field>
-                        </v-flex>
+                      </v-flex>
                     </v-card-title>
                   </Vcard>
                 </v-flex>
                 
-                 <V-layout v-if="tambah">
+                 <v-layout v-if="tambah">
                     <VCard> 
                     <v-card-title>
                     <v-btn 
@@ -117,6 +118,7 @@
                         >
                         <v-icon>add_circle</v-icon>
                     </v-btn>
+                    <!-- buat pertama kali input data untuk addList -->
                      <v-flex>
                         <v-select
                           label="Material" 
@@ -310,14 +312,14 @@
 
     <v-dialog v-model="dialog4" max-width="600px">
       <template>
-      <div>
-        <v-data-table
-          :headers="headers2"
-          :items="ahs_details"
-          class="elevation-1"
-        ></v-data-table>
-      </div>
-    </template>
+        <div>
+          <v-data-table
+            :headers="headers2"
+            :items="ahs_details"
+            class="elevation-1"
+          ></v-data-table>
+        </div>
+      </template>
     </v-dialog>
 
     <v-row justify="center">
@@ -515,7 +517,6 @@
               
             </template>
             </v-data-table>
-          
           <v-expansion-panel-content>
             <template>
               <div>
@@ -524,6 +525,28 @@
                   :items="ahs_details"
                   class="elevation-1"
                 >
+                <template v-slot:item.coefficient="props">
+                  <v-edit-dialog
+                    :return-value.sync="props.item.coefficient"
+                    @save="save"
+                    @cancel="cancel"
+                    @open="open"
+                    @close="close"
+                    lazy
+                    large
+                    persistent
+                  > {{ props.item.coefficient }}
+                    <template v-slot:input>
+                      <v-text-field
+                        v-model="props.item.coefficient"
+                        label="Edit"
+                        single-line
+                        counter
+                      ></v-text-field>
+                    </template>
+                  </v-edit-dialog>
+                </template>
+
                 <template v-slot:item.action="{ item }">
                   <v-dialog v-model="dialog5" max-width="500px">
                     <template v-slot:activator="{ on }">
@@ -545,7 +568,7 @@
                   
                       <Vform>
                         <v-card-text>
-                          <v-layout>
+                          <!-- <v-layout>
                             <v-select
                               v-model="detail.id_material"
                               label="Material/Labor"
@@ -554,6 +577,7 @@
                               item-value="id_material"
                               :return-object="false"
                               @change="getSelectedIndexD"
+                              disabled
                             ></v-select>
                           </v-layout>
 
@@ -566,8 +590,33 @@
                               item-value="id_material"
                               :return-object="false"
                               @change="getSelectedIndexD"
+                              disabled
                             ></v-select>
-                          </v-layout>
+                          </v-layout> -->
+                        
+                        <v-layout>
+                          <v-flex>
+                            <v-text-field 
+                              v-model="detail.name" 
+                              label="Materials/Labor"
+                              required
+                              disabled
+                            >
+                            </v-text-field>
+                          </v-flex>
+                        </v-layout>
+
+                        <v-layout>
+                          <v-flex>
+                            <v-text-field 
+                              v-model="detail.price" 
+                              label="Price"
+                              required
+                              disabled
+                            >
+                            </v-text-field>
+                          </v-flex>
+                        </v-layout>
 
                         <v-layout>
                           <v-flex>
@@ -614,6 +663,12 @@
                 </template>
 
                 </v-data-table>
+
+                <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+                  {{ snackText }}
+                  <v-btn text @click="snack = false">Close</v-btn>
+                </v-snackbar>
+                
               </div>
             </template>
           </v-expansion-panel-content>
@@ -631,6 +686,10 @@ import detailController from './../service/Details'
 
   export default {
     data: () => ({
+      snack: false,
+      snackColor: '',
+      snackText: '',
+      
       dialog: false,
       dialog2: false,
       dialog3: false,
@@ -747,13 +806,33 @@ import detailController from './../service/Details'
       
     },
     methods: {
+      save () {
+        this.snack = true
+        this.snackColor = 'success'
+        this.snackText = 'Data saved'
+
+      },
+      cancel () {
+        this.snack = true
+        this.snackColor = 'error'
+        this.snackText = 'Canceled'
+      },
+      open () {
+        this.snack = true
+        this.snackColor = 'info'
+        this.snackText = 'Dialog opened'
+      },
+      close () {
+        console.log('Dialog closed')
+      },
       itemHandler(item){
         this.ahs_details = item.ahs_details.data
         console.log(this.ahs_details)
       },
       itemHandler2(item){
         this.AHS = item
-        this.details = item.ahs_details.data;
+        this.details = item.ahs_details.data
+        console.log(this.AHS)
       },
       itemDetailHandler(item){
         this.detail = item
@@ -858,13 +937,15 @@ import detailController from './../service/Details'
       async updateDetail(id){
         try{
             const payload = {
-              id_material   : this.detail.id_material,
               coefficient   : this.detail.coefficient,
-              sub_total     : this.detail.price * this.detail.coefficient
+              sub_total     : this.detail.sub_total,
             } 
             await detailController.updateDetail(payload,id)
             this.close()
+            // this.getItem($id)
+            this.getallAHS()
             this.getallDetails()
+            this.refresh()
         }catch(err){
           console.log(err);
         }
@@ -881,6 +962,13 @@ import detailController from './../service/Details'
         try{
           await detailController.deleteItem(id).data
           this.getallDetails()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getItem(id){
+        try{
+          await detailController.getItem(id).data
         }catch(err){
           console.log(err)
         }

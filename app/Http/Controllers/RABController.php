@@ -29,8 +29,9 @@ class RABController extends RestController
             $rab->id_project    = $request->get('id_project');
             $rab->id_ahs        = $request->get('id_ahs');
             $rab->kode          = $request->get('kode');
-            $rab->coefficient   = $request->get('coefficient');
+            $rab->sub           = $request->get('sub');
             $rab->total_rab     = $request->get('total_rab');
+            $rab->desc          = $request->get('desc');
 
             $rab->save();
 
@@ -62,11 +63,14 @@ class RABController extends RestController
         
         $detail_rab = $request->get('detail');
     
+        $rab = RAB::findOrFail($id);
         $rab->id_project    = $request->get('id_project');
         $rab->id_ahs        = $request->get('id_ahs');
         $rab->kode          = $request->get('kode');
-        $rab->coefficient   = $request->get('coefficient');
+        $rab->sub           = $request->get('sub');
         $rab->total_rab     = $request->get('total_rab');
+        $rab->desc          = $request->get('desc');
+
 
         $rab->save();
 
@@ -81,7 +85,6 @@ class RABController extends RestController
 
     public function destroy($id)
     {
-        
         $details = RABDetails::where('id_rab',$id)->get();
         foreach($details as $detail)
         {   
@@ -96,6 +99,23 @@ class RABController extends RestController
             'status' => $status,
             'message' => $status ? 'Deleted' : 'Error Delete'
         ]);
+    }
 
+    public function count()
+    {
+        $rab = RAB::all();
+        $count = count($rab);
+
+        $result['data'][0]['count']=$count;
+        return $result;
+    }
+
+    public function total()
+    {
+        $rab = RAB::all();
+        $total = $rab->sum('total_rab');
+        
+        $result['data'][0]['total']=$total;
+        return $result;
     }
 }

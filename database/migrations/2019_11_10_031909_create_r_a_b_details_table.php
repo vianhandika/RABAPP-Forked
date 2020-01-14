@@ -17,8 +17,10 @@ class CreateRABDetailsTable extends Migration
             $table->increments('id_rab_details');
             $table->unsignedInteger('id_rab');
             $table->unsignedInteger('id_ahs');
-            $table->double('volume');
+            $table->string('type');
             $table->double('sub_total');
+            $table->double('volume');
+            $table->double('coefficient');
             $table->timestamps();
             $table->softDeletes();
 

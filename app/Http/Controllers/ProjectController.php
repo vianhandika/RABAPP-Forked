@@ -89,4 +89,14 @@ class ProjectController extends RestController
             'message'=> $status ? 'Deleted' : 'Error Delete'
         ]);
     }
+
+    public function count()
+    {
+        $project = Project::all();
+        $countproject = count($project);
+
+        $result['data'][0]['count']=$countproject;
+        
+        return $result;
+    }
 }

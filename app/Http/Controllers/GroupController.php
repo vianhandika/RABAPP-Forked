@@ -16,4 +16,17 @@ class GroupController extends RestController
         $response = $this->generateCollection($group);
         return $this->sendResponse($response,200);
     }
+
+    public function store(Request $request)
+    {
+        $group = Group::create([
+            'name' => $request->name,
+        ]);
+    
+        return response()->json([
+            'status' => (bool) $group,
+            'data'   => $group,
+            'message' => $group ? 'Success' : 'Error Sub'
+        ]);
+    }
 }

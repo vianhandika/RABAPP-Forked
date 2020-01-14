@@ -91,8 +91,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
     data () {
       return{
         email:'',
-        password: '',
-
+        password: ''
       }
     },
     props: {
@@ -115,6 +114,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
           password : this.password
         }
         await this.retrieveToken(payload)
+        console.log('cek')
         this.$router.push({name: 'dashboard'})
       }
     },

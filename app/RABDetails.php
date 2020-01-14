@@ -12,7 +12,7 @@ class RABDetails extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'id_rab', 'id_ahs', 'volume','sub_total'
+        'id_rab', 'id_ahs', 'volume','sub_total', 'type', 'coefficient'
     ];
 
     protected $dates = [

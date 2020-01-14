@@ -24,11 +24,11 @@ const getters = {
 
 const actions = {
     async retrieveToken(context, credentials){
-        console.log('cek 456')
         return new Promise((resolve, reject) => {
+            console.log('cek')
             axios.post('/api/auth/login',{
-                email: credentials.email,
-                password: credentials.password,
+                email       : credentials.email,
+                password    : credentials.password,
             })
             .then(response => {
                 const token = response.data.access_token
@@ -42,6 +42,7 @@ const actions = {
                 reject(error)
             })
         })
+        console.log('sampe')
     },
 
     async deleteToken(context){

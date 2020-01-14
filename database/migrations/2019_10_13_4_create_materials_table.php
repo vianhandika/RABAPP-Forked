@@ -17,7 +17,6 @@ class CreateMaterialsTable extends Migration
             $table->increments('id_material');
             $table->unsignedInteger('id_store');
             $table->string('kode');
-           // $table->string('status');
             $table->string('name');
             $table->string('type');
             $table->string('satuan');

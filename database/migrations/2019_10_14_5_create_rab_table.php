@@ -18,8 +18,9 @@ class CreateRABTable extends Migration
             $table->unsignedInteger('id_project');
             $table->unsignedInteger('id_ahs');
             $table->string('kode');
-            $table->double('coefficient');
+            $table->string('sub');
             $table->double('total_rab');
+            $table->string('desc');
             $table->timestamps();
             $table->softDeletes();
             

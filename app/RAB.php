@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class RAB extends Model
 {
-    //
     use SoftDeletes;
 
     protected $table = 'rabs';
@@ -15,7 +14,7 @@ class RAB extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'id_project', 'id_ahs', 'coefficient','total_rab', 'kode'
+        'id_project', 'id_ahs','kode', 'sub', 'total_rab', 'desc'
     ];
 
     protected $dates = [

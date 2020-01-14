@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Transformers\AHSDetailsTransformers;
 use Illuminate\Support\Facades\DB;
 use App\AHSDetails;
-use App\AHS;
+use App\AHS; 
 
 class AHSDetailsController extends RestController
 {
@@ -22,17 +22,22 @@ class AHSDetailsController extends RestController
     public function update(Request $request, $id)
     {
         $this->validateWith([
-            'id_material' => 'required|max:255',
             'coefficient' => 'required|max:255',
             'sub_total' => 'required|max:255',
         ]);
 
         $detail = AHSDetails::findOrFail($id);
-        $detail->id_material = $request->id_material;
+        $ahs = AHS::where('id_ahs',$detail->id_ahs)->first();
+
+        $ahs->total = $ahs->total - $detail->sub_total;
+        $ahs->save();
+
         $detail->coefficient = $request->coefficient;
-        $detail->sub_total = $request->sub_total;
-        
+        $detail->sub_total = $request->coefficient * $detail->sub_total;
         $detail->save();
+        
+        $ahs->total = $ahs->total + $detail->sub_total;
+        $ahs->save();
 
         return response()->json([
             'status' => (bool) $detail,

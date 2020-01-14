@@ -38,6 +38,7 @@ Route::post('/projects/store', 'ProjectController@store');
 Route::patch('/projects/update/{id}', 'ProjectController@update');
 Route::delete('/projects/delete/{id}', 'ProjectController@destroy');
 Route::get('/projects/show/{id}', 'ProjectController@showByID');
+Route::get('/count','ProjectController@count');
 //Job
 Route::get('/jobs','JobController@index');
 Route::post('/jobs/store','JobController@store');
@@ -52,6 +53,7 @@ Route::delete('/materials/delete/{id}','MaterialsController@destroy');
 Route::get('/materials/show/{id}', 'MaterialsController@show');
 //Group
 Route::get('/groups','GroupController@index');
+Route::post('/groups/store','GroupController@store');
 //AHS 
 Route::get('/ahs','AHSController@index');
 Route::post('/ahs/store','AHSController@store');
@@ -71,14 +73,22 @@ Route::get('/rabs','RABController@index');
 Route::post('/rabs/store','RABController@store');
 Route::patch('/rabs/update/{id}','RABController@update');
 Route::delete('/rabs/delete/{id}','RABController@destroy');
+Route::get('/rabs/total','RABController@total');
+Route::get('/count_rab','RABController@count');
 //RAB Details
 Route::get('/rab_details','RABDetailsController@index');
+Route::patch('/rab_details/update/{id}','RABDetailsController@update');
+Route::delete('/rab_details/delete/{id}','RABDetailsController@destroy');
 //Store
 Route::get('/stores','StoreController@index');
 Route::post('/stores/store', 'StoreController@store');
 Route::patch('/stores/update/{id}', 'StoreController@update');
 Route::delete('/stores/delete/{id}', 'StoreController@destroy');
 Route::get('/stores/show/{id}', 'StoreController@showByID');
+Route::get('/count_store', 'StoreController@count');
 //Satuan
 Route::get('/satuans','SatuanController@index');
 Route::post('/satuans/store', 'SatuanController@store');
+//Task Sub
+Route::get('/task_sub','TaskSubController@index');
+Route::post('/task_sub/store', 'TaskSubController@store');

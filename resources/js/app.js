@@ -29,6 +29,7 @@ import App from './components/App'
 Vue.use(VueRouter);
 Vue.use(Vuetify);
 Vue.use(Vuelidate);
+
 // Vue.component('apexchart', VueApexCharts)
 
 const router = new VueRouter({
