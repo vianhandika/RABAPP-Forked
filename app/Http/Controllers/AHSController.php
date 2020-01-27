@@ -31,6 +31,8 @@ class AHSController extends RestController
             $ahs = new AHS;
             $ahs->kode      = $request->get('kode');
             $ahs->id_job    = $request->get('id_job');
+            $ahs->total_labor     = $request->get('total_labor');
+            $ahs->total_material     = $request->get('total_material');
             $ahs->total     = $request->get('total');
             $ahs->save();
             
@@ -62,7 +64,8 @@ class AHSController extends RestController
     
         $ahs=AHS::findOrFail($id);
         $ahs->kode      = $request->get('kode');
-        //$ahs->id_job    = $request->get('id_job');
+        $ahs->total_labor     = $request->get('total_labor');
+        $ahs->total_material     = $request->get('total_material');
         $ahs->total     = $request->get('total');
         $ahs->save();
 

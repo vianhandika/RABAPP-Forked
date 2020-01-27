@@ -27,7 +27,7 @@ class MaterialsController extends RestController
             'satuan' => $request->satuan,
             'spesification' => $request->spesification,
             'price' => $request->price,
-            //'status' => $request->status,
+            'status' => $request->status,
         ]);
 
         return response()->json([
@@ -57,7 +57,7 @@ class MaterialsController extends RestController
         $material->type = $request->type;
         $material->price = $request->price;
         $material->spesification = $request->spesification;
-        //$material->status = $request->status;
+        $material->status = $request->status;
         $material->satuan = $request->satuan;
         
         $material->save();

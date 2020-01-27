@@ -3,7 +3,7 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-      color="white"
+      dark
     >
       <v-list dense>
         <v-list-item @click="home">
@@ -108,7 +108,7 @@
 
     <v-app-bar
       app
-      color="light-blue accent-3"
+      color="light-blue"
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer">
@@ -135,7 +135,7 @@
     </v-content>
     
     <!-- <v-footer
-      color="blue lighten-1"
+      color="light-blue"
       app
     >
       <span class="white--text">&copy; copyright 2019</span>
@@ -168,7 +168,6 @@ import { mapGetters, mapState, mapActions } from 'vuex'
       ...mapGetters({
         loggedIn: 'Token/loggedIn',
       }),
-      
       async logout() {
           await this.destroyToken()
           this.$router.push({ name : 'login' })

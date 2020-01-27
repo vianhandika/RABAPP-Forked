@@ -7,6 +7,7 @@ use App\Transformers\AHSDetailsTransformers;
 use Illuminate\Support\Facades\DB;
 use App\AHSDetails;
 use App\AHS; 
+use App\Materials;
 
 class AHSDetailsController extends RestController
 {
@@ -48,12 +49,18 @@ class AHSDetailsController extends RestController
 
     public function destroy($id)
     {
-        
         $detail = AHSDetails::findOrFail($id);
-        $id_ahs = $detail->id_ahs;
+        // dd($detail);
+        $ahs = AHS::findOrFail($detail->id_ahs);
 
-        $ahs = AHS::findOrFail($id_ahs);
+        $material = Materials::where('id_material',$detail->id_material)->first();
+        if($material->status == "material")
+            $ahs->total_material -= $detail->sub_total;
+        else
+            $ahs->total_labor -= $detail->sub_total;
+
         $ahs->total -= $detail->sub_total;
+      
         $ahs->save();
         $status = $detail->delete();
 
@@ -65,7 +72,8 @@ class AHSDetailsController extends RestController
 
     public function showbyID($id)
     {
-        $detail = AHSDetails::findOrFail($id);
-        return response()->json($detail,200);
+        $ahs = AHSDetails::where('id_ahs',$id)->get();
+        $response = $this->generateCollection($ahs);
+        return $this->sendResponse($response,200);
     }
 }

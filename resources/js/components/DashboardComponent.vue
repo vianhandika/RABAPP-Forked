@@ -3,7 +3,8 @@
     <v-navigation-drawer
       v-model="drawer"
       app
-      color="white"
+      dark
+      color="cyan darken-1"
     >
       <v-list dense>
         <v-list-item @click="home">
@@ -108,7 +109,7 @@
 
     <v-app-bar
       app
-      color="light-blue accent-3"
+      color="light-blue"
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer">
@@ -208,29 +209,29 @@
               md6
               lg3
             >
-            <v-card class="ma-3">
-              <v-list-item>
-                <v-list-item-avatar
-                  tile
-                  class="mt-n7"
-                >
-                <v-sheet color="#03A9F4" width="80" height="80" elevation="10">
-                      <v-icon dark large>money</v-icon>
-                </v-sheet>
-                </v-list-item-avatar>
-                <v-list-item-content>
-                  <div class="overline text-right">RAB</div>
-                  <v-list-item-title class="headline mb-1 text-right" v-for="counts in counter_rab" :key="counts.count">{{ counts.count }}</v-list-item-title>
-                  <div><v-divider></v-divider></div>
-                </v-list-item-content> 
-              </v-list-item>
+              <v-card class="ma-3">
+                <v-list-item>
+                  <v-list-item-avatar
+                    tile
+                    class="mt-n7"
+                  >
+                  <v-sheet color="#03A9F4" width="80" height="80" elevation="10">
+                        <v-icon dark large>money</v-icon>
+                  </v-sheet>
+                  </v-list-item-avatar>
+                  <v-list-item-content>
+                    <div class="overline text-right">RAB</div>
+                    <v-list-item-title class="headline mb-1 text-right" v-for="counts in counter_rab" :key="counts.count">{{ counts.count }}</v-list-item-title>
+                    <div><v-divider></v-divider></div>
+                  </v-list-item-content> 
+                </v-list-item>
 
-              <v-card-actions>
-                <v-icon text class="ma-2">house</v-icon>
-                <div class="overline">VISA Card</div>
-              </v-card-actions>
-          </v-card>
-          </v-flex>
+                <v-card-actions>
+                  <v-icon text class="ma-2">house</v-icon>
+                  <div class="overline">VISA Card</div>
+                </v-card-actions>
+              </v-card>
+            </v-flex>
 
           <v-flex
             sm6
@@ -279,179 +280,184 @@
             </v-card>
           </v-flex> -->
 
-          <v-flex>
+          <!-- <v-flex>
             <v-card class="text-center ma-3">
               <v-card-title>
                 What
               </v-card-title>
             </v-card>
-          </v-flex>
+          </v-flex> -->
           
           <v-flex>
             <v-card class="text-center ma-3">
               <v-card-title>
                 Reports
               </v-card-title>
-              <!-- <v-spacer></v-spacer>
-              <v-text-field
-                v-model="search"
-                append-icon="search"
-                label="Search"
-                single-line
-                hide-details
-              ></v-text-field> -->
 
-              <v-responsive class="pt-4">
+              <!-- <v-responsive class="pt-4">
                 <v-data-table
                 :headers="headers"
                 :items="item">
-
-
-                <template v-slot:item.action="{ item }">
-                  <v-dialog v-model="dialog3" max-width="450px">
-                    <template v-slot:activator="{ on }">
-                      <v-icon
-                        small
-                        class="mr-2"
-                        color="green"
-                        v-on="on"
-                      >
-                        picture_as_pdf
-                      </v-icon>
-                    </template>
-                      <v-card>
-                        <v-card-title>
-                          <span class="headline">Edit Task</span>
-                        </v-card-title>
-                      
-                        <Vform>
-                          <!-- <v-card-text>
-                            <v-layout>
-                              <v-flex>
-                                <v-text-field 
-                                  v-model="Job.kode" 
-                                  label="ID Task"
-                                  :error-messages="idErrors"
-                                  @input="$v.Job.kode.$touch()"
-                                  @blur="$v.Job.kode.$touch()"
-                                >
-                                </v-text-field>
-                              </v-flex>
-                            </v-layout>
-
-                            <v-layout>
-                                <v-flex>
-                                  <v-text-field 
-                                    v-model="Job.name" 
-                                    label="Name"
-                                    :error-messages="nameErrors"
-                                    @input="$v.Job.name.$touch()"
-                                    @blur="$v.Job.name.$touch()"
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-                              </v-layout>
-
-                              <v-container row>
-                                <v-select row
-                                  v-model="Job.satuan"
-                                  :items="satuan"
-                                  item-text="name"
-                                  item-value="name"
-                                  label="Satuan"
-                                  :error-messages="satuanErrors"
-                                  @input="$v.Job.satuan.$touch()"
-                                  @blur="$v.Job.satuan.$touch()"
-                                ></v-select>
-                                <v-btn 
-                                  width="50px" 
-                                  color="blue" 
-                                  @click="dialog4=true"
-                                > 
-                                Add
-                                </v-btn>
-                              </v-container>
-
-                              <template>
-                              <v-dialog v-model="dialog4" width="300px" style="color: blue">
-                                <v-card-text>
-                                  <v-layout>
-                                    <v-text-field
-                                      label="Satuan"
-                                      v-model="name"
-                                    >
-                                    </v-text-field>
-                                  </v-layout>
-                                  <div class="flex-grow-1"></div>
-                                    <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
-                                    <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
-                                </v-card-text>
-                              </v-dialog>
-                              </template>
-
-                              <!-- <v-radio-group v-model="Job.status" row> 
-                                <v-radio label="Volume" value="v"></v-radio>
-                                <v-radio label="Price" value="p"></v-radio>
-                              </v-radio-group> -->
-
-                              <!-- <v-select row
-                                  v-model="Job.status"
-                                  :items="items"
-                                  label="Status"
-                                  :error-messages="statusErrors"
-                                  @input="$v.Job.status.$touch()"
-                                  @blur="$v.Job.status.$touch()"
-                                ></v-select>
-
+                  <template v-slot:item.action="{ item }">
+                    <v-dialog v-model="dialog3" max-width="450px">
+                      <template v-slot:activator="{ on }">
+                        <v-icon
+                          small
+                          class="mr-2"
+                          color="green"
+                          v-on="on"
+                        >
+                          picture_as_pdf
+                        </v-icon>
+                      </template>
+                        <v-card>
+                          <v-card-title>
+                            <span class="headline">Edit Task</span>
+                          </v-card-title>
+                        
+                          <Vform>
+                            <v-card-text>
                               <v-layout>
                                 <v-flex>
                                   <v-text-field 
-                                    v-model="Job.details" 
-                                    label="Spesification"
-                                    :error-messages="detailsErrors"
-                                    @input="$v.Job.details.$touch()"
-                                    @blur="$v.Job.details.$touch()"
+                                    v-model="Job.kode" 
+                                    label="ID Task"
+                                    :error-messages="idErrors"
+                                    @input="$v.Job.kode.$touch()"
+                                    @blur="$v.Job.kode.$touch()"
                                   >
                                   </v-text-field>
                                 </v-flex>
                               </v-layout>
-                          </v-card-text> --> -->
-                        </Vform>
 
-                        <!-- <v-card-actions>
-                          <div class="flex-grow-1"></div>
-                          <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-                          <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Job.id_job)">Save</v-btn>
-                        </v-card-actions> -->
-                      </v-card>
-                  </v-dialog>
+                              <v-layout>
+                                  <v-flex>
+                                    <v-text-field 
+                                      v-model="Job.name" 
+                                      label="Name"
+                                      :error-messages="nameErrors"
+                                      @input="$v.Job.name.$touch()"
+                                      @blur="$v.Job.name.$touch()"
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+                                </v-layout>
 
-                  <v-dialog v-model="dialog2" max-width="290px">
-                    <template v-slot:activator="{ on }">
-                      <v-icon
-                        small
-                        color="red"
-                        v-on="on"
-                        @click="itemHandler(item)"
-                      >
-                        delete
-                      </v-icon>
-                    </template>
-                        <!-- <v-card>
-                          <v-card-title class="headline">Confirmation</v-card-title>
-                            <v-card-text>Are you sure want to delete this task?</v-card-text>
+                                <v-container row>
+                                  <v-select row
+                                    v-model="Job.satuan"
+                                    :items="satuan"
+                                    item-text="name"
+                                    item-value="name"
+                                    label="Satuan"
+                                    :error-messages="satuanErrors"
+                                    @input="$v.Job.satuan.$touch()"
+                                    @blur="$v.Job.satuan.$touch()"
+                                  ></v-select>
+                                  <v-btn 
+                                    width="50px" 
+                                    color="blue" 
+                                    @click="dialog4=true"
+                                  > 
+                                  Add
+                                  </v-btn>
+                                </v-container>
+
+                                <template>
+                                <v-dialog v-model="dialog4" width="300px" style="color: blue">
+                                  <v-card-text>
+                                    <v-layout>
+                                      <v-text-field
+                                        label="Satuan"
+                                        v-model="name"
+                                      >
+                                      </v-text-field>
+                                    </v-layout>
+                                    <div class="flex-grow-1"></div>
+                                      <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
+                                      <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
+                                  </v-card-text>
+                                </v-dialog>
+                                </template>
+
+                                <v-radio-group v-model="Job.status" row> 
+                                  <v-radio label="Volume" value="v"></v-radio>
+                                  <v-radio label="Price" value="p"></v-radio>
+                                </v-radio-group> 
+
+                                <v-select row
+                                    v-model="Job.status"
+                                    :items="items"
+                                    label="Status"
+                                    :error-messages="statusErrors"
+                                    @input="$v.Job.status.$touch()"
+                                    @blur="$v.Job.status.$touch()"
+                                  ></v-select>
+
+                                <v-layout>
+                                  <v-flex>
+                                    <v-text-field 
+                                      v-model="Job.details" 
+                                      label="Spesification"
+                                      :error-messages="detailsErrors"
+                                      @input="$v.Job.details.$touch()"
+                                      @blur="$v.Job.details.$touch()"
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+                                </v-layout>
+                            </v-card-text>
+                          </Vform>
+
                           <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Job.id_job)">Yes</v-btn>
-                            <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
-                          </v-card-actions>
-                        </v-card> -->
-                  </v-dialog>
-                </template>
+                            <div class="flex-grow-1"></div>
+                            <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                            <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Job.id_job)">Save</v-btn>
+                          </v-card-actions> 
+                        </v-card>
+                    </v-dialog>
+
+                    <v-dialog v-model="dialog2" max-width="290px">
+                      <template v-slot:activator="{ on }">
+                        <v-icon
+                          small
+                          color="red"
+                          v-on="on"
+                          @click="itemHandler(item)"
+                        >
+                          delete
+                        </v-icon>
+                      </template>
+                          <v-card>
+                            <v-card-title class="headline">Confirmation</v-card-title>
+                              <v-card-text>Are you sure want to delete this task?</v-card-text>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Job.id_job)">Yes</v-btn>
+                              <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                    </v-dialog>
+                  </template>
                 </v-data-table>
-              </v-responsive> 
+              </v-responsive>  -->
+              <template>
+                <v-expansion-panels focusable>
+                  <v-expansion-panel
+                    v-for="(item,i) in 5"
+                    :key="i"
+                  >
+                    <v-expansion-panel-header>Item</v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+              </template>
+              
             </v-card>
           </v-flex>
+
           </v-layout>
         </v-container>
       </div>
@@ -480,7 +486,7 @@ import Controller from './../service/Project'
       source: String,
     },
     data: () => ({
-       dialog2: false,
+      dialog2: false,
       dialog3: false,
       items: [
       {
@@ -545,7 +551,6 @@ import Controller from './../service/Project'
       ...mapGetters({
         loggedIn: 'Token/loggedIn',
       }),
-      
       async logout() {
           await this.destroyToken()
           this.$router.push({ name : 'login' })
@@ -571,9 +576,6 @@ import Controller from './../service/Project'
       store(){
         this.$router.push({name: 'store'})
       },
-        // reports(){
-        //   this.$router.push({name : 'reports'})
-        // },
       async counter(){
         try{
           this.counter = (await Controller.count()).data

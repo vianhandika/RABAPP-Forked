@@ -29,4 +29,31 @@ class GroupController extends RestController
             'message' => $group ? 'Success' : 'Error Sub'
         ]);
     }
+
+    public function update(Request $request,$id)
+    {
+        $this->validateWith([
+            'name' => 'required|max:255'
+        ]);
+
+        $group = Group::findOrFail($id);
+        $group->name = $request->name;
+        $group->save();
+
+        return response()->json([
+            'status' => (bool) $group,
+            'data' => $group,
+            'message' => $group ? 'Updated' : 'Error update'
+        ]);
+    }
+
+    public function destroy($id)
+    {
+        $group = Group::findOrFail($id);
+        $status = $group->delete();
+        return response()->json([
+            'status' => $group,
+            'message' => $group ? 'Deleted' : 'Error Delete'
+        ]);
+    }
 }

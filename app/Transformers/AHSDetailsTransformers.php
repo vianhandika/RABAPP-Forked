@@ -17,6 +17,7 @@ class AHSDetailsTransformers extends TransformerAbstract
             'kode'               => $ahs_details->materials->kode,
             'name'               => $ahs_details->materials->name,
             'price'              => $ahs_details->materials->price,
+            'status'             => $ahs_details->materials->status,
         ];
     }
 }

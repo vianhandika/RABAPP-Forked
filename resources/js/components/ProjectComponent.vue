@@ -464,11 +464,6 @@ import validators from './../validations/Project'
       this.getallItem()
     },
     computed: {
-      filteredProject:function(){
-        return this.project.filter((projectData)=>{
-          projectData.name.match(this.search);
-        });
-      },
       idErrors(){
         const errors = []
         if(!this.$v.Project.kode.$dirty) return errors 

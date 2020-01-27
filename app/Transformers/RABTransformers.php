@@ -6,7 +6,7 @@ use App\RAB;
 class RABTransformers extends TransformerAbstract
 {
     protected $defaultIncludes = [
-        'rab_details'
+        'structure'
     ];
 
     public function transform(RAB $rab)
@@ -14,17 +14,17 @@ class RABTransformers extends TransformerAbstract
         return [
             'id_rab'            => $rab->id_rab,
             'id_project'        => $rab->id_project,
-            'id_ahs'            => $rab->id_ahs,
             'kode'              => $rab->kode,
             'sub'               => $rab->sub,
             'total_rab'         => $rab->total_rab,
             'desc'              => $rab->desc,
             'name'              => $rab->projects->name,
-            'price'
+            // 'price'             
         ]; 
     }
-    public function includeRABDetails(RAB $rab)
+
+    public function includeStructure(RAB $rab)
     {
-        return $this->collection($rab->detail_rab, new RABDetailsTransformers);
+        return $this->collection($rab->structures, new StructureDetailsTransformers);
     }
 }

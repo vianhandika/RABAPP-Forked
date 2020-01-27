@@ -7,7 +7,7 @@
     class="elevation-1"
   >
     <template v-slot:top>
-      <v-toolbar flat color="white">
+      <v-toolbar color="cyan">
         <v-toolbar-title>Task</v-toolbar-title>
         <v-divider
           class="mx-4"
@@ -357,11 +357,6 @@ import validators from './../validations/Job'
       this.getallItem()
     },
     computed: {
-      filteredJob:function(){
-        return this.job.filter((jobData)=>{
-          jobData.name.match(this.search)
-        });
-      },
       idErrors(){
         const errors = []
         if(!this.$v.Job.kode.$dirty) return errors 

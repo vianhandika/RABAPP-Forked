@@ -14,7 +14,7 @@ class TaskSub extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'name'
+        'name', 
     ];
 
     protected $dates = [

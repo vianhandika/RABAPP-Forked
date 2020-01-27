@@ -1,7 +1,46 @@
+
 import Http from '../http'
 
 export default {
-    getallItem(){
+    add(payload) {
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.post('/api/task_sub/store', payload, successCallback, errorCallback)
+        })
+    },
+    update(payload,id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+
+            const errorCallback = (err) => {
+                reject(err)
+            }
+
+            Http.patch('/api/task_sub/update/'+id, payload, successCallback, errorCallback)
+        })
+    },
+    delete(id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.delete('/api/task_sub/delete/'+id, successCallback, errorCallback)
+        })
+    },
+    get(){
         return new Promise((resolve, reject) => {
             
             const successCallback = (res) => {
@@ -11,45 +50,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/ahs', successCallback, errorCallback)
+            Http.get('/api/task_sub', successCallback, errorCallback)
         })
     },
-    addItem(payload) {
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.post('/api/ahs/store', payload, successCallback, errorCallback)
-        })
-    },
-    updateItem(payload,id){
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-
-            const errorCallback = (err) => {
-                reject(err)
-            }
-
-            Http.patch('/api/ahs/update/'+id, payload, successCallback, errorCallback)
-        })
-    },
-    deleteItem(id){
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.delete('/api/ahs/delete/'+id, successCallback, errorCallback)
-        })
-    }
 }

@@ -5,11 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Group extends Model
+class Structure extends Model
 {
     use SoftDeletes;
-    protected $table = 'groups';
-    protected $primaryKey = 'id_groups';
+    protected $table = 'structures';
+    protected $primaryKey = 'id_structure';
     public $timestamp = true;
 
     protected $fillable = [

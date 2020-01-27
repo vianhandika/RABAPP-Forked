@@ -16,16 +16,13 @@ class CreateRABTable extends Migration
         Schema::create('rabs', function (Blueprint $table) {
             $table->increments('id_rab');
             $table->unsignedInteger('id_project');
-            $table->unsignedInteger('id_ahs');
             $table->string('kode');
-            $table->string('sub');
             $table->double('total_rab');
             $table->string('desc');
             $table->timestamps();
             $table->softDeletes();
             
             $table->foreign('id_project')->references('id_project')->on('projects');
-            $table->foreign('id_ahs')->references('id_ahs')->on('a_h_s_s');
         });
     }
 

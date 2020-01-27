@@ -10,9 +10,8 @@ class RABDetailsTransformers extends TransformerAbstract
     {
         return [
             'id_rab_details'=> $rab_details->id_rab_details,
-            'id_rab'        => $rab_details->id_rab,
+            'id_sub_details'=> $rab_details->id_sub_details,
             'id_ahs'        => $rab_details->id_ahs,
-            'type'          => $rab_details->type,
             'volume'        => $rab_details->volume,
             'coefficient'   => $rab_details->coefficient,
             'sub_total'     => $rab_details->sub_total,

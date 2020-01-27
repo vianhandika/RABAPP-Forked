@@ -31,7 +31,6 @@ Route::group([
         Route::get('/user', 'UserController@user');
     });
 });
-
 //Project
 Route::get('/projects','ProjectController@index');
 Route::post('/projects/store', 'ProjectController@store');
@@ -51,9 +50,6 @@ Route::post('/materials/store','MaterialsController@store');
 Route::patch('/materials/update/{id}', 'MaterialsController@update');
 Route::delete('/materials/delete/{id}','MaterialsController@destroy');
 Route::get('/materials/show/{id}', 'MaterialsController@show');
-//Group
-Route::get('/groups','GroupController@index');
-Route::post('/groups/store','GroupController@store');
 //AHS 
 Route::get('/ahs','AHSController@index');
 Route::post('/ahs/store','AHSController@store');
@@ -64,17 +60,19 @@ Route::get('/ahs/show/{id}', 'AHSController@showByID');
 Route::get('/ahs_details','AHSDetailsController@index');
 Route::patch('/ahs_details/update/{id}','AHSDetailsController@update');
 Route::delete('/ahs_details/delete/{id}', 'AHSDetailsController@destroy');
-Route::get('/ahs_details/show/{id}', 'AHSDetailsController@showByID');
+Route::get('/ahs_details/show/{id}', 'AHSDetailsController@showbyID');
 //Material Details
 Route::get('/material_details','MaterialDetailsController@index');
 Route::post('/material_details/store','MaterialDetailsController@store');
 //RAB
 Route::get('/rabs','RABController@index');
 Route::post('/rabs/store','RABController@store');
+Route::post('/rabs/storeN','RABController@storeN');
 Route::patch('/rabs/update/{id}','RABController@update');
 Route::delete('/rabs/delete/{id}','RABController@destroy');
 Route::get('/rabs/total','RABController@total');
 Route::get('/count_rab','RABController@count');
+Route::post('/rabs/storeN','RABController@storeN');
 //RAB Details
 Route::get('/rab_details','RABDetailsController@index');
 Route::patch('/rab_details/update/{id}','RABDetailsController@update');
@@ -89,6 +87,21 @@ Route::get('/count_store', 'StoreController@count');
 //Satuan
 Route::get('/satuans','SatuanController@index');
 Route::post('/satuans/store', 'SatuanController@store');
+//Structure
+Route::get('/structure','StructureController@index');
+Route::post('/structure/store', 'StructureController@store');
+Route::patch('/structure/update/{id}','StructureController@update');
+Route::delete('/structure/delete/{id}','StructureController@destroy');
+//Group
+Route::get('/groups','GroupController@index');
+Route::post('/groups/store','GroupController@store');
+Route::patch('/groups/update/{id}','GroupController@update');
+Route::delete('/groups/delete/{id}','GroupController@destroy');
 //Task Sub
 Route::get('/task_sub','TaskSubController@index');
 Route::post('/task_sub/store', 'TaskSubController@store');
+Route::patch('/task_sub/update/{id}','TaskSubController@update');
+Route::delete('/task_sub/delete/{id}','TaskSubController@destroy');
+//Reports
+Route::get('/analisa_task/{id}','ReportsController@analisa_task');
+Route::get('/analisa_task_all','ReportsController@analisa_task_all');

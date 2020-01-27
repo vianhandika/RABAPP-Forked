@@ -10,8 +10,8 @@ class GroupTransformers extends TransformerAbstract
     public function transform(Group $group)
     {
         return [
-            'id_group' => $group->id_groups,
-            'name' => $group->name,
+            'id_group'  => $group->id_groups,
+            'name'      => $group->name,
         ];
     }
 }

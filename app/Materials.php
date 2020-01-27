@@ -14,7 +14,7 @@ class Materials extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'id_store', 'kode', 'name', 'type', 'spesification', 'price','satuan',
+        'id_store', 'kode', 'name', 'type', 'spesification', 'price','satuan', 'status'
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'

@@ -14,7 +14,7 @@ class RAB extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'id_project', 'id_ahs','kode', 'sub', 'total_rab', 'desc'
+        'id_project', 'kode', 'total_rab', 'desc'
     ];
 
     protected $dates = [
@@ -31,8 +31,8 @@ class RAB extends Model
         return $this->hasMany('App\AHS','id_ahs');
     }
 
-    public function detail_rab()
+    public function structures()
     {
-        return $this->hasMany('App\RABDetails','id_rab');
+        return $this->hasMany('App\StructureDetails','id_rab');
     }
 }

@@ -61,7 +61,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.delete('/api/ahs_details/show/'+id, successCallback, errorCallback)
+            Http.get('/api/ahs_details/show/'+id, successCallback, errorCallback)
         })
     }
 }

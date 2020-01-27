@@ -2,12 +2,15 @@
   <v-data-table
     :headers="headers"
     :items="material"
+    :pagination.sync="pagination"
+    sortBy="status"
+    update: sort-desc    
     :search="search"
     sort-by="date"
     class="elevation-1"
   >
     <template v-slot:top>
-      <v-toolbar flat color="white">
+      <v-toolbar flat color="cyan">
         <v-toolbar-title>Materials/Labor</v-toolbar-title>
         <v-divider
           class="mx-4"
@@ -47,14 +50,12 @@
                   >
                   </v-text-field>
                 </v-flex>
-              </v-layout>
 
-              <!-- <v-layout>
                 <v-radio-group v-model="Material.status" row>
                   <v-radio label="Material" value="material"></v-radio>
                   <v-radio label="Labor" value="labor"></v-radio>
                 </v-radio-group>
-              </v-layout> -->
+              </v-layout>
 
               <v-layout>
                   <v-flex>
@@ -336,6 +337,7 @@ import storeController from './../service/Store'
         price: 0,
         spesification: '',
         satuan: '',
+        status: '',
       },
       headers: [
         {
@@ -343,6 +345,12 @@ import storeController from './../service/Store'
           align: 'left',
           sortable: false,
           value: 'kode',
+        },
+        {
+          text: 'Status',
+          align: 'left',
+          sortable: false,
+          value: 'status',
         },
         {
           text: 'Name',
@@ -388,11 +396,6 @@ import storeController from './../service/Store'
       this.getallItem()
     },
     computed: {
-      filteredMaterials:function(){
-        return this.material.filter((materialData)=>{
-          materialData.name.match(this.search);
-        });
-      }
     },
     methods: {
       async addSatuan()
@@ -441,7 +444,7 @@ import storeController from './../service/Store'
             price           : this.Material.price,
             type            : this.Material.type,
             satuan          : this.Material.satuan,
-            //status          : this.Material.status,
+            status          : this.Material.status,
             spesification   : this.Material.spesification
           }
           await Controller.addItem(payload)
@@ -461,7 +464,7 @@ import storeController from './../service/Store'
               price           : this.Material.price,
               type            : this.Material.type,
               satuan          : this.Material.satuan,
-              //status          : this.Material.status,
+              status          : this.Material.status,
               spesification   : this.Material.spesification
             } 
             await Controller.updateItem(payload,id)

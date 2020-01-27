@@ -22,6 +22,7 @@ class CreateMaterialsTable extends Migration
             $table->string('satuan');
             $table->double('price');
             $table->string('spesification');
+            $table->string('status');
             $table->softDeletes();
             $table->timestamps();
 

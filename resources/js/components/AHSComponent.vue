@@ -1,7 +1,7 @@
 <template>
   <div>
     <template>
-      <v-toolbar flat color="white">
+      <v-toolbar flat color="cyan">
         <v-toolbar-title>AHS</v-toolbar-title>
         <v-divider
           class="mx-4"
@@ -59,7 +59,7 @@
                 color="primary"
                 @click="tambah=true"
               >
-              Add Material
+              Add 
               </VBtn>
 
               <v-flex class="text-md-center" sm12 mt-2>
@@ -78,7 +78,7 @@
                     <!-- buat ditampilkan setelah di clik addList -->
                      <v-flex>
                         <v-select
-                          label="Material" 
+                          label="Material/Labor" 
                           class="pa-1"
                           v-model="detail.id_material"
                           item-text="name"
@@ -88,6 +88,21 @@
                           required 
                         ></v-select>
                       </v-flex>
+
+                      <!-- <v-flex xs12 sm4 md4>
+                        <v-select
+                          label="Status" 
+                          class="pa-1"
+                          v-model="detail.id_material"
+                          item-text="status"
+                          item-value="id_material"
+                          :return-object="false"
+                          :items="material"
+                          required 
+                          @change="getSelectedIndex"
+                          disabled
+                        ></v-select>
+                      </v-flex> -->
                       
                       <v-flex xs12 sm4 md4>
                           <v-text-field
@@ -121,7 +136,7 @@
                     <!-- buat pertama kali input data untuk addList -->
                      <v-flex>
                         <v-select
-                          label="Material" 
+                          label="Material/Labor" 
                           class="pa-1"
                           v-model="Material.id_material"
                           item-text="name"
@@ -132,21 +147,56 @@
                           @change="getSelectedIndex"
                         ></v-select>
                       </v-flex>
-                      
-                        <v-flex xs12 sm4 md4>
-                          <v-text-field
-                          label="Coefficient*" 
-                          class="pa-1"
-                          v-model="ahs_details.coefficient"
-                          required
-                          ></v-text-field>
-                        </v-flex>
-                      </v-card-title>
-                  </Vcard>
-                 </v-layout>
 
-                <v-layout>
-                  <v-flex>
+                      <!-- <v-flex xs12 sm4 md4>
+                        <v-select
+                          label="Status" 
+                          class="pa-1"
+                          v-model="Material.id_material"
+                          item-text="status"
+                          item-value="id_material"
+                          :return-object="false"
+                          :items="material"
+                          required 
+                          @change="getSelectedIndex"
+                          disabled
+                        ></v-select>
+                      </v-flex> -->
+                      
+                      <v-flex xs12 sm4 md4>
+                        <v-text-field
+                        label="Coefficient*" 
+                        class="pa-1"
+                        v-model="ahs_details.coefficient"
+                        required
+                        ></v-text-field>
+                      </v-flex>
+                    </v-card-title>
+                  </Vcard>
+                </v-layout>
+
+                
+                <v-layout >
+                  <!-- <v-flex xs12 sm4 md4>
+                    <v-text-field 
+                      v-model="AHS.total_labor" 
+                      label="Total of Labor"
+                      required
+                    >
+                    </v-text-field>
+                  </v-flex>
+
+                  <v-spacer></v-spacer>
+                  <v-flex xs12 sm4 md4>
+                    <v-text-field 
+                      v-model="AHS.total_material" 
+                      label="Total of Material"
+                      required
+                    >
+                    </v-text-field>
+                  </v-flex> -->
+
+                   <v-flex>
                     <v-text-field 
                       v-model="AHS.total" 
                       label="Total"
@@ -155,7 +205,7 @@
                     </v-text-field>
                   </v-flex>
                 </v-layout>
-
+              
             </v-card-text>
           </Vform>
 
@@ -317,7 +367,9 @@
             :headers="headers2"
             :items="ahs_details"
             class="elevation-1"
-          ></v-data-table>
+            hide-actions
+          >
+          </v-data-table>
         </div>
       </template>
     </v-dialog>
@@ -379,7 +431,7 @@
                       color="primary"
                       @click="tambah=true"
                     >
-                    Add Material
+                    Add 
                     </VBtn>
 
                     <v-flex class="text-md-center" sm12 mt-2>
@@ -523,6 +575,8 @@
                 <v-data-table
                   :headers="headers2"
                   :items="ahs_details"
+                  sortBy="status"
+                  update: sort-desc
                   class="elevation-1"
                 >
                 <template v-slot:item.coefficient="props">
@@ -728,6 +782,8 @@ import detailController from './../service/Details'
         kode:'',
         id_ahs:'',
         id_job: '', 
+        total_labor: 0,
+        total_material: 0,
         total: 0
       },
       ahs_details:{
@@ -745,13 +801,6 @@ import detailController from './../service/Details'
       Material:{
         id_material:'',
       },
-      items: [
-        'm',
-        'm2',
-        'm3',
-        'unit',
-        'ls'
-      ],
       headers: [
         {
           text : 'ID',
@@ -763,6 +812,16 @@ import detailController from './../service/Details'
           align: 'left',
           sortable: false,
           value: 'name',
+        },
+        { 
+          sortable: false,
+          text: 'Total of Labor', 
+          value: 'total_labor'
+        },
+        { 
+          sortable: false,
+          text: 'Total of Materials', 
+          value: 'total_material'
         },
         { 
           sortable: false,
@@ -778,6 +837,9 @@ import detailController from './../service/Details'
       headers2: [
         { 
           text: 'ID Material/Labor', align: 'left', sortable: false, value: 'kode',
+        },
+        { 
+          text: 'Type', align: 'left', sortable: true, value: 'status',
         },
         { 
           text: 'Item', align: 'left', sortable: false, value: 'name',
@@ -797,8 +859,8 @@ import detailController from './../service/Details'
       ],
     }),
     mounted(){
-      this.getallDetails()
       this.getallAHS()
+      this.getall()
       this.getallItem()
       this.getallItemMaterial()
     },
@@ -826,8 +888,12 @@ import detailController from './../service/Details'
         console.log('Dialog closed')
       },
       itemHandler(item){
+        this.AHS = item
         this.ahs_details = item.ahs_details.data
         console.log(this.ahs_details)
+        console.log('AHS')
+        console.log(this.AHS)
+
       },
       itemHandler2(item){
         this.AHS = item
@@ -843,13 +909,23 @@ import detailController from './../service/Details'
         this.err = false
         var object = this.Material
         let data = this.material.find(obj=>obj.id_material == this.Material.id_material)
-        console.log(data)
         object.id_material = this.material[this.index].id_material
         object.coefficient = this.ahs_details.coefficient
         object.sub_total   = data.price * object.coefficient
+        
+        if(data.status == "material")
+        {
+          this.AHS.total_material = object.sub_total + this.AHS.total_material
+        }
+        if(data.status == "labor")
+        {
+          this.AHS.total_labor = object.sub_total + this.AHS.total_labor
+        }
         this.AHS.total     = parseInt(object.sub_total + this.AHS.total,10)
+        console.log(this.AHS.total)
 
         this.details.push(JSON.parse(JSON.stringify(object)))
+        console.log(this.details)
         this.tambah = false
         this.Material.id_material=""
         this.ahs_details.coefficient=0
@@ -858,13 +934,22 @@ import detailController from './../service/Details'
       deleteList(id){
         let data = this.details.find(obj=>obj.id_material == id)
         console.log(data)
+        if(data.status == "material")
+        {
+          this.AHS.total_material -= data.sub_total
+        }
+        if(data.status == "labor")
+        {
+          this.AHS.total_labor -= data.sub_total
+        }
         this.AHS.total = parseInt(this.AHS.total - data.sub_total,10)
-        
+        console.log(this.AHS.total)
         let filter = this.details.filter(function( obj ) {
             return obj.id_material !== id;
         });
         this.details=filter
       },
+      
       getSelectedIndex(){
         this.index = this.material.map(function(e) { return e.id_material; }).indexOf(this.Material.id_material);
         console.log(this.index)
@@ -873,9 +958,16 @@ import detailController from './../service/Details'
         this.index = this.material.map(function(e) { return e.id_material; }).indexOf(this.detail.id_material);
         console.log(this.index)
       },
-      async getallDetails(){
+      async getallDetails(id){
         try{
-          this.detailsData = (await ahsController.getallDetails()).data
+          this.detailsData = (await detailController.getItem(id)).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getall(){
+        try{
+          this.detailsData = (await detailController.getallItem()).data
         }catch(err){
           console.log(err)
         }
@@ -905,10 +997,12 @@ import detailController from './../service/Details'
       async addItem(){
         try{
           const payload = {
-            kode    : this.AHS.kode,
-            id_job  : this.AHS.id_job,
-            total   : this.AHS.total,
-            detail  : this.details
+            kode            : this.AHS.kode,
+            id_job          : this.AHS.id_job,
+            total_labor     : this.AHS.total_labor,
+            total_material  : this.AHS.total_material,
+            total           : this.AHS.total,
+            detail          : this.details
           }
           await ahsController.addItem(payload)
           this.getallAHS();
@@ -924,10 +1018,13 @@ import detailController from './../service/Details'
               kode    : this.AHS.kode,
               //id_job  : this.AHS.id_job,
               total   : this.AHS.total,
+              total_labor     : this.AHS.total_labor,
+              total_material  : this.AHS.total_material,
               detail  : this.details
             } 
             await ahsController.updateItem(payload,id)
             this.getallAHS()
+            this.getall()
             this.close()
             this.refresh()
         }catch(err){
@@ -944,7 +1041,7 @@ import detailController from './../service/Details'
             this.close()
             // this.getItem($id)
             this.getallAHS()
-            this.getallDetails()
+            // this.getallDetails()
             this.refresh()
         }catch(err){
           console.log(err);
@@ -961,7 +1058,8 @@ import detailController from './../service/Details'
       async deleteDetail(id){
         try{
           await detailController.deleteItem(id).data
-          this.getallDetails()
+          // this.getallDetails(id)
+          this.getall()
         }catch(err){
           console.log(err)
         }

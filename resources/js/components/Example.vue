@@ -1,234 +1,2235 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="desserts"
-    sort-by="calories"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar flat color="white">
-        <v-toolbar-title>My CRUD</v-toolbar-title>
+  <div>
+    <template>
+      <v-toolbar>
+        <v-toolbar-title>RAB</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
           vertical
         ></v-divider>
-        <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
+
+        <v-text-field
+            flat
+            solo-inverted
+            hide-details
+            prepend-inner-icon="search"
+            label="Search"
+            class="hidden-sm-and-down"
+            color="blue"
+            v-model="search"
+        >
+        </v-text-field>
+      
+        <div class="flex-grow-1"></div>
+        <v-dialog v-model="dialog" max-width="600px" max-height="200px">  
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">New Item</v-btn>
+            <v-btn color="blue" dark v-on="on">New</v-btn>
           </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
+          <v-card color="">
 
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card-text>
-
-            <v-card-actions>
+            <v-toolbar dark color="teal">
+              <v-btn icon dark @click="dialog = false">
+                <v-icon>close</v-icon>
+              </v-btn>
+              <v-toolbar-title>New RAB</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancel</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Save</v-btn>
-            </v-card-actions>
+              <v-toolbar-items>
+                <v-btn dark text @click="addAllItem">Save</v-btn>
+              </v-toolbar-items>
+            </v-toolbar>
+
+            <template>
+              <v-card>
+                <v-tabs 
+                  color="white"
+                  background-color="blue"
+                >
+                  <v-tab>
+                    <v-icon left>payment</v-icon>
+                    Data
+                  </v-tab>
+                  <v-tab>
+                    <v-icon>home</v-icon>
+                    Building
+                  </v-tab>
+                  <v-tab>
+                    <v-icon left>group_work</v-icon>
+                    Floor
+                  </v-tab>
+                  <v-tab>
+                    <v-icon left>work</v-icon>
+                    Sub
+                  </v-tab>
+                  <v-tab>
+                    <v-icon left>work_outline</v-icon>
+                    Detail 
+                  </v-tab>
+
+                  <!-- Fom RAB awal -->
+                  <v-tab-item>
+                    <Vform> 
+                      <v-card-text>
+                        <v-layout>
+                          <v-text-field
+                            v-model="rab.kode"
+                            label="ID"
+                          >
+                          </v-text-field>
+                        </v-layout>
+
+                        <v-layout>
+                          <v-select
+                            v-model="rab.id_project"
+                            label="Project"
+                            :items="project"
+                            item-text="name"
+                            item-value="id_project" 
+                            :return-object="false"
+                            ></v-select>
+                        </v-layout>
+
+                        <v-layout>
+                          <v-text-field
+                            v-model="rab.desc"
+                            label="Note"
+                            >
+                          </v-text-field>
+                        </v-layout>
+
+                        <v-layout>
+                          <v-text-field
+                            v-model="rab.total_rab"
+                            label="Nominal"
+                          ></v-text-field>
+                        </v-layout>
+                      </v-card-text>
+                    </Vform>
+                  </v-tab-item>
+                  <!-- Form Structure -->
+                  <v-tab-item>
+                    <v-data-table
+                      :headers="headers_structure"
+                      :items="structure"
+                      height="150px">
+
+                      <template v-slot:top>
+                        <v-toolbar>
+                          <v-toolbar-title>Building</v-toolbar-title>
+                          <v-divider
+                            class="mx-4"
+                            inset
+                            vertical
+                          ></v-divider>
+                          
+                          <v-text-field
+                              flat
+                              solo-inverted
+                              hide-details
+                              v-model="gedung"
+                          >
+                          </v-text-field>
+                          <v-btn 
+                            class="ma-3" 
+                            color="light-green accent-1" 
+                            @click="addStructure"
+                          >
+                            Add
+                          </v-btn>
+                        </v-toolbar>
+                      </template>
+
+                      <template v-slot:item.action="{ item }">
+                        <!-- <v-dialog v-model="dialog3" max-width="450px">
+                          <template v-slot:activator="{ on }">
+                            <v-icon
+                              small
+                              class="mr-2"
+                              color="green"
+                              @click="itemHandler(item)"
+                              v-on="on"
+                            >
+                              edit
+                            </v-icon>
+                          </template>
+                            <v-card>
+                              <v-card-title>
+                                <span class="headline">Edit Task</span>
+                              </v-card-title>
+                            
+                              <Vform>
+                                <v-card-text>
+                                  <v-layout>
+                                  </v-layout>
+                                </v-card-text>
+                              </Vform>
+
+                              <v-card-actions>
+                                <div class="flex-grow-1"></div>
+                                <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                                <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Job.id_job)">Save</v-btn>
+                              </v-card-actions>
+                            </v-card>
+                        </v-dialog> -->
+
+                        <v-dialog v-model="dialog9" max-width="290px">
+                          <template v-slot:activator="{ on }">
+                            <v-icon
+                              small
+                              color="red"
+                              v-on="on"
+                              @click="itemHandlerStructure(item)"
+                            >
+                              delete
+                            </v-icon>
+                          </template>
+                            <v-card>
+                              <v-card-title class="headline">Confirmation</v-card-title>
+                                <v-card-text>Are you sure want to delete this building?</v-card-text>
+                              <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="green darken-1" text @click="dialog9 = false; deleteStructure(structure_data.id_structure)">Yes</v-btn>
+                                <v-btn color="red darken-1" text @click="dialog9 = false">No</v-btn>
+                              </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                      </template>
+                    </v-data-table>
+
+                    <v-form>
+                      <v-card-text>
+                        <VBtn
+                          color="light-blue darken-4"
+                          fab dark
+                          @click="tambahS=true"
+                        >
+                        New  
+                        </VBtn>
+                        
+                        <v-flex class="text-md-center" sm12 mt-2>
+                          <VCard
+                            v-for="detail_structure in Structure"
+                            :key="detail_structure.id_structure"
+                            > 
+                              <v-card-title>
+                              <v-btn 
+                                  icon
+                                  color="red"
+                                  dark @click="deletestructure(detail_structure.id_structure)"
+                                  >
+                                  <v-icon>remove_circle</v-icon>
+                              </v-btn>
+                              <!-- buat ditampilkan setelah di clik addList -->
+                              <v-flex >
+                                <v-select
+                                  label="Building" 
+                                  class="pa-1"
+                                  v-model="detail_structure.id_structure"
+                                  item-text="name"
+                                  item-value="id_structure"
+                                  :items="structure"
+                                  required 
+                                ></v-select>
+                              </v-flex>
+                            </v-card-title>
+                          </Vcard>
+                        </v-flex>
+                          
+                        <v-layout v-if="tambahS">
+                          <v-flex class="text-md-center" sm12 mt-2>
+                            <VCard> 
+                              <v-card-title>
+                              <v-btn 
+                                  icon
+                                  color="red"
+                                  dark @click="tambahS=false"
+                                  >
+                                  <v-icon>remove_circle</v-icon>
+                              </v-btn>
+                              <v-btn 
+                                  icon
+                                  color="green"
+                                  dark @click="addstructure();tambahS=false"
+                                  >
+                                  <v-icon>add_circle</v-icon>
+                              </v-btn>
+                              <!-- buat pertama kali input data untuk addList -->
+                                <v-flex>
+                                  <v-select
+                                    v-model="structure_data.id_structure"
+                                    :items="structure"
+                                    label="Building"
+                                    item-text="name"
+                                    item-value="id_structure"
+                                  >
+                                  </v-select>
+                                </v-flex>
+                              </v-card-title>
+                            </Vcard>
+                          </v-flex>
+                        </v-layout>
+                      </v-card-text>
+                    </v-form>
+                  </v-tab-item>
+                  <!-- Form Floor -->
+                  <v-tab-item>
+                    <v-data-table
+                      :headers="headers_group"
+                      :items="sub"
+                      height="150px">
+
+                      <template v-slot:top>
+                        <v-toolbar>
+                          <v-toolbar-title>Floor</v-toolbar-title>
+                          <v-divider
+                            class="mx-4"
+                            inset
+                            vertical
+                          ></v-divider>
+                          
+                          <v-text-field
+                              flat
+                              solo-inverted
+                              hide-details
+                              v-model="sub_item"
+                          >
+                          </v-text-field>
+                          <v-btn 
+                            class="ma-3" 
+                            color="light-green accent-1" 
+                            @click="addGroup"
+                          >
+                            Add
+                          </v-btn>
+                        </v-toolbar>
+                      </template>
+
+                      <template v-slot:item.action="{ item }">
+                        <!-- <v-dialog v-model="dialog3" max-width="450px">
+                          <template v-slot:activator="{ on }">
+                            <v-icon
+                              small
+                              class="mr-2"
+                              color="green"
+                              @click="itemHandler(item)"
+                              v-on="on"
+                            >
+                              edit
+                            </v-icon>
+                          </template>
+                            <v-card>
+                              <v-card-title>
+                                <span class="headline">Edit Task</span>
+                              </v-card-title>
+                            
+                              <Vform>
+                                
+                              </Vform>
+
+                              <v-card-actions>
+                                <div class="flex-grow-1"></div>
+                                <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                                <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Job.id_job)">Save</v-btn>
+                              </v-card-actions>
+                            </v-card>
+                        </v-dialog> -->
+
+                        <v-dialog v-model="dialog10" max-width="290px">
+                          <template v-slot:activator="{ on }">
+                            <v-icon
+                              small
+                              color="red"
+                              v-on="on"
+                              @click="itemHandlerGroup(item)"
+                            >
+                              delete
+                            </v-icon>
+                          </template>
+                              <v-card>
+                                <v-card-title class="headline">Confirmation</v-card-title>
+                                  <v-card-text>Are you sure want to delete this floor?</v-card-text>
+                                <v-card-actions>
+                                  <v-spacer></v-spacer>
+                                  <v-btn color="green darken-1" text @click="dialog9 = false; deleteGroup(group_data.id_group)">Yes</v-btn>
+                                  <v-btn color="red darken-1" text @click="dialog9 = false">No</v-btn>
+                                </v-card-actions>
+                              </v-card>
+                        </v-dialog>
+                      </template>
+                    </v-data-table>
+
+                    <v-form>
+                      <v-card-text>
+                        <VBtn
+                          fab dark
+                          color="light-blue darken-4"
+                          @click="tambahF=true"
+                        >
+                        New
+                        </VBtn>
+
+                        <v-flex class="text-md-center" sm12 mt-2>
+                          <VCard
+                            v-for="detail_group in Groups"
+                            :key="detail_group.id_group"
+                            > 
+                              <v-card-title>
+                              <v-btn 
+                                  icon
+                                  color="red"
+                                  dark @click="deletefloor(detail_group.id_group)"
+                                  >
+                                  <v-icon>remove_circle</v-icon>
+                              </v-btn>
+                              <!-- buat ditampilkan setelah di clik addList -->
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                  label="Structure" 
+                                  class="pa-1"
+                                  v-model="detail_group.id_structure"
+                                  item-text="name"
+                                  item-value="id_structure"
+                                  :items="Structure"
+                                  required 
+                                ></v-select>
+                              </v-flex>
+                            
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                label="Floor*" 
+                                class="pa-1"
+                                v-model="detail_group.id_group"
+                                :items="sub"
+                                item-text="name"
+                                item-value="id_group"
+                                required
+                                ></v-select>
+                              </v-flex>
+                            </v-card-title>
+                          </Vcard>
+                        </v-flex>
+                          
+                        <v-layout v-if="tambahF">
+                          <v-flex class="text-md-center" sm12 mt-2>
+                            <VCard> 
+                              <v-card-title>
+                              <v-btn 
+                                  icon
+                                  color="red"
+                                  dark @click="tambahF=false"
+                                  >
+                                  <v-icon>remove_circle</v-icon>
+                              </v-btn>
+                              <v-btn 
+                                  icon
+                                  color="green"
+                                  dark @click="addfloor();tambahF=false"
+                                  >
+                                  <v-icon>add_circle</v-icon>
+                              </v-btn>
+                              <!-- buat pertama kali input data untuk addList -->
+                                <v-flex xs12 sm4 md4>
+                                  <v-select
+                                    label="Building" 
+                                    class="pa-1"
+                                    v-model="group_data.id_structure"
+                                    item-text="name"
+                                    item-value="id_structure"
+                                    :items="Structure"
+                                    required 
+                                  ></v-select>
+                                </v-flex>
+                                
+                                <v-flex xs12 sm4 md4>
+                                  <v-select
+                                  label="Floor*" 
+                                  class="pa-1"
+                                  v-model="group_data.id_group"
+                                  :items="sub"
+                                  item-text="name"
+                                  item-value="id_group"
+                                  required
+                                  ></v-select>
+                                </v-flex>
+
+                                </v-card-title>
+                            </Vcard>
+                          </v-flex>
+                        </v-layout>
+                      </v-card-text>
+                    </v-form>
+                  </v-tab-item>
+                  <!-- Form Type of Task -->
+                  <v-tab-item>
+                    <v-data-table
+                      :headers="headers_sub"
+                      :items="type"
+                      height="150px">
+
+                      <template v-slot:top>
+                        <v-toolbar>
+                          <v-toolbar-title>Sub Task</v-toolbar-title>
+                          <v-divider
+                            class="mx-4"
+                            inset
+                            vertical
+                          ></v-divider>
+                          
+                          <v-text-field
+                              flat
+                              solo-inverted
+                              hide-details
+                              v-model="sub_item"
+                          >
+                          </v-text-field>
+                          <v-btn 
+                            class="ma-3" 
+                            color="light-green accent-1" 
+                            @click="addTaskSub"
+                          >
+                            Add
+                          </v-btn>
+                        </v-toolbar>
+                      </template>
+
+                      <template v-slot:item.action="{ item }">
+                        <!-- <v-dialog v-model="dialog3" max-width="450px">
+                          <template v-slot:activator="{ on }">
+                            <v-icon
+                              small
+                              class="mr-2"
+                              color="green"
+                              @click="itemHandler(item)"
+                              v-on="on"
+                            >
+                              edit
+                            </v-icon>
+                          </template>
+                            <v-card>
+                              <v-card-title>
+                                <span class="headline">Edit Task</span>
+                              </v-card-title>
+                            
+                              <Vform>
+                                
+                              </Vform>
+
+                              <v-card-actions>
+                                <div class="flex-grow-1"></div>
+                                <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                                <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Job.id_job)">Save</v-btn>
+                              </v-card-actions>
+                            </v-card>
+                        </v-dialog> -->
+
+                        <v-dialog v-model="dialog10" max-width="290px">
+                          <template v-slot:activator="{ on }">
+                            <v-icon
+                              small
+                              color="red"
+                              v-on="on"
+                              @click="itemHandlerSub(item)"
+                            >
+                              delete
+                            </v-icon>
+                          </template>
+                              <v-card>
+                                <v-card-title class="headline">Confirmation</v-card-title>
+                                  <v-card-text>Are you sure want to delete this sub task?</v-card-text>
+                                <v-card-actions>
+                                  <v-spacer></v-spacer>
+                                  <v-btn color="green darken-1" text @click="dialog9 = false; deleteTaskSub(tasksub_data.id_sub)">Yes</v-btn>
+                                  <v-btn color="red darken-1" text @click="dialog9 = false">No</v-btn>
+                                </v-card-actions>
+                              </v-card>
+                        </v-dialog>
+                      </template>
+                    </v-data-table>
+
+                    <v-form>
+                      <v-card-text>
+                      <VBtn
+                        fab dark
+                        color="light-blue darken-4"
+                        @click="tambahT=true"
+                      >
+                      New
+                      </VBtn>
+
+                      <v-flex class="text-md-center" sm12 mt-2>
+                        <VCard
+                          v-for="detail_task in TaskSub"
+                          :key="detail_task.id_sub"
+                          > 
+                            <v-card-title>
+                            <v-btn 
+                                icon
+                                color="red"
+                                dark @click="deletetasksub(detail_task.id_sub)"
+                                >
+                                <v-icon>remove_circle</v-icon>
+                            </v-btn>
+                            <!-- buat ditampilkan setelah di clik addList -->
+                            <v-flex xs12 sm4 md4>
+                              <v-select
+                                label="Building" 
+                                class="pa-1"
+                                v-model="detail_task.id_structure"
+                                item-text="structure"
+                                item-value="id_structure"
+                                :items="TaskSub"
+                                required 
+                              ></v-select>
+                            </v-flex>
+
+                            <v-flex xs12 sm4 md4>
+                              <v-select
+                                label="Floor" 
+                                class="pa-1"
+                                v-model="detail_task.id_groups"
+                                item-text="groups"
+                                item-value="id_groups"
+                                :items="TaskSub"
+                                required 
+                              ></v-select>
+                            </v-flex>
+
+                            <v-flex xs16 sm8 md8>
+                              <v-select
+                                label="Type of Task" 
+                                class="pa-1"
+                                v-model="detail_task.id_sub"
+                                item-text="name"
+                                item-value="id_sub"
+                                :items="type"
+                                required 
+                              ></v-select>
+                            </v-flex>
+
+                          </v-card-title>
+                        </Vcard>
+                      </v-flex>
+                        
+                      <v-layout 
+                        v-for="detail_group in Groups"
+                        :key="detail_group.id_group"
+                        >
+                        <v-layout v-if="tambahT">
+                          <v-flex class="text-md-center" sm12 mt-2>
+                            <VCard> 
+                              <v-card-title>
+                              <v-btn 
+                                  icon
+                                  color="red"
+                                  dark @click="tambahT=false"
+                              >
+                              <v-icon>remove_circle</v-icon>
+                              </v-btn>
+                              <v-btn 
+                                  icon
+                                  color="green"
+                                  dark @click="addtasksub(detail_group);tambahT=false"
+                                  >
+                                  <v-icon>add_circle</v-icon>
+                              </v-btn>
+                              <!-- buat ditampilkan setelah di clik addList -->
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                  label="Structure" 
+                                  class="pa-1"
+                                  v-model="detail_group.id_structure"
+                                  item-text="name"
+                                  item-value="id_structure"
+                                  :items="Structure"
+                                  required 
+                                ></v-select>
+                              </v-flex>
+                            
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                label="Floor*" 
+                                class="pa-1"
+                                v-model="detail_group.id_group"
+                                :items="sub"
+                                item-text="name"
+                                item-value="id_group"
+                                required
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs16 sm8 md8>
+                                <v-select
+                                label="Type of Task" 
+                                class="pa-1"
+                                v-model="tasksub_data.id_sub"
+                                item-text="name"
+                                item-value="id_sub"
+                                :items="type"
+                                required 
+                                ></v-select>
+                              </v-flex>
+                              </v-card-title>
+                            </Vcard>
+                          </v-flex>
+                        </v-layout>
+                      </v-layout>
+                      </v-card-text>
+                    </v-form>
+                  </v-tab-item>
+                  <!-- Form Detail -->
+                  <v-tab-item>
+                    <v-card>
+                      <v-form>
+                        <v-card-text>
+                          <VBtn
+                            depressed
+                            fab dark
+                            color="light-blue darken-4"
+                            @click="tambah=true"
+                          >
+                          New
+                          </VBtn>
+                        
+                          <v-flex class="text-md-center" sm12 mt-2>
+                            <VCard
+                              v-for="detail in details"
+                              :key="detail.id_ahs"
+                            > 
+                              <v-card-title>
+                              <v-btn 
+                                  icon
+                                  color="red"
+                                  dark @click="deleteList(detail.id_ahs)"
+                                  >
+                                  <v-icon>remove_circle</v-icon>
+                              </v-btn>
+
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                  label="Building" 
+                                  class="pa-1"
+                                  v-model="detail.id_structure"
+                                  item-text="structure"
+                                  item-value="id_structure"
+                                  :items="details"
+                                  required 
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                  label="Floor" 
+                                  class="pa-1"
+                                  v-model="detail.id_groups"
+                                  item-text="groups"
+                                  item-value="id_groups"
+                                  :items="details"
+                                  required 
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs16 sm8 md8>
+                                <v-select
+                                  label="Type of Task" 
+                                  class="pa-1"
+                                  v-model="detail.id_sub"
+                                  item-text="name"
+                                  item-value="id_sub"
+                                  :items="details"
+                                  required 
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs12 sm4 md4> 
+                                <v-select 
+                                  label="AHS" 
+                                  class="pa-1"
+                                  v-model="detail.id_ahs"
+                                  item-text="name"
+                                  item-value="id_ahs"
+                                  :items="ahs"
+                                  @change="getSelectedIndex"
+                                  required 
+                                ></v-select>
+                              </v-flex>
+                              
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                  label="HSP" 
+                                  class="pa-1"
+                                  v-model="detail.id_ahs"
+                                  item-text="total"
+                                  item-value="id_ahs"
+                                  :items="ahs"
+                                  @change="getSelectedIndex"
+                                  required 
+                                  disabled
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs12 sm4 md4>
+                                <v-text-field
+                                  v-model="detail.volume"
+                                  label="Volume"
+                                  class="pa-1"
+                                >
+                                </v-text-field>
+                              </v-flex>
+
+                              <v-flex xs12 sm4 md4>
+                                <v-text-field
+                                  v-model="detail.coefficient"
+                                  label="Adjustment*"
+                                  class="pa-1"
+                                >
+                                </v-text-field>
+                              </v-flex>
+
+                              </v-card-title>
+                            </Vcard>
+                          </v-flex>
+
+                          <v-layout v-if="tambah">
+                            <v-layout 
+                              v-for="detail_task in TaskSub"
+                              :key="detail_task.id_sub"
+                            >
+                            <v-flex class="text-md-center" sm12 mt-2>
+                              <VCard> 
+                                <v-card-title>
+                                  <v-btn 
+                                    icon
+                                    color="red"
+                                    dark @click="tambah=false"
+                                    >
+                                    <v-icon>remove_circle</v-icon>
+                                  </v-btn>
+                                  <v-btn 
+                                      icon
+                                      color="green"
+                                      dark @click="addList(detail_task)"
+                                      >
+                                      <v-icon>add_circle</v-icon>
+                                  </v-btn>
+                                  <!-- buat tambah data -->
+                                  <v-flex xs12 sm4 md4>
+                                    <v-select
+                                      label="Building" 
+                                      class="pa-1"
+                                      v-model="detail_task.id_structure"
+                                      item-text="structure"
+                                      item-value="id_structure"
+                                      :items="TaskSub"
+                                      required 
+                                    ></v-select>
+                                  </v-flex>
+
+                                  <v-flex xs12 sm4 md4>
+                                    <v-select
+                                      label="Floor" 
+                                      class="pa-1"
+                                      v-model="detail_task.id_groups"
+                                      item-text="groups"
+                                      item-value="id_groups"
+                                      :items="TaskSub"
+                                      required 
+                                    ></v-select>
+                                  </v-flex>
+
+                                  <v-flex xs16 sm8 md8>
+                                    <v-select
+                                      label="Type of Task" 
+                                      class="pa-1"
+                                      v-model="detail_task.id_sub"
+                                      item-text="name"
+                                      item-value="id_sub"
+                                      :items="TaskSub"
+                                      required 
+                                    ></v-select>
+                                  </v-flex>
+                                  
+                                  <v-flex xs12 sm4 md4>
+                                    <v-select 
+                                      label="AHS" 
+                                      class="pa-1"
+                                      v-model="AHS.id_ahs"
+                                      item-text="name"
+                                      item-value="id_ahs"
+                                      :items="ahs"
+                                      @change="getSelectedIndex"
+                                      required 
+                                    ></v-select>
+                                  </v-flex>
+
+                                  <v-flex xs12 sm4 md4>
+                                    <v-select
+                                      label="HSP" 
+                                      class="pa-1"
+                                      v-model="AHS.id_ahs"
+                                      item-text="total"
+                                      item-value="id_ahs"
+                                      :items="ahs"
+                                      @change="getSelectedIndex"
+                                      disabled
+                                      required 
+                                    ></v-select>
+                                  </v-flex>
+
+                                  <v-flex xs12 sm4 md4>
+                                    <v-text-field
+                                      v-model="rab_details.volume"
+                                      label="Volume"
+                                      class="pa-1"
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+
+                                  <v-flex xs12 sm4 md4>
+                                    <v-text-field
+                                      v-model="rab_details.coefficient"
+                                      label="Adjustment*"
+                                      class="pa-1"
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+
+                                </v-card-title>
+                              </Vcard>
+                            </v-flex>
+                            </v-layout> 
+                          </v-layout>
+
+                        </v-card-text>
+                      </v-form>
+                    </v-card>
+                  </v-tab-item>
+                </v-tabs>
+              </v-card>
+            </template>
           </v-card>
         </v-dialog>
       </v-toolbar>
     </template>
-    <template v-slot:item.action="{ item }">
-      <v-icon
-        small
-        class="mr-2"
-        @click="editItem(item)"
-      >
-        edit
-      </v-icon>
-      <v-icon
-        small
-        @click="deleteItem(item)"
-      >
-        delete
-      </v-icon>
-    </template>
-    <template v-slot:no-data>
-      <v-btn color="primary" @click="initialize">Reset</v-btn>
-    </template>
-  </v-data-table>
+
+    <v-dialog v-model="dialog3" max-width="500px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Edit RAB</span>
+        </v-card-title>
+      
+        <Vform> 
+          <v-card-text>
+            <v-layout>
+              <v-text-field
+                v-model="rab.kode"
+                label="ID"
+              >
+              </v-text-field>
+            </v-layout>
+
+            <v-layout>
+              <v-select
+                v-model="rab.id_project"
+                label="Project"
+                :items="project"
+                item-text="name"
+                item-value="id_project" 
+                :return-object="false"
+                ></v-select>
+            </v-layout>
+
+            <v-layout>
+              <v-select
+                v-model="rab.sub"
+                label="Lantai"
+                :items="sub"
+                item-text="name"
+                item-value="name" 
+                :return-object="false"
+                ></v-select>
+            </v-layout>
+
+            <VBtn
+              depressed
+              color="primary"
+              @click="tambah=true"
+            >
+            Add
+            </VBtn>
+          
+            <v-flex class="text-md-center" sm12 mt-2>
+                <VCard
+                v-for="detail in details"
+                :key="detail.id_ahs"
+                > 
+                  <v-card-title>
+                  <v-btn 
+                      icon
+                      color="red"
+                      dark @click="deleteList(detail.id_ahs)"
+                      >
+                      <v-icon>remove_circle</v-icon>
+                  </v-btn>
+
+                  <v-flex>
+                    <v-select row
+                      v-model="detail.type"
+                      :items="type"
+                      item-text="name"
+                      item-value="name"
+                      label="Type of Task"
+                      required
+                    >
+                    </v-select>
+                  </v-flex>
+
+                  <v-flex>
+                    <v-select
+                      label="AHS" 
+                      class="pa-1"
+                      v-model="detail.id_ahs"
+                      item-text="name"
+                      item-value="id_ahs"
+                      :items="ahs"
+                      @change="getSelectedIndex"
+                      required 
+                    ></v-select>
+                  </v-flex>
+                  
+                  <v-flex xs12 sm4 md4>
+                    <v-select
+                      label="Status" 
+                      class="pa-1"
+                      v-model="detail.id_ahs"
+                      item-text="status"
+                      item-value="id_ahs"
+                      :items="ahs"
+                      @change="getSelectedIndex"
+                      required 
+                      disabled
+                    ></v-select>
+                  </v-flex>
+
+                  <v-flex xs12 sm4 md4>
+                    <v-select
+                      label="Total" 
+                      class="pa-1"
+                      v-model="detail.id_ahs"
+                      item-text="total"
+                      item-value="id_ahs"
+                      :items="ahs"
+                      @change="getSelectedIndex"
+                      required 
+                      disabled
+                    ></v-select>
+                  </v-flex>
+
+                  <v-flex>
+                    <v-text-field
+                      v-model="detail.volume"
+                      label="Volume"
+                      class="pa-1"
+                    >
+                    </v-text-field>
+                  </v-flex>
+
+                  <v-flex>
+                    <v-text-field
+                      v-model="detail.coefficient"
+                      label="Coefficient*"
+                      class="pa-1"
+                    >
+                    </v-text-field>
+                  </v-flex>
+                  </v-card-title>
+                </Vcard>
+              </v-flex>
+              
+              <V-layout v-if="tambah">
+                  <VCard> 
+                  <v-card-title>
+                  <v-btn 
+                      icon
+                      color="red"
+                      dark @click="tambah=false"
+                      >
+                      <v-icon>remove_circle</v-icon>
+                  </v-btn>
+                  <v-btn 
+                      icon
+                      color="green"
+                      dark @click="addList()"
+                      >
+                      <v-icon>add_circle</v-icon>
+                  </v-btn>
+
+                  <v-flex>
+                    <v-container row>
+                      <v-select row
+                        v-model="rab_details.type"
+                        :items="type"
+                        item-text="name"
+                        item-value="name"
+                        label="Type of Task"
+                        required
+                      ></v-select>
+                      <v-btn 
+                        width="50px" 
+                        color="blue" 
+                        @click="dialog5=true"
+                      > 
+                      Add
+                      </v-btn>
+                    </v-container>
+                  </v-flex>
+
+                  <template>
+                    <v-dialog v-model="dialog5" width="300px" style="color: blue">
+                      <v-card-text>
+                        <v-layout>
+                          <v-text-field
+                            label="Type of Task"
+                            v-model="jenis">
+                          </v-text-field>
+                        </v-layout>
+                        <div class="flex-grow-1"></div>
+                          <v-btn class="ma-2" rounded color="green" dark @click="dialog5=false">Cancel</v-btn>
+                          <v-btn class="ma-2" rounded color="orange" dark @click="addTaskSub()">Save</v-btn>                  
+                      </v-card-text>
+                    </v-dialog>
+                  </template>
+
+                  <v-flex>
+                    <v-select
+                      label="AHS" 
+                      class="pa-1"
+                      v-model="AHS.id_ahs"
+                      item-text="name"
+                      item-value="id_ahs"
+                      :items="ahs"
+                      @change="getSelectedIndex"
+                      required 
+                    ></v-select>
+                  </v-flex>
+
+                  <v-flex xs12 sm4 md4>
+                    <v-select
+                      label="Status" 
+                      class="pa-1"
+                      v-model="AHS.id_ahs"
+                      item-text="status"
+                      item-value="id_ahs"
+                      :items="ahs"
+                      @change="getSelectedIndex"
+                      disabled
+                      required 
+                    ></v-select>
+                  </v-flex>
+
+                  <v-flex xs12 sm4 md4>
+                    <v-select
+                      label="Total" 
+                      class="pa-1"
+                      v-model="AHS.id_ahs"
+                      item-text="total"
+                      item-value="id_ahs"
+                      :items="ahs"
+                      @change="getSelectedIndex"
+                      disabled
+                      required 
+                    ></v-select>
+                  </v-flex>
+
+                  <v-flex>
+                    <v-text-field
+                      v-model="rab_details.volume"
+                      label="Volume"
+                      class="pa-1"
+                    >
+                    </v-text-field>
+                  </v-flex>
+
+                  <v-flex>
+                    <v-text-field
+                      v-model="rab_details.coefficient"
+                      label="Coefficient*"
+                      class="pa-1"
+                    >
+                    </v-text-field>
+                  </v-flex>
+                  </v-card-title>
+                </Vcard>
+              </v-layout>
+
+            <v-layout>
+              <v-flex>
+                <v-text-field
+                  v-model="rab.total_rab"
+                  label="Total RAB"
+                ></v-text-field>
+              </v-flex>
+            </v-layout>
+
+            <v-layout>
+              <v-text-field
+                v-model="rab.desc"
+                label="Description"
+                >
+              </v-text-field>
+            </v-layout>
+
+          </v-card-text>
+        </Vform>
+
+        <v-card-actions>
+          <div class="flex-grow-1"></div>
+          <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+          <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(rab.id_rab)">Save</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog4" max-width="600px">
+      <template>
+        <div>
+          <v-data-table
+            :headers="headers2"
+            :items="rab_details"
+            class="elevation-1"
+          ></v-data-table>
+        </div>
+      </template>
+    </v-dialog>
+
+    <v-row justify="center">
+      <v-expansion-panels accordion>
+        <v-expansion-panel>
+            <v-data-table 
+              :headers="headers"
+              :items="RAB"
+              :search="search"
+              class="my-data-table"
+            >
+            <template v-slot:item.action="{ item }">
+              <v-expansion-panel-header>
+              <v-dialog v-model="dialog3" max-width="500px">
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    class="mr-2"
+                    color="green"
+                    @click="itemHandler2(item)"
+                    v-on="on"
+                  >
+                    edit
+                  </v-icon>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">Edit RAB</span>
+                  </v-card-title>
+          
+                  <Vform> 
+                    <v-card-text>
+                      <v-layout>
+                        <v-text-field
+                          v-model="rab.kode"
+                          label="ID"
+                        >
+                        </v-text-field>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-select
+                          v-model="rab.id_project"
+                          label="Project"
+                          :items="project"
+                          item-text="name"
+                          item-value="id_project" 
+                          :return-object="false"
+                          ></v-select>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-select
+                          v-model="rab.sub"
+                          label="Lantai"
+                          :items="sub"
+                          item-text="name"
+                          item-value="name" 
+                          :return-object="false"
+                          ></v-select>
+                      </v-layout>
+
+                      <VBtn
+                        depressed
+                        color="primary"
+                        @click="tambah=true"
+                      >
+                      Add
+                      </VBtn>
+                    
+                      <v-flex class="text-md-center" sm12 mt-2>
+                          <VCard
+                          v-for="detail in details"
+                          :key="detail.id_ahs"
+                          > 
+                            <v-card-title>
+                            <v-btn 
+                                icon
+                                color="red"
+                                dark @click="deleteList(detail.id_ahs)"
+                                >
+                                <v-icon>remove_circle</v-icon>
+                            </v-btn>
+
+                            <v-flex>
+                              <v-select row
+                                v-model="detail.type"
+                                :items="type"
+                                item-text="name"
+                                item-value="name"
+                                label="Type of Task"
+                                required
+                              >
+                              </v-select>
+                            </v-flex>
+
+                            <v-flex>
+                              <v-select
+                                label="AHS" 
+                                class="pa-1"
+                                v-model="detail.id_ahs"
+                                item-text="name"
+                                item-value="id_ahs"
+                                :items="ahs"
+                                @change="getSelectedIndex"
+                                required 
+                              ></v-select>
+                            </v-flex>
+                            
+                            <v-flex xs12 sm4 md4>
+                              <v-select
+                                label="Status" 
+                                class="pa-1"
+                                v-model="detail.id_ahs"
+                                item-text="status"
+                                item-value="id_ahs"
+                                :items="ahs"
+                                @change="getSelectedIndex"
+                                required 
+                                disabled
+                              ></v-select>
+                            </v-flex>
+
+                            <v-flex xs12 sm4 md4>
+                              <v-select
+                                label="Total" 
+                                class="pa-1"
+                                v-model="detail.id_ahs"
+                                item-text="total"
+                                item-value="id_ahs"
+                                :items="ahs"
+                                @change="getSelectedIndex"
+                                required 
+                                disabled
+                              ></v-select>
+                            </v-flex>
+
+                            <v-flex>
+                              <v-text-field
+                                v-model="detail.volume"
+                                label="Volume"
+                                class="pa-1"
+                              >
+                              </v-text-field>
+                            </v-flex>
+
+                            <v-flex>
+                              <v-text-field
+                                v-model="detail.coefficient"
+                                label="Coefficient*"
+                                class="pa-1"
+                              >
+                              </v-text-field>
+                            </v-flex>
+                            </v-card-title>
+                          </Vcard>
+                        </v-flex>
+                        
+                        <V-layout v-if="tambah">
+                            <VCard> 
+                            <v-card-title>
+                            <v-btn 
+                                icon
+                                color="red"
+                                dark @click="tambah=false"
+                                >
+                                <v-icon>remove_circle</v-icon>
+                            </v-btn>
+                            <v-btn 
+                                icon
+                                color="green"
+                                dark @click="addList()"
+                                >
+                                <v-icon>add_circle</v-icon>
+                            </v-btn>
+
+                            <v-flex>
+                              <v-container row>
+                                <v-select row
+                                  v-model="rab_details.type"
+                                  :items="type"
+                                  item-text="name"
+                                  item-value="name"
+                                  label="Type of Task"
+                                  required
+                                ></v-select>
+                                <v-btn 
+                                  width="50px" 
+                                  color="blue" 
+                                  @click="dialog5=true"
+                                > 
+                                Add
+                                </v-btn>
+                              </v-container>
+                            </v-flex>
+
+                            <template>
+                              <v-dialog v-model="dialog5" width="300px" style="color: blue">
+                                <v-card-text>
+                                  <v-layout>
+                                    <v-text-field
+                                      label="Type of Task"
+                                      v-model="jenis">
+                                    </v-text-field>
+                                  </v-layout>
+                                  <div class="flex-grow-1"></div>
+                                    <v-btn class="ma-2" rounded color="green" dark @click="dialog5=false">Cancel</v-btn>
+                                    <v-btn class="ma-2" rounded color="orange" dark @click="addTaskSub()">Save</v-btn>                  
+                                </v-card-text>
+                              </v-dialog>
+                            </template>
+
+                            <v-flex>
+                              <v-select
+                                label="AHS" 
+                                class="pa-1"
+                                v-model="AHS.id_ahs"
+                                item-text="name"
+                                item-value="id_ahs"
+                                :items="ahs"
+                                @change="getSelectedIndex"
+                                required 
+                              ></v-select>
+                            </v-flex>
+
+                            <v-flex xs12 sm4 md4>
+                              <v-select
+                                label="Status" 
+                                class="pa-1"
+                                v-model="AHS.id_ahs"
+                                item-text="status"
+                                item-value="id_ahs"
+                                :items="ahs"
+                                @change="getSelectedIndex"
+                                disabled
+                                required 
+                              ></v-select>
+                            </v-flex>
+
+                            <v-flex xs12 sm4 md4>
+                              <v-select
+                                label="Total" 
+                                class="pa-1"
+                                v-model="AHS.id_ahs"
+                                item-text="total"
+                                item-value="id_ahs"
+                                :items="ahs"
+                                @change="getSelectedIndex"
+                                disabled
+                                required 
+                              ></v-select>
+                            </v-flex>
+
+                            <v-flex>
+                              <v-text-field
+                                v-model="rab_details.volume"
+                                label="Volume"
+                                class="pa-1"
+                              >
+                              </v-text-field>
+                            </v-flex>
+
+                            <v-flex>
+                              <v-text-field
+                                v-model="rab_details.coefficient"
+                                label="Coefficient*"
+                                class="pa-1"
+                              >
+                              </v-text-field>
+                            </v-flex>
+                            </v-card-title>
+                          </Vcard>
+                        </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field
+                            v-model="rab.total_rab"
+                            label="Total RAB"
+                          ></v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-text-field
+                          v-model="rab.desc"
+                          label="Description"
+                          >
+                        </v-text-field>
+                      </v-layout>
+
+                    </v-card-text>
+                  </Vform>
+
+                  <v-card-actions>
+                    <div class="flex-grow-1"></div>
+                    <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                    <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(rab.id_rab)">Save</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+
+              <v-dialog v-model="dialog2" max-width="290px">
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    color="red"
+                    v-on="on"
+                    @click="itemHandler2(item)"
+                  >
+                    delete
+                  </v-icon>
+                </template>
+                    <v-card>
+                      <v-card-title class="headline">Confirmation</v-card-title>
+                        <v-card-text>Are you sure want to delete this AHS?</v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(rab.id_rab)">Yes</v-btn>
+                        <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                      </v-card-actions>
+                    </v-card>
+              </v-dialog>
+
+              <!-- <v-icon
+                small
+                color="blue"
+                @click="itemHandler(item)"
+              >
+                remove_red_eye
+              </v-icon> -->
+              </v-expansion-panel-header>
+              
+            </template>
+            </v-data-table>
+          
+          <v-expansion-panel-content>
+            <template>
+              <div>
+                <v-data-table
+                  :headers="headers2"
+                  :items="rab_details"
+                  class="elevation-1"
+                >
+                <template v-slot:item.action="{ item }">
+                  <v-dialog v-model="dialog5" max-width="500px">
+                    <template v-slot:activator="{ on }">
+                      <v-icon
+                        small
+                        class="mr-2"
+                        color="green"
+                        @click="itemDetailHandler(item)"
+                        v-on="on"
+                      >
+                        edit
+                      </v-icon>
+                    </template>
+
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">Edit Detail</span>
+                      </v-card-title>
+                  
+                    <Vform> 
+                      <v-card-text>
+                        <v-layout>
+                          <v-text-field
+                            v-model="detail.volume"
+                            label="Volume"
+                          ></v-text-field>
+                        </v-layout>
+
+                        <v-layout>
+                          <v-text-field
+                            v-model="detail.coefficient"
+                            label="Coefficient"
+                            >
+                          </v-text-field>
+                        </v-layout>
+
+                        <!-- <v-layout>
+                          <v-text-field
+                            v-model="detail.sub_total"
+                            label="Sub Total"
+                            >
+                          </v-text-field>
+                        </v-layout> -->
+
+                      </v-card-text>
+                    </Vform>
+
+                      <v-card-actions>
+                        <div class="flex-grow-1"></div>
+                        <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                        <v-btn class="ma-2" rounded color="orange" dark @click="updateDetail(detail.id_rab_details)">Save</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  
+                  <v-dialog v-model="dialog8" max-width="290px">
+                    <template v-slot:activator="{ on }">
+                      <v-icon
+                        small
+                        color="red"
+                        v-on="on"
+                        @click="itemDetailHandler(item)"
+                      >
+                        delete
+                      </v-icon>
+                    </template>
+                        <v-card>
+                          <v-card-title class="headline">Confirmation</v-card-title>
+                            <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="green darken-1" text @click="dialog8 = false; deleteDetail(detail.id_rab_details)">Yes</v-btn>
+                            <v-btn color="red darken-1" text @click="dialog8 = false">No</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                  </v-dialog>
+                </template>
+
+                </v-data-table>
+              </div>
+            </template>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-row>
+  </div>
 </template>
 
 <script>
+import Controller from './../service/Project'
+import ahsController from './../service/AHS'
+import rabController from './../service/RAB'
+import structure from './../service/Structure'
+import groups from './../service/Group'
+import task from './../service/TaskSub'
+
   export default {
     data: () => ({
       dialog: false,
+      dialog2: false,
+      dialog3: false,
+      dialog4: false,
+      dialog5: false,
+      dialog6: false,
+      dialog7: false,
+      dialog8: false,
+      dialog9: false,
+      dialog10: false,
+
+      menu: false,
+      tambah: false,
+      tambahS: false,
+      tambahF: false,
+      tambahT: false,
+
+      select: null,
+      search:'',
+      jenis:'',
+      sub_item: '',
+      gedung:'',
+
+      details:[],
+      project: [],
+      ahs: [],
+      RAB:[],
+      detailsData: [],
+
+      data: {
+        id_structure:'',
+        id_groups:'',
+        id_sub:'',
+        structure:'',
+        groups:'',
+        name:'',
+      },
+
+      Structure:[],
+      structure:[],
+      structure_data:{
+        id_structure: '',
+        name : '',
+      },
+
+      Groups:[],
+      sub: [],
+      group_data:{
+        id_structure:'',
+        id_group: '',
+        structure:'',
+        groups:'',
+      },
+
+      TaskSub:[],
+      type:[],
+      task:[],
+      tasksub_data:{
+        id_structure:'',
+        id_groups:'',
+        id_sub:'',
+        structure:'',
+        groups:'',
+        name:'',
+      },
+
+      detail:{
+        coefficient: '',
+        volume:''
+      },
+      rab_details:{
+        id_ahs:'',
+        sub_total: 0,
+        volume: 0,
+        coefficient: 1,
+        hp: 0,
+        id_structure: '',
+        id_groups:'',
+        id_sub:'',
+        structure:'',
+        groups:'',
+        name:'',
+      },
+      Job:{
+        id_job:''
+      },
+      AHS:{
+        id_ahs:'',
+        total:0
+      },
+      rab:{
+        id_rab:'',
+        id_project:'',
+        id_ahs:'',
+        coefficient: 1,
+        total_rab:0,
+        kode:'',
+        desc: '',
+        sub:'',
+      },
+      Project: {
+        name:'',
+        date: new Date().toISOString().substr(0, 10),
+        address: '',
+        contact: '',
+        id_project: '',
+        phone: '',
+      },
       headers: [
         {
-          text: 'Dessert (100g serving)',
+          text: 'ID',
           align: 'left',
+          sortable: false,
+          value: 'kode',
+        },
+        {
+          text: 'Project',
           sortable: false,
           value: 'name',
         },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
-        { text: 'Actions', value: 'action', sortable: false },
+        { 
+          sortable: false,
+          text: 'Description', 
+          value: 'desc'
+        },
+        { 
+          sortable: false,
+          text: 'Nominal', 
+          value: 'total_rab'
+        },
+        { 
+          text: 'Actions', 
+          value: 'action', 
+          sortable: false 
+        },
       ],
-      desserts: [],
-      editedIndex: -1,
-      editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
-      defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0,
-      },
+      headers2: [
+        // { 
+        //   text: 'ID AHS', align: 'left', sortable: false, value: 'kode_ahs',
+        // },
+        // { 
+        //   text: 'Satuan', align: 'left', sortable: false, value: 'satuan',
+        // },
+        // {
+        //   text: 'Status', align: 'left', sortable: false, value: 'status',
+        // },
+        // {
+        //   text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient'
+        // },
+        // { 
+        //   text: 'Price', align: 'left', sortable: false, value: 'price',
+        // },
+        // { 
+        //   text: 'Volume', align: 'left', sortable: false, value: 'volume',
+        // },
+        // { 
+        //   text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total',
+        // },
+        // {
+        //   text: 'Actions', align: 'left', sortable: false, value: 'action'
+        // },
+      ],
+      headers_structure: [
+        { 
+          text: 'ID', align: 'left', sortable: false, value: 'id_structure',
+        },
+        { 
+          text: 'Building', align: 'left', sortable: false, value: 'name',
+        },
+        {
+          text: 'Action', align: 'left', sortable: false, value: 'action'
+        }
+      ],
+      headers_group: [
+        { 
+          text: 'ID', align: 'left', sortable: false, value: 'id_group',
+        },
+        { 
+          text: 'Floor', align: 'left', sortable: false, value: 'name',
+        },
+        {
+          text: 'Action', align: 'left', sortable: false, value: 'action'
+        }
+      ],
+      headers_sub: [
+        { 
+          text: 'ID', align: 'left', sortable: false, value: 'id_sub',
+        },
+        { 
+          text: 'Sub Task', align: 'left', sortable: false, value: 'name',
+        },
+        {
+          text: 'Action', align: 'left', sortable: false, value: 'action'
+        }
+      ],
     }),
-
+    mounted(){
+      this.getallDetails()
+      this.getallItem()
+      this.getallAHS()
+      this.getallRAB()
+      this.getGroup()
+      this.getTaskSub()
+      this.getStructure()
+    },
     computed: {
-      formTitle () {
-        return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-      },
+      
     },
-
-    watch: {
-      dialog (val) {
-        val || this.close()
-      },
-    },
-
-    created () {
-      this.initialize()
-    },
-
     methods: {
-      initialize () {
-        this.desserts = [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0,
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3,
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0,
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3,
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9,
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0,
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0,
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5,
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9,
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7,
-          },
-        ]
+      itemHandlerGroup(item)
+      {
+        this.group_data = item
+        console.log(group_data)
       },
-
-      editItem (item) {
-        this.editedIndex = this.desserts.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.dialog = true
+      itemHandlerStructure(item)
+      {
+        this.structure_data = item
+        console.log(structure_data)
       },
-
-      deleteItem (item) {
-        const index = this.desserts.indexOf(item)
-        confirm('Are you sure you want to delete this item?') && this.desserts.splice(index, 1)
+      itemHandler(item){
+        this.rab_details = item.rab_details
+        console.log(this.rab_details)
       },
+      itemHandler2(item){
+        this.rab = item
+        this.details = item.rab_details.data
+        // this.rab.total_rab = 0
+        console.log(this.rab)
+      },
+      itemDetailHandler(item){
+        this.detail = item
+        console.log(this.detail)
+      },
+      async addstructure()
+      {
+        var i = 0
+        this.err = false
+        var object = this.structure_data
+        let data = this.structure.find(obj=>obj.id_structure == this.structure_data.id_structure)
+        console.log(data)
+        object.id_structure = data.id_structure
+        object.name = data.name
+        this.Structure.push(JSON.parse(JSON.stringify(object)))
+        console.log('Detail Structure')
+        console.log(this.Structure)
+      },
+      deletestructure(id){
+        let data = this.Structure.find(obj=>obj.id_structure == id)
+        let filter = this.Structure.filter(function( obj ) {
+            return obj.id_structure !== id;
+        });
+        this.Structure=filter
+      },
+      async addfloor()
+      {
+        this.err = false
+        var object = this.group_data
+        let data = this.sub.find(obj=>obj.id_group == this.group_data.id_group)
+        let dataS = this.Structure.find(obj=>obj.id_structure == this.group_data.id_structure)
+        object.id_structure = this.group_data.id_structure
+        object.id_groups  = data.id_group
+        object.structure  = dataS.name
+        object.groups = data.name
+        object.name = data.name
+        this.Groups.push(JSON.parse(JSON.stringify(object)))
+        console.log('Detail Group')
+        console.log(this.Groups)
+      },
+      deletefloor(id){
+        let data = this.Groups.find(obj=>obj.id_group == id)
+        let filter = this.Groups.filter(function( obj ) {
+            return obj.id_group !== id;
+        });
+        this.Groups=filter
+      },
+      async addtasksub(detail_group)
+      {
+        this.err = false
+        var object = this.tasksub_data
+        let data = this.type.find(obj=>obj.id_sub == this.tasksub_data.id_sub)
+        object.id_structure = detail_group.id_structure
+        object.id_groups = detail_group.id_group
+        object.id_sub = data.id_sub
+        object.structure = detail_group.structure
+        object.groups = detail_group.groups
+        object.name = data.name
+        this.TaskSub.push(JSON.parse(JSON.stringify(object)))
+        console.log('Detail Task')
+        console.log(this.TaskSub)
+      },
+      deletetasksub(id){
+        let data = this.TaskSub.find(obj=>obj.id_sub == id)
+        let filter = this.TaskSub.filter(function( obj ) {
+            return obj.id_sub !== id;
+        });
+        this.TaskSub=filter
+      },
+      async addList(detail_task)
+      {
+        var object = this.rab_details
+        let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
+        object.id_ahs = this.ahs[this.index].id_ahs
+        object.coefficient = this.rab_details.coefficient
+        object.status = data.status
+        object.id_structure = detail_task.id_structure
+        object.id_groups = detail_task.id_groups
+        object.id_sub = detail_task.id_sub
+        object.structure = detail_task.structure
+        object.groups = detail_task.groups
+        object.name = detail_task.name
 
+        if(object.status == 'Price')
+        {
+          object.volume = this.rab_details.volume
+          object.sub_total  = object.coefficient * data.total
+          this.rab_details.hp = object.sub_total * object.volume
+          object.hp = this.rab_details.hp
+        }
+        else
+        {
+          object.volume = object.coefficient * this.rab_details.volume
+          object.sub_total = data.total
+          this.rab_details.hp = object.volume * object.sub_total
+          object.hp = this.rab_details.hp
+        }
+        this.rab.total_rab = parseInt(this.rab_details.hp + this.rab.total_rab,10);
+
+        this.details.push(JSON.parse(JSON.stringify(object)))
+        this.tambah = false
+        this.AHS.id_ahs=""
+        console.log('Detail AHS')
+        console.log(this.details)
+      },
+      deleteList(id){
+        let data = this.details.find(obj=>obj.id_ahs == id)
+        console.log(data)
+        this.rab.total_rab = parseInt(this.rab.total_rab - data.hp,10)
+        console.log(this.rab.total_rab)
+        let filter = this.details.filter(function( obj ) {
+            return obj.id_ahs !== id;
+        });
+        this.details=filter
+      },
+      getSelectedIndex(){
+        this.index = this.ahs.map(function(e) { return e.id_ahs; }).indexOf(this.AHS.id_ahs);
+        console.log(this.index)
+      },
+      async addTaskSub()
+      {
+        try{
+          const payload = {
+            name :  'Pekerjaan' + ' ' + this.sub_item,
+          }
+          await task.addTaskSub(payload)
+          this.getTaskSub()
+          this.sub_item = ''
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async updateTaskSub(id){
+        try{
+          const payload = {
+            name        : this.tasksub_data.name
+          }
+          await task.update(payload,id)
+          this.getTaskSub()
+          this.close()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async deleteTaskSub(id){
+        try{
+          await task.delete(id).data
+          this.getTaskSub()
+          this.close()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getTaskSub(){
+        try{
+          this.type = (await rabController.getTaskSub()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getallDetails(){
+        try{
+          this.detailsData = (await rabController.getallDetails()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getallAHS(){
+        try{
+          this.ahs = (await ahsController.getallItem()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getallItem(){
+        try{
+          this.project = (await Controller.getallItem()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getallRAB(){
+        try{
+          this.RAB = (await rabController.getallItem()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async addGroup()
+      {
+        try{
+          const payload = {
+            name : 'Lantai' + ' ' + this.sub_item,
+          }
+          await groups.addGroup(payload)
+          this.getGroup()
+          this.sub_item = ''
+        }catch(err){
+          console.log(err);
+        }
+      },
+      async updateGroup(id){
+        try{
+          const payload = {
+            name        : this.group_data.name
+          }
+          await groups.update(payload,id)
+          this.getGroup()
+          this.close()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async deleteGroup(id){
+        try{
+          await groups.delete(id).data
+          this.getGroup()
+          this.refresh()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getGroup(){
+        try{
+          this.sub = (await rabController.getGroup()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async addAllItem(){
+        try{
+          const payload = {
+            id_project        : this.rab.id_project,
+            id_ahs            : this.rab.id_ahs,
+            kode              : this.rab.kode,
+            desc              : this.rab.desc,
+            total_rab         : this.rab.total_rab,
+            detail_structure  : this.Structure,
+            detail_group      : this.Groups,
+            detail_task       : this.TaskSub,
+            detail            : this.details,
+          }
+          await rabController.addAllItem(payload)
+          this.close()
+          this.getallRAB()
+          this.refresh()
+        }catch(err){
+          console.log(err);
+        }
+      },
+      async updateItem(id){
+        try{
+            const payload = {
+              id_project    : this.rab.id_project,
+              id_ahs        : this.rab.id_ahs,
+              kode          : this.rab.kode,
+              sub           : this.rab.sub,
+              desc          : this.rab.desc,
+              total_rab     : this.rab.total_rab,
+              detail        : this.details
+            } 
+            await rabController.updateItem(payload,id)
+            this.getallRAB()
+            this.close()
+            this.refresh()
+        }catch(err){
+          console.log(err);
+        }
+      },
+      async deleteItem(id){
+        try{
+          await rabController.deleteItem(id).data
+          this.getallRAB()
+          this.refresh()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async deleteDetail(id){
+        try{
+          await rabController.deleteDetail(id).data
+          this.getallDetails()
+          this.getallRAB()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async updateDetail(id){
+        try{
+          const payload = {
+            coefficient   : this.detail.coefficient,
+            volume        : this.detail.volume
+          }
+          await rabController.updateDetail(payload,id)
+          this.getallDetails()
+          this.getallRAB()
+          this.close()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async addStructure()
+      {
+        try{
+          const payload = {
+            name :  'Gedung' + ' ' + this.gedung,
+          }
+          await structure.add(payload)
+          this.getStructure()
+          this.gedung = ''
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async updateStructure(id){
+        try{
+          const payload = {
+            name        : this.structure_data.name
+          }
+          await structure.update(payload,id)
+          this.getStructure()
+          this.close()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async deleteStructure(id){
+        try{
+          await structure.delete(id).data
+          this.getStructure()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getStructure(){
+        try{
+          this.structure = (await rabController.getStructure()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      refresh(){
+        this.deleteList()
+        this.rab = ''
+      },
       close () {
         this.dialog = false
-        setTimeout(() => {
-          this.editedItem = Object.assign({}, this.defaultItem)
-          this.editedIndex = -1
-        }, 300)
+        this.dialog3 = false
+        this.dialog5 = false
+        this.dialog6 = false
+        this.dialog7 = false
+        this.dialog8 = false
+        this.dialog9 = false
+        this.dialog10 = false
       },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        } else {
-          this.desserts.push(this.editedItem)
-        }
-        this.close()
-      },
-    },
+    }
   }
 </script>
+
+<style>
+.mytable table tr {
+    /* background-color: gainsboro; */
+}
+</style>
