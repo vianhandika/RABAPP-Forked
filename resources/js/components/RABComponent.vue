@@ -1,7 +1,7 @@
 <template>
   <div>
     <template>
-      <v-toolbar>
+      <v-toolbar dark color="cyan">
         <v-toolbar-title>RAB</v-toolbar-title>
         <v-divider
           class="mx-4"

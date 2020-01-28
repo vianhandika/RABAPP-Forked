@@ -4,6 +4,7 @@
       v-model="drawer"
       app
       dark
+      color="cyan"
     >
       <v-list dense>
         <v-list-item @click="home">

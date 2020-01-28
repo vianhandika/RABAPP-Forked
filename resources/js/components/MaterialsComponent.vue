@@ -10,7 +10,7 @@
     class="elevation-1"
   >
     <template v-slot:top>
-      <v-toolbar flat color="cyan">
+      <v-toolbar dark color="cyan">
         <v-toolbar-title>Materials/Labor</v-toolbar-title>
         <v-divider
           class="mx-4"

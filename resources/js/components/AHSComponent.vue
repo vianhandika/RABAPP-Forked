@@ -1,7 +1,7 @@
 <template>
   <div>
     <template>
-      <v-toolbar flat color="cyan">
+      <v-toolbar dark color="cyan">
         <v-toolbar-title>AHS</v-toolbar-title>
         <v-divider
           class="mx-4"

@@ -85,15 +85,6 @@
                         <td>Rp. {{$data->price}}</td>
                         <td>Rp. {{$data->price_satuan}}</td>
                     </tr>
-{{-- 
-                    <tr> 
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                    </tr> --}}
 
                     <tr>
                         <td></td>

@@ -38,9 +38,8 @@ class ReportsController extends Controller
         return $pdf->stream();
     }
 
-    public function analisa_task_all($id)
+    public function analisa_task_all()
     {
-        $ahs = AHS::find($id);
         $datas = DB::select("SELECT j.kode as kode_task, j.name as task, j.satuan as satuan_task, 
         d.coefficient as coefficient, d.sub_total as price_satuan, m.kode as kode_material, m.name as material, 
         m.satuan as satuan_material, m.price, m.status as status, a.total_labor, a.total_material, a.total
@@ -49,18 +48,29 @@ class ReportsController extends Controller
         INNER JOIN ahs_details d ON a.id_ahs = d.id_ahs
         INNER JOIN materials m ON m.id_material = d.id_material
         WHERE d.deleted_at is null
-        ORDER BY j.name, m.status DESC");
+        ORDER BY j.kode, m.status DESC");
 
         $index = count($datas);
-        for($i=0;$i<$index;$i++)
+        for($i=0;$i<$index-1;$i++)
         {
             if($datas[$i]->status == "labor")
             {
                 $j = $i;
                 break;
             }
+            else{
+
+            }
         }
-        $pdf = PDF::loadView('analisa_task_all_report',['datas' => $datas, 'j'=>$j]);
+        $count=1;
+        for($i=0;$i<$index-1;$i++)
+        {
+            if($datas[$i]->task != $datas[$i+1]->task)
+            {
+                $count +=1;
+            }
+        }
+        $pdf = PDF::loadView('analisa_task_all_report',['datas' => $datas,'count'=>$count,'index'=>$index]);
         $pdf->setPaper([0,0,550,900]);
         return $pdf->stream();
     }

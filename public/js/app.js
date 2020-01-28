@@ -15175,6 +15175,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -17868,7 +17869,7 @@ var render = function() {
       [
         _c(
           "v-toolbar",
-          { attrs: { flat: "", color: "cyan" } },
+          { attrs: { dark: "", color: "cyan" } },
           [
             _c("v-toolbar-title", [_vm._v("AHS")]),
             _vm._v(" "),
@@ -30951,7 +30952,7 @@ var render = function() {
           return [
             _c(
               "v-toolbar",
-              { attrs: { color: "cyan" } },
+              { attrs: { dark: "", color: "cyan" } },
               [
                 _c("v-toolbar-title", [_vm._v("Task")]),
                 _vm._v(" "),
@@ -32073,7 +32074,7 @@ var render = function() {
           return [
             _c(
               "v-toolbar",
-              { attrs: { flat: "", color: "cyan" } },
+              { attrs: { dark: "", color: "cyan" } },
               [
                 _c("v-toolbar-title", [_vm._v("Materials/Labor")]),
                 _vm._v(" "),
@@ -33050,7 +33051,7 @@ var render = function() {
           return [
             _c(
               "v-toolbar",
-              { attrs: { flat: "", color: "white" } },
+              { attrs: { dark: "", color: "cyan" } },
               [
                 _c("v-toolbar-title", [_vm._v("Project")]),
                 _vm._v(" "),
@@ -34210,6 +34211,7 @@ var render = function() {
       [
         _c(
           "v-toolbar",
+          { attrs: { dark: "", color: "cyan" } },
           [
             _c("v-toolbar-title", [_vm._v("RAB")]),
             _vm._v(" "),
@@ -39502,7 +39504,7 @@ var render = function() {
       _c(
         "v-navigation-drawer",
         {
-          attrs: { app: "", dark: "" },
+          attrs: { app: "", dark: "", color: "cyan" },
           model: {
             value: _vm.drawer,
             callback: function($$v) {
@@ -39793,7 +39795,7 @@ var render = function() {
           return [
             _c(
               "v-toolbar",
-              { attrs: { flat: "", color: "white" } },
+              { attrs: { dark: "", color: "cyan" } },
               [
                 _c("v-toolbar-title", [_vm._v("Store")]),
                 _vm._v(" "),

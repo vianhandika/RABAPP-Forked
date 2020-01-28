@@ -7,7 +7,7 @@
     class="elevation-1"
   >
     <template v-slot:top>
-      <v-toolbar flat color="white">
+      <v-toolbar dark color="cyan">
         <v-toolbar-title>Project</v-toolbar-title>
         <v-divider
           class="mx-4"
