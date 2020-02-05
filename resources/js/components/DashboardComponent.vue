@@ -4,7 +4,7 @@
       v-model="drawer"
       app
       dark
-      color="cyan darken-1"
+      color="teal"
     >
       <v-list dense>
         <v-list-item @click="home">
@@ -109,7 +109,7 @@
 
     <v-app-bar
       app
-      color="light-blue"
+      color="green"
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer">
@@ -185,13 +185,13 @@
                   class="mt-n7"
                 >
                 <v-sheet color="#F44336" width="80" height="80" elevation="10">
-                      <v-icon dark large>store</v-icon>
+                      <v-icon dark large>waves</v-icon>
                 </v-sheet>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <div class="overline text-right">Store</div>
-                  <v-list-item-title class="headline mb-1 text-right" v-for="counts in store" :key="counts.count">{{ counts.count }}</v-list-item-title>
+                  <div class="overline text-right">Materials/Labor</div>
+                  <v-list-item-title class="headline mb-1 text-right" v-for="counts in materials" :key="counts.count">{{ counts.count }}</v-list-item-title>
                   <div><v-divider></v-divider></div>
                 </v-list-item-content> 
               </v-list-item>
@@ -220,8 +220,8 @@
                   </v-sheet>
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <div class="overline text-right">RAB</div>
-                    <v-list-item-title class="headline mb-1 text-right" v-for="counts in counter_rab" :key="counts.count">{{ counts.count }}</v-list-item-title>
+                    <div class="overline text-right">AHS</div>
+                    <v-list-item-title class="headline mb-1 text-right" v-for="counts in ahs" :key="counts.count">{{ counts.count }}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
                 </v-list-item>
@@ -477,11 +477,10 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import Controller from './../service/Project'
 
   export default {
-    name: 'team',
     counter:[],
-    store:[],
+    materials:[],
     rab:[],
-    counter_rab:[],
+    ahs:[],
     props: {
       source: String,
     },
@@ -532,8 +531,8 @@ import Controller from './../service/Project'
     }),
     mounted() {
       this.counter()
-      this.counter_store()
-      this.counter_rab()
+      this.counter_materials()
+      this.counter_ahs()
       this.total()
     },
     computed: {
@@ -583,9 +582,9 @@ import Controller from './../service/Project'
           console.log(err)
         }
       },
-      async counter_store(){
+      async counter_materials(){
         try{
-          this.store = (await Controller.count_store()).data
+          this.materials = (await Controller.count_materials()).data
         }catch(err){
           console.log(err)
         }
@@ -597,9 +596,9 @@ import Controller from './../service/Project'
           console.log(err)
         }
       },
-      async counter_rab(){
+      async counter_ahs(){
         try{
-          this.counter_rab = (await Controller.count_rab()).data
+          this.ahs = (await Controller.count_ahs()).data
         }catch(err){
           console.log(err)
         }

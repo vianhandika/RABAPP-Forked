@@ -15,11 +15,9 @@ class RABTransformers extends TransformerAbstract
             'id_rab'            => $rab->id_rab,
             'id_project'        => $rab->id_project,
             'kode'              => $rab->kode,
-            'sub'               => $rab->sub,
             'total_rab'         => $rab->total_rab,
             'desc'              => $rab->desc,
             'name'              => $rab->projects->name,
-            // 'price'             
         ]; 
     }
 

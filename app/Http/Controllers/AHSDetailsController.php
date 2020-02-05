@@ -24,17 +24,17 @@ class AHSDetailsController extends RestController
     {
         $this->validateWith([
             'coefficient' => 'required|max:255',
-            'sub_total' => 'required|max:255',
         ]);
 
         $detail = AHSDetails::findOrFail($id);
         $ahs = AHS::where('id_ahs',$detail->id_ahs)->first();
+        $material = Materials::where('id_material',$detail->id_material)->first();
 
         $ahs->total = $ahs->total - $detail->sub_total;
         $ahs->save();
 
         $detail->coefficient = $request->coefficient;
-        $detail->sub_total = $request->coefficient * $detail->sub_total;
+        $detail->sub_total = $detail->coefficient * $material->price;
         $detail->save();
         
         $ahs->total = $ahs->total + $detail->sub_total;

@@ -17,8 +17,7 @@ class GroupDetailsTransformers extends TransformerAbstract
             'id_group_details'      => $group_details->id_group_details,
             'id_groups'             => $group_details->id_groups,
             'id_structure_details'  => $group_details->id_structure_details,
-            // 'name'                  => $group_details->group->name,
-            // 'name_structure'        => $group_details->for_if->name,
+            'group'                 => $group_details->group->name,
         ];
     }
 

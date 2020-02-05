@@ -10,12 +10,12 @@ class JobTransformers extends TransformerAbstract
     public function transform(Job $job)
     {
         return [
-            'kode' => $job->kode,
-            'id_job' => $job->id_job,
-            'name' => $job->name,
-            'satuan' => $job->satuan,
-            'status' => $job->status,
-            'details' => $job->details
+            'kode'      => $job->kode,
+            'id_job'    => $job->id_job,
+            'name'      => $job->name,
+            'satuan'    => $job->satuan,
+            'status'    => $job->status,
+            'details'   => $job->details
         ];
     }
 }

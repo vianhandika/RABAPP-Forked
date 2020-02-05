@@ -3,7 +3,7 @@ namespace App\Transformers;
 use League\Fractal\TransformerAbstract;
 use App\AHS;
 
-class AHSTransformers extends TransformerAbstract
+class AHSTransformers2 extends TransformerAbstract
 {
     protected $defaultIncludes = [
         'ahs_details'
@@ -15,12 +15,14 @@ class AHSTransformers extends TransformerAbstract
             'kode'              => $ahs->kode,
             'id_ahs'            => $ahs->id_ahs,
             'id_job'            => $ahs->id_job,
+            'id_sub'            => $ahs->id_sub,
             'total'             => $ahs->total,
             'total_labor'       => $ahs->total_labor,
             'total_material'    => $ahs->total_material,
             'name'              => $ahs->jobs->name,
             'satuan'            => $ahs->jobs->satuan,
             'status'            => $ahs->jobs->status,
+            'name_sub'          => $ahs->sub->name
         ];
     }
 

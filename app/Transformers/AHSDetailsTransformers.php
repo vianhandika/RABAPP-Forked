@@ -16,8 +16,12 @@ class AHSDetailsTransformers extends TransformerAbstract
             'sub_total'          => $ahs_details->sub_total,
             'kode'               => $ahs_details->materials->kode,
             'name'               => $ahs_details->materials->name,
+            'type'               => $ahs_details->materials->type,
+            'satuan'             => $ahs_details->materials->satuan,
             'price'              => $ahs_details->materials->price,
+            'spesification'      => $ahs_details->materials->spesification,
             'status'             => $ahs_details->materials->status,
+            'store'              => $ahs_details->materials->stores->name,
         ];
     }
 }

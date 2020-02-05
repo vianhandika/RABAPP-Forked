@@ -14,7 +14,7 @@ class RABDetails extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'id_sub_details', 'id_ahs', 'volume','sub_total', 'coefficient', 'hp'
+        'id_sub_details', 'id_ahs', 'id_ahs_adjust','volume','sub_total', 'coefficient', 'hp'
     ];
 
     protected $dates = [
@@ -29,6 +29,11 @@ class RABDetails extends Model
     public function ahs()
     {
         return $this->belongsTo('App\AHS','id_ahs');
+    }
+
+    public function ahs_adjust()
+    {
+        return $this->belongsTo('App\AHSAdjust','id_ahs_adjust');
     }
 }
 

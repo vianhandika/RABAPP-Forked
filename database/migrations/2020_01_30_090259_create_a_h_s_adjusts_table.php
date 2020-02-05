@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAHSSTable extends Migration
+class CreateAHSAdjustsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateAHSSTable extends Migration
      */
     public function up()
     {
-        Schema::create('a_h_s_s', function (Blueprint $table) {
-            $table->increments('id_ahs');
+        Schema::create('a_h_s_adjusts', function (Blueprint $table) {
+            $table->increments('id_ahs_adjust');
+            $table->unsignedInteger('id_project');
             $table->unsignedInteger('id_job');
             $table->unsignedInteger('id_sub');
-            $table->string('kode');
+            $table->double('adjustment');
             $table->double('total_labor');
             $table->double('total_material');
             $table->double('total');
@@ -26,6 +27,7 @@ class CreateAHSSTable extends Migration
 
             $table->foreign('id_job')->references('id_job')->on('jobs');
             $table->foreign('id_sub')->references('id_sub')->on('task_subs');
+            $table->foreign('id_project')->references('id_project')->on('projects');
         });
     }
 
@@ -36,6 +38,6 @@ class CreateAHSSTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('a_h_s_s');
+        Schema::dropIfExists('a_h_s_adjusts');
     }
 }

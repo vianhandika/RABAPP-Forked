@@ -211,11 +211,6 @@ class RABController extends RestController
             }
         }
         
-
-        
-
-        
-
         $rab=RAB::find($id);
         $status = $rab->delete();
         

@@ -29,7 +29,7 @@
         </style>
     </head>
     <body>
-        <img src="{{public_path('images/logo.png')}}" width="350px">
+        <img src="{{public_path('images/logo.png')}}" width="120px">
         <div class="title">
             <h3>Daftar Analisa Pekerjaan (Master)</h3>
         </div>
@@ -52,10 +52,10 @@
                             <th>Id. Pek.</th>
                             <th>Uraian Pekerjaan</th>
                             <th>Koef</th>
-                            <th>Id. Bahan/Pek.</th>
-                            <th>Uraian Bahan/Pek</th>
+                            <th>Id. B&T</th>
+                            <th>Uraian B&T</th>
                             <th>Sat.</th>
-                            <th>Harga Bahanup.</th>
+                            <th>Harga B&T</th>
                             <th>Harga Satuan</th>
                         </tr>
                     </thead>

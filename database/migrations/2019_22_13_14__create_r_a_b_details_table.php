@@ -16,7 +16,8 @@ class CreateRABDetailsTable extends Migration
         Schema::create('r_a_b_details', function (Blueprint $table) {
             $table->increments('id_rab_details');
             $table->unsignedInteger('id_sub_details');
-            $table->unsignedInteger('id_ahs');
+            $table->integer('id_ahs')->unsigned()->nullable();
+            $table->integer('id_ahs_adjust')->unsigned()->nullable();
             $table->double('sub_total');
             $table->double('volume');
             $table->double('coefficient');
@@ -26,6 +27,7 @@ class CreateRABDetailsTable extends Migration
 
             $table->foreign('id_sub_details')->references('id_sub_details')->on('task_sub_details');
             $table->foreign('id_ahs')->references('id_ahs')->on('a_h_s_s');
+            $table->foreign('id_ahs_adjust')->references('id_ahs_adjust')->on('a_h_s_adjusts');
 
         });
     }

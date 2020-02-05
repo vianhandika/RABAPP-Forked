@@ -15,7 +15,7 @@ class TaskSubDetailsTransformers extends TransformerAbstract
             'id_sub'            => $tasksub_details->id_sub,
             'id_group_details'  => $tasksub_details->id_group_details,
             'id_sub_details'    => $tasksub_details->id_sub_details,
-            // 'name'              => $tasksub_details->task_sub->name
+            'task'              => $tasksub_details->task_sub->name
         ];
     }
 

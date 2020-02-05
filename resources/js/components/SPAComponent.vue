@@ -4,7 +4,7 @@
       v-model="drawer"
       app
       dark
-      color="cyan"
+      color="teal"
     >
       <v-list dense>
         <v-list-item @click="home">
@@ -109,7 +109,7 @@
 
     <v-app-bar
       app
-      color="light-blue"
+      color="green"
       dark
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer">

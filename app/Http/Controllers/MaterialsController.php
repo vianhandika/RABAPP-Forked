@@ -84,4 +84,14 @@ class MaterialsController extends RestController
             'message' => $material ? 'Deleted' : 'Error Delete'
         ]);
     }
+
+    public function count_materials()
+    {
+        $materials = Materials::all();
+        $countmaterials = count($materials);
+
+        $result['data'][0]['count']=$countmaterials;
+        
+        return $result;
+    }
 }

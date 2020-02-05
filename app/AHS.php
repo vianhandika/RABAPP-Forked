@@ -14,7 +14,7 @@ class AHS extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'kode','id_job', 'total_labor','total_material','total'
+        'kode','id_job', 'id_sub','total_labor','total_material','total'
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'
@@ -28,5 +28,10 @@ class AHS extends Model
     public function jobs()
     { 
         return $this->belongsTo('App\Job','id_job');
+    }
+
+    public function sub()
+    {
+        return $this->belongsTo('App\TaskSub', 'id_sub');
     }
 }

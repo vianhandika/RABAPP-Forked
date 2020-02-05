@@ -1,7 +1,7 @@
 import Http from '../http'
 
 export default {
-    count_rab(){
+    count_ahs(){
         return new Promise((resolve, reject) => {
             
             const successCallback = (res) => {
@@ -11,7 +11,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/count_rab', successCallback, errorCallback)
+            Http.get('/api/count_ahs', successCallback, errorCallback)
         })
     },
     total(){
@@ -27,7 +27,7 @@ export default {
             Http.get('/api/rabs/total', successCallback, errorCallback)
         })
     },
-    count_store(){
+    count_materials(){
         return new Promise((resolve, reject) => {
             
             const successCallback = (res) => {
@@ -37,7 +37,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/count_store', successCallback, errorCallback)
+            Http.get('/api/count_materials', successCallback, errorCallback)
         })
     },
     count(){

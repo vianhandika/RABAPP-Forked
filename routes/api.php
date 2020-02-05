@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 //User
 Route::group([
     'prefix' => 'auth'
@@ -50,20 +49,19 @@ Route::post('/materials/store','MaterialsController@store');
 Route::patch('/materials/update/{id}', 'MaterialsController@update');
 Route::delete('/materials/delete/{id}','MaterialsController@destroy');
 Route::get('/materials/show/{id}', 'MaterialsController@show');
+Route::get('/count_materials', 'MaterialsController@count_materials');
 //AHS 
 Route::get('/ahs','AHSController@index');
 Route::post('/ahs/store','AHSController@store');
 Route::patch('/ahs/update/{id}','AHSController@update');
 Route::delete('/ahs/delete/{id}','AHSController@destroy');
 Route::get('/ahs/show/{id}', 'AHSController@showByID');
+Route::get('/count_ahs','AHSController@count_ahs');
 //AHS Details
 Route::get('/ahs_details','AHSDetailsController@index');
 Route::patch('/ahs_details/update/{id}','AHSDetailsController@update');
 Route::delete('/ahs_details/delete/{id}', 'AHSDetailsController@destroy');
 Route::get('/ahs_details/show/{id}', 'AHSDetailsController@showbyID');
-//Material Details
-Route::get('/material_details','MaterialDetailsController@index');
-Route::post('/material_details/store','MaterialDetailsController@store');
 //RAB
 Route::get('/rabs','RABController@index');
 Route::post('/rabs/store','RABController@store');
@@ -83,7 +81,6 @@ Route::post('/stores/store', 'StoreController@store');
 Route::patch('/stores/update/{id}', 'StoreController@update');
 Route::delete('/stores/delete/{id}', 'StoreController@destroy');
 Route::get('/stores/show/{id}', 'StoreController@showByID');
-Route::get('/count_store', 'StoreController@count');
 //Satuan
 Route::get('/satuans','SatuanController@index');
 Route::post('/satuans/store', 'SatuanController@store');
@@ -105,3 +102,14 @@ Route::delete('/task_sub/delete/{id}','TaskSubController@destroy');
 //Reports
 Route::get('/analisa_task/{id}','ReportsController@analisa_task');
 Route::get('/analisa_task_all','ReportsController@analisa_task_all');
+//AHS Adjust
+Route::get('/ahs_adjust','AHSAdjustController@index');
+Route::post('/ahs_adjust/store','AHSAdjustController@store');
+Route::patch('/ahs_adjust/update/{id}','AHSAdjustController@update');
+Route::delete('/ahs_adjust/delete/{id}','AHSAdjustController@destroy');
+Route::get('/ahs_adjust/show/{id}', 'AHSAdjustController@showByID');
+//AHS Adjust Details
+// Route::get('/ahs_details','AHSDetailsController@index');
+// Route::patch('/ahs_details/update/{id}','AHSDetailsController@update');
+// Route::delete('/ahs_details/delete/{id}', 'AHSDetailsController@destroy');
+// Route::get('/ahs_details/show/{id}', 'AHSDetailsController@showbyID');

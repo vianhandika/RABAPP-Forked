@@ -26,9 +26,9 @@ export const routes = [
     path: '/dashboard',
     name: 'dashboard',
     component: Dashboard,
-    beforeEnter: middleware([
-      auth
-    ])
+    // beforeEnter: middleware([
+    //   auth
+    // ])
   },
   {
     path: '/spa',
@@ -39,65 +39,65 @@ export const routes = [
         path: '/project',
         name: 'project',
         component: Project,
-        beforeEnter: middleware([
-          auth
-        ])
+        // beforeEnter: middleware([
+        //   auth
+        // ])
       },
       {
         path: '/job',
         name: 'job',
         component: Job,
-        beforeEnter: middleware([
-          auth
-        ])
+        // beforeEnter: middleware([
+        //   auth
+        // ])
       },
       {
         path: '/materials',
         name: 'materials',
         component: Material,
-        beforeEnter: middleware([
-          auth
-        ])
+        // beforeEnter: middleware([
+        //   auth
+        // ])
       },
       {
         path: '/transaction',
         name: 'transaction',
         component: Transaction,
-        beforeEnter: middleware([
-          auth
-        ])
+        // beforeEnter: middleware([
+        //   auth
+        // ])
       },
       {
         path: '/analisa',
         name: 'analisa',
         component: AHS,
-        beforeEnter: middleware([
-          auth
-        ])
+        // beforeEnter: middleware([
+        //   auth
+        // ])
       },
       {
         path: '/home',
         name: 'home',
         component: Home,
-        beforeEnter: middleware([
-          auth
-        ])
+        // beforeEnter: middleware([
+        //   auth
+        // ])
       },
       {
         path: '/store',
         name: 'store',
         component: Store,
-        beforeEnter: middleware([
-          auth
-        ])
+        // beforeEnter: middleware([
+        //   auth
+        // ])
       },
       {
         path: 'reports',
         name: 'reports',
         component: Report,
-        beforeEnter: middleware([
-          auth
-        ])
+        // beforeEnter: middleware([
+        //   auth
+        // ])
       },
       {
         path: '/cek',

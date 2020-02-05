@@ -3,18 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Transformers\AHSTransformers;
+use App\Transformers\AHSTransformers2;
 use Illuminate\Support\Facades\DB;
 use App\AHSDetails;
 use App\AHS;
 
 class AHSController extends RestController
 {
-    protected $transformer = AHSTransformers::Class;
+    protected $transformer = AHSTransformers2::Class;
 
     public function index()
     {
-        //$ahs = AHS::orderBy('id_ahs','DESC')->get();
         $ahs = AHS::all();
         $response = $this->generateCollection($ahs);
         return $this->sendResponse($response,200);
@@ -29,11 +28,12 @@ class AHSController extends RestController
             }
             
             $ahs = new AHS;
-            $ahs->kode      = $request->get('kode');
-            $ahs->id_job    = $request->get('id_job');
-            $ahs->total_labor     = $request->get('total_labor');
-            $ahs->total_material     = $request->get('total_material');
-            $ahs->total     = $request->get('total');
+            $ahs->kode = $request->get('kode');
+            $ahs->id_job = $request->get('id_job');
+            $ahs->id_sub = $request->get('id_sub');
+            $ahs->total_labor = $request->get('total_labor');
+            $ahs->total_material = $request->get('total_material');
+            $ahs->total = $request->get('total');
             $ahs->save();
             
             if($request->has('detail'));
@@ -57,16 +57,16 @@ class AHSController extends RestController
         {
             if(AHSDetails::where('id_ahs',$id)->get() != null)
                 $delete = AHSDetails::where('id_ahs',$id)->delete();
-                //$ahs->total = 0;
         }
         
         $detail_ahs = $request->get('detail');
     
         $ahs=AHS::findOrFail($id);
-        $ahs->kode      = $request->get('kode');
-        $ahs->total_labor     = $request->get('total_labor');
-        $ahs->total_material     = $request->get('total_material');
-        $ahs->total     = $request->get('total');
+        $ahs->kode = $request->get('kode');
+        $ahs->id_sub = $request->get('id_sub');
+        $ahs->total_labor = $request->get('total_labor');
+        $ahs->total_material = $request->get('total_material');
+        $ahs->total = $request->get('total');
         $ahs->save();
 
         if($request->has('detail'));
@@ -100,5 +100,14 @@ class AHSController extends RestController
     {
         $ahs = AHS::findOrFail($id);
         return response()->json($ahs,200);
+    }
+
+    public function count_ahs()
+    {
+        $ahs = AHS::all();
+        $count = count($ahs);
+
+        $result['data'][0]['count']=$count;
+        return $result;
     }
 }
