@@ -79,6 +79,17 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item @click="adjust">
+          <v-list-item-action>
+            <v-btn icon>
+              <v-icon>trending_up</v-icon>
+            </v-btn>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>AHS Lokal</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
         <v-list-item @click="transaction">
           <v-list-item-action>
@@ -105,8 +116,18 @@
         </v-list-item> -->
 
       </v-list>
-    </v-navigation-drawer>
 
+      <!-- <v-expansion-panels accordion v-if="expand">
+        <v-expansion-panel>
+            <v-expansion-panel-header>cek</v-expansion-panel-header>
+          <v-expansion-panel-content v-for="(item,i) in items" :key="i">
+            {{ item }}
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels> -->
+
+    </v-navigation-drawer>
+    
     <v-app-bar
       app
       color="green"
@@ -146,6 +167,7 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
+import Structure from '../service/Structure'
 
   export default {
     props: {
@@ -153,6 +175,12 @@ import { mapGetters, mapState, mapActions } from 'vuex'
     },
     data: () => ({
       drawer: null,
+      expand: false,
+      items: [
+        'Building',
+        'Floor',
+        'Task Group',
+      ],
     }),
     computed: {
       ...mapState({
@@ -183,6 +211,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
         this.$router.push({name: 'materials'});
       },
       transaction(){
+        this.expand = true
         this.$router.push({name: 'transaction'});
       },
       analisa(){
@@ -196,6 +225,9 @@ import { mapGetters, mapState, mapActions } from 'vuex'
       },
       reports(){
         this.$router.push({name : 'reports'})
+      },
+      adjust(){
+        this.$router.push({name: 'adjust'})
       }
     }
   }

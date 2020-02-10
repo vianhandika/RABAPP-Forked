@@ -15,8 +15,8 @@ class CreateAHSSTable extends Migration
     {
         Schema::create('a_h_s_s', function (Blueprint $table) {
             $table->increments('id_ahs');
-            $table->unsignedInteger('id_job');
             $table->unsignedInteger('id_sub');
+            $table->unsignedInteger('id_job');
             $table->string('kode');
             $table->double('total_labor');
             $table->double('total_material');

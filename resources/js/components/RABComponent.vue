@@ -17,11 +17,12 @@
           class="hidden-sm-and-down"
           color="blue"
           v-model="search"
+          dense
       >
       </v-text-field>
     
       <div class="flex-grow-1"></div>
-      <v-dialog v-model="dialog" width="800px" max-height="200px">  
+      <v-dialog v-model="dialog" width="750px" max-height="200px">  
         <template v-slot:activator="{ on }">
           <v-btn color="blue" dark v-on="on">New</v-btn>
         </template>
@@ -65,10 +66,10 @@
                   <v-icon left>work_outline</v-icon>
                   Detail 
                 </v-tab>
-                <v-tab ripple href='#tab-6'>
+                <!-- <v-tab ripple href='#tab-6'>
                   <v-icon left>remove_red_eye</v-icon>
                   Adjustment
-                </v-tab>
+                </v-tab> -->
 
                 <!-- Fom RAB awal -->
                 <v-tab-item value='tab-1'>
@@ -653,23 +654,52 @@
                       </template>
 
                       <template v-slot:item.action="{ item }">
-                        <VBtn
+                        <!-- <VBtn
                           fab dark
                           color="light-blue darken-4"
                           small
                           @click="itemTask(item);tambah=true;"
                         >
                         Add
-                        </VBtn>
+                        </VBtn> -->
+                        
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-btn 
+                              icon
+                              color="light-blue darken-4"
+                              dark @click="filterAHS(item);tambah=true"
+                              v-on="on"
+                              >
+                            <v-icon>add_circle</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>Add AHS</span>
+                        </v-tooltip>
 
-                        <VBtn
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-btn 
+                              icon
+                              color="light-green darken-4"
+                              dark @click="filterAHSAdjustment(item);tambahAdjust=true"
+                              v-on="on"
+                              >
+                            <v-icon>add_box</v-icon>
+                            </v-btn>
+                          </template>
+                          <span>Add AHS Adjust</span>
+                        </v-tooltip>
+
+
+                        <!-- <VBtn
                           fab dark
                           color="green"
                           small
                           @click="itemAdjust(item);tambahAdjust=true;"
                         >
                         Adjust
-                        </VBtn>
+                        </VBtn> -->
                       </template>
                     </v-data-table>
                   </v-flex>
@@ -817,19 +847,19 @@
                                   >
                                   <v-icon>add_circle</v-icon>
                                 </v-btn>
-                                <v-btn
+                                <!-- <v-btn
                                   icon 
                                   color="blue"
-                                  @click="changeTab()"
+                                  @click="filterAHSAdjustment();tambahAdjust=true"
                                 >
                                 <v-icon>remove_red_eye</v-icon>
-                                </v-btn>
+                                </v-btn> -->
                                 <!-- buat tambah data -->
                                 <v-flex xs11 sm3 md3>
                                   <v-select
                                     label="Building" 
                                     class="pa-1"
-                                    v-model="tasksub_data.id_structure"
+                                    v-model="tasksub_unit.id_structure"
                                     item-text="structure"
                                     item-value="id_structure"
                                     :items="TaskSub"
@@ -841,7 +871,7 @@
                                   <v-select
                                     label="Floor" 
                                     class="pa-1"
-                                    v-model="tasksub_data.id_groups"
+                                    v-model="tasksub_unit.id_groups"
                                     item-text="groups"
                                     item-value="id_groups"
                                     :items="TaskSub"
@@ -853,7 +883,7 @@
                                   <v-select
                                     label="Type of Task" 
                                     class="pa-1"
-                                    v-model="tasksub_data.id_sub"
+                                    v-model="tasksub_unit.id_sub"
                                     item-text="name"
                                     item-value="id_sub"
                                     :items="TaskSub"
@@ -1056,7 +1086,7 @@
                                   <v-select
                                     label="Building" 
                                     class="pa-1"
-                                    v-model="tasksub_data.id_structure"
+                                    v-model="tasksub_unit.id_structure"
                                     item-text="structure"
                                     item-value="id_structure"
                                     :items="TaskSub"
@@ -1068,7 +1098,7 @@
                                   <v-select
                                     label="Floor" 
                                     class="pa-1"
-                                    v-model="tasksub_data.id_groups"
+                                    v-model="tasksub_unit.id_groups"
                                     item-text="groups"
                                     item-value="id_groups"
                                     :items="TaskSub"
@@ -1080,7 +1110,7 @@
                                   <v-select
                                     label="Type of Task" 
                                     class="pa-1"
-                                    v-model="tasksub_data.id_sub"
+                                    v-model="tasksub_unit.id_sub"
                                     item-text="name"
                                     item-value="id_sub"
                                     :items="TaskSub"
@@ -1095,7 +1125,7 @@
                                     v-model="ahs_adjust.id_ahs_adjust"
                                     item-text="name"
                                     item-value="id_ahs_adjust"
-                                    :items="adjust"
+                                    :items="filterAHSAdjust"
                                     @change="getSelectedIndexAdjust"
                                     required 
                                   ></v-select>
@@ -1108,8 +1138,7 @@
                                     v-model="ahs_adjust.id_ahs_adjust"
                                     item-text="total"
                                     item-value="id_ahs_adjust"
-                                    :items="adjust"
-                                    @change="getSelectedIndexAdjust"
+                                    :items="filterAHSAdjust"
                                     disabled
                                   ></v-select>
                                 </v-flex>
@@ -1122,14 +1151,17 @@
                                   >
                                   </v-text-field>
                                 </v-flex>
-
+                                
                                 <v-flex xs10 sm2 md2>
-                                  <v-text-field
-                                    v-model="rab_details.coefficient"
-                                    label="Adjustment*"
+                                  <v-select
+                                    label="Adjustment*" 
                                     class="pa-1"
-                                  >
-                                  </v-text-field>
+                                    v-model="ahs_adjust.id_ahs_adjust"
+                                    item-text="adjustment"
+                                    item-value="id_ahs_adjust"
+                                    :items="filterAHSAdjust"
+                                    disabled
+                                  ></v-select>
                                 </v-flex>
 
                               </v-card-title>
@@ -1142,8 +1174,7 @@
                   </v-card>
                 </v-tab-item>
                 <!-- Form Adjustment -->
-                <v-tab-item value="tab-6">
-                  <!-- <template v-slot:item.action="{ item }"> -->
+                <!-- <v-tab-item value="tab-6">
                     <v-data-table
                       :headers="headers_filter_materials"
                       height="150px"
@@ -1181,8 +1212,7 @@
                     </template>
 
                     </v-data-table>
-                  <!-- </template> -->
-                </v-tab-item>
+                </v-tab-item> -->
               </v-tabs>
             </v-card>
           </template>
@@ -1194,25 +1224,25 @@
       <v-expansion-panel v-for="data in filtered" :key="data.name">
           <v-expansion-panel-header>
             <v-layout row wrap :class="`pa-3 ahs`">
-              <v-flex >
+              <v-flex xs2>
                 <div class="caption grey--text">ID RAB</div>
                 <div>{{ data.kode }}</div>
               </v-flex>
-              <v-flex>
+              <v-flex xs3>
                 <div class="caption grey--text">Project</div>
                 <div>{{ data.name }}</div>
               </v-flex>
-              <v-flex>
+              <v-flex xs2>
                 <div class="caption grey--text">Nominal</div>
                 <div>Rp. {{ data.total_rab }}</div>
               </v-flex>
-              <v-flex>
+              <v-flex xs3>
                 <div class="caption grey--text">Description</div>
                 <div>{{ data.desc }}</div>
               </v-flex>
-              <v-flex>
+              <v-flex xs2>
                 <div class="caption grey--text">Actions</div>
-                <v-icon color="green" @click="itemPanelsStructure(data);dialog5=true">edit</v-icon>
+                <v-icon color="green" @click="itemPanelsStructure(data)">edit</v-icon>
                 <v-icon color="red" @click="itemPanelsStructure(data);dialog2=true">delete</v-icon>
               </v-flex>
             </v-layout>
@@ -1231,7 +1261,7 @@
                         <div class="subtitle-2 black--text">{{data.structure}}</div>
                       </v-flex>
                       <v-flex xs12 sm12 md1>
-                        <v-icon color="light-blue darken-4" @click="itemHandler2(data)">delete</v-icon>
+                        <v-icon color="light-blue darken-4" @click="itemPanelsStructureHandler(data);dialog3=true">delete</v-icon>
                       </v-flex>
                     </v-layout>
                     
@@ -1249,7 +1279,7 @@
                                 <div class="subtitle-2 black--text">{{data.group}}</div>
                               </v-flex>
                               <v-flex xs12 sm12 md1>
-                                <v-icon color="light-blue darken-2" @click="itemHandler2(data)">delete</v-icon>
+                                <v-icon color="light-blue darken-2" @click="itemPanelsGroupHandler(data);dialog4=true">delete</v-icon>
                               </v-flex>
                             </v-layout>
                             
@@ -1267,7 +1297,7 @@
                                         <div class="subtitle-2 black--text">{{data.task}}</div>
                                       </v-flex>
                                       <v-flex xs12 sm12 md1>
-                                        <v-icon color="cyan accent-4" @click="itemHandler2(data)">delete</v-icon>
+                                        <v-icon color="cyan accent-4" @click="itemPanelsTaskHandler(data);dialog5=true">delete</v-icon>
                                       </v-flex>
                                     </v-layout>
                                     
@@ -1310,7 +1340,7 @@
                                                 <div>Rp. {{ data.sub_total }}</div>
                                               </v-flex>
                                               <v-flex xs12 sm12 md1>
-                                                <v-icon color="light-blue lighten-2" @click="itemHandler2(data)">delete</v-icon>
+                                                <v-icon color="light-blue lighten-2" @click="itemPanelsDetailTask(data);dialog6=true">delete</v-icon>
                                               </v-flex>
                                             </v-layout>
 
@@ -1382,6 +1412,54 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="dialog3" max-width="290px">
+      <v-card>
+        <v-card-title class="headline">Confirmation</v-card-title>
+          <v-card-text>Are you sure want to delete this structure?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog3 = false; deleteStructureDetails(detail.id_structure_details)">Yes</v-btn>
+          <v-btn color="red darken-1" text @click="dialog3 = false">No</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog4" max-width="290px">
+      <v-card>
+        <v-card-title class="headline">Confirmation</v-card-title>
+          <v-card-text>Are you sure want to delete this floor?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog4 = false; deleteGroupDetails(detail.id_group_details)">Yes</v-btn>
+          <v-btn color="red darken-1" text @click="dialog4 = false">No</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog5" max-width="290px">
+      <v-card>
+        <v-card-title class="headline">Confirmation</v-card-title>
+          <v-card-text>Are you sure want to delete this task group?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog5 = false; deleteTaskDetails(detail.id_sub_details)">Yes</v-btn>
+          <v-btn color="red darken-1" text @click="dialog5 = false">No</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog v-model="dialog6" max-width="290px">
+      <v-card>
+        <v-card-title class="headline">Confirmation</v-card-title>
+          <v-card-text>Are you sure want to delete this task?</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(rab_details.id_rab_details)">Yes</v-btn>
+          <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </div>
 </template>
 
@@ -1393,6 +1471,8 @@ import structure from './../service/Structure'
 import groups from './../service/Group'
 import task from './../service/TaskSub'
 import adjust from './../service/AHSAdjust'
+import detail from './../service/RABDetails'
+import job from './../service/Job'
 
   export default {
     data (){
@@ -1425,29 +1505,30 @@ import adjust from './../service/AHSAdjust'
         jenis:'',
         sub_item: '',
         gedung:'',
-        id_structure: '',
 
+        job:[],
+        structuredetails:[],
+        groupdetails:[],
+        tasksubdetails:[],
 
         details:[],
         project: [],
         ahs: [],
         adjust:[],
-        // ahs_adjust:[],
         detail_adjust:[],
 
         RAB:[],
         detailsData: [],
 
         filterAHSAll:[],
+        filterAHSAdjust:[],
         filterMaterialsAll:[],
-        
-        data: {
-          id_structure:'',
-          id_groups:'',
-          id_sub:'',
-          structure:'',
-          groups:'',
-          name:'',
+
+        detail:{
+          id_structure_details: '',
+          id_group_details:'',
+          id_sub_details:'',
+          id_rab_details:''
         },
 
         structure_unit:{
@@ -1475,10 +1556,21 @@ import adjust from './../service/AHSAdjust'
           id_structure: '',
           name : '',
         },
+        structureDefault:
+        {
+          id_structure: '',
+          name : '',
+        },
 
         Groups:[],
         sub: [],
         group_data:{
+          id_structure:'',
+          id_group: '',
+          structure:'',
+          groups:'',
+        },
+        groupDefault:{
           id_structure:'',
           id_group: '',
           structure:'',
@@ -1496,11 +1588,15 @@ import adjust from './../service/AHSAdjust'
           groups:'',
           name:'',
         },
-
-        detail:{
-          coefficient: '',
-          volume:''
+        tasksubDefault:{
+          id_structure:'',
+          id_groups:'',
+          id_sub:'',
+          structure:'',
+          groups:'',
+          name:'',
         },
+        
         rab_details:{
           id_ahs:'',
           sub_total: 0,
@@ -1514,8 +1610,19 @@ import adjust from './../service/AHSAdjust'
           groups:'',
           name:'',
         },
-        Job:{
-          id_job:''
+
+        rabDetailsDefault:{
+          id_ahs:'',
+          sub_total: 0,
+          volume: 0,
+          coefficient: 1,
+          hp: 0,
+          id_structure: '',
+          id_groups:'',
+          id_sub:'',
+          structure:'',
+          groups:'',
+          name:'',
         },
 
         AHSAdjustDefault: {
@@ -1537,12 +1644,10 @@ import adjust from './../service/AHSAdjust'
         AHS:{
           id_ahs:'',
           total:0,
-          // ahs_details: ''
         },
         AHSDefault:{
           id_ahs:'',
           total:0,
-          // ahs_details: ''
         },
         rab:{
           id_rab:'',
@@ -1552,8 +1657,18 @@ import adjust from './../service/AHSAdjust'
           total_rab:0,
           kode:'',
           desc: '',
-          sub:'',
         },
+
+        RABDefault:{
+          id_rab:'',
+          id_project:'',
+          id_ahs:'',
+          coefficient: 1,
+          total_rab:0,
+          kode:'',
+          desc: '',
+        },
+
         Project: {
           name:'',
           date: new Date().toISOString().substr(0, 10),
@@ -1562,60 +1677,6 @@ import adjust from './../service/AHSAdjust'
           id_project: '',
           phone: '',
         },
-        headers: [
-          {
-            text: 'ID',
-            align: 'left',
-            sortable: false,
-            value: 'kode',
-          },
-          {
-            text: 'Project',
-            sortable: false,
-            value: 'name',
-          },
-          { 
-            sortable: false,
-            text: 'Nominal (Rp)', 
-            value: 'total_rab'
-          },
-          { 
-            sortable: false,
-            text: 'Description', 
-            value: 'desc'
-          },
-          { 
-            text: 'Actions', 
-            value: 'action', 
-            sortable: false 
-          },
-        ],
-        headers2: [
-          // { 
-          //   text: 'ID AHS', align: 'left', sortable: false, value: 'kode_ahs',
-          // },
-          // { 
-          //   text: 'Satuan', align: 'left', sortable: false, value: 'satuan',
-          // },
-          // {
-          //   text: 'Status', align: 'left', sortable: false, value: 'status',
-          // },
-          // {
-          //   text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient'
-          // },
-          // { 
-          //   text: 'Price', align: 'left', sortable: false, value: 'price',
-          // },
-          // { 
-          //   text: 'Volume', align: 'left', sortable: false, value: 'volume',
-          // },
-          // { 
-          //   text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total',
-          // },
-          // {
-          //   text: 'Actions', align: 'left', sortable: false, value: 'action'
-          // },
-        ],
         headers_filter_materials: [
           {
             text: 'ID',
@@ -1743,6 +1804,8 @@ import adjust from './../service/AHSAdjust'
       this.getTaskSub()
       this.getStructure()
       this.getAdjust()
+      this.getJob()
+      // this.getStructureDetails()
     },
     computed: {
       filtered:function(){
@@ -1815,31 +1878,31 @@ import adjust from './../service/AHSAdjust'
           console.log(err);
         }
       },
-      changeTab()
-      {
-        this.tab = 'tab-6'
-        let filterMaterials=[]
-        let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
+      // changeTab()
+      // {
+      //   this.tab = 'tab-6'
+      //   let filterMaterials=[]
+      //   let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
 
-        for(let materials of data.ahs_details.data)
-        {
-          let each_materials = {
-            id_ahs        : materials.id_ahs,
-            id_material   : materials.id_material,
-            kode          : materials.kode,
-            name          : materials.name,
-            type          : materials.type,
-            satuan        : materials.satuan,
-            price         : materials.price,
-            spesification : materials.spesification,
-            status        : materials.status,
-            store         : materials.store,
-            adjust        : 1
-          }
-          filterMaterials.push(each_materials)
-        }
-        this.filterMaterialsAll = filterMaterials
-      },
+      //   for(let materials of data.ahs_details.data)
+      //   {
+      //     let each_materials = {
+      //       id_ahs        : materials.id_ahs,
+      //       id_material   : materials.id_material,
+      //       kode          : materials.kode,
+      //       name          : materials.name,
+      //       type          : materials.type,
+      //       satuan        : materials.satuan,
+      //       price         : materials.price,
+      //       spesification : materials.spesification,
+      //       status        : materials.status,
+      //       store         : materials.store,
+      //       adjust        : 1
+      //     }
+      //     filterMaterials.push(each_materials)
+      //   }
+      //   this.filterMaterialsAll = data.ahs_details.data
+      // },
       async getAdjust()
       {
         try{
@@ -1866,10 +1929,9 @@ import adjust from './../service/AHSAdjust'
         console.log(item)
         // this.ahs_adjust = item
       },
-      itemTask(item)
+      filterAHS(item)
       {
-        // this.tasksub_data = item 
-        // console.log(this.tasksub_data)
+        this.tasksub_unit = item 
 
         let filterAHS=[]
         for(let ahs_data of this.ahs.filter(obj=>obj.id_sub == item.id_sub))
@@ -1888,6 +1950,33 @@ import adjust from './../service/AHSAdjust'
           filterAHS.push(each_ahs)
         }
         this.filterAHSAll = filterAHS
+      },
+      filterAHSAdjustment(item)
+      {
+        this.tasksub_unit = item 
+        
+        let filterAHS=[]
+        console.log('cek')
+        for(let ahs_data of this.adjust.filter(obj=>obj.id_sub == item.id_sub))
+        {
+          let data = this.job.find(obj=>obj.id_job == ahs_data.id_job)
+          console.log(data)
+          let each_ahs = {
+            id_ahs_adjust   : ahs_data.id_ahs_adjust,
+            // kode            : ahs_data.kode,
+            id_job          : ahs_data.id_job,
+            id_sub          : ahs_data.id_sub,
+            adjustment      : ahs_data.adjustment,
+            // total_labor     : ahs_data.total_labor,
+            // total_material  : ahs_data.total_material,
+            total           : ahs_data.total,
+            name            : data.name,
+            // detail          : ahs_data.ahs_details 
+          }
+          filterAHS.push(each_ahs)
+        }
+        this.filterAHSAdjust = filterAHS
+        console.log(this.filterAHSAdjust)
       },
       itemGroups(item)
       {
@@ -1914,29 +2003,50 @@ import adjust from './../service/AHSAdjust'
         console.log(this.rab_details)
       },
       itemPanelsStructure(item){
-        this.rab = item
-        console.log(this.rab)
-        console.log('Structure')
+        this.rab = item 
+
         this.Structure = item.structure.data
+        console.log('Structure')
         console.log(this.Structure)
+        console.log('masuk kesini')
       },
       itemPanelsGroups(item)
       {
         console.log('Groups')
         this.Groups = item.group.data
-        console.log(this.Groups)
       },
       itemPanelsTask(item)
       {
         console.log('Task')
         this.TaskSub = item.task_sub.data
-        console.log(this.TaskSub)
       },
       itemPanelsDetail(item)
       {
         console.log('Detail')
         this.details = item.rab_details.data
         console.log(this.details)
+      },
+      itemPanelsStructureHandler(item)
+      {
+        console.log('Structure Item')
+        this.detail = item 
+        console.log(this.detail)
+      },
+      itemPanelsGroupHandler(item)
+      {
+        console.log('Group Item')
+        this.detail = item
+      },
+      itemPanelsTaskHandler(item)
+      {
+        console.log('Task Item')
+        this.detail  = item
+      },
+      itemPanelsDetailTask(item)
+      {
+        console.log('Detail Item')
+        this.rab_details = item 
+        console.log(this.rab_details)
       },
       itemDetailHandler(item){
         this.detail = item
@@ -1979,7 +2089,7 @@ import adjust from './../service/AHSAdjust'
         var object = this.group_data
         let data = this.sub.find(obj=>obj.id_group == this.group_data.id_group)
         let dataS = this.Structure.find(obj=>obj.id_structure == this.structure_unit.id_structure)
-        object.id_structure = dataS.id_structure
+        object.id_structure = this.structure_unit.id_structure
         object.id_groups  = data.id_group
         object.structure  = dataS.name
         object.groups = data.name
@@ -2006,17 +2116,19 @@ import adjust from './../service/AHSAdjust'
       },
       async addtasksub()
       {
-        this.err = false
         var object = this.tasksub_data
-        var objectT = this.group_data
         console.log("Detail Group in Task")
-        console.log(objectT)
         let data = this.type.find(obj=>obj.id_sub == this.tasksub_data.id_sub)
-        object.id_structure = objectT.id_structure
-        object.id_groups = objectT.id_group
+        console.log(data)
+        object.id_structure = this.group_unit.id_structure
+        object.id_groups = this.group_unit.id_group
         object.id_sub = data.id_sub
-        object.structure = objectT.structure
-        object.groups = objectT.groups
+        let dataS = this.structure.find(obj=>obj.id_structure == this.group_unit.id_structure)
+        console.log(dataS)
+        object.structure = dataS.name
+        let dataG = this.sub.find(obj=>obj.id_group == this.group_unit.id_group)
+        console.log(dataG)
+        object.groups = dataG.name
         object.name = data.name
         this.TaskSub.push(JSON.parse(JSON.stringify(object)))
         console.log('Detail Task')
@@ -2036,10 +2148,15 @@ import adjust from './../service/AHSAdjust'
       {
         var object = this.rab_details
         console.log(this.adjust)
+        console.log('object')
+        console.log(object)
         if(this.ahs_adjust.id_ahs_adjust != '')
         {
-          let dataS = this.adjust.find(obj=>obj.id_ahs_adjust == this.ahs_adjust.id_ahs_adjust)
+          // let dataA = this.filterAHSAdjust.find(obj=>obj.id_ahs_adjust == this.ahs_adjust.id_ahs_adjust)
+
+          let dataS = this.filterAHSAdjust.find(obj=>obj.id_ahs_adjust == this.ahs_adjust.id_ahs_adjust)
           console.log(dataS)
+          object.coefficient = dataS.adjustment
           object.id_ahs_adjust = dataS.id_ahs_adjust
           object.id_ahs = null
           object.ahs_adjust = dataS.name
@@ -2052,19 +2169,20 @@ import adjust from './../service/AHSAdjust'
           {
             object.volume = this.rab_details.volume
             object.sub_total_adjust  = object.coefficient * dataS.total
-            this.rab_details.hp = object.sub_total_adjust * object.volume
+            this.rab_details.hp = dataS.total * object.volume
             object.hp = this.rab_details.hp
           }
           else
           {
             object.volume = object.coefficient * this.rab_details.volume
             object.sub_total_adjust = dataS.total
-            this.rab_details.hp = object.volume * object.sub_total_adjust
+            this.rab_details.hp = dataS.total * object.volume 
             object.hp = this.rab_details.hp
           }
           console.log('masuk ahs adjust')
           // cek = true
           object.sub_total = 0
+
         }
         if(this.ahs_adjust.id_ahs_adjust == '') 
         {
@@ -2091,18 +2209,21 @@ import adjust from './../service/AHSAdjust'
             object.hp = this.rab_details.hp
           }
           console.log('masuk ahs')
-          // cek2 = true
           object.sub_total_adjust = 0
-          
-
+          object.coefficient = this.rab_details.coefficient
         }
-        object.coefficient = this.rab_details.coefficient
-        object.id_structure = this.tasksub_data.id_structure
-        object.id_groups = this.tasksub_data.id_groups
-        object.id_sub = this.tasksub_data.id_sub
-        object.structure = this.tasksub_data.structure
-        object.groups = this.tasksub_data.groups
-        object.name = this.tasksub_data.name
+        object.id_structure = this.tasksub_unit.id_structure
+        object.id_groups = this.tasksub_unit.id_groups
+        object.id_sub = this.tasksub_unit.id_sub
+        let datas = this.structure.find(obj=>obj.id_structure == this.tasksub_unit.id_structure)
+        console.log(datas)
+        object.structure = datas.name
+        let dataG = this.sub.find(obj=>obj.id_group == this.tasksub_unit.id_groups)
+        console.log(dataG)
+        object.groups = dataG.name
+        let dataT = this.type.find(obj=>obj.id_sub == this.tasksub_unit.id_sub)
+        console.log(dataT)
+        object.name = dataT.name
         
         this.rab.total_rab = parseInt(this.rab_details.hp + this.rab.total_rab,10);
 
@@ -2129,7 +2250,7 @@ import adjust from './../service/AHSAdjust'
         console.log(this.index)
       },
       getSelectedIndexAdjust(){
-        this.index = this.adjust.map(function(e) { return e.id_ahs_adjust; }).indexOf(this.ahs_adjust.id_ahs_adjust);
+        this.index = this.filterAHSAdjust.map(function(e) { return e.id_ahs_adjust; }).indexOf(this.ahs_adjust.id_ahs_adjust);
         console.log(this.index)
       },
       async addTaskSub()
@@ -2283,7 +2404,11 @@ import adjust from './../service/AHSAdjust'
         try{
           await rabController.deleteItem(id).data
           this.getallRAB()
-          this.refresh()
+          // this.rab = Object.assign({},this.RABDefault)
+          // this.structure_data = Object.assign({},this.structureDefault)
+          // this.group_data = Object.assign({},this.groupDefault)
+          // this.tasksub_data = Object.assign({},this.tasksubDefault)
+          // this.rab_details = Object.assign({},this.rabDetailsDefault)
         }catch(err){
           console.log(err)
         }
@@ -2351,13 +2476,55 @@ import adjust from './../service/AHSAdjust'
           console.log(err)
         }
       },
+      async deleteStructureDetails(id)
+      {
+        console.log('Cek id')
+        console.log(id)
+        try{
+          await detail.deleteS(id).data
+          this.getallRAB()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async deleteGroupDetails(id)
+      {
+        console.log('Cek id')
+        console.log(id)
+        try{
+          await detail.deleteG(id).data
+          this.getallRAB()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async deleteTaskDetails(id)
+      {
+        console.log('Cek id')
+        console.log(id)
+        try{
+          await detail.deleteT(id).data
+          this.getallRAB()
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getJob()
+      {
+        try{
+          this.job = (await job.getallItem()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
       refresh(){
-        this.deleteList()
-        this.rab = ''
+        // this.deleteList()
+        // this.rab = ''
       },
       close () {
         this.dialog = false
         this.dialog3 = false
+        this.dialog4 = false
         this.dialog5 = false
         this.dialog6 = false
         this.dialog7 = false

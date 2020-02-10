@@ -27,31 +27,33 @@
             class="hidden-sm-and-down"
             color="blue"
             v-model="search"
+            dense
         >
         </v-text-field>
       
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" max-width="450px">
           <template v-slot:activator="{ on }">
-            <v-btn color="blue" dark class="mb-2" v-on="on">New</v-btn>
+            <v-btn color="blue" dark class="mb-2" @click="reset" v-on="on">New</v-btn>
           </template>
           <v-card>
             <v-card-title>
               <span class="headline">New Materials/Labor</span>
             </v-card-title>
             
-          <Vform>
+          <v-form ref="form" v-model="valid" lazy-validation>
             <v-card-text>
               <v-layout>
                 <v-flex>
                   <v-text-field 
                     v-model="Material.kode" 
                     label="ID"
+                    :rules="idRules"
                   >
                   </v-text-field>
                 </v-flex>
 
-                <v-radio-group v-model="Material.status" row>
+                <v-radio-group v-model="Material.status" row :rules="statusRules">
                   <v-radio label="Material" value="material"></v-radio>
                   <v-radio label="Labor" value="labor"></v-radio>
                 </v-radio-group>
@@ -63,6 +65,7 @@
                       v-model="Material.name" 
                       label="Name"
                       required
+                      :rules="nameRules"
                     >
                     </v-text-field>
                   </v-flex>
@@ -70,12 +73,13 @@
 
                 <v-layout>
                     <v-flex>
-                        <v-text-field
+                      <v-text-field
                         v-model="Material.type"
                         label="Type"
                         required
-                        >
-                        </v-text-field>
+                        :rules="typeRules"
+                      >
+                      </v-text-field>
                     </v-flex>
                 </v-layout>
 
@@ -87,6 +91,7 @@
                     item-value="name"
                     label="Satuan"
                     required
+                    :rules="satuanRules"
                   ></v-select>
                   <v-btn 
                     width="50px" 
@@ -119,6 +124,7 @@
                         v-model="Material.price"
                         label="Price"
                         required
+                        :rules="priceRules"
                       >
                       </v-text-field>
                     </v-flex>
@@ -130,6 +136,7 @@
                       v-model="Material.spesification" 
                       label="Spesification"
                       required
+                      :rules="specRules"
                     >
                       </v-text-field>
                   </v-flex>
@@ -137,20 +144,22 @@
 
                 <v-layout>
                   <v-select
-                  v-model="Material.store"
-                  :items="store"
-                  item-text="name"
-                  item-value="id_store"
-                  label="Store">
+                    v-model="Material.store"
+                    :items="store"
+                    item-text="name"
+                    item-value="id_store"
+                    label="Store"
+                    :rules="storeRules"
+                  >
                   </v-select>
                 </v-layout>
             </v-card-text>
-          </Vform>
+          </v-form>
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
               <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark @click="addItem()">Save</v-btn>
+              <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Save</v-btn>
             </v-card-actions>
           </v-card>
 
@@ -176,113 +185,125 @@
               <span class="headline">Edit Material/Labor</span>
             </v-card-title>
           
-            <Vform>
-            <v-card-text>
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Material.kode" 
-                    label="ID"
-                  >
-                  </v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
+            <v-form ref="form" v-model="valid" lazy-validation>
+              <v-card-text>
+                <v-layout>
                   <v-flex>
                     <v-text-field 
-                      v-model="Material.name" 
-                      label="Name"
-                      required
+                      v-model="Material.kode" 
+                      label="ID"
+                      :rules="idRules"
                     >
                     </v-text-field>
                   </v-flex>
+
+                  <v-radio-group v-model="Material.status" row :rules="statusRules">
+                    <v-radio label="Material" value="material"></v-radio>
+                    <v-radio label="Labor" value="labor"></v-radio>
+                  </v-radio-group>
                 </v-layout>
 
                 <v-layout>
-                  <v-flex>
-                      <v-text-field
-                      v-model="Material.type"
-                      label="Type"
-                      required
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Material.name" 
+                        label="Name"
+                        required
+                        :rules="nameRules"
                       >
                       </v-text-field>
-                  </v-flex>
-                </v-layout>
+                    </v-flex>
+                  </v-layout>
 
-                <v-container row>
-                  <v-select row
-                    v-model="Material.satuan"
-                    :items="satuan"
-                    item-text="name"
-                    item-value="name"
-                    label="Satuan"
-                    required
-                  ></v-select>
-                  <v-btn 
-                    width="50px" 
-                    color="blue" 
-                    @click="dialog4=true"
-                  > 
-                  Add
-                  </v-btn>
-                </v-container>
+                  <v-layout>
+                      <v-flex>
+                        <v-text-field
+                          v-model="Material.type"
+                          label="Type"
+                          required
+                          :rules="typeRules"
+                        >
+                        </v-text-field>
+                      </v-flex>
+                  </v-layout>
 
-                <template>
-                <v-dialog v-model="dialog4" width="300px" style="color: blue">
-                  <v-card-text>
-                    <v-layout>
-                      <v-text-field
-                        label="Satuan"
-                        v-model="name">
-                      </v-text-field>
-                    </v-layout>
-                    <div class="flex-grow-1"></div>
-                      <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
-                      <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
-                  </v-card-text>
-                </v-dialog>
-                </template>
-
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Material.price"
-                      label="Price"
+                  <v-container row>
+                    <v-select row
+                      v-model="Material.satuan"
+                      :items="satuan"
+                      item-text="name"
+                      item-value="name"
+                      label="Satuan"
                       required
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
+                      :rules="satuanRules"
+                    ></v-select>
+                    <v-btn 
+                      width="50px" 
+                      color="blue" 
+                      @click="dialog4=true"
+                    > 
+                    Add
+                    </v-btn>
+                  </v-container>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Material.spesification" 
-                      label="Spesification"
-                      required
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <template>
+                  <v-dialog v-model="dialog4" width="300px" style="color: blue">
+                    <v-card-text>
+                      <v-layout>
+                        <v-text-field
+                          label="Satuan"
+                          v-model="name">
+                        </v-text-field>
+                      </v-layout>
+                      <div class="flex-grow-1"></div>
+                        <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
+                        <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
+                    </v-card-text>
+                  </v-dialog>
+                  </template>
+                  
+                  <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Material.price"
+                          label="Price"
+                          required
+                          :rules="priceRules"
+                        >
+                        </v-text-field>
+                      </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-select
-                    v-model="Material.store"
-                    :items="store"
-                    item-text="name"
-                    item-value="id_store"
-                    label="Store"
-                    required>
-                  </v-select>
-                </v-layout>
-            </v-card-text>
-          </Vform>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Material.spesification" 
+                        label="Spesification"
+                        required
+                        :rules="specRules"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
+
+                  <v-layout>
+                    <v-select
+                      v-model="Material.store"
+                      :items="store"
+                      item-text="name"
+                      item-value="id_store"
+                      label="Store"
+                      :rules="storeRules"
+                    >
+                    </v-select>
+                  </v-layout>
+              </v-card-text>
+            </v-form>
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
               <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Material.id_material)">Save</v-btn>
+              <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(Material.id_material)">Save</v-btn>
             </v-card-actions>
           </v-card>
       </v-dialog>
@@ -319,6 +340,7 @@ import storeController from './../service/Store'
 
   export default {
     data: () => ({
+      valid: true,
       dialog: false,
       dialog2: false,
       dialog3: false,
@@ -329,6 +351,7 @@ import storeController from './../service/Store'
       material: [],
       satuan: [],
       store:[],
+      
       Material: {
         store:'',
         kode: '',
@@ -389,6 +412,33 @@ import storeController from './../service/Store'
           sortable: false 
         },
       ],
+      //validation
+      idRules: [
+        v => !!v || 'ID is required',
+        v => (v && v.length <= 4) || 'ID must be less than 4 characters',
+      ],
+      statusRules:[
+        v => !!v || 'Status is required'
+      ],
+      nameRules: [
+        v => !!v || 'Name is required',
+      ],
+      typeRules:[
+        v => !!v || 'Type is required'
+      ],
+      priceRules:[
+        v => !!v || 'Price is required',
+        v => (v && !v.numeric) || 'Price must be numeric'
+      ],
+      satuanRules: [
+        v => !!v || 'Satuan is required',
+      ],
+      specRules: [
+        v => !!v || 'Spesification is required'
+      ],
+      storeRules: [
+        v => !!v || 'Store is required'
+      ],
     }),
     mounted(){
       this.getStore()
@@ -448,9 +498,7 @@ import storeController from './../service/Store'
             spesification   : this.Material.spesification
           }
           await Controller.addItem(payload)
-          this.getallItem()
           this.close()
-          this.refresh()
         }catch(err){
           console.log(err);
         }
@@ -468,9 +516,7 @@ import storeController from './../service/Store'
               spesification   : this.Material.spesification
             } 
             await Controller.updateItem(payload,id)
-            this.getallItem()
             this.close()
-            this.refresh()
         }catch(err){
           console.log(err);
         }
@@ -485,22 +531,22 @@ import storeController from './../service/Store'
       },
       itemHandler(item){
         this.Material = item
-        this.det
         console.log(this.Material)
       },
-      refresh(){
-        this.Material.kode     = '';
-        this.Material.name     = '';
-        this.Material.price  = 0;
-        this.Material.type = '',
-        this.Material.satuan = '',
-        this.Material.id_store = '',
-        this.Material.status= '',
-        this.Material.spesification = ''
+      reset(){
+        this.resetForm()
+        this.resetValidation()
+      },
+      resetForm(){
+        this.$refs.form.reset()
+      },
+      resetValidation(){
+        this.$refs.form.resetValidation()
       },
       close () {
         this.dialog = false
         this.dialog3 = false
+        this.getallItem()
       },
     },
   }

@@ -29,7 +29,10 @@ class AHSDetailsController extends RestController
         $detail = AHSDetails::findOrFail($id);
         $ahs = AHS::where('id_ahs',$detail->id_ahs)->first();
         $material = Materials::where('id_material',$detail->id_material)->first();
-
+        if($material->status == "material")
+            $ahs->total_material -= $detail->sub_total;
+        else
+            $ahs->total_labor -= $detail->sub_total;
         $ahs->total = $ahs->total - $detail->sub_total;
         $ahs->save();
 
@@ -37,6 +40,10 @@ class AHSDetailsController extends RestController
         $detail->sub_total = $detail->coefficient * $material->price;
         $detail->save();
         
+        if($material->status == "material")
+            $ahs->total_material += $detail->sub_total;
+        else
+            $ahs->total_labor += $detail->sub_total;
         $ahs->total = $ahs->total + $detail->sub_total;
         $ahs->save();
 

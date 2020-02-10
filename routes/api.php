@@ -89,16 +89,25 @@ Route::get('/structure','StructureController@index');
 Route::post('/structure/store', 'StructureController@store');
 Route::patch('/structure/update/{id}','StructureController@update');
 Route::delete('/structure/delete/{id}','StructureController@destroy');
+//Structure Details
+Route::get('/structure_details','StructureDetailsController@index');
+Route::delete('/structure_details/delete/{id}','StructureDetailsController@destroy');
 //Group
 Route::get('/groups','GroupController@index');
 Route::post('/groups/store','GroupController@store');
 Route::patch('/groups/update/{id}','GroupController@update');
 Route::delete('/groups/delete/{id}','GroupController@destroy');
+//Group Details
+Route::get('/group_details','GroupDetailsController@index');
+Route::delete('/group_details/delete/{id}','GroupDetailsController@destroy');
 //Task Sub
 Route::get('/task_sub','TaskSubController@index');
 Route::post('/task_sub/store', 'TaskSubController@store');
 Route::patch('/task_sub/update/{id}','TaskSubController@update');
 Route::delete('/task_sub/delete/{id}','TaskSubController@destroy');
+//Task Sub Details
+Route::get('/tasksub_details','TaskSubDetailsController@index');
+Route::delete('/tasksub_details/delete/{id}','TaskSubDetailsController@destroy');
 //Reports
 Route::get('/analisa_task/{id}','ReportsController@analisa_task');
 Route::get('/analisa_task_all','ReportsController@analisa_task_all');
@@ -109,7 +118,7 @@ Route::patch('/ahs_adjust/update/{id}','AHSAdjustController@update');
 Route::delete('/ahs_adjust/delete/{id}','AHSAdjustController@destroy');
 Route::get('/ahs_adjust/show/{id}', 'AHSAdjustController@showByID');
 //AHS Adjust Details
-// Route::get('/ahs_details','AHSDetailsController@index');
-// Route::patch('/ahs_details/update/{id}','AHSDetailsController@update');
-// Route::delete('/ahs_details/delete/{id}', 'AHSDetailsController@destroy');
-// Route::get('/ahs_details/show/{id}', 'AHSDetailsController@showbyID');
+Route::get('/ahs_adjust_details','AHSAdjustDetailsController@index');
+Route::patch('/ahs_adjust_details/update/{id}','AHSAdjustDetailsController@update');
+Route::delete('/ahs_adjust_details/delete/{id}', 'AHSAdjustDetailsController@destroy');
+Route::get('/ahs_adjust_details/show/{id}', 'AHSAdjustDetailsController@showByID');

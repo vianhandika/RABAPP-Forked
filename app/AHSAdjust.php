@@ -13,7 +13,10 @@ class AHSAdjust extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'id_project','id_job', 'id_sub','adjustment','total_labor','total_material','total'
+        'kode','id_project','id_sub', 'id_job',
+        'adjustment', 
+        // 'volume',
+        'total_labor','total_material','total'
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'

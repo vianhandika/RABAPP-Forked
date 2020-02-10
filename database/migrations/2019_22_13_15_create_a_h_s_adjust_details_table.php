@@ -17,7 +17,8 @@ class CreateAHSAdjustDetailsTable extends Migration
             $table->increments('id_ahs_details_adjust');
             $table->unsignedInteger('id_ahs_adjust');
             $table->unsignedInteger('id_material');
-            $table->double('sub_adjusment');
+            $table->double('price_ahs');
+            $table->double('sub_adjustment');
             $table->double('sub_total');
             $table->timestamps();
             $table->softDeletes();

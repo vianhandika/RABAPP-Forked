@@ -38,7 +38,7 @@ class JobController extends RestController
     {
         $this->validate($request, [
             'kode' => 'required|max:255',
-            'name' => 'required|max:255',
+            'name' => 'required|max:255|unique',
             'satuan' => 'required|max:255',
             'status' => 'required|max:255',
             'details' => 'required|max:255',

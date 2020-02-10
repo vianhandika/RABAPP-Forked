@@ -3,7 +3,6 @@
     :headers="headers"
     :items="store"
     :search="search"
-    sort-by="date"
     class="elevation-1"
   >
     <template v-slot:top>
@@ -16,14 +15,15 @@
         ></v-divider>
 
         <v-text-field
-            flat
-            solo-inverted
-            hide-details
-            prepend-inner-icon="search"
-            label="Search"
-            class="hidden-sm-and-down"
-            color="blue"
-            v-model="search"
+          flat
+          solo-inverted
+          hide-details
+          prepend-inner-icon="search"
+          label="Search"
+          class="hidden-sm-and-down"
+          color="blue"
+          v-model="search"
+          dense
         >
         </v-text-field>
       
@@ -32,114 +32,104 @@
           <template v-slot:activator="{ on }">
             <v-btn color="blue" dark class="mb-2" v-on="on">New</v-btn>
           </template>
+
           <v-card>
             <v-card-title>
               <span class="headline">New Store</span>
             </v-card-title>
             
-          <Vform>
-            <v-card-text>
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Store.kode" 
-                    label="ID Store"
-                    :error-messages="idErrors"
-                    @input="$v.Store.kode.$touch()"
-                    @blur="$v.Store.kode.$touch()"
-                  >
-                  </v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
+            <v-form 
+              ref="form"
+              lazy-validation
+              v-model="valid"
+              > 
+              <v-card-text>
+                <v-layout>
                   <v-flex>
                     <v-text-field 
-                      v-model="Store.name" 
-                      label="Name"
-                      :error-messages="nameErrors"
-                      @input="$v.Store.name.$touch()"
-                      @blur="$v.Store.name.$touch()"
+                      v-model="Store.kode" 
+                      label="ID Store"
+                      :rules="idRules"
                     >
                     </v-text-field>
                   </v-flex>
                 </v-layout>
 
                 <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.address" 
-                      label="Address"
-                      :error-messages="addressErrors"
-                      @input="$v.Store.address.$touch()"
-                      @blur="$v.Store.address.$touch()"
-                    >
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.name" 
+                        label="Name"
+                        :rules="nameRules"
+                      >
                       </v-text-field>
-                  </v-flex>
-                </v-layout>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.type" 
-                      label="Type of Material"
-                      :error-messages="typeErrors"
-                      @input="$v.Store.type.$touch()"
-                      @blur="$v.Store.type.$touch()"
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.address" 
+                        label="Address"
+                        :rules="addressRules"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.no_telp" 
-                      label="Telp Number"
-                      :error-messages="noErrors"
-                      @input="$v.Store.no_telp.$touch()"
-                      @blur="$v.Store.no_telp.$touch()"
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.type" 
+                        label="Type of Material"
+                        :rules="typeRules"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.phone" 
-                      label="Phone Number"
-                      :error-messages="phoneErrors"
-                      @input="$v.Store.phone.$touch()"
-                      @blur="$v.Store.phone.$touch()"
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.no_telp" 
+                        label="Telp Number"
+                        :rules="noRules"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.owner" 
-                      label="Owner"
-                      :error-messages="ownerErrors"
-                      @input="$v.Store.owner.$touch()"
-                      @blur="$v.Store.owner.$touch()"
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.phone" 
+                        label="Phone Number"
+                        :rules="phoneRules"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-            </v-card-text>
-          </Vform>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Store.owner" 
+                        label="Owner"
+                        :rules="ownerRules"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
+
+              </v-card-text>
+            </v-form>
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark @click="addItem()">Save</v-btn>
+              <v-btn class="ma-2" rounded color="green" dark @click="reset();dialog=false">Cancel</v-btn>
+              <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem();dialog=false">Save</v-btn>
             </v-card-actions>
           </v-card>
-
         </v-dialog>
       </v-toolbar>
     </template>
@@ -157,21 +147,24 @@
             edit
           </v-icon>
         </template>
+
           <v-card>
             <v-card-title>
               <span class="headline">Edit Store</span>
             </v-card-title>
           
-            <Vform>
+            <v-form 
+              ref="form"
+              lazy-validation
+              v-model="valid"
+              > 
               <v-card-text>
                 <v-layout>
                   <v-flex>
                     <v-text-field 
                       v-model="Store.kode" 
                       label="ID Store"
-                      :error-messages="idErrors"
-                      @input="$v.Store.kode.$touch()"
-                      @blur="$v.Store.kode.$touch()"
+                      :rules="idRules"
                     >
                     </v-text-field>
                   </v-flex>
@@ -182,9 +175,7 @@
                       <v-text-field 
                         v-model="Store.name" 
                         label="Name"
-                        :error-messages="nameErrors"
-                        @input="$v.Store.name.$touch()"
-                        @blur="$v.Store.name.$touch()"
+                        :rules="nameRules"
                       >
                       </v-text-field>
                     </v-flex>
@@ -195,9 +186,7 @@
                       <v-text-field 
                         v-model="Store.address" 
                         label="Address"
-                        :error-messages="addressErrors"
-                        @input="$v.Store.address.$touch()"
-                        @blur="$v.Store.address.$touch()"
+                        :rules="addressRules"
                       >
                         </v-text-field>
                     </v-flex>
@@ -208,9 +197,7 @@
                       <v-text-field 
                         v-model="Store.type" 
                         label="Type of Material"
-                        :error-messages="typeErrors"
-                        @input="$v.Store.type.$touch()"
-                        @blur="$v.Store.type.$touch()"
+                        :rules="typeRules"
                       >
                         </v-text-field>
                     </v-flex>
@@ -221,9 +208,7 @@
                       <v-text-field 
                         v-model="Store.no_telp" 
                         label="Telp Number"
-                        :error-messages="noErrors"
-                        @input="$v.Store.no_telp.$touch()"
-                        @blur="$v.Store.no_telp.$touch()"
+                        :rules="noRules"
                       >
                         </v-text-field>
                     </v-flex>
@@ -234,9 +219,7 @@
                       <v-text-field 
                         v-model="Store.phone" 
                         label="Phone Number"
-                        :error-messages="phoneErrors"
-                        @input="$v.Store.phone.$touch()"
-                        @blur="$v.Store.phone.$touch()"
+                        :rules="phoneRules"
                       >
                         </v-text-field>
                     </v-flex>
@@ -247,21 +230,19 @@
                       <v-text-field 
                         v-model="Store.owner" 
                         label="Owner"
-                        :error-messages="ownerErrors"
-                        @input="$v.Store.owner.$touch()"
-                        @blur="$v.Store.owner.$touch()"
+                        :rules="ownerRules"
                       >
                         </v-text-field>
                     </v-flex>
                   </v-layout>
 
               </v-card-text>
-            </Vform>
+            </v-form>
 
             <v-card-actions>
               <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Store.id_store)">Save</v-btn>
+              <v-btn class="ma-2" rounded color="green" dark @click="reset();dialog3=false">Cancel</v-btn>
+              <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Store.id_store);dialog3=false">Save</v-btn>
             </v-card-actions>
           </v-card>
       </v-dialog>
@@ -277,33 +258,29 @@
             delete
           </v-icon>
         </template>
-            <v-card>
-              <v-card-title class="headline">Confirmation</v-card-title>
-                <v-card-text>Are you sure want to delete this store?</v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Store.id_store)">Yes</v-btn>
-                <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
-              </v-card-actions>
-            </v-card>
+          <v-card>
+            <v-card-title class="headline">Confirmation</v-card-title>
+            <v-card-text>Are you sure want to delete this store?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Store.id_store)">Yes</v-btn>
+              <v-btn color="red darken-1" text @click="reset(); dialog2=false">No</v-btn>
+            </v-card-actions>
+          </v-card>
       </v-dialog>
     </template>
-
   </v-data-table>
 </template>
 
 <script>
 import Controller from './../service/Store'
-import validators from './../validations/Store'
 
   export default {
-    validations: validators,
     data: () => ({
+      valid: true,
       dialog: false,
       dialog2: false,
       dialog3: false,
-      menu: false,
-      select: null,
       search:'',
       store: [],
       Store: {
@@ -359,73 +336,37 @@ import validators from './../validations/Store'
           sortable: false 
         },
       ],
+      //validation
+      idRules: [
+        v => !!v || 'ID is required',
+        v => (v && v.length <= 4) || 'ID must be less than 4 characters',
+      ],
+      nameRules: [
+        v => !!v || 'Name is required',
+      ],
+      addressRules: [
+        v => !!v || 'Address is required',
+      ],
+      typeRules: [
+        v => !!v || 'Type is required'
+      ],
+      phoneRules: [
+        v => !!v || 'Phone is required',
+        v => (v && !v.numeric) || 'Phone number must be numeric'
+      ],
+      noRules: [
+        v => !!v || 'Telp number is required',
+        v => (v && !v.numeric) || 'Telp number must be numeric'
+      ],
+      ownerRules:[
+        v => !!v || 'Owner is required'
+      ]
     }),
     mounted(){
       this.getallItem()
     },
     computed: {
-      filteredStore:function(){
-        return this.store.filter((storeData)=>{
-          storeData.name.match(this.search)
-        });
-      },
-      idErrors(){
-        const errors = []
-        if(!this.$v.Store.kode.$dirty) return errors 
-        !this.$v.Store.kode.maxLength && errors.push('ID must be at most 255 characters long')
-        !this.$v.Store.kode.minLength && errors.push('ID must be at least 4 characters long')
-        !this.$v.Store.kode.required && errors.push('ID is required')
-        return errors
-      },
-      nameErrors(){
-        const errors = []
-        if(!this.$v.Store.name.$dirty) return errors 
-        !this.$v.Store.name.maxLength && errors.push('Name must be at most 255 characters long')
-        !this.$v.Store.name.minLength && errors.push('Name must be at least 10 characters long')
-        !this.$v.Store.name.required && errors.push('Name is required')
-        return errors
-      },
-      addressErrors(){
-        const errors = []
-        if(!this.$v.Store.address.$dirty) return errors
-        !this.$v.Store.address.maxLength && errors.push('Address must be at most 255 characters long')
-        !this.$v.Store.address.minLength && errors.push('Address must be at least 10 characters long')
-        !this.$v.Store.address.required && errors.push('Address is required')
-        return errors
-      },
-      typeErrors(){
-        const errors = []
-        if(!this.$v.Store.type.$dirty) return errors
-        !this.$v.Store.type.maxLength && errors.push('Type must be at most 255 characters long')
-        !this.$v.Store.type.required && errors.push('Type is required')
-        return errors
-      },
-      phoneErrors(){
-        const errors = []
-        if(!this.$v.Store.phone.$dirty) return errors
-        !this.$v.Store.phone.maxLength && errors.push('Phone number must be at most 15 characters long')
-        !this.$v.Store.phone.minLength && errors.push('Phone number must be at least 10 characters long')
-        !this.$v.Store.phone.required && errors.push('Phone number is required')
-        !this.$v.Store.phone.numeric && errors.push('Phone number must be numeric')
-        return errors
-      },
-      noErrors(){
-        const errors = []
-        if(!this.$v.Store.no_telp.$dirty) return errors
-        !this.$v.Store.no_telp.required && errors.push('Telp number is required')
-        !this.$v.Store.no_telp.numeric && errors.push('Telp number must be numeric')
-        !this.$v.Store.no_telp.maxLength && errors.push('Telp number must be at most 15 characters long')
-        !this.$v.Store.no_telp.minLength && errors.push('Telp number must be at least 10 characters long')
-        return errors
-      },
-      ownerErrors(){
-        const errors = []
-        if(!this.$v.Store.owner.$dirty) return errors
-        !this.$v.Store.owner.maxLength && errors.push('Project must be at most 255 characters long')
-        !this.$v.Store.owner.minLength && errors.push('Project must be at least 10 characters long')
-        !this.$v.Store.owner.required && errors.push('Project is required')
-        return errors
-      },
+
     },
     methods: {
       async getallItem(){
@@ -447,9 +388,7 @@ import validators from './../validations/Store'
             owner       : this.Store.owner
           }
           await Controller.addItem(payload)
-          this.getallItem()
-          this.close()
-          this.refresh()
+          this.reset()
         }catch(err){
           console.log(err);
         }
@@ -466,9 +405,7 @@ import validators from './../validations/Store'
                 owner       : this.Store.owner
             } 
             await Controller.updateItem(payload,id)
-            this.getallItem()
-            this.close()
-            this.refresh()
+            this.reset()
         }catch(err){
           console.log(err);
         }
@@ -485,18 +422,25 @@ import validators from './../validations/Store'
         this.Store = item
         console.log(this.Store)
       },
-      refresh(){
-        this.Store.kode = '';
-        this.Store.name     = '';
-        this.Store.address  = '';
-        this.Store.no_telp  = '';
-        this.Store.phone  = '';
-        this.Store.owner  = '';
+      resetForm(){
+        this.$refs.form.reset()
       },
-      close () {
-        this.dialog = false
-        this.dialog3 = false
+      resetValidation(){
+        this.$refs.form.resetValidation()
       },
+      reset()
+      {
+        this.getallItem()
+        this.resetForm()
+        this.resetValidation()
+      },
+      // close () {
+      //   // this.reset()
+      //   this.dialog = false
+      //   this.dialog2 = false
+      //   this.dialog3 = false
+      //   this.getallItem()
+      // },
     },
   }
 </script>

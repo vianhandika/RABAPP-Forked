@@ -1,9 +1,8 @@
 import Http from '../http'
 
 export default {
-    getallItem(){
+    deleteS(id){
         return new Promise((resolve, reject) => {
-            
             const successCallback = (res) => {
                 const data = res.data
                 resolve(data)
@@ -11,24 +10,22 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/ahs_details', successCallback, errorCallback)
+            Http.delete('/api/structure_details/delete/'+id, successCallback, errorCallback)
         })
     },
-    updateDetail(payload,id){
+    deleteG(id){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
                 const data = res.data
                 resolve(data)
             }
-
             const errorCallback = (err) => {
                 reject(err)
             }
-
-            Http.patch('/api/ahs_details/update/'+id, payload, successCallback, errorCallback)
+            Http.delete('/api/group_details/delete/'+id, successCallback, errorCallback)
         })
     },
-    deleteItem(id){
+    deleteT(id){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
                 const data = res.data
@@ -37,19 +34,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.delete('/api/ahs_details/delete/'+id, successCallback, errorCallback)
+            Http.delete('/api/tasksub_details/delete/'+id, successCallback, errorCallback)
         })
     },
-    getItem(id){
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/ahs_details/show/'+id, successCallback, errorCallback)
-        })
-    }
 }

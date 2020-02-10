@@ -12,7 +12,7 @@ import Store from './components/StoreComponent'
 import Report from './components/ReportsComponent'
 import SPA from './components/SPAComponent'
 import Cek from './components/Cek'
-import Example from './components/Example'
+import AHSAdjust from './components/AHSAdjustComponent'
 
 import VueRouter from 'vue-router';
 
@@ -100,14 +100,14 @@ export const routes = [
         // ])
       },
       {
+        path: '/analisa_adjustment',
+        name: 'adjust',
+        component: AHSAdjust
+      },
+      {
         path: '/cek',
         name: 'cek',
         component: Cek
-      },
-      {
-        path: '/cek_2',
-        name: 'cek_2',
-        component: Example
       },
     ]
   },

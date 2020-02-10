@@ -79,6 +79,17 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item @click="adjust">
+          <v-list-item-action>
+            <v-btn icon>
+              <v-icon>trending_up</v-icon>
+            </v-btn>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>AHS Lokal</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
 
         <v-list-item @click="transaction">
           <v-list-item-action>
@@ -106,6 +117,17 @@
 
       </v-list>
     </v-navigation-drawer>
+
+    <!-- <v-expansion-panel expand>
+      <v-expansion-panel-content v-for="(item,i) in 5" :key="i" :value="item === 2">
+        <div slot="header">Item</div>
+        <v-card>
+          <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel> -->
+
+    
 
     <v-app-bar
       app
@@ -574,6 +596,9 @@ import Controller from './../service/Project'
       },
       store(){
         this.$router.push({name: 'store'})
+      },
+      adjust(){
+        this.$router.push({name: 'adjust'})
       },
       async counter(){
         try{
