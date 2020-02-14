@@ -9,31 +9,31 @@ class RABDetails extends Model
 {
     use SoftDeletes;
     
-    protected $table = 'r_a_b_details';
-    protected $primaryKey = 'id_rab_details';
+    protected $table = 'ahs_lokals';
+    protected $primaryKey = 'id_ahs_lokal';
     public $timestamps = true;
 
     protected $fillable = [
-        'id_sub_details', 'id_ahs', 'id_ahs_adjust','volume','sub_total', 'coefficient', 'hp'
+        'id_sub_details', 'id_job','total_labor','total_material','HSP', 'volume','adjustment', 'HP'
     ];
 
     protected $dates = [
         'created_at', 'deleted_at','updated_at'
     ];
 
-    public function task_sub()
+    public function task_group()
     {
         return $this->belongsTo('App\TaskSubDetails','id_sub_details');
     }
 
-    public function ahs()
+    public function jobs()
     {
-        return $this->belongsTo('App\AHS','id_ahs');
+        return $this->belongsTo('App\Job','id_job');
     }
 
-    public function ahs_adjust()
+    public function detail_ahs_lokal()
     {
-        return $this->belongsTo('App\AHSAdjust','id_ahs_adjust');
+        return $this->hasMany('App\AHSLokalDetails','id_ahs_lokal');
     }
 }
 

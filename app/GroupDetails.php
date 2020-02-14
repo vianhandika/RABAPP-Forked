@@ -13,7 +13,7 @@ class GroupDetails extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'id_groups', 'id_structure_details', 'name'
+        'id_groups', 'id_structure_details', 
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'

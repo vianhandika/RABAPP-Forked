@@ -17,7 +17,6 @@ class CreateGroupDetailsTable extends Migration
             $table->increments('id_group_details');
             $table->unsignedInteger('id_structure_details');
             $table->unsignedInteger('id_groups');
-            $table->string('name');
             $table->SoftDeletes();
 
             $table->foreign('id_groups')->references('id_groups')->on('groups');

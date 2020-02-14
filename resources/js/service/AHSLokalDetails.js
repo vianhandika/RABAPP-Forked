@@ -10,7 +10,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.delete('/api/ahs_adjust_details/delete/'+id, successCallback, errorCallback)
+            Http.delete('/api/ahs_lokal_details/delete/'+id, successCallback, errorCallback)
         })
     },
     getItem(id){
@@ -22,7 +22,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/ahs_adjust_details/show/'+id, successCallback, errorCallback)
+            Http.get('/api/ahs_lokal_details/show/'+id, successCallback, errorCallback)
         })
     },
     updateDetail(payload,id){
@@ -36,7 +36,7 @@ export default {
                 reject(err)
             }
 
-            Http.patch('/api/ahs_adjust_details/update/'+id, payload, successCallback, errorCallback)
+            Http.patch('/api/ahs_lokal_details/update/'+id, payload, successCallback, errorCallback)
         })
     },
 }

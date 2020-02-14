@@ -100,7 +100,7 @@ export const routes = [
         // ])
       },
       {
-        path: '/analisa_adjustment',
+        path: '/analisa_lokal',
         name: 'adjust',
         component: AHSAdjust
       },

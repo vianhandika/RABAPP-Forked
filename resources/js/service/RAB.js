@@ -1,18 +1,6 @@
 import Http from '../http'
 
 export default {
-    addItem(payload) {
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.post('/api/rabs/store', payload, successCallback, errorCallback)
-        })
-    },
     addAllItem(payload) {
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
@@ -22,7 +10,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.post('/api/rabs/storeN', payload, successCallback, errorCallback)
+            Http.post('/api/rabs/store', payload, successCallback, errorCallback)
         })
     },
     updateItem(payload,id){
@@ -102,6 +90,18 @@ export default {
                 reject(err)
             }
             Http.get('/api/rab_details', successCallback, errorCallback)
+        })
+    },
+    showD(id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rab_details/show/'+id, successCallback, errorCallback)
         })
     },
 }

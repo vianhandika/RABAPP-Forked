@@ -13,7 +13,7 @@ class StructureDetails extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'id_structure','name', 'id_rab', 'name'
+        'id_structure','name', 'id_rab'
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'

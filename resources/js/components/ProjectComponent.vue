@@ -382,7 +382,7 @@ import Controller from './../service/Project'
           text: 'Project',
           align: 'left',
           sortable: false,
-          value: 'name',
+          value: 'project',
         },
         { 
           sortable: false,

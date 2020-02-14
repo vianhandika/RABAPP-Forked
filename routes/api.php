@@ -70,11 +70,11 @@ Route::patch('/rabs/update/{id}','RABController@update');
 Route::delete('/rabs/delete/{id}','RABController@destroy');
 Route::get('/rabs/total','RABController@total');
 Route::get('/count_rab','RABController@count');
-Route::post('/rabs/storeN','RABController@storeN');
 //RAB Details
 Route::get('/rab_details','RABDetailsController@index');
 Route::patch('/rab_details/update/{id}','RABDetailsController@update');
 Route::delete('/rab_details/delete/{id}','RABDetailsController@destroy');
+Route::get('rab_details/show/{id}','RABDetailsController@show');
 //Store
 Route::get('/stores','StoreController@index');
 Route::post('/stores/store', 'StoreController@store');
@@ -92,6 +92,7 @@ Route::delete('/structure/delete/{id}','StructureController@destroy');
 //Structure Details
 Route::get('/structure_details','StructureDetailsController@index');
 Route::delete('/structure_details/delete/{id}','StructureDetailsController@destroy');
+Route::get('structure_details/show/{id}','StructureDetailsController@show');
 //Group
 Route::get('/groups','GroupController@index');
 Route::post('/groups/store','GroupController@store');
@@ -100,6 +101,7 @@ Route::delete('/groups/delete/{id}','GroupController@destroy');
 //Group Details
 Route::get('/group_details','GroupDetailsController@index');
 Route::delete('/group_details/delete/{id}','GroupDetailsController@destroy');
+Route::get('group_details/show/{id}','GroupDetailsController@show');
 //Task Sub
 Route::get('/task_sub','TaskSubController@index');
 Route::post('/task_sub/store', 'TaskSubController@store');
@@ -108,6 +110,7 @@ Route::delete('/task_sub/delete/{id}','TaskSubController@destroy');
 //Task Sub Details
 Route::get('/tasksub_details','TaskSubDetailsController@index');
 Route::delete('/tasksub_details/delete/{id}','TaskSubDetailsController@destroy');
+Route::get('tasksub_details/show/{id}','TaskSubDetailsController@show');
 //Reports
 Route::get('/analisa_task/{id}','ReportsController@analisa_task');
 Route::get('/analisa_task_all','ReportsController@analisa_task_all');
@@ -117,8 +120,8 @@ Route::post('/ahs_adjust/store','AHSAdjustController@store');
 Route::patch('/ahs_adjust/update/{id}','AHSAdjustController@update');
 Route::delete('/ahs_adjust/delete/{id}','AHSAdjustController@destroy');
 Route::get('/ahs_adjust/show/{id}', 'AHSAdjustController@showByID');
-//AHS Adjust Details
-Route::get('/ahs_adjust_details','AHSAdjustDetailsController@index');
-Route::patch('/ahs_adjust_details/update/{id}','AHSAdjustDetailsController@update');
-Route::delete('/ahs_adjust_details/delete/{id}', 'AHSAdjustDetailsController@destroy');
-Route::get('/ahs_adjust_details/show/{id}', 'AHSAdjustDetailsController@showByID');
+//AHS Lokal Details
+Route::get('/ahs_lokal_details','AHSLokalDetailsController@index');
+Route::patch('/ahs_lokal_details/update/{id}','AHSLokalDetailsController@update');
+Route::delete('/ahs_lokal_details/delete/{id}', 'AHSLokalDetailsController@destroy');
+Route::get('/ahs_lokal_details/show/{id}', 'AHSLokalDetailsController@showByID');

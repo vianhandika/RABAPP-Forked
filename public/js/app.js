@@ -1856,9 +1856,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _service_Material__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../service/Material */ "./resources/js/service/Material.js");
 /* harmony import */ var _service_AHSAdjust__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../service/AHSAdjust */ "./resources/js/service/AHSAdjust.js");
 /* harmony import */ var _service_AHS__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../service/AHS */ "./resources/js/service/AHS.js");
-/* harmony import */ var _service_AHSAdjustDetails__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../service/AHSAdjustDetails */ "./resources/js/service/AHSAdjustDetails.js");
+/* harmony import */ var _service_AHSLokalDetails__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./../service/AHSLokalDetails */ "./resources/js/service/AHSLokalDetails.js");
 /* harmony import */ var _service_TaskSub__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./../service/TaskSub */ "./resources/js/service/TaskSub.js");
 /* harmony import */ var _service_Project__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../service/Project */ "./resources/js/service/Project.js");
+/* harmony import */ var _service_RAB__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./../service/RAB */ "./resources/js/service/RAB.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2161,123 +2162,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -2381,20 +2266,25 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         sortable: false,
         value: 'name'
       }, {
-        text: 'Price AHS',
+        text: 'Price',
         align: 'left',
         sortable: false,
-        value: 'price_ahs'
+        value: 'price'
       }, {
-        text: 'Sub Adjustment',
+        text: 'Coefficient',
         align: 'left',
         sortable: false,
-        value: 'sub_adjustment'
+        value: 'coefficient'
       }, {
         text: 'Sub Total',
         align: 'left',
         sortable: false,
         value: 'sub_total'
+      }, {
+        text: 'Adjustment',
+        align: 'left',
+        sortable: false,
+        value: 'adjustment'
       }, {
         text: 'Actions',
         align: 'left',
@@ -2456,11 +2346,11 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         if (_this.select != '') {
           if (_this.select == data.id_project) {
             if (_this.search == '') return data;else {
-              return data.name.match(_this.search) || data.kode.match(_this.search) || data.volume.toLocaleString().match(_this.search);
+              return data.name.match(_this.search) || data.volume.toLocaleString().match(_this.search);
             }
           }
         } else {
-          return data.name.match(_this.search) || data.kode.match(_this.search) || data.volume.toLocaleString().match(_this.search);
+          return data.name.match(_this.search) || data.volume.toLocaleString().match(_this.search);
         }
       });
     }
@@ -2689,12 +2579,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.index = this.material.map(function (e) {
         return e.id_material;
       }).indexOf(this.Material.id_material);
-      console.log(this.index);
-    },
-    getSelectedIndexD: function getSelectedIndexD() {
-      this.index = this.material.map(function (e) {
-        return e.id_material;
-      }).indexOf(this.detail.id_material);
       console.log(this.index);
     },
     getTask: function () {
@@ -2934,116 +2818,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       return getAHSDefaultFilter;
     }(),
-    addItem: function () {
-      var _addItem = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
-        var _this3 = this;
-
-        var total_labor, total_material, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _loop, _iterator4, _step4, payload;
-
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
-          while (1) {
-            switch (_context9.prev = _context9.next) {
-              case 0:
-                total_labor = 0;
-                total_material = 0;
-                _iteratorNormalCompletion4 = true;
-                _didIteratorError4 = false;
-                _iteratorError4 = undefined;
-                _context9.prev = 5;
-
-                _loop = function _loop() {
-                  var detail = _step4.value;
-
-                  var material = _this3.material.find(function (obj) {
-                    return obj.id_material == detail.id_material;
-                  });
-
-                  console.log('ini material');
-                  console.log(material);
-                  if (material.status == "labor") total_labor += detail.sub_total;
-                  if (material.status == "material") total_material += detail.sub_total;
-                };
-
-                for (_iterator4 = this.details[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                  _loop();
-                }
-
-                _context9.next = 14;
-                break;
-
-              case 10:
-                _context9.prev = 10;
-                _context9.t0 = _context9["catch"](5);
-                _didIteratorError4 = true;
-                _iteratorError4 = _context9.t0;
-
-              case 14:
-                _context9.prev = 14;
-                _context9.prev = 15;
-
-                if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-                  _iterator4["return"]();
-                }
-
-              case 17:
-                _context9.prev = 17;
-
-                if (!_didIteratorError4) {
-                  _context9.next = 20;
-                  break;
-                }
-
-                throw _iteratorError4;
-
-              case 20:
-                return _context9.finish(17);
-
-              case 21:
-                return _context9.finish(14);
-
-              case 22:
-                _context9.prev = 22;
-                payload = {
-                  kode: this.AHS.kode,
-                  id_project: this.AHS.id_project,
-                  id_job: this.AHS.id_job,
-                  id_sub: this.AHS.id_sub,
-                  // volume          : this.AHS.volume,
-                  adjustment: this.AHS.adjustment,
-                  total_labor: total_labor,
-                  total_material: total_material,
-                  total: this.AHS.total,
-                  detail: this.details
-                };
-                _context9.next = 26;
-                return _service_AHSAdjust__WEBPACK_IMPORTED_MODULE_3__["default"].add(payload);
-
-              case 26:
-                this.close();
-                _context9.next = 32;
-                break;
-
-              case 29:
-                _context9.prev = 29;
-                _context9.t1 = _context9["catch"](22);
-                console.log(_context9.t1);
-
-              case 32:
-              case "end":
-                return _context9.stop();
-            }
-          }
-        }, _callee9, this, [[5, 10, 14, 22], [15,, 17, 21], [22, 29]]);
-      }));
-
-      function addItem() {
-        return _addItem.apply(this, arguments);
-      }
-
-      return addItem;
-    }(),
     // async updateItem(id){
     //   try{
     //       const payload = {
@@ -3063,38 +2837,38 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     updateDetail: function () {
       var _updateDetail = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10(props) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9(props) {
         var payload;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
           while (1) {
-            switch (_context10.prev = _context10.next) {
+            switch (_context9.prev = _context9.next) {
               case 0:
-                _context10.prev = 0;
+                _context9.prev = 0;
                 console.log(props.item);
                 payload = {
                   sub_adjustment: props.item.sub_adjustment
                 };
-                _context10.next = 5;
-                return _service_AHSAdjustDetails__WEBPACK_IMPORTED_MODULE_5__["default"].updateDetail(payload, props.item.id_ahs_details_adjust);
+                _context9.next = 5;
+                return _service_AHSLokalDetails__WEBPACK_IMPORTED_MODULE_5__["default"].updateDetail(payload, props.item.id_ahs_details_adjust);
 
               case 5:
                 this.getItem(props.item.id_ahs_adjust);
                 this.close();
                 console.log('cek');
-                _context10.next = 13;
+                _context9.next = 13;
                 break;
 
               case 10:
-                _context10.prev = 10;
-                _context10.t0 = _context10["catch"](0);
-                console.log(_context10.t0);
+                _context9.prev = 10;
+                _context9.t0 = _context9["catch"](0);
+                console.log(_context9.t0);
 
               case 13:
               case "end":
-                return _context10.stop();
+                return _context9.stop();
             }
           }
-        }, _callee10, this, [[0, 10]]);
+        }, _callee9, this, [[0, 10]]);
       }));
 
       function updateDetail(_x) {
@@ -3106,31 +2880,31 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     deleteItem: function () {
       var _deleteItem = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11(id) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10(id) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
           while (1) {
-            switch (_context11.prev = _context11.next) {
+            switch (_context10.prev = _context10.next) {
               case 0:
-                _context11.prev = 0;
-                _context11.next = 3;
-                return _service_AHSAdjust__WEBPACK_IMPORTED_MODULE_3__["default"]["delete"](id).data;
+                _context10.prev = 0;
+                _context10.next = 3;
+                return rab.deleteDetail(id).data;
 
               case 3:
                 this.getallAHS();
-                _context11.next = 9;
+                _context10.next = 9;
                 break;
 
               case 6:
-                _context11.prev = 6;
-                _context11.t0 = _context11["catch"](0);
-                console.log(_context11.t0);
+                _context10.prev = 6;
+                _context10.t0 = _context10["catch"](0);
+                console.log(_context10.t0);
 
               case 9:
               case "end":
-                return _context11.stop();
+                return _context10.stop();
             }
           }
-        }, _callee11, this, [[0, 6]]);
+        }, _callee10, this, [[0, 6]]);
       }));
 
       function deleteItem(_x2) {
@@ -3142,37 +2916,37 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     deleteDetail: function () {
       var _deleteDetail = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12(id) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11(id) {
         var _ahs2;
 
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
           while (1) {
-            switch (_context12.prev = _context12.next) {
+            switch (_context11.prev = _context11.next) {
               case 0:
-                _context12.prev = 0;
+                _context11.prev = 0;
                 _ahs2 = this.details.find(function (obj) {
-                  return obj.id_ahs_details_adjust == id;
+                  return obj.id_ahs_lokal_details == id;
                 });
-                _context12.next = 4;
-                return _service_AHSAdjustDetails__WEBPACK_IMPORTED_MODULE_5__["default"].deleteItem(id).data;
+                _context11.next = 4;
+                return _service_AHSLokalDetails__WEBPACK_IMPORTED_MODULE_5__["default"].deleteItem(id).data;
 
               case 4:
-                this.getItem(_ahs2.id_ahs_adjust);
+                this.getItem(_ahs2.id_ahs_lokal);
                 this.close();
-                _context12.next = 11;
+                _context11.next = 11;
                 break;
 
               case 8:
-                _context12.prev = 8;
-                _context12.t0 = _context12["catch"](0);
-                console.log(_context12.t0);
+                _context11.prev = 8;
+                _context11.t0 = _context11["catch"](0);
+                console.log(_context11.t0);
 
               case 11:
               case "end":
-                return _context12.stop();
+                return _context11.stop();
             }
           }
-        }, _callee12, this, [[0, 8]]);
+        }, _callee11, this, [[0, 8]]);
       }));
 
       function deleteDetail(_x3) {
@@ -3184,17 +2958,53 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     getItem: function () {
       var _getItem = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13(id) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12(id) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
+          while (1) {
+            switch (_context12.prev = _context12.next) {
+              case 0:
+                _context12.prev = 0;
+                _context12.next = 3;
+                return _service_AHSLokalDetails__WEBPACK_IMPORTED_MODULE_5__["default"].getItem(id);
+
+              case 3:
+                this.details = _context12.sent.data;
+                _context12.next = 9;
+                break;
+
+              case 6:
+                _context12.prev = 6;
+                _context12.t0 = _context12["catch"](0);
+                console.log(_context12.t0);
+
+              case 9:
+              case "end":
+                return _context12.stop();
+            }
+          }
+        }, _callee12, this, [[0, 6]]);
+      }));
+
+      function getItem(_x4) {
+        return _getItem.apply(this, arguments);
+      }
+
+      return getItem;
+    }(),
+    getProject: function () {
+      var _getProject = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee13$(_context13) {
           while (1) {
             switch (_context13.prev = _context13.next) {
               case 0:
                 _context13.prev = 0;
                 _context13.next = 3;
-                return _service_AHSAdjustDetails__WEBPACK_IMPORTED_MODULE_5__["default"].getItem(id);
+                return _service_Project__WEBPACK_IMPORTED_MODULE_7__["default"].getallItem();
 
               case 3:
-                this.details = _context13.sent.data;
+                this.project = _context13.sent.data;
                 _context13.next = 9;
                 break;
 
@@ -3209,42 +3019,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             }
           }
         }, _callee13, this, [[0, 6]]);
-      }));
-
-      function getItem(_x4) {
-        return _getItem.apply(this, arguments);
-      }
-
-      return getItem;
-    }(),
-    getProject: function () {
-      var _getProject = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
-          while (1) {
-            switch (_context14.prev = _context14.next) {
-              case 0:
-                _context14.prev = 0;
-                _context14.next = 3;
-                return _service_Project__WEBPACK_IMPORTED_MODULE_7__["default"].getallItem();
-
-              case 3:
-                this.project = _context14.sent.data;
-                _context14.next = 9;
-                break;
-
-              case 6:
-                _context14.prev = 6;
-                _context14.t0 = _context14["catch"](0);
-                console.log(_context14.t0);
-
-              case 9:
-              case "end":
-                return _context14.stop();
-            }
-          }
-        }, _callee14, this, [[0, 6]]);
       }));
 
       function getProject() {
@@ -3965,7 +3739,7 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.filter = _toConsumableArray(this.filter);
       this.temp = this.filter;
     },
-    itemEdit: function itemEdit(item) {
+    itemHandler: function itemHandler(item) {
       this.AHS = item;
       this.details = item.ahs_details.data;
     },
@@ -4498,15 +4272,6 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -11187,7 +10952,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         text: 'Project',
         align: 'left',
         sortable: false,
-        value: 'name'
+        value: 'project'
       }, {
         sortable: false,
         text: 'Address',
@@ -11480,20 +11245,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _service_AHSAdjust__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./../service/AHSAdjust */ "./resources/js/service/AHSAdjust.js");
 /* harmony import */ var _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./../service/RABDetails */ "./resources/js/service/RABDetails.js");
 /* harmony import */ var _service_Job__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./../service/Job */ "./resources/js/service/Job.js");
+/* harmony import */ var _service_Material__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./../service/Material */ "./resources/js/service/Material.js");
 
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -12518,447 +12278,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
+
 
 
 
@@ -12970,7 +12290,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
-    return {
+    var _ref;
+
+    return _ref = {
       snack: false,
       snackColor: '',
       snackText: '',
@@ -12985,17 +12307,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       dialog9: false,
       dialog10: false,
       dialog11: false,
+      edit: false,
       menu: false,
       tambah: false,
       tambahS: false,
       tambahF: false,
       tambahT: false,
-      tambahAdjust: false,
+      detail: false,
+      adjustM: false,
       select: null,
       search: '',
       jenis: '',
       sub_item: '',
       gedung: '',
+      temp: '',
       job: [],
       structuredetails: [],
       groupdetails: [],
@@ -13003,299 +12328,195 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       details: [],
       project: [],
       ahs: [],
-      adjust: [],
-      detail_adjust: [],
+      material: [],
       RAB: [],
       detailsData: [],
       filterAHSAll: [],
-      filterAHSAdjust: [],
       filterMaterialsAll: [],
-      detail: {
-        id_structure_details: '',
-        id_group_details: '',
-        id_sub_details: '',
-        id_rab_details: ''
-      },
-      structure_unit: {
-        id_structure: '',
-        name: ''
-      },
-      group_unit: {
-        id_structure: '',
-        id_group: '',
-        structure: '',
-        groups: ''
-      },
-      tasksub_unit: {
-        id_structure: '',
-        id_groups: '',
-        id_sub: '',
-        structure: '',
-        groups: '',
-        name: ''
-      },
+      filterProject: [],
+      filterStructure: [],
+      filterGroup: [],
+      filterTaskGroup: [],
+      Material: [],
       Structure: [],
       structure: [],
-      structure_data: {
-        id_structure: '',
-        name: ''
-      },
-      structureDefault: {
-        id_structure: '',
-        name: ''
-      },
+      detailStructure: [],
       Groups: [],
       sub: [],
-      group_data: {
-        id_structure: '',
-        id_group: '',
-        structure: '',
-        groups: ''
-      },
-      groupDefault: {
-        id_structure: '',
-        id_group: '',
-        structure: '',
-        groups: ''
-      },
+      detailGroup: [],
       TaskSub: [],
       type: [],
       task: [],
-      tasksub_data: {
-        id_structure: '',
-        id_groups: '',
-        id_sub: '',
-        structure: '',
-        groups: '',
-        name: ''
-      },
-      tasksubDefault: {
-        id_structure: '',
-        id_groups: '',
-        id_sub: '',
-        structure: '',
-        groups: '',
-        name: ''
-      },
-      rab_details: {
-        id_ahs: '',
-        sub_total: 0,
-        volume: 0,
-        coefficient: 1,
-        hp: 0,
-        id_structure: '',
-        id_groups: '',
-        id_sub: '',
-        structure: '',
-        groups: '',
-        name: ''
-      },
-      rabDetailsDefault: {
-        id_ahs: '',
-        sub_total: 0,
-        volume: 0,
-        coefficient: 1,
-        hp: 0,
-        id_structure: '',
-        id_groups: '',
-        id_sub: '',
-        structure: '',
-        groups: '',
-        name: ''
-      },
-      AHSAdjustDefault: {
-        id_ahs_adjust: '',
-        adjusment: 0,
-        total_labor: 0,
-        total_material: 0,
-        total: 0
-      },
-      ahs_adjust: {
-        id_ahs_adjust: '',
-        adjusment: 0,
-        total_labor: 0,
-        total_material: 0,
-        total: 0
-      },
-      AHS: {
-        id_ahs: '',
-        total: 0
-      },
-      AHSDefault: {
-        id_ahs: '',
-        total: 0
-      },
-      rab: {
-        id_rab: '',
-        id_project: '',
-        id_ahs: '',
-        coefficient: 1,
-        total_rab: 0,
-        kode: '',
-        desc: ''
-      },
-      RABDefault: {
-        id_rab: '',
-        id_project: '',
-        id_ahs: '',
-        coefficient: 1,
-        total_rab: 0,
-        kode: '',
-        desc: ''
-      },
-      Project: {
-        name: '',
-        date: new Date().toISOString().substr(0, 10),
-        address: '',
-        contact: '',
-        id_project: '',
-        phone: ''
-      },
-      headers_filter_materials: [{
-        text: 'ID',
-        align: 'left',
-        sortable: false,
-        value: 'kode'
-      }, {
-        text: 'Status',
-        align: 'left',
-        sortable: false,
-        value: 'status'
-      }, {
-        text: 'Name',
-        align: 'left',
-        sortable: false,
-        value: 'name'
-      }, {
-        sortable: false,
-        text: 'Type',
-        value: 'type'
-      }, {
-        sortable: false,
-        text: 'Price',
-        value: 'price'
-      }, {
-        sortable: false,
-        text: 'Satuan',
-        value: 'satuan'
-      }, {
-        sortable: false,
-        text: 'Adjusment',
-        value: 'adjust'
-      }],
-      headers_structure: [{
-        text: 'ID',
-        align: 'left',
-        sortable: false,
-        value: 'id_structure'
-      }, {
-        text: 'Building',
-        align: 'left',
-        sortable: false,
-        value: 'name'
-      }, {
-        text: 'Action',
-        align: 'left',
-        sortable: false,
-        value: 'action'
-      }],
-      headers_group: [{
-        text: 'ID',
-        align: 'left',
-        sortable: false,
-        value: 'id_group'
-      }, {
-        text: 'Floor',
-        align: 'left',
-        sortable: false,
-        value: 'name'
-      }, {
-        text: 'Action',
-        align: 'left',
-        sortable: false,
-        value: 'action'
-      }],
-      headers_sub: [{
-        text: 'ID',
-        align: 'left',
-        sortable: false,
-        value: 'id_sub'
-      }, {
-        text: 'Sub Task',
-        align: 'left',
-        sortable: false,
-        value: 'name'
-      }, {
-        text: 'Action',
-        align: 'left',
-        sortable: false,
-        value: 'action'
-      }],
-      headers_detail_floor: [{
-        text: 'ID',
-        align: 'left',
-        sortable: false,
-        value: 'id_groups'
-      }, {
-        text: 'Building',
-        align: 'left',
-        sortable: false,
-        value: 'structure'
-      }, {
-        text: 'Floor',
-        align: 'left',
-        sortable: false,
-        value: 'groups'
-      }, {
-        text: 'Task Sub',
-        align: 'left',
-        sortable: false,
-        value: 'action'
-      }],
-      headers_detail_task: [{
-        text: 'ID',
-        align: 'left',
-        sortable: false,
-        value: 'id_sub'
-      }, {
-        text: 'Building',
-        align: 'left',
-        sortable: false,
-        value: 'structure'
-      }, {
-        text: 'Floor',
-        align: 'left',
-        sortable: false,
-        value: 'groups'
-      }, {
-        text: 'Task Sub',
-        align: 'left',
-        sortable: false,
-        value: 'name'
-      }, {
-        text: 'Detail',
-        align: 'left',
-        sortable: false,
-        value: 'action'
-      }],
-      headers_detail_building: [{
-        text: 'ID',
-        align: 'left',
-        sortable: false,
-        value: 'id_structure'
-      }, {
-        text: 'Building',
-        align: 'left',
-        sortable: false,
-        value: 'name'
-      }, {
-        text: 'Floor',
-        align: 'left',
-        sortable: false,
-        value: 'action'
-      }],
-      tab: 'tab-1'
-    };
+      detailTask: [],
+      detailDetails: []
+    }, _defineProperty(_ref, "detail", {
+      id_structure_details: '',
+      id_group_details: '',
+      id_sub_details: '',
+      id_ahs_lokal: ''
+    }), _defineProperty(_ref, "structure_unit", {
+      id_structure: ''
+    }), _defineProperty(_ref, "group_unit", {
+      id_structure: '',
+      id_groups: ''
+    }), _defineProperty(_ref, "tasksub_unit", {
+      id_structure: '',
+      id_groups: '',
+      id_sub: ''
+    }), _defineProperty(_ref, "structure_data", {
+      id_structure: ''
+    }), _defineProperty(_ref, "group_data", {
+      id_structure: '',
+      id_groups: ''
+    }), _defineProperty(_ref, "tasksub_data", {
+      id_structure: '',
+      id_groups: '',
+      id_sub: ''
+    }), _defineProperty(_ref, "ahs_lokal", {
+      id_ahs_lokal: '',
+      id_sub_details: '',
+      id_job: '',
+      total_labor: 0,
+      total_material: 0,
+      HSP: 0,
+      volume: 0,
+      adjustment: 1,
+      HP: 0,
+      HPAdjust: 0
+    }), _defineProperty(_ref, "AHSLokalDefault", {
+      id_ahs_lokal: '',
+      id_sub_details: '',
+      id_job: '',
+      total_labor: 0,
+      total_material: 0,
+      HSP: 0,
+      volume: 0,
+      adjustment: 1,
+      HP: 0,
+      HPAdjust: 0
+    }), _defineProperty(_ref, "AHS", {
+      id_ahs: '',
+      total: 0
+    }), _defineProperty(_ref, "AHSDefault", {
+      id_ahs: '',
+      total: 0
+    }), _defineProperty(_ref, "rab", {
+      id_rab: '',
+      id_project: '',
+      total_rab: 0,
+      kode: '',
+      desc: ''
+    }), _defineProperty(_ref, "RABDefault", {
+      id_rab: '',
+      id_project: '',
+      id_ahs: '',
+      coefficient: 1,
+      total_rab: 0,
+      kode: '',
+      desc: ''
+    }), _defineProperty(_ref, "Project", {
+      name: '',
+      date: new Date().toISOString().substr(0, 10),
+      address: '',
+      contact: '',
+      id_project: '',
+      phone: ''
+    }), _defineProperty(_ref, "headers_filter_materials", [{
+      text: 'ID',
+      align: 'left',
+      sortable: false,
+      value: 'kode'
+    }, {
+      text: 'Type',
+      align: 'left',
+      sortable: true,
+      value: 'status'
+    }, {
+      text: 'Item',
+      align: 'left',
+      sortable: false,
+      value: 'name'
+    }, {
+      text: 'Price',
+      align: 'left',
+      sortable: false,
+      value: 'price'
+    }, {
+      text: 'Coefficient',
+      align: 'left',
+      sortable: false,
+      value: 'coefficient'
+    }, {
+      text: 'Sub Total',
+      align: 'left',
+      sortable: false,
+      value: 'sub_total'
+    }, {
+      text: 'Adjustment',
+      align: 'left',
+      sortable: false,
+      value: 'adjustment'
+    }]), _defineProperty(_ref, "headers_detail_floor", [{
+      text: 'ID',
+      align: 'left',
+      sortable: false,
+      value: 'id_groups'
+    }, {
+      text: 'Building',
+      align: 'left',
+      sortable: false,
+      value: 'structure'
+    }, {
+      text: 'Floor',
+      align: 'left',
+      sortable: false,
+      value: 'floor'
+    }, {
+      text: 'Task Group',
+      align: 'left',
+      sortable: false,
+      value: 'action'
+    }]), _defineProperty(_ref, "headers_detail_task", [{
+      text: 'ID',
+      align: 'left',
+      sortable: false,
+      value: 'id_sub'
+    }, {
+      text: 'Building',
+      align: 'left',
+      sortable: false,
+      value: 'structure'
+    }, {
+      text: 'Floor',
+      align: 'left',
+      sortable: false,
+      value: 'floor'
+    }, {
+      text: 'Task Group',
+      align: 'left',
+      sortable: false,
+      value: 'task'
+    }, {
+      text: 'Detail',
+      align: 'left',
+      sortable: false,
+      value: 'action'
+    }]), _defineProperty(_ref, "headers_detail_building", [{
+      text: 'ID',
+      align: 'left',
+      sortable: false,
+      value: 'id_structure'
+    }, {
+      text: 'Building',
+      align: 'left',
+      sortable: false,
+      value: 'structure'
+    }, {
+      text: 'Floor',
+      align: 'left',
+      sortable: false,
+      value: 'action'
+    }]), _defineProperty(_ref, "tab", 'tab-1'), _ref;
   },
   mounted: function mounted() {
     this.getallDetails();
@@ -13305,546 +12526,399 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     this.getGroup();
     this.getTaskSub();
     this.getStructure();
-    this.getAdjust();
-    this.getJob(); // this.getStructureDetails()
+    this.getJob();
+    this.getMaterial();
   },
   computed: {
     filtered: function filtered() {
       var _this = this;
 
       return this.RAB.filter(function (data) {
-        return data.name.match(_this.search);
+        return data.project.match(_this.search);
       });
+    },
+    change: function change() {
+      var _this2 = this;
+
+      if (this.AHS.id_ahs != '') {
+        var data = this.ahs.find(function (obj) {
+          return obj.id_ahs == _this2.AHS.id_ahs;
+        });
+        this.ahs_lokal.HP = data.total * this.ahs_lokal.volume;
+        return this.ahs_lokal.HP;
+      }
+    },
+    adjust: function adjust() {
+      var _this3 = this;
+
+      if (this.AHS.id_ahs != '') {
+        var data = this.ahs.find(function (obj) {
+          return obj.id_ahs == _this3.AHS.id_ahs;
+        });
+        this.ahs_lokal.HPAdjust = 0;
+        if (this.ahs_lokal.adjustment != 1) this.ahs_lokal.HPAdjust = this.ahs_lokal.adjustment * data.total * this.ahs_lokal.volume;
+        return this.ahs_lokal.HPAdjust;
+      }
     }
   },
   methods: {
-    saveAdjust: function () {
-      var _saveAdjust = _asyncToGenerator(
+    itemEdit: function () {
+      var _itemEdit = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(filterMaterialsAll) {
-        var _this2 = this;
-
-        var data, temp, count, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _detail, each_detail, payload;
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(item) {
+        var _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, _detail, _iteratorNormalCompletion4, _didIteratorError4, _iteratorError4, _iterator4, _step4, group, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, _detail2, _iteratorNormalCompletion5, _didIteratorError5, _iteratorError5, _iterator5, _step5, _task, _iteratorNormalCompletion3, _didIteratorError3, _iteratorError3, _iterator3, _step3, _detail3, _iteratorNormalCompletion6, _didIteratorError6, _iteratorError6, _iterator6, _step6, ahs;
 
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                data = this.ahs.find(function (obj) {
-                  return obj.id_ahs == _this2.AHS.id_ahs;
-                });
-                console.log('Data');
-                console.log(data);
-                temp = 0;
-                count = 0;
-                this.AHS = data;
+                this.edit = true;
+                this.filterProject = this.project;
+                this.rab = item;
+                this.detailStructure = item.structure.data;
                 _iteratorNormalCompletion = true;
                 _didIteratorError = false;
                 _iteratorError = undefined;
-                _context.prev = 9;
+                _context.prev = 7;
+                _iterator = this.detailStructure[Symbol.iterator]();
 
-                for (_iterator = this.filterMaterialsAll[Symbol.iterator](); !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                  _detail = _step.value;
-                  if (_detail.status == "labor") this.ahs_adjust.total_labor += _detail.price * _detail.adjust;else this.ahs_adjust.total_material += _detail.price * _detail.adjust;
-                  this.ahs_adjust.total = this.ahs_adjust.total_labor + this.ahs_adjust.total_material;
-                  temp = parseInt(temp) + parseInt(_detail.adjust);
-                  count = parseInt(count + 1, 10);
-                  each_detail = {
-                    id_material: _detail.id_material,
-                    sub_adjusment: _detail.adjust,
-                    sub_total: _detail.adjust * _detail.price
-                  };
-                  this.detail_adjust.push(each_detail);
-                } // console.log('Detail Adjust')
-                // console.log(this.detail_adjust)
-                // console.log('count')
-                // console.log(count)
-                // console.log('Adjustment')
-                // console.log(temp)
-                // console.log('Total Material AHS Adjust')
-                // console.log(this.ahs_adjust.total_material)
-                // console.log('Total Labor AHS Adjust')
-                // console.log(this.ahs_adjust.total_labor)
-                // console.log('Total AHS Adjust')
-                // console.log(this.ahs_adjust.total)
+              case 9:
+                if (_iteratorNormalCompletion = (_step = _iterator.next()).done) {
+                  _context.next = 33;
+                  break;
+                }
 
+                _detail = _step.value;
+                _iteratorNormalCompletion4 = true;
+                _didIteratorError4 = false;
+                _iteratorError4 = undefined;
+                _context.prev = 14;
 
-                _context.next = 17;
+                for (_iterator4 = _detail.group.data[Symbol.iterator](); !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                  group = _step4.value;
+                  this.Groups.push(group);
+                  this.detailGroup.push(group);
+                }
+
+                _context.next = 22;
                 break;
 
-              case 13:
-                _context.prev = 13;
-                _context.t0 = _context["catch"](9);
-                _didIteratorError = true;
-                _iteratorError = _context.t0;
-
-              case 17:
-                _context.prev = 17;
+              case 18:
                 _context.prev = 18;
+                _context.t0 = _context["catch"](14);
+                _didIteratorError4 = true;
+                _iteratorError4 = _context.t0;
+
+              case 22:
+                _context.prev = 22;
+                _context.prev = 23;
+
+                if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
+                  _iterator4["return"]();
+                }
+
+              case 25:
+                _context.prev = 25;
+
+                if (!_didIteratorError4) {
+                  _context.next = 28;
+                  break;
+                }
+
+                throw _iteratorError4;
+
+              case 28:
+                return _context.finish(25);
+
+              case 29:
+                return _context.finish(22);
+
+              case 30:
+                _iteratorNormalCompletion = true;
+                _context.next = 9;
+                break;
+
+              case 33:
+                _context.next = 39;
+                break;
+
+              case 35:
+                _context.prev = 35;
+                _context.t1 = _context["catch"](7);
+                _didIteratorError = true;
+                _iteratorError = _context.t1;
+
+              case 39:
+                _context.prev = 39;
+                _context.prev = 40;
 
                 if (!_iteratorNormalCompletion && _iterator["return"] != null) {
                   _iterator["return"]();
                 }
 
-              case 20:
-                _context.prev = 20;
+              case 42:
+                _context.prev = 42;
 
                 if (!_didIteratorError) {
-                  _context.next = 23;
+                  _context.next = 45;
                   break;
                 }
 
                 throw _iteratorError;
 
-              case 23:
-                return _context.finish(20);
+              case 45:
+                return _context.finish(42);
 
-              case 24:
-                return _context.finish(17);
+              case 46:
+                return _context.finish(39);
 
-              case 25:
-                _context.prev = 25;
-                payload = {
-                  id_project: this.rab.id_project,
-                  id_job: this.AHS.id_job,
-                  id_sub: this.AHS.id_sub,
-                  adjustment: temp / count,
-                  total_labor: this.ahs_adjust.total_labor,
-                  total_material: this.ahs_adjust.total_material,
-                  total: this.ahs_adjust.total,
-                  detail: this.detail_adjust
-                };
-                _context.next = 29;
-                return _service_AHSAdjust__WEBPACK_IMPORTED_MODULE_7__["default"].add(payload);
+              case 47:
+                _iteratorNormalCompletion2 = true;
+                _didIteratorError2 = false;
+                _iteratorError2 = undefined;
+                _context.prev = 50;
+                _iterator2 = this.Groups[Symbol.iterator]();
 
-              case 29:
-                this.getAdjust();
-                this.tab = 'tab-5';
-                this.tambahAdjust = true;
-                this.tambah = false;
-                this.filterMaterialsAll = [];
-                _context.next = 39;
+              case 52:
+                if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
+                  _context.next = 76;
+                  break;
+                }
+
+                _detail2 = _step2.value;
+                _iteratorNormalCompletion5 = true;
+                _didIteratorError5 = false;
+                _iteratorError5 = undefined;
+                _context.prev = 57;
+
+                for (_iterator5 = _detail2.task_sub.data[Symbol.iterator](); !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                  _task = _step5.value;
+                  this.TaskSub.push(_task);
+                  this.detailTask.push(_task);
+                }
+
+                _context.next = 65;
                 break;
 
-              case 36:
-                _context.prev = 36;
-                _context.t1 = _context["catch"](25);
-                console.log(_context.t1);
+              case 61:
+                _context.prev = 61;
+                _context.t2 = _context["catch"](57);
+                _didIteratorError5 = true;
+                _iteratorError5 = _context.t2;
 
-              case 39:
+              case 65:
+                _context.prev = 65;
+                _context.prev = 66;
+
+                if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
+                  _iterator5["return"]();
+                }
+
+              case 68:
+                _context.prev = 68;
+
+                if (!_didIteratorError5) {
+                  _context.next = 71;
+                  break;
+                }
+
+                throw _iteratorError5;
+
+              case 71:
+                return _context.finish(68);
+
+              case 72:
+                return _context.finish(65);
+
+              case 73:
+                _iteratorNormalCompletion2 = true;
+                _context.next = 52;
+                break;
+
+              case 76:
+                _context.next = 82;
+                break;
+
+              case 78:
+                _context.prev = 78;
+                _context.t3 = _context["catch"](50);
+                _didIteratorError2 = true;
+                _iteratorError2 = _context.t3;
+
+              case 82:
+                _context.prev = 82;
+                _context.prev = 83;
+
+                if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
+                  _iterator2["return"]();
+                }
+
+              case 85:
+                _context.prev = 85;
+
+                if (!_didIteratorError2) {
+                  _context.next = 88;
+                  break;
+                }
+
+                throw _iteratorError2;
+
+              case 88:
+                return _context.finish(85);
+
+              case 89:
+                return _context.finish(82);
+
+              case 90:
+                _iteratorNormalCompletion3 = true;
+                _didIteratorError3 = false;
+                _iteratorError3 = undefined;
+                _context.prev = 93;
+                _iterator3 = this.TaskSub[Symbol.iterator]();
+
+              case 95:
+                if (_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done) {
+                  _context.next = 119;
+                  break;
+                }
+
+                _detail3 = _step3.value;
+                _iteratorNormalCompletion6 = true;
+                _didIteratorError6 = false;
+                _iteratorError6 = undefined;
+                _context.prev = 100;
+
+                for (_iterator6 = _detail3.rab_details.data[Symbol.iterator](); !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                  ahs = _step6.value;
+                  this.details.push(ahs);
+                  this.detailDetails.push(ahs);
+                }
+
+                _context.next = 108;
+                break;
+
+              case 104:
+                _context.prev = 104;
+                _context.t4 = _context["catch"](100);
+                _didIteratorError6 = true;
+                _iteratorError6 = _context.t4;
+
+              case 108:
+                _context.prev = 108;
+                _context.prev = 109;
+
+                if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
+                  _iterator6["return"]();
+                }
+
+              case 111:
+                _context.prev = 111;
+
+                if (!_didIteratorError6) {
+                  _context.next = 114;
+                  break;
+                }
+
+                throw _iteratorError6;
+
+              case 114:
+                return _context.finish(111);
+
+              case 115:
+                return _context.finish(108);
+
+              case 116:
+                _iteratorNormalCompletion3 = true;
+                _context.next = 95;
+                break;
+
+              case 119:
+                _context.next = 125;
+                break;
+
+              case 121:
+                _context.prev = 121;
+                _context.t5 = _context["catch"](93);
+                _didIteratorError3 = true;
+                _iteratorError3 = _context.t5;
+
+              case 125:
+                _context.prev = 125;
+                _context.prev = 126;
+
+                if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
+                  _iterator3["return"]();
+                }
+
+              case 128:
+                _context.prev = 128;
+
+                if (!_didIteratorError3) {
+                  _context.next = 131;
+                  break;
+                }
+
+                throw _iteratorError3;
+
+              case 131:
+                return _context.finish(128);
+
+              case 132:
+                return _context.finish(125);
+
+              case 133:
+                console.log('item');
+                console.log(item);
+                console.log('This Detail Structure');
+                console.log(this.detailStructure);
+                console.log('This Groups');
+                console.log(this.Groups);
+                console.log('This Detail Group');
+                console.log(this.detailGroup);
+                console.log('This Task Sub');
+                console.log(this.TaskSub);
+                console.log('This Detail Task');
+                console.log(this.detailTask);
+                console.log('This Details');
+                console.log(this.details);
+                console.log('This Detailss');
+                console.log(this.detailDetails);
+
+              case 149:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[9, 13, 17, 25], [18,, 20, 24], [25, 36]]);
+        }, _callee, this, [[7, 35, 39, 47], [14, 18, 22, 30], [23,, 25, 29], [40,, 42, 46], [50, 78, 82, 90], [57, 61, 65, 73], [66,, 68, 72], [83,, 85, 89], [93, 121, 125, 133], [100, 104, 108, 116], [109,, 111, 115], [126,, 128, 132]]);
       }));
 
-      function saveAdjust(_x) {
-        return _saveAdjust.apply(this, arguments);
+      function itemEdit(_x) {
+        return _itemEdit.apply(this, arguments);
       }
 
-      return saveAdjust;
+      return itemEdit;
     }(),
-    // changeTab()
-    // {
-    //   this.tab = 'tab-6'
-    //   let filterMaterials=[]
-    //   let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
-    //   for(let materials of data.ahs_details.data)
-    //   {
-    //     let each_materials = {
-    //       id_ahs        : materials.id_ahs,
-    //       id_material   : materials.id_material,
-    //       kode          : materials.kode,
-    //       name          : materials.name,
-    //       type          : materials.type,
-    //       satuan        : materials.satuan,
-    //       price         : materials.price,
-    //       spesification : materials.spesification,
-    //       status        : materials.status,
-    //       store         : materials.store,
-    //       adjust        : 1
-    //     }
-    //     filterMaterials.push(each_materials)
-    //   }
-    //   this.filterMaterialsAll = data.ahs_details.data
-    // },
-    getAdjust: function () {
-      var _getAdjust = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
-                return _service_AHSAdjust__WEBPACK_IMPORTED_MODULE_7__["default"].get();
-
-              case 3:
-                this.adjust = _context2.sent.data;
-                _context2.next = 9;
-                break;
-
-              case 6:
-                _context2.prev = 6;
-                _context2.t0 = _context2["catch"](0);
-                console.log(_context2.t0);
-
-              case 9:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this, [[0, 6]]);
-      }));
-
-      function getAdjust() {
-        return _getAdjust.apply(this, arguments);
-      }
-
-      return getAdjust;
-    }(),
-    save: function save(props) {
-      console.log("Array Material");
-      console.log(this.filterMaterialsAll);
-      console.log('After Set');
-      console.log(this.filterMaterialsAll);
-    },
-    itemStructure: function itemStructure(item) {
-      this.structure_unit = item;
-      console.log(this.structure_unit);
-    },
-    itemAdjust: function itemAdjust(item) {
-      console.log('ini permasalahannya');
-      console.log(item); // this.ahs_adjust = item
-    },
-    filterAHS: function filterAHS(item) {
-      this.tasksub_unit = item;
-      var filterAHS = [];
-      var _iteratorNormalCompletion2 = true;
-      var _didIteratorError2 = false;
-      var _iteratorError2 = undefined;
-
-      try {
-        for (var _iterator2 = this.ahs.filter(function (obj) {
-          return obj.id_sub == item.id_sub;
-        })[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-          var ahs_data = _step2.value;
-          var each_ahs = {
-            id_ahs: ahs_data.id_ahs,
-            kode: ahs_data.kode,
-            id_job: ahs_data.id_job,
-            id_sub: ahs_data.id_sub,
-            total_labor: ahs_data.total_labor,
-            total_material: ahs_data.total_material,
-            total: ahs_data.total,
-            name: ahs_data.name,
-            detail: ahs_data.ahs_details
-          };
-          filterAHS.push(each_ahs);
-        }
-      } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion2 && _iterator2["return"] != null) {
-            _iterator2["return"]();
-          }
-        } finally {
-          if (_didIteratorError2) {
-            throw _iteratorError2;
-          }
-        }
-      }
-
-      this.filterAHSAll = filterAHS;
-    },
-    filterAHSAdjustment: function filterAHSAdjustment(item) {
-      var _this3 = this;
-
-      this.tasksub_unit = item;
-      var filterAHS = [];
-      console.log('cek');
-      var _iteratorNormalCompletion3 = true;
-      var _didIteratorError3 = false;
-      var _iteratorError3 = undefined;
-
-      try {
-        var _loop = function _loop() {
-          var ahs_data = _step3.value;
-
-          var data = _this3.job.find(function (obj) {
-            return obj.id_job == ahs_data.id_job;
-          });
-
-          console.log(data);
-          var each_ahs = {
-            id_ahs_adjust: ahs_data.id_ahs_adjust,
-            // kode            : ahs_data.kode,
-            id_job: ahs_data.id_job,
-            id_sub: ahs_data.id_sub,
-            adjustment: ahs_data.adjustment,
-            // total_labor     : ahs_data.total_labor,
-            // total_material  : ahs_data.total_material,
-            total: ahs_data.total,
-            name: data.name // detail          : ahs_data.ahs_details 
-
-          };
-          filterAHS.push(each_ahs);
-        };
-
-        for (var _iterator3 = this.adjust.filter(function (obj) {
-          return obj.id_sub == item.id_sub;
-        })[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-          _loop();
-        }
-      } catch (err) {
-        _didIteratorError3 = true;
-        _iteratorError3 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion3 && _iterator3["return"] != null) {
-            _iterator3["return"]();
-          }
-        } finally {
-          if (_didIteratorError3) {
-            throw _iteratorError3;
-          }
-        }
-      }
-
-      this.filterAHSAdjust = filterAHS;
-      console.log(this.filterAHSAdjust);
-    },
-    itemGroups: function itemGroups(item) {
-      this.group_unit = item;
-      console.log(this.group_unit);
-    },
-    itemHandlerSub: function itemHandlerSub(item) {
-      this.tasksub_data = item;
-      console.log(this.tasksub_data);
-    },
-    itemHandlerGroup: function itemHandlerGroup(item) {
-      this.group_data = item;
-      console.log(this.group_data);
-    },
-    itemHandlerStructure: function itemHandlerStructure(item) {
-      this.structure_data = item;
-      console.log(this.structure_data);
-    },
-    itemHandler: function itemHandler(item) {
-      this.rab_details = item.rab_details;
-      console.log(this.rab_details);
-    },
-    itemPanelsStructure: function itemPanelsStructure(item) {
+    itemDelete: function itemDelete(item) {
       this.rab = item;
-      this.Structure = item.structure.data;
-      console.log('Structure');
-      console.log(this.Structure);
-      console.log('masuk kesini');
     },
-    itemPanelsGroups: function itemPanelsGroups(item) {
-      console.log('Groups');
-      this.Groups = item.group.data;
-    },
-    itemPanelsTask: function itemPanelsTask(item) {
-      console.log('Task');
-      this.TaskSub = item.task_sub.data;
-    },
-    itemPanelsDetail: function itemPanelsDetail(item) {
-      console.log('Detail');
-      this.details = item.rab_details.data;
-      console.log(this.details);
-    },
-    itemPanelsStructureHandler: function itemPanelsStructureHandler(item) {
-      console.log('Structure Item');
-      this.detail = item;
-      console.log(this.detail);
-    },
-    itemPanelsGroupHandler: function itemPanelsGroupHandler(item) {
-      console.log('Group Item');
-      this.detail = item;
-    },
-    itemPanelsTaskHandler: function itemPanelsTaskHandler(item) {
-      console.log('Task Item');
-      this.detail = item;
-    },
-    itemPanelsDetailTask: function itemPanelsDetailTask(item) {
-      console.log('Detail Item');
-      this.rab_details = item;
-      console.log(this.rab_details);
-    },
-    itemDetailHandler: function itemDetailHandler(item) {
-      this.detail = item;
-      console.log(this.detail);
-    },
-    addstructure: function () {
-      var _addstructure = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var _this4 = this;
+    filterProjects: function filterProjects() {
+      var _this4 = this;
 
-        var object, data;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                object = this.structure_data;
-                data = this.structure.find(function (obj) {
-                  return obj.id_structure == _this4.structure_data.id_structure;
-                });
-                object.id_structure = data.id_structure;
-                object.name = data.name;
-                this.Structure.push(JSON.parse(JSON.stringify(object)));
-                console.log('Detail Structure');
-                console.log(this.Structure);
-
-              case 7:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function addstructure() {
-        return _addstructure.apply(this, arguments);
-      }
-
-      return addstructure;
-    }(),
-    deletestructure: function deletestructure(index) {
-      this.Structure.splice(this.Structure.indexOf(index), 1);
-      var _iteratorNormalCompletion4 = true;
-      var _didIteratorError4 = false;
-      var _iteratorError4 = undefined;
-
-      try {
-        for (var _iterator4 = this.Groups[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-          var group = _step4.value;
-          if (group.id_structure == index.id_structure) this.Groups.splice(this.Groups.indexOf(group));
-        }
-      } catch (err) {
-        _didIteratorError4 = true;
-        _iteratorError4 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion4 && _iterator4["return"] != null) {
-            _iterator4["return"]();
-          }
-        } finally {
-          if (_didIteratorError4) {
-            throw _iteratorError4;
-          }
-        }
-      }
-
-      var _iteratorNormalCompletion5 = true;
-      var _didIteratorError5 = false;
-      var _iteratorError5 = undefined;
-
-      try {
-        for (var _iterator5 = this.TaskSub[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-          var _task = _step5.value;
-          if (_task.id_structure == index.id_structure) this.TaskSub.splice(this.TaskSub.indexOf(_task));
-        }
-      } catch (err) {
-        _didIteratorError5 = true;
-        _iteratorError5 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion5 && _iterator5["return"] != null) {
-            _iterator5["return"]();
-          }
-        } finally {
-          if (_didIteratorError5) {
-            throw _iteratorError5;
-          }
-        }
-      }
-
-      var _iteratorNormalCompletion6 = true;
-      var _didIteratorError6 = false;
-      var _iteratorError6 = undefined;
-
-      try {
-        for (var _iterator6 = this.details[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-          var _detail2 = _step6.value;
-          if (_detail2.id_structure == index.id_structure) this.details.splice(this.details.indexOf(_detail2));
-        }
-      } catch (err) {
-        _didIteratorError6 = true;
-        _iteratorError6 = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion6 && _iterator6["return"] != null) {
-            _iterator6["return"]();
-          }
-        } finally {
-          if (_didIteratorError6) {
-            throw _iteratorError6;
-          }
-        }
-      }
-
-      this.Structure = _toConsumableArray(this.Structure);
-      this.Groups = _toConsumableArray(this.Groups);
-      this.TaskSub = _toConsumableArray(this.TaskSub);
-      this.details = _toConsumableArray(this.details);
-    },
-    addfloor: function () {
-      var _addfloor = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
-        var _this5 = this;
-
-        var object, data, dataS;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                object = this.group_data;
-                data = this.sub.find(function (obj) {
-                  return obj.id_group == _this5.group_data.id_group;
-                });
-                dataS = this.Structure.find(function (obj) {
-                  return obj.id_structure == _this5.structure_unit.id_structure;
-                });
-                object.id_structure = this.structure_unit.id_structure;
-                object.id_groups = data.id_group;
-                object.structure = dataS.name;
-                object.groups = data.name;
-                object.name = data.name;
-                this.Groups.push(JSON.parse(JSON.stringify(object)));
-                console.log('Detail Group');
-                console.log(this.Groups);
-
-              case 11:
-              case "end":
-                return _context4.stop();
-            }
-          }
-        }, _callee4, this);
-      }));
-
-      function addfloor() {
-        return _addfloor.apply(this, arguments);
-      }
-
-      return addfloor;
-    }(),
-    deletefloor: function deletefloor(index) {
-      this.Groups.splice(this.Groups.indexOf(index), 1);
+      this.filterProject = this.project;
       var _iteratorNormalCompletion7 = true;
       var _didIteratorError7 = false;
       var _iteratorError7 = undefined;
 
       try {
-        for (var _iterator7 = this.TaskSub[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-          var _task2 = _step7.value;
-          if (_task2.id_groups == index.id_group) this.TaskSub.splice(this.TaskSub.indexOf(_task2));
+        var _loop = function _loop() {
+          var rab = _step7.value;
+          _this4.filterProject = _this4.project.filter(function (obj) {
+            return obj.id_project != rab.id_project;
+          });
+        };
+
+        for (var _iterator7 = this.RAB[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+          _loop();
         }
       } catch (err) {
         _didIteratorError7 = true;
@@ -13861,14 +12935,26 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       }
 
+      console.log(this.filterProject);
+    },
+    filterStructures: function filterStructures() {
+      var _this5 = this;
+
+      this.filterStructure = this.structure;
       var _iteratorNormalCompletion8 = true;
       var _didIteratorError8 = false;
       var _iteratorError8 = undefined;
 
       try {
-        for (var _iterator8 = this.details[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
-          var _detail3 = _step8.value;
-          if (_detail3.id_groups == index.id_group) this.details.splice(this.details.indexOf(_detail3));
+        var _loop2 = function _loop2() {
+          var structure = _step8.value;
+          _this5.filterStructure = _this5.structure.filter(function (obj) {
+            return obj.id_structure != structure.id_structure;
+          });
+        };
+
+        for (var _iterator8 = this.Structure[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+          _loop2();
         }
       } catch (err) {
         _didIteratorError8 = true;
@@ -13884,70 +12970,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       }
-
-      this.Groups = _toConsumableArray(this.Groups);
-      this.TaskSub = _toConsumableArray(this.TaskSub);
-      this.details = _toConsumableArray(this.details);
     },
-    addtasksub: function () {
-      var _addtasksub = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        var _this6 = this;
+    filterGroups: function filterGroups(item) {
+      var _this6 = this;
 
-        var object, data, dataS, dataG;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                object = this.tasksub_data;
-                console.log("Detail Group in Task");
-                data = this.type.find(function (obj) {
-                  return obj.id_sub == _this6.tasksub_data.id_sub;
-                });
-                console.log(data);
-                object.id_structure = this.group_unit.id_structure;
-                object.id_groups = this.group_unit.id_group;
-                object.id_sub = data.id_sub;
-                dataS = this.structure.find(function (obj) {
-                  return obj.id_structure == _this6.group_unit.id_structure;
-                });
-                console.log(dataS);
-                object.structure = dataS.name;
-                dataG = this.sub.find(function (obj) {
-                  return obj.id_group == _this6.group_unit.id_group;
-                });
-                console.log(dataG);
-                object.groups = dataG.name;
-                object.name = data.name;
-                this.TaskSub.push(JSON.parse(JSON.stringify(object)));
-                console.log('Detail Task');
-                console.log(this.TaskSub);
-
-              case 17:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5, this);
-      }));
-
-      function addtasksub() {
-        return _addtasksub.apply(this, arguments);
-      }
-
-      return addtasksub;
-    }(),
-    deletetasksub: function deletetasksub(index) {
-      this.TaskSub.splice(this.TaskSub.indexOf(index), 1);
+      this.structure_unit = item;
+      this.filterGroup = this.sub;
+      var sub = this.sub;
+      var Groups = this.Groups.filter(function (obj) {
+        return obj.id_structure == _this6.structure_unit.id_structure;
+      });
       var _iteratorNormalCompletion9 = true;
       var _didIteratorError9 = false;
       var _iteratorError9 = undefined;
 
       try {
-        for (var _iterator9 = this.details[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
-          var _detail4 = _step9.value;
-          if (_detail4.id_sub == index.id_sub) this.details.splice(this.details.indexOf(_detail4));
+        var _loop3 = function _loop3() {
+          var group = _step9.value;
+          _this6.filterGroup = sub.filter(function (obj) {
+            return obj.id_group != group.id_groups;
+          });
+          sub = _this6.filterGroup;
+        };
+
+        for (var _iterator9 = Groups[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+          _loop3();
         }
       } catch (err) {
         _didIteratorError9 = true;
@@ -13963,122 +13010,706 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }
       }
+    },
+    filterTaskGroups: function filterTaskGroups(item) {
+      var _this7 = this;
 
-      this.TaskSub = _toConsumableArray(this.TaskSub);
-      this.details = _toConsumableArray(this.details);
+      this.group_unit = item;
+      this.filterTaskGroup = this.type;
+      var type = this.type;
+      var Task = this.TaskSub.filter(function (obj) {
+        return obj.id_structure == _this7.group_unit.id_structure && obj.id_groups == _this7.group_unit.id_groups;
+      });
+      var _iteratorNormalCompletion10 = true;
+      var _didIteratorError10 = false;
+      var _iteratorError10 = undefined;
+
+      try {
+        var _loop4 = function _loop4() {
+          var task = _step10.value;
+          _this7.filterTaskGroup = type.filter(function (obj) {
+            return obj.id_sub != task.id_sub;
+          });
+          type = _this7.filterTaskGroup;
+        };
+
+        for (var _iterator10 = Task[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+          _loop4();
+        }
+      } catch (err) {
+        _didIteratorError10 = true;
+        _iteratorError10 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion10 && _iterator10["return"] != null) {
+            _iterator10["return"]();
+          }
+        } finally {
+          if (_didIteratorError10) {
+            throw _iteratorError10;
+          }
+        }
+      }
+    },
+    filterAHS: function filterAHS(item) {
+      var _this8 = this;
+
+      this.tasksub_unit = item;
+      this.filterAHSAll = this.ahs.filter(function (obj) {
+        return obj.id_sub == item.id_sub;
+      });
+      var Detail = this.details.filter(function (obj) {
+        return obj.id_structure == _this8.tasksub_unit.id_structure && obj.id_groups == _this8.tasksub_unit.id_groups && obj.id_sub == _this8.tasksub_unit.id_sub;
+      });
+      console.log('ahs id sub sama');
+      console.log(this.filterAHSAll);
+      console.log('Detail');
+      console.log(Detail);
+      var _iteratorNormalCompletion11 = true;
+      var _didIteratorError11 = false;
+      var _iteratorError11 = undefined;
+
+      try {
+        var _loop5 = function _loop5() {
+          var detail = _step11.value;
+          _this8.filterAHSAll = _this8.filterAHSAll.filter(function (obj) {
+            return obj.id_ahs != detail.id_ahs;
+          });
+        };
+
+        for (var _iterator11 = Detail[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+          _loop5();
+        }
+      } catch (err) {
+        _didIteratorError11 = true;
+        _iteratorError11 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion11 && _iterator11["return"] != null) {
+            _iterator11["return"]();
+          }
+        } finally {
+          if (_didIteratorError11) {
+            throw _iteratorError11;
+          }
+        }
+      }
+
+      console.log('Filter AHS ');
+      console.log(this.filterAHSAll);
+    },
+    getMaterialDetails: function getMaterialDetails() {
+      var _this9 = this;
+
+      if (this.ahs_lokal.adjusment != '') {
+        var filterMaterials = [];
+        var data = this.ahs.find(function (obj) {
+          return obj.id_ahs == _this9.AHS.id_ahs;
+        });
+        var _iteratorNormalCompletion12 = true;
+        var _didIteratorError12 = false;
+        var _iteratorError12 = undefined;
+
+        try {
+          for (var _iterator12 = data.ahs_details.data[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+            var materials = _step12.value;
+            var each_materials = {
+              // id_ahs        : materials.id_ahs,
+              id_job: data.id_job,
+              id_material: materials.id_material,
+              kode: materials.kode,
+              status: materials.status,
+              name: materials.name,
+              price: materials.price,
+              coefficient: materials.coefficient,
+              sub_total: materials.sub_total,
+              adjustment: this.ahs_lokal.adjustment
+            };
+            filterMaterials.push(each_materials);
+          }
+        } catch (err) {
+          _didIteratorError12 = true;
+          _iteratorError12 = err;
+        } finally {
+          try {
+            if (!_iteratorNormalCompletion12 && _iterator12["return"] != null) {
+              _iterator12["return"]();
+            }
+          } finally {
+            if (_didIteratorError12) {
+              throw _iteratorError12;
+            }
+          }
+        }
+
+        this.filterMaterialsAll = filterMaterials;
+        console.log('ini filter material');
+        console.log(this.filterMaterialsAll);
+      }
+    },
+    save: function save(props) {
+      console.log("Array Material");
+      console.log(this.filterMaterialsAll);
+      console.log('After Set');
+      console.log(this.filterMaterialsAll);
+    },
+    addstructure: function () {
+      var _addstructure = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var _this10 = this;
+
+        var data, structure, detail;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                data = this.structure.find(function (obj) {
+                  return obj.id_structure == _this10.structure_data.id_structure;
+                });
+                structure = {
+                  id_structure: this.structure_data.id_structure
+                };
+                detail = {
+                  id_structure: this.structure_data.id_structure,
+                  structure: data.name
+                };
+                this.Structure.push(structure);
+                this.detailStructure.push(detail);
+                this.structure_data.id_structure = '';
+                console.log('Detail Structure');
+                console.log(this.Structure);
+                console.log('Detail Structures');
+                console.log(this.detailStructure);
+
+              case 10:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function addstructure() {
+        return _addstructure.apply(this, arguments);
+      }
+
+      return addstructure;
+    }(),
+    deletestructure: function deletestructure(index) {
+      var structure = this.detailStructure.find(function (obj) {
+        return obj.id_structure == index.id_structure;
+      });
+      var Groups = this.Groups.filter(function (obj) {
+        return obj.id_structure == index.id_structure;
+      });
+      var Task = this.TaskSub.filter(function (obj) {
+        return obj.id_structure == index.id_structure;
+      });
+      var Detail = this.details.filter(function (obj) {
+        return obj.id_structure == index.id_structure;
+      });
+      var DetailGroup = this.detailGroup.filter(function (obj) {
+        return obj.id_structure == index.id_structure;
+      });
+      var DetailTask = this.detailTask.filter(function (obj) {
+        return obj.id_structure == index.id_structure;
+      });
+      var Details = this.detailDetails.filter(function (obj) {
+        return obj.id_structure == index.id_structure;
+      });
+      this.Structure.splice(this.Structure.indexOf(index), 1);
+      this.detailStructure.splice(this.detailStructure.indexOf(structure), 1);
+      var _iteratorNormalCompletion13 = true;
+      var _didIteratorError13 = false;
+      var _iteratorError13 = undefined;
+
+      try {
+        for (var _iterator13 = Groups[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+          var group = _step13.value;
+          this.Groups.splice(this.Groups.indexOf(group), 1);
+        }
+      } catch (err) {
+        _didIteratorError13 = true;
+        _iteratorError13 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion13 && _iterator13["return"] != null) {
+            _iterator13["return"]();
+          }
+        } finally {
+          if (_didIteratorError13) {
+            throw _iteratorError13;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion14 = true;
+      var _didIteratorError14 = false;
+      var _iteratorError14 = undefined;
+
+      try {
+        for (var _iterator14 = Task[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
+          var _task2 = _step14.value;
+          this.TaskSub.splice(this.TaskSub.indexOf(_task2), 1);
+        }
+      } catch (err) {
+        _didIteratorError14 = true;
+        _iteratorError14 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion14 && _iterator14["return"] != null) {
+            _iterator14["return"]();
+          }
+        } finally {
+          if (_didIteratorError14) {
+            throw _iteratorError14;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion15 = true;
+      var _didIteratorError15 = false;
+      var _iteratorError15 = undefined;
+
+      try {
+        for (var _iterator15 = Detail[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
+          var _detail4 = _step15.value;
+          this.details.splice(this.details.indexOf(_detail4), 1);
+        }
+      } catch (err) {
+        _didIteratorError15 = true;
+        _iteratorError15 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion15 && _iterator15["return"] != null) {
+            _iterator15["return"]();
+          }
+        } finally {
+          if (_didIteratorError15) {
+            throw _iteratorError15;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion16 = true;
+      var _didIteratorError16 = false;
+      var _iteratorError16 = undefined;
+
+      try {
+        for (var _iterator16 = DetailGroup[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
+          var _group = _step16.value;
+          this.detailGroup.splice(this.detailGroup.indexOf(_group), 1);
+        }
+      } catch (err) {
+        _didIteratorError16 = true;
+        _iteratorError16 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion16 && _iterator16["return"] != null) {
+            _iterator16["return"]();
+          }
+        } finally {
+          if (_didIteratorError16) {
+            throw _iteratorError16;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion17 = true;
+      var _didIteratorError17 = false;
+      var _iteratorError17 = undefined;
+
+      try {
+        for (var _iterator17 = DetailTask[Symbol.iterator](), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {
+          var _task3 = _step17.value;
+          this.detailTask.splice(this.detailTask.indexOf(_task3), 1);
+        }
+      } catch (err) {
+        _didIteratorError17 = true;
+        _iteratorError17 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion17 && _iterator17["return"] != null) {
+            _iterator17["return"]();
+          }
+        } finally {
+          if (_didIteratorError17) {
+            throw _iteratorError17;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion18 = true;
+      var _didIteratorError18 = false;
+      var _iteratorError18 = undefined;
+
+      try {
+        for (var _iterator18 = Details[Symbol.iterator](), _step18; !(_iteratorNormalCompletion18 = (_step18 = _iterator18.next()).done); _iteratorNormalCompletion18 = true) {
+          var _detail5 = _step18.value;
+          this.detailDetails.splice(this.detailDetails.indexOf(_detail5), 1);
+        }
+      } catch (err) {
+        _didIteratorError18 = true;
+        _iteratorError18 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion18 && _iterator18["return"] != null) {
+            _iterator18["return"]();
+          }
+        } finally {
+          if (_didIteratorError18) {
+            throw _iteratorError18;
+          }
+        }
+      }
+    },
+    addfloor: function () {
+      var _addfloor = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var _this11 = this;
+
+        var data, dataS, group, detail;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                data = this.sub.find(function (obj) {
+                  return obj.id_group == _this11.group_data.id_groups;
+                });
+                dataS = this.structure.find(function (obj) {
+                  return obj.id_structure == _this11.structure_unit.id_structure;
+                });
+                group = {
+                  id_structure: this.structure_unit.id_structure,
+                  id_groups: this.group_data.id_groups
+                };
+                detail = {
+                  id_structure: this.structure_unit.id_structure,
+                  id_groups: this.group_data.id_groups,
+                  structure: dataS.name,
+                  floor: data.name
+                };
+                this.Groups.push(group);
+                this.detailGroup.push(detail);
+                this.group_data.id_groups = '';
+                console.log('Detail Group');
+                console.log(this.Groups);
+                console.log('Detail Groups');
+                console.log(this.detailGroup);
+
+              case 11:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3, this);
+      }));
+
+      function addfloor() {
+        return _addfloor.apply(this, arguments);
+      }
+
+      return addfloor;
+    }(),
+    deletefloor: function deletefloor(index) {
+      var Task = this.TaskSub.filter(function (obj) {
+        return obj.id_structure == index.id_structure && obj.id_groups == index.id_groups;
+      });
+      var Details = this.details.filter(function (obj) {
+        return obj.id_structure == index.id_structure && obj.id_groups == index.id_groups;
+      });
+      var group = this.detailGroup.find(function (obj) {
+        return obj.id_groups == index.id_groups && obj.id_structure == index.id_structure;
+      });
+      var DetailTask = this.detailTask.filter(function (obj) {
+        return obj.id_structure == index.id_structure && obj.id_groups == index.id_groups;
+      });
+      var Detail = this.detailDetails.filter(function (obj) {
+        return obj.id_structure == index.id_structure && obj.id_groups == index.id_groups;
+      });
+      this.Groups.splice(this.Groups.indexOf(index), 1);
+      this.detailGroup.splice(this.detailGroup.indexOf(group), 1);
+      var _iteratorNormalCompletion19 = true;
+      var _didIteratorError19 = false;
+      var _iteratorError19 = undefined;
+
+      try {
+        for (var _iterator19 = Task[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
+          var _task4 = _step19.value;
+          this.TaskSub.splice(this.TaskSub.indexOf(_task4), 1);
+        }
+      } catch (err) {
+        _didIteratorError19 = true;
+        _iteratorError19 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion19 && _iterator19["return"] != null) {
+            _iterator19["return"]();
+          }
+        } finally {
+          if (_didIteratorError19) {
+            throw _iteratorError19;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion20 = true;
+      var _didIteratorError20 = false;
+      var _iteratorError20 = undefined;
+
+      try {
+        for (var _iterator20 = Details[Symbol.iterator](), _step20; !(_iteratorNormalCompletion20 = (_step20 = _iterator20.next()).done); _iteratorNormalCompletion20 = true) {
+          var _detail6 = _step20.value;
+          this.details.splice(this.details.indexOf(_detail6), 1);
+        }
+      } catch (err) {
+        _didIteratorError20 = true;
+        _iteratorError20 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion20 && _iterator20["return"] != null) {
+            _iterator20["return"]();
+          }
+        } finally {
+          if (_didIteratorError20) {
+            throw _iteratorError20;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion21 = true;
+      var _didIteratorError21 = false;
+      var _iteratorError21 = undefined;
+
+      try {
+        for (var _iterator21 = DetailTask[Symbol.iterator](), _step21; !(_iteratorNormalCompletion21 = (_step21 = _iterator21.next()).done); _iteratorNormalCompletion21 = true) {
+          var _task5 = _step21.value;
+          this.detailTask.splice(this.detailTask.indexOf(_task5), 1);
+        }
+      } catch (err) {
+        _didIteratorError21 = true;
+        _iteratorError21 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion21 && _iterator21["return"] != null) {
+            _iterator21["return"]();
+          }
+        } finally {
+          if (_didIteratorError21) {
+            throw _iteratorError21;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion22 = true;
+      var _didIteratorError22 = false;
+      var _iteratorError22 = undefined;
+
+      try {
+        for (var _iterator22 = Detail[Symbol.iterator](), _step22; !(_iteratorNormalCompletion22 = (_step22 = _iterator22.next()).done); _iteratorNormalCompletion22 = true) {
+          var _detail7 = _step22.value;
+          this.detailDetails.splice(this.detailDetails.indexOf(_detail7), 1);
+        }
+      } catch (err) {
+        _didIteratorError22 = true;
+        _iteratorError22 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion22 && _iterator22["return"] != null) {
+            _iterator22["return"]();
+          }
+        } finally {
+          if (_didIteratorError22) {
+            throw _iteratorError22;
+          }
+        }
+      }
+    },
+    addtasksub: function () {
+      var _addtasksub = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
+        var _this12 = this;
+
+        var data, dataS, dataG, task, detail;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                data = this.type.find(function (obj) {
+                  return obj.id_sub == _this12.tasksub_data.id_sub;
+                });
+                dataS = this.structure.find(function (obj) {
+                  return obj.id_structure == _this12.group_unit.id_structure;
+                });
+                dataG = this.sub.find(function (obj) {
+                  return obj.id_group == _this12.group_unit.id_groups;
+                });
+                console.log(dataG);
+                task = {
+                  id_structure: this.group_unit.id_structure,
+                  id_groups: this.group_unit.id_groups,
+                  id_sub: data.id_sub
+                };
+                detail = {
+                  id_structure: this.group_unit.id_structure,
+                  id_groups: this.group_unit.id_groups,
+                  id_sub: data.id_sub,
+                  structure: dataS.name,
+                  floor: dataG.name,
+                  task: data.name
+                };
+                this.TaskSub.push(task);
+                this.detailTask.push(detail);
+                this.tasksub_data.id_sub = '';
+                console.log('Detail Task');
+                console.log(this.TaskSub);
+                console.log('Detail Tasks');
+                console.log(this.detailTask);
+
+              case 13:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4, this);
+      }));
+
+      function addtasksub() {
+        return _addtasksub.apply(this, arguments);
+      }
+
+      return addtasksub;
+    }(),
+    deletetasksub: function deletetasksub(index) {
+      var tasks = this.detailTask.find(function (obj) {
+        return obj.id_groups == index.id_groups && obj.id_structure == index.id_structure && obj.id_sub == index.id_sub;
+      });
+      var Details = this.details.filter(function (obj) {
+        return obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub;
+      });
+      var Detail = this.detailDetails.filter(function (obj) {
+        return obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub;
+      });
+      this.TaskSub.splice(this.TaskSub.indexOf(index), 1);
+      this.detailTask.splice(this.detailTask.indexOf(tasks), 1);
+      var _iteratorNormalCompletion23 = true;
+      var _didIteratorError23 = false;
+      var _iteratorError23 = undefined;
+
+      try {
+        for (var _iterator23 = Details[Symbol.iterator](), _step23; !(_iteratorNormalCompletion23 = (_step23 = _iterator23.next()).done); _iteratorNormalCompletion23 = true) {
+          var _detail8 = _step23.value;
+          this.details.splice(this.details.indexOf(_detail8), 1);
+        }
+      } catch (err) {
+        _didIteratorError23 = true;
+        _iteratorError23 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion23 && _iterator23["return"] != null) {
+            _iterator23["return"]();
+          }
+        } finally {
+          if (_didIteratorError23) {
+            throw _iteratorError23;
+          }
+        }
+      }
+
+      var _iteratorNormalCompletion24 = true;
+      var _didIteratorError24 = false;
+      var _iteratorError24 = undefined;
+
+      try {
+        for (var _iterator24 = Detail[Symbol.iterator](), _step24; !(_iteratorNormalCompletion24 = (_step24 = _iterator24.next()).done); _iteratorNormalCompletion24 = true) {
+          var _detail9 = _step24.value;
+          this.detailDetails.splice(this.detailDetails.indexOf(_detail9), 1);
+        }
+      } catch (err) {
+        _didIteratorError24 = true;
+        _iteratorError24 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion24 && _iterator24["return"] != null) {
+            _iterator24["return"]();
+          }
+        } finally {
+          if (_didIteratorError24) {
+            throw _iteratorError24;
+          }
+        }
+      }
     },
     addList: function () {
       var _addList = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
-        var _this7 = this;
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var _this13 = this;
 
-        var object, dataS, data, datas, dataG, dataT;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+        var data, structure, floor, tasksub, ahs, detail, temp;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context5.prev = _context5.next) {
               case 0:
-                object = this.rab_details;
-                console.log(this.adjust);
-                console.log('object');
-                console.log(object);
-
-                if (this.ahs_adjust.id_ahs_adjust != '') {
-                  // let dataA = this.filterAHSAdjust.find(obj=>obj.id_ahs_adjust == this.ahs_adjust.id_ahs_adjust)
-                  dataS = this.filterAHSAdjust.find(function (obj) {
-                    return obj.id_ahs_adjust == _this7.ahs_adjust.id_ahs_adjust;
-                  });
-                  console.log(dataS);
-                  object.coefficient = dataS.adjustment;
-                  object.id_ahs_adjust = dataS.id_ahs_adjust;
-                  object.id_ahs = null;
-                  object.ahs_adjust = dataS.name;
-                  object.ahs = '';
-                  object.status = dataS.status;
-                  console.log('ID Job');
-
-                  if (object.status == 'Price') {
-                    object.volume = this.rab_details.volume;
-                    object.sub_total_adjust = object.coefficient * dataS.total;
-                    this.rab_details.hp = dataS.total * object.volume;
-                    object.hp = this.rab_details.hp;
-                  } else {
-                    object.volume = object.coefficient * this.rab_details.volume;
-                    object.sub_total_adjust = dataS.total;
-                    this.rab_details.hp = dataS.total * object.volume;
-                    object.hp = this.rab_details.hp;
-                  }
-
-                  console.log('masuk ahs adjust'); // cek = true
-
-                  object.sub_total = 0;
-                }
-
-                if (this.ahs_adjust.id_ahs_adjust == '') {
-                  data = this.filterAHSAll.find(function (obj) {
-                    return obj.id_ahs == _this7.AHS.id_ahs;
-                  });
-                  console.log(data);
-                  object.id_ahs = data.id_ahs;
-                  object.id_ahs_adjust = null;
-                  object.ahs = data.name;
-                  object.ahs_adjust = '';
-                  object.status = data.status;
-
-                  if (object.status == 'Price') {
-                    object.volume = this.rab_details.volume;
-                    object.sub_total = object.coefficient * data.total;
-                    this.rab_details.hp = object.sub_total * object.volume;
-                    object.hp = this.rab_details.hp;
-                  } else {
-                    object.volume = object.coefficient * this.rab_details.volume;
-                    object.sub_total = data.total;
-                    this.rab_details.hp = object.volume * object.sub_total;
-                    object.hp = this.rab_details.hp;
-                  }
-
-                  console.log('masuk ahs');
-                  object.sub_total_adjust = 0;
-                  object.coefficient = this.rab_details.coefficient;
-                }
-
-                object.id_structure = this.tasksub_unit.id_structure;
-                object.id_groups = this.tasksub_unit.id_groups;
-                object.id_sub = this.tasksub_unit.id_sub;
-                datas = this.structure.find(function (obj) {
-                  return obj.id_structure == _this7.tasksub_unit.id_structure;
+                data = this.filterAHSAll.find(function (obj) {
+                  return obj.id_ahs == _this13.AHS.id_ahs;
                 });
-                console.log(datas);
-                object.structure = datas.name;
-                dataG = this.sub.find(function (obj) {
-                  return obj.id_group == _this7.tasksub_unit.id_groups;
+                structure = this.structure.find(function (obj) {
+                  return obj.id_structure == _this13.tasksub_unit.id_structure;
                 });
-                console.log(dataG);
-                object.groups = dataG.name;
-                dataT = this.type.find(function (obj) {
-                  return obj.id_sub == _this7.tasksub_unit.id_sub;
+                floor = this.sub.find(function (obj) {
+                  return obj.id_group == _this13.tasksub_unit.id_groups;
                 });
-                console.log(dataT);
-                object.name = dataT.name;
-                this.rab.total_rab = parseInt(this.rab_details.hp + this.rab.total_rab, 10);
-                this.details.push(JSON.parse(JSON.stringify(object)));
+                tasksub = this.type.find(function (obj) {
+                  return obj.id_sub == _this13.tasksub_unit.id_sub;
+                });
+                ahs = {
+                  id_structure: this.tasksub_unit.id_structure,
+                  id_groups: this.tasksub_unit.id_groups,
+                  id_sub: this.tasksub_unit.id_sub,
+                  id_ahs: data.id_ahs,
+                  id_sub_details: data.id_sub,
+                  id_job: data.id_job,
+                  total_labor: data.total_labor,
+                  total_material: data.total_material,
+                  HSP: data.total,
+                  volume: this.ahs_lokal.volume,
+                  adjustment: this.ahs_lokal.adjustment,
+                  HP: data.total * this.ahs_lokal.volume * this.ahs_lokal.adjustment
+                };
+                detail = {
+                  id_structure: this.tasksub_unit.id_structure,
+                  id_groups: this.tasksub_unit.id_groups,
+                  id_sub: this.tasksub_unit.id_sub,
+                  structure: structure.name,
+                  floor: floor.name,
+                  task: tasksub.name,
+                  id_job: data.id_job,
+                  id_ahs: data.id_ahs,
+                  ahs: data.name
+                };
+                this.details.push(ahs);
+                this.detailDetails.push(detail);
+                temp = data.total * this.ahs_lokal.volume * this.ahs_lokal.adjustment;
+                this.rab.total_rab = parseInt(temp + this.rab.total_rab, 10);
                 this.tambah = false;
-                this.tambahAdjust = false;
                 console.log('Detail AHS');
                 console.log(this.details);
-                this.ahs_adjust = Object.assign({}, this.AHSAdjustDefault);
-                console.log('cek ahs adjust');
-                console.log(this.ahs_adjust);
+                console.log('Detail AHSs');
+                console.log(this.detailDetails);
+                this.addDetails();
                 this.AHS = Object.assign({}, this.AHSDefault);
-                console.log('cek ahs');
-                console.log(this.AHS);
+                this.ahs_lokal = Object.assign({}, this.AHSLokalDefault);
 
-              case 30:
+              case 18:
               case "end":
-                return _context6.stop();
+                return _context5.stop();
             }
           }
-        }, _callee6, this);
+        }, _callee5, this);
       }));
 
       function addList() {
@@ -14087,10 +13718,74 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return addList;
     }(),
+    addDetails: function addDetails() {
+      var _this14 = this;
+
+      var ahs = this.ahs.find(function (obj) {
+        return obj.id_ahs == _this14.AHS.id_ahs;
+      });
+      var _iteratorNormalCompletion25 = true;
+      var _didIteratorError25 = false;
+      var _iteratorError25 = undefined;
+
+      try {
+        for (var _iterator25 = ahs.ahs_details.data[Symbol.iterator](), _step25; !(_iteratorNormalCompletion25 = (_step25 = _iterator25.next()).done); _iteratorNormalCompletion25 = true) {
+          var materials = _step25.value;
+          var each_materials = {
+            id_structure: this.tasksub_unit.id_structure,
+            id_groups: this.tasksub_unit.id_groups,
+            id_sub: this.tasksub_unit.id_sub,
+            id_ahs: ahs.id_ahs,
+            id_job: ahs.id_job,
+            id_material: materials.id_material,
+            kode: materials.kode,
+            status: materials.status,
+            name: materials.name,
+            price: materials.price,
+            coefficient: materials.coefficient,
+            sub_total: materials.sub_total,
+            adjustment: this.ahs_lokal.adjustment
+          };
+          this.Material.push(each_materials);
+        }
+      } catch (err) {
+        _didIteratorError25 = true;
+        _iteratorError25 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion25 && _iterator25["return"] != null) {
+            _iterator25["return"]();
+          }
+        } finally {
+          if (_didIteratorError25) {
+            throw _iteratorError25;
+          }
+        }
+      }
+    },
     deleteList: function deleteList(index) {
-      this.rab.total_rab = parseInt(this.rab.total_rab - index.hp, 10);
+      var detail = this.detailDetails.find(function (obj) {
+        return obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub;
+      });
+      this.rab.total_rab = parseInt(this.rab.total_rab - index.HP, 10);
       this.details.splice(this.details.indexOf(index), 1);
-      this.details = _toConsumableArray(this.details);
+      this.detailDetails.splice(this.detailDetails.indexOf(detail), 1);
+      console.log('Detail Structure');
+      console.log(this.Structure);
+      console.log('Detail Group');
+      console.log(this.Groups);
+      console.log('Detail Task');
+      console.log(this.TaskSub);
+      console.log('Detail AHS');
+      console.log(this.details);
+      console.log('Detail Structures');
+      console.log(this.detailStructure);
+      console.log('Detail Groups');
+      console.log(this.detailGroup);
+      console.log('Detail Task');
+      console.log(this.detailTask);
+      console.log('Detail AHSs');
+      console.log(this.detailDetails);
     },
     getSelectedIndex: function getSelectedIndex() {
       this.index = this.ahs.map(function (e) {
@@ -14098,108 +13793,128 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }).indexOf(this.AHS.id_ahs);
       console.log(this.index);
     },
-    getSelectedIndexAdjust: function getSelectedIndexAdjust() {
-      this.index = this.filterAHSAdjust.map(function (e) {
-        return e.id_ahs_adjust;
-      }).indexOf(this.ahs_adjust.id_ahs_adjust);
-      console.log(this.index);
-    },
-    addTaskSub: function () {
-      var _addTaskSub = _asyncToGenerator(
+    getStructure: function () {
+      var _getStructure = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                _context6.prev = 0;
+                _context6.next = 3;
+                return _service_Structure__WEBPACK_IMPORTED_MODULE_4__["default"].get();
+
+              case 3:
+                this.structure = _context6.sent.data;
+                _context6.next = 9;
+                break;
+
+              case 6:
+                _context6.prev = 6;
+                _context6.t0 = _context6["catch"](0);
+                console.log(_context6.t0);
+
+              case 9:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this, [[0, 6]]);
+      }));
+
+      function getStructure() {
+        return _getStructure.apply(this, arguments);
+      }
+
+      return getStructure;
+    }(),
+    getGroup: function () {
+      var _getGroup = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
-        var payload;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
           while (1) {
             switch (_context7.prev = _context7.next) {
               case 0:
                 _context7.prev = 0;
-                payload = {
-                  name: 'Pekerjaan' + ' ' + this.sub_item
-                };
-                _context7.next = 4;
-                return _service_TaskSub__WEBPACK_IMPORTED_MODULE_6__["default"].add(payload);
+                _context7.next = 3;
+                return _service_Group__WEBPACK_IMPORTED_MODULE_5__["default"].get();
 
-              case 4:
-                this.getTaskSub();
-                this.sub_item = '';
-                _context7.next = 11;
+              case 3:
+                this.sub = _context7.sent.data;
+                _context7.next = 9;
                 break;
 
-              case 8:
-                _context7.prev = 8;
+              case 6:
+                _context7.prev = 6;
                 _context7.t0 = _context7["catch"](0);
                 console.log(_context7.t0);
 
-              case 11:
+              case 9:
               case "end":
                 return _context7.stop();
             }
           }
-        }, _callee7, this, [[0, 8]]);
+        }, _callee7, this, [[0, 6]]);
       }));
 
-      function addTaskSub() {
-        return _addTaskSub.apply(this, arguments);
+      function getGroup() {
+        return _getGroup.apply(this, arguments);
       }
 
-      return addTaskSub;
+      return getGroup;
     }(),
-    updateTaskSub: function () {
-      var _updateTaskSub = _asyncToGenerator(
+    getTaskSub: function () {
+      var _getTaskSub = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8(id) {
-        var payload;
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
           while (1) {
             switch (_context8.prev = _context8.next) {
               case 0:
                 _context8.prev = 0;
-                payload = {
-                  name: this.tasksub_data.name
-                };
-                _context8.next = 4;
-                return _service_TaskSub__WEBPACK_IMPORTED_MODULE_6__["default"].update(payload, id);
+                _context8.next = 3;
+                return _service_TaskSub__WEBPACK_IMPORTED_MODULE_6__["default"].get();
 
-              case 4:
-                this.getTaskSub();
-                this.close();
-                _context8.next = 11;
+              case 3:
+                this.type = _context8.sent.data;
+                _context8.next = 9;
                 break;
 
-              case 8:
-                _context8.prev = 8;
+              case 6:
+                _context8.prev = 6;
                 _context8.t0 = _context8["catch"](0);
                 console.log(_context8.t0);
 
-              case 11:
+              case 9:
               case "end":
                 return _context8.stop();
             }
           }
-        }, _callee8, this, [[0, 8]]);
+        }, _callee8, this, [[0, 6]]);
       }));
 
-      function updateTaskSub(_x2) {
-        return _updateTaskSub.apply(this, arguments);
+      function getTaskSub() {
+        return _getTaskSub.apply(this, arguments);
       }
 
-      return updateTaskSub;
+      return getTaskSub;
     }(),
-    deleteTaskSub: function () {
-      var _deleteTaskSub = _asyncToGenerator(
+    getallDetails: function () {
+      var _getallDetails = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9(id) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee9() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee9$(_context9) {
           while (1) {
             switch (_context9.prev = _context9.next) {
               case 0:
                 _context9.prev = 0;
                 _context9.next = 3;
-                return _service_TaskSub__WEBPACK_IMPORTED_MODULE_6__["default"]["delete"](id).data;
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getallDetails();
 
               case 3:
-                this.getTaskSub();
+                this.detailsData = _context9.sent.data;
                 _context9.next = 9;
                 break;
 
@@ -14216,14 +13931,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee9, this, [[0, 6]]);
       }));
 
-      function deleteTaskSub(_x3) {
-        return _deleteTaskSub.apply(this, arguments);
+      function getallDetails() {
+        return _getallDetails.apply(this, arguments);
       }
 
-      return deleteTaskSub;
+      return getallDetails;
     }(),
-    getTaskSub: function () {
-      var _getTaskSub = _asyncToGenerator(
+    getallAHS: function () {
+      var _getallAHS = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee10() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee10$(_context10) {
@@ -14232,10 +13947,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context10.prev = 0;
                 _context10.next = 3;
-                return _service_TaskSub__WEBPACK_IMPORTED_MODULE_6__["default"].get();
+                return _service_AHS__WEBPACK_IMPORTED_MODULE_2__["default"].getallItem();
 
               case 3:
-                this.type = _context10.sent.data;
+                this.ahs = _context10.sent.data;
                 _context10.next = 9;
                 break;
 
@@ -14252,14 +13967,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee10, this, [[0, 6]]);
       }));
 
-      function getTaskSub() {
-        return _getTaskSub.apply(this, arguments);
+      function getallAHS() {
+        return _getallAHS.apply(this, arguments);
       }
 
-      return getTaskSub;
+      return getallAHS;
     }(),
-    getallDetails: function () {
-      var _getallDetails = _asyncToGenerator(
+    getallItem: function () {
+      var _getallItem = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee11() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee11$(_context11) {
@@ -14268,10 +13983,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context11.prev = 0;
                 _context11.next = 3;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getallDetails();
+                return _service_Project__WEBPACK_IMPORTED_MODULE_1__["default"].getallItem();
 
               case 3:
-                this.detailsData = _context11.sent.data;
+                this.project = _context11.sent.data;
                 _context11.next = 9;
                 break;
 
@@ -14288,14 +14003,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee11, this, [[0, 6]]);
       }));
 
-      function getallDetails() {
-        return _getallDetails.apply(this, arguments);
+      function getallItem() {
+        return _getallItem.apply(this, arguments);
       }
 
-      return getallDetails;
+      return getallItem;
     }(),
-    getallAHS: function () {
-      var _getallAHS = _asyncToGenerator(
+    getallRAB: function () {
+      var _getallRAB = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee12() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee12$(_context12) {
@@ -14304,10 +14019,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context12.prev = 0;
                 _context12.next = 3;
-                return _service_AHS__WEBPACK_IMPORTED_MODULE_2__["default"].getallItem();
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getallItem();
 
               case 3:
-                this.ahs = _context12.sent.data;
+                this.RAB = _context12.sent.data;
                 _context12.next = 9;
                 break;
 
@@ -14324,144 +14039,165 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee12, this, [[0, 6]]);
       }));
 
-      function getallAHS() {
-        return _getallAHS.apply(this, arguments);
-      }
-
-      return getallAHS;
-    }(),
-    getallItem: function () {
-      var _getallItem = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee13$(_context13) {
-          while (1) {
-            switch (_context13.prev = _context13.next) {
-              case 0:
-                _context13.prev = 0;
-                _context13.next = 3;
-                return _service_Project__WEBPACK_IMPORTED_MODULE_1__["default"].getallItem();
-
-              case 3:
-                this.project = _context13.sent.data;
-                _context13.next = 9;
-                break;
-
-              case 6:
-                _context13.prev = 6;
-                _context13.t0 = _context13["catch"](0);
-                console.log(_context13.t0);
-
-              case 9:
-              case "end":
-                return _context13.stop();
-            }
-          }
-        }, _callee13, this, [[0, 6]]);
-      }));
-
-      function getallItem() {
-        return _getallItem.apply(this, arguments);
-      }
-
-      return getallItem;
-    }(),
-    getallRAB: function () {
-      var _getallRAB = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
-          while (1) {
-            switch (_context14.prev = _context14.next) {
-              case 0:
-                _context14.prev = 0;
-                _context14.next = 3;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].getallItem();
-
-              case 3:
-                this.RAB = _context14.sent.data;
-                _context14.next = 9;
-                break;
-
-              case 6:
-                _context14.prev = 6;
-                _context14.t0 = _context14["catch"](0);
-                console.log(_context14.t0);
-
-              case 9:
-              case "end":
-                return _context14.stop();
-            }
-          }
-        }, _callee14, this, [[0, 6]]);
-      }));
-
       function getallRAB() {
         return _getallRAB.apply(this, arguments);
       }
 
       return getallRAB;
     }(),
-    addGroup: function () {
-      var _addGroup = _asyncToGenerator(
+    addAllItem: function () {
+      var _addAllItem = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee13() {
         var payload;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee13$(_context13) {
+          while (1) {
+            switch (_context13.prev = _context13.next) {
+              case 0:
+                _context13.prev = 0;
+                payload = {
+                  id_project: this.rab.id_project,
+                  kode: this.rab.kode,
+                  desc: this.rab.desc,
+                  total_rab: this.rab.total_rab,
+                  detail_structure: this.Structure,
+                  detail_group: this.Groups,
+                  detail_task: this.TaskSub,
+                  detail: this.details,
+                  detail_material: this.Material
+                };
+                _context13.next = 4;
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].addAllItem(payload);
+
+              case 4:
+                this.close();
+                this.getallRAB();
+                _context13.next = 11;
+                break;
+
+              case 8:
+                _context13.prev = 8;
+                _context13.t0 = _context13["catch"](0);
+                console.log(_context13.t0);
+
+              case 11:
+              case "end":
+                return _context13.stop();
+            }
+          }
+        }, _callee13, this, [[0, 8]]);
+      }));
+
+      function addAllItem() {
+        return _addAllItem.apply(this, arguments);
+      }
+
+      return addAllItem;
+    }(),
+    updateItem: function () {
+      var _updateItem = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee14(id) {
+        var payload;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee14$(_context14) {
+          while (1) {
+            switch (_context14.prev = _context14.next) {
+              case 0:
+                _context14.prev = 0;
+                payload = {
+                  id_project: this.rab.id_project,
+                  kode: this.rab.kode,
+                  desc: this.rab.desc,
+                  total_rab: this.rab.total_rab,
+                  detail_structure: this.Structure,
+                  detail_group: this.Groups,
+                  detail_task: this.TaskSub,
+                  detail: this.details,
+                  detail_material: this.Material
+                };
+                _context14.next = 4;
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].updateItem(payload, id);
+
+              case 4:
+                this.close();
+                this.getallRAB();
+                _context14.next = 11;
+                break;
+
+              case 8:
+                _context14.prev = 8;
+                _context14.t0 = _context14["catch"](0);
+                console.log(_context14.t0);
+
+              case 11:
+              case "end":
+                return _context14.stop();
+            }
+          }
+        }, _callee14, this, [[0, 8]]);
+      }));
+
+      function updateItem(_x2) {
+        return _updateItem.apply(this, arguments);
+      }
+
+      return updateItem;
+    }(),
+    deleteItem: function () {
+      var _deleteItem = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee15(id) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee15$(_context15) {
           while (1) {
             switch (_context15.prev = _context15.next) {
               case 0:
                 _context15.prev = 0;
-                payload = {
-                  name: 'Lantai' + ' ' + this.sub_item
-                };
-                _context15.next = 4;
-                return _service_Group__WEBPACK_IMPORTED_MODULE_5__["default"].add(payload);
+                _context15.next = 3;
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].deleteItem(id).data;
 
-              case 4:
-                this.getGroup();
-                this.sub_item = '';
-                _context15.next = 11;
+              case 3:
+                this.getallRAB();
+                _context15.next = 9;
                 break;
 
-              case 8:
-                _context15.prev = 8;
+              case 6:
+                _context15.prev = 6;
                 _context15.t0 = _context15["catch"](0);
                 console.log(_context15.t0);
 
-              case 11:
+              case 9:
               case "end":
                 return _context15.stop();
             }
           }
-        }, _callee15, this, [[0, 8]]);
+        }, _callee15, this, [[0, 6]]);
       }));
 
-      function addGroup() {
-        return _addGroup.apply(this, arguments);
+      function deleteItem(_x3) {
+        return _deleteItem.apply(this, arguments);
       }
 
-      return addGroup;
+      return deleteItem;
     }(),
-    updateGroup: function () {
-      var _updateGroup = _asyncToGenerator(
+    deleteDetail: function () {
+      var _deleteDetail = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee16(id) {
-        var payload;
+        var rabdetails;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee16$(_context16) {
           while (1) {
             switch (_context16.prev = _context16.next) {
               case 0:
                 _context16.prev = 0;
-                payload = {
-                  name: this.group_data.name
-                };
+                rabdetails = this.details.find(function (obj) {
+                  return obj.id_ahs_lokal == id;
+                });
                 _context16.next = 4;
-                return _service_Group__WEBPACK_IMPORTED_MODULE_5__["default"].update(payload, id);
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].deleteDetail(id).data;
 
               case 4:
-                this.getGroup();
-                this.close();
+                this.getdetails(rabdetails.id_sub_details);
+                this.getallRAB();
                 _context16.next = 11;
                 break;
 
@@ -14478,200 +14214,194 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee16, this, [[0, 8]]);
       }));
 
-      function updateGroup(_x4) {
-        return _updateGroup.apply(this, arguments);
+      function deleteDetail(_x4) {
+        return _deleteDetail.apply(this, arguments);
       }
 
-      return updateGroup;
+      return deleteDetail;
     }(),
-    deleteGroup: function () {
-      var _deleteGroup = _asyncToGenerator(
+    updateDetail: function () {
+      var _updateDetail = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee17(id) {
+        var payload;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee17$(_context17) {
           while (1) {
             switch (_context17.prev = _context17.next) {
               case 0:
                 _context17.prev = 0;
-                _context17.next = 3;
-                return _service_Group__WEBPACK_IMPORTED_MODULE_5__["default"]["delete"](id).data;
+                payload = {
+                  coefficient: this.detail.coefficient,
+                  volume: this.detail.volume
+                };
+                _context17.next = 4;
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].updateDetail(payload, id);
 
-              case 3:
-                this.getGroup();
-                _context17.next = 9;
+              case 4:
+                this.getallDetails();
+                this.getallRAB();
+                this.close();
+                _context17.next = 12;
                 break;
 
-              case 6:
-                _context17.prev = 6;
+              case 9:
+                _context17.prev = 9;
                 _context17.t0 = _context17["catch"](0);
                 console.log(_context17.t0);
 
-              case 9:
+              case 12:
               case "end":
                 return _context17.stop();
             }
           }
-        }, _callee17, this, [[0, 6]]);
+        }, _callee17, this, [[0, 9]]);
       }));
 
-      function deleteGroup(_x5) {
-        return _deleteGroup.apply(this, arguments);
+      function updateDetail(_x5) {
+        return _updateDetail.apply(this, arguments);
       }
 
-      return deleteGroup;
+      return updateDetail;
     }(),
-    getGroup: function () {
-      var _getGroup = _asyncToGenerator(
+    deleteStructureDetails: function () {
+      var _deleteStructureDetails = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee18() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee18(id) {
+        var _structure;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee18$(_context18) {
           while (1) {
             switch (_context18.prev = _context18.next) {
               case 0:
                 _context18.prev = 0;
-                _context18.next = 3;
-                return _service_Group__WEBPACK_IMPORTED_MODULE_5__["default"].get();
+                _structure = this.Structure.find(function (obj) {
+                  return obj.id_structure_details == id;
+                });
+                _context18.next = 4;
+                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].deleteS(id).data;
 
-              case 3:
-                this.sub = _context18.sent.data;
-                _context18.next = 9;
+              case 4:
+                this.getstructure(_structure.id_rab);
+                this.getallRAB();
+                _context18.next = 11;
                 break;
 
-              case 6:
-                _context18.prev = 6;
+              case 8:
+                _context18.prev = 8;
                 _context18.t0 = _context18["catch"](0);
                 console.log(_context18.t0);
 
-              case 9:
+              case 11:
               case "end":
                 return _context18.stop();
             }
           }
-        }, _callee18, this, [[0, 6]]);
+        }, _callee18, this, [[0, 8]]);
       }));
 
-      function getGroup() {
-        return _getGroup.apply(this, arguments);
+      function deleteStructureDetails(_x6) {
+        return _deleteStructureDetails.apply(this, arguments);
       }
 
-      return getGroup;
+      return deleteStructureDetails;
     }(),
-    addAllItem: function () {
-      var _addAllItem = _asyncToGenerator(
+    deleteGroupDetails: function () {
+      var _deleteGroupDetails = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19() {
-        var payload;
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee19(id) {
+        var group;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee19$(_context19) {
           while (1) {
             switch (_context19.prev = _context19.next) {
               case 0:
                 _context19.prev = 0;
-                payload = {
-                  id_project: this.rab.id_project,
-                  kode: this.rab.kode,
-                  desc: this.rab.desc,
-                  total_rab: this.rab.total_rab,
-                  detail_structure: this.Structure,
-                  detail_group: this.Groups,
-                  detail_task: this.TaskSub,
-                  detail: this.details
-                };
+                group = this.Groups.find(function (obj) {
+                  return obj.id_group_details == id;
+                });
                 _context19.next = 4;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].addAllItem(payload);
+                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].deleteG(id).data;
 
               case 4:
-                this.close();
+                this.getfloor(group.id_structure_details);
                 this.getallRAB();
-                this.refresh();
-                _context19.next = 12;
+                _context19.next = 11;
                 break;
 
-              case 9:
-                _context19.prev = 9;
+              case 8:
+                _context19.prev = 8;
                 _context19.t0 = _context19["catch"](0);
                 console.log(_context19.t0);
 
-              case 12:
+              case 11:
               case "end":
                 return _context19.stop();
             }
           }
-        }, _callee19, this, [[0, 9]]);
+        }, _callee19, this, [[0, 8]]);
       }));
 
-      function addAllItem() {
-        return _addAllItem.apply(this, arguments);
+      function deleteGroupDetails(_x7) {
+        return _deleteGroupDetails.apply(this, arguments);
       }
 
-      return addAllItem;
+      return deleteGroupDetails;
     }(),
-    updateItem: function () {
-      var _updateItem = _asyncToGenerator(
+    deleteTaskDetails: function () {
+      var _deleteTaskDetails = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee20(id) {
-        var payload;
+        var _task6;
+
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee20$(_context20) {
           while (1) {
             switch (_context20.prev = _context20.next) {
               case 0:
                 _context20.prev = 0;
-                payload = {
-                  id_project: this.rab.id_project,
-                  id_ahs: this.rab.id_ahs,
-                  kode: this.rab.kode,
-                  sub: this.rab.sub,
-                  desc: this.rab.desc,
-                  total_rab: this.rab.total_rab,
-                  detail: this.details
-                };
+                _task6 = this.TaskSub.find(function (obj) {
+                  return obj.id_sub_details == id;
+                });
                 _context20.next = 4;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].updateItem(payload, id);
+                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].deleteT(id).data;
 
               case 4:
+                this.gettasksub(_task6.id_group_details);
                 this.getallRAB();
-                this.close();
-                this.refresh();
-                _context20.next = 12;
+                _context20.next = 11;
                 break;
 
-              case 9:
-                _context20.prev = 9;
+              case 8:
+                _context20.prev = 8;
                 _context20.t0 = _context20["catch"](0);
                 console.log(_context20.t0);
 
-              case 12:
+              case 11:
               case "end":
                 return _context20.stop();
             }
           }
-        }, _callee20, this, [[0, 9]]);
+        }, _callee20, this, [[0, 8]]);
       }));
 
-      function updateItem(_x6) {
-        return _updateItem.apply(this, arguments);
+      function deleteTaskDetails(_x8) {
+        return _deleteTaskDetails.apply(this, arguments);
       }
 
-      return updateItem;
+      return deleteTaskDetails;
     }(),
-    deleteItem: function () {
-      var _deleteItem = _asyncToGenerator(
+    getJob: function () {
+      var _getJob = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee21(id) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee21() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee21$(_context21) {
           while (1) {
             switch (_context21.prev = _context21.next) {
               case 0:
                 _context21.prev = 0;
                 _context21.next = 3;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].deleteItem(id).data;
+                return _service_Job__WEBPACK_IMPORTED_MODULE_9__["default"].getallItem();
 
               case 3:
-                this.getallRAB(); // this.rab = Object.assign({},this.RABDefault)
-                // this.structure_data = Object.assign({},this.structureDefault)
-                // this.group_data = Object.assign({},this.groupDefault)
-                // this.tasksub_data = Object.assign({},this.tasksubDefault)
-                // this.rab_details = Object.assign({},this.rabDetailsDefault)
-
+                this.job = _context21.sent.data;
                 _context21.next = 9;
                 break;
 
@@ -14688,14 +14418,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee21, this, [[0, 6]]);
       }));
 
-      function deleteItem(_x7) {
-        return _deleteItem.apply(this, arguments);
+      function getJob() {
+        return _getJob.apply(this, arguments);
       }
 
-      return deleteItem;
+      return getJob;
     }(),
-    deleteDetail: function () {
-      var _deleteDetail = _asyncToGenerator(
+    getstructure: function () {
+      var _getstructure = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee22(id) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee22$(_context22) {
@@ -14704,172 +14434,154 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 0:
                 _context22.prev = 0;
                 _context22.next = 3;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].deleteDetail(id).data;
+                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].show(id);
 
               case 3:
-                this.getallDetails();
-                this.getallRAB();
-                _context22.next = 10;
+                this.Structure = _context22.sent.data;
+                _context22.next = 9;
                 break;
 
-              case 7:
-                _context22.prev = 7;
+              case 6:
+                _context22.prev = 6;
                 _context22.t0 = _context22["catch"](0);
                 console.log(_context22.t0);
 
-              case 10:
+              case 9:
               case "end":
                 return _context22.stop();
             }
           }
-        }, _callee22, this, [[0, 7]]);
+        }, _callee22, this, [[0, 6]]);
       }));
 
-      function deleteDetail(_x8) {
-        return _deleteDetail.apply(this, arguments);
+      function getstructure(_x9) {
+        return _getstructure.apply(this, arguments);
       }
 
-      return deleteDetail;
+      return getstructure;
     }(),
-    updateDetail: function () {
-      var _updateDetail = _asyncToGenerator(
+    getfloor: function () {
+      var _getfloor = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee23(id) {
-        var payload;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee23$(_context23) {
           while (1) {
             switch (_context23.prev = _context23.next) {
               case 0:
                 _context23.prev = 0;
-                payload = {
-                  coefficient: this.detail.coefficient,
-                  volume: this.detail.volume
-                };
-                _context23.next = 4;
-                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].updateDetail(payload, id);
+                _context23.next = 3;
+                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].showG(id);
 
-              case 4:
-                this.getallDetails();
-                this.getallRAB();
-                this.close();
-                _context23.next = 12;
+              case 3:
+                this.Groups = _context23.sent.data;
+                _context23.next = 9;
                 break;
 
-              case 9:
-                _context23.prev = 9;
+              case 6:
+                _context23.prev = 6;
                 _context23.t0 = _context23["catch"](0);
                 console.log(_context23.t0);
 
-              case 12:
+              case 9:
               case "end":
                 return _context23.stop();
             }
           }
-        }, _callee23, this, [[0, 9]]);
+        }, _callee23, this, [[0, 6]]);
       }));
 
-      function updateDetail(_x9) {
-        return _updateDetail.apply(this, arguments);
+      function getfloor(_x10) {
+        return _getfloor.apply(this, arguments);
       }
 
-      return updateDetail;
+      return getfloor;
     }(),
-    addStructure: function () {
-      var _addStructure = _asyncToGenerator(
+    gettasksub: function () {
+      var _gettasksub = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee24() {
-        var payload;
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee24(id) {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee24$(_context24) {
           while (1) {
             switch (_context24.prev = _context24.next) {
               case 0:
                 _context24.prev = 0;
-                payload = {
-                  name: 'Gedung' + ' ' + this.gedung
-                };
-                _context24.next = 4;
-                return _service_Structure__WEBPACK_IMPORTED_MODULE_4__["default"].add(payload);
+                _context24.next = 3;
+                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].showT(id);
 
-              case 4:
-                this.getStructure();
-                this.gedung = '';
-                _context24.next = 11;
+              case 3:
+                this.TaskSub = _context24.sent.data;
+                _context24.next = 9;
                 break;
 
-              case 8:
-                _context24.prev = 8;
+              case 6:
+                _context24.prev = 6;
                 _context24.t0 = _context24["catch"](0);
                 console.log(_context24.t0);
 
-              case 11:
+              case 9:
               case "end":
                 return _context24.stop();
             }
           }
-        }, _callee24, this, [[0, 8]]);
+        }, _callee24, this, [[0, 6]]);
       }));
 
-      function addStructure() {
-        return _addStructure.apply(this, arguments);
+      function gettasksub(_x11) {
+        return _gettasksub.apply(this, arguments);
       }
 
-      return addStructure;
+      return gettasksub;
     }(),
-    updateStructure: function () {
-      var _updateStructure = _asyncToGenerator(
+    getdetails: function () {
+      var _getdetails = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee25(id) {
-        var payload;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee25$(_context25) {
           while (1) {
             switch (_context25.prev = _context25.next) {
               case 0:
                 _context25.prev = 0;
-                payload = {
-                  name: this.structure_data.name
-                };
-                _context25.next = 4;
-                return _service_Structure__WEBPACK_IMPORTED_MODULE_4__["default"].update(payload, id);
+                _context25.next = 3;
+                return _service_RAB__WEBPACK_IMPORTED_MODULE_3__["default"].showD(id);
 
-              case 4:
-                this.getStructure();
-                this.close();
-                _context25.next = 11;
+              case 3:
+                this.details = _context25.sent.data;
+                _context25.next = 9;
                 break;
 
-              case 8:
-                _context25.prev = 8;
+              case 6:
+                _context25.prev = 6;
                 _context25.t0 = _context25["catch"](0);
                 console.log(_context25.t0);
 
-              case 11:
+              case 9:
               case "end":
                 return _context25.stop();
             }
           }
-        }, _callee25, this, [[0, 8]]);
+        }, _callee25, this, [[0, 6]]);
       }));
 
-      function updateStructure(_x10) {
-        return _updateStructure.apply(this, arguments);
+      function getdetails(_x12) {
+        return _getdetails.apply(this, arguments);
       }
 
-      return updateStructure;
+      return getdetails;
     }(),
-    deleteStructure: function () {
-      var _deleteStructure = _asyncToGenerator(
+    getMaterial: function () {
+      var _getMaterial = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee26(id) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee26() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee26$(_context26) {
           while (1) {
             switch (_context26.prev = _context26.next) {
               case 0:
                 _context26.prev = 0;
                 _context26.next = 3;
-                return _service_Structure__WEBPACK_IMPORTED_MODULE_4__["default"]["delete"](id).data;
+                return _service_Material__WEBPACK_IMPORTED_MODULE_10__["default"].getallItem();
 
               case 3:
-                this.getStructure();
+                this.material = _context26.sent.data;
                 _context26.next = 9;
                 break;
 
@@ -14886,200 +14598,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee26, this, [[0, 6]]);
       }));
 
-      function deleteStructure(_x11) {
-        return _deleteStructure.apply(this, arguments);
+      function getMaterial() {
+        return _getMaterial.apply(this, arguments);
       }
 
-      return deleteStructure;
+      return getMaterial;
     }(),
-    getStructure: function () {
-      var _getStructure = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee27() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee27$(_context27) {
-          while (1) {
-            switch (_context27.prev = _context27.next) {
-              case 0:
-                _context27.prev = 0;
-                _context27.next = 3;
-                return _service_Structure__WEBPACK_IMPORTED_MODULE_4__["default"].get();
-
-              case 3:
-                this.structure = _context27.sent.data;
-                _context27.next = 9;
-                break;
-
-              case 6:
-                _context27.prev = 6;
-                _context27.t0 = _context27["catch"](0);
-                console.log(_context27.t0);
-
-              case 9:
-              case "end":
-                return _context27.stop();
-            }
-          }
-        }, _callee27, this, [[0, 6]]);
-      }));
-
-      function getStructure() {
-        return _getStructure.apply(this, arguments);
-      }
-
-      return getStructure;
-    }(),
-    deleteStructureDetails: function () {
-      var _deleteStructureDetails = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee28(id) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee28$(_context28) {
-          while (1) {
-            switch (_context28.prev = _context28.next) {
-              case 0:
-                console.log('Cek id');
-                console.log(id);
-                _context28.prev = 2;
-                _context28.next = 5;
-                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].deleteS(id).data;
-
-              case 5:
-                this.getallRAB();
-                _context28.next = 11;
-                break;
-
-              case 8:
-                _context28.prev = 8;
-                _context28.t0 = _context28["catch"](2);
-                console.log(_context28.t0);
-
-              case 11:
-              case "end":
-                return _context28.stop();
-            }
-          }
-        }, _callee28, this, [[2, 8]]);
-      }));
-
-      function deleteStructureDetails(_x12) {
-        return _deleteStructureDetails.apply(this, arguments);
-      }
-
-      return deleteStructureDetails;
-    }(),
-    deleteGroupDetails: function () {
-      var _deleteGroupDetails = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee29(id) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee29$(_context29) {
-          while (1) {
-            switch (_context29.prev = _context29.next) {
-              case 0:
-                console.log('Cek id');
-                console.log(id);
-                _context29.prev = 2;
-                _context29.next = 5;
-                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].deleteG(id).data;
-
-              case 5:
-                this.getallRAB();
-                _context29.next = 11;
-                break;
-
-              case 8:
-                _context29.prev = 8;
-                _context29.t0 = _context29["catch"](2);
-                console.log(_context29.t0);
-
-              case 11:
-              case "end":
-                return _context29.stop();
-            }
-          }
-        }, _callee29, this, [[2, 8]]);
-      }));
-
-      function deleteGroupDetails(_x13) {
-        return _deleteGroupDetails.apply(this, arguments);
-      }
-
-      return deleteGroupDetails;
-    }(),
-    deleteTaskDetails: function () {
-      var _deleteTaskDetails = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee30(id) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee30$(_context30) {
-          while (1) {
-            switch (_context30.prev = _context30.next) {
-              case 0:
-                console.log('Cek id');
-                console.log(id);
-                _context30.prev = 2;
-                _context30.next = 5;
-                return _service_RABDetails__WEBPACK_IMPORTED_MODULE_8__["default"].deleteT(id).data;
-
-              case 5:
-                this.getallRAB();
-                _context30.next = 11;
-                break;
-
-              case 8:
-                _context30.prev = 8;
-                _context30.t0 = _context30["catch"](2);
-                console.log(_context30.t0);
-
-              case 11:
-              case "end":
-                return _context30.stop();
-            }
-          }
-        }, _callee30, this, [[2, 8]]);
-      }));
-
-      function deleteTaskDetails(_x14) {
-        return _deleteTaskDetails.apply(this, arguments);
-      }
-
-      return deleteTaskDetails;
-    }(),
-    getJob: function () {
-      var _getJob = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee31() {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee31$(_context31) {
-          while (1) {
-            switch (_context31.prev = _context31.next) {
-              case 0:
-                _context31.prev = 0;
-                _context31.next = 3;
-                return _service_Job__WEBPACK_IMPORTED_MODULE_9__["default"].getallItem();
-
-              case 3:
-                this.job = _context31.sent.data;
-                _context31.next = 9;
-                break;
-
-              case 6:
-                _context31.prev = 6;
-                _context31.t0 = _context31["catch"](0);
-                console.log(_context31.t0);
-
-              case 9:
-              case "end":
-                return _context31.stop();
-            }
-          }
-        }, _callee31, this, [[0, 6]]);
-      }));
-
-      function getJob() {
-        return _getJob.apply(this, arguments);
-      }
-
-      return getJob;
-    }(),
-    refresh: function refresh() {// this.deleteList()
-      // this.rab = ''
+    reset: function reset() {// this.$refs.form.reset();
+      // this.Structure=[]
+      // this.Groups=[]
+      // this.TaskSub=[]
+      // this.details=[]
+      // this.detailStructure=[]
+      // this.detailGroup=[]
+      // this.detailTask=[]
+      // this.detailDetails=[]
     },
     close: function close() {
       this.dialog = false;
@@ -18083,424 +17616,7 @@ var render = function() {
               },
               expression: "search"
             }
-          }),
-          _vm._v(" "),
-          _c("div", { staticClass: "flex-grow-1" }),
-          _vm._v(" "),
-          _c(
-            "v-dialog",
-            {
-              attrs: { "max-width": "600px" },
-              scopedSlots: _vm._u([
-                {
-                  key: "activator",
-                  fn: function(ref) {
-                    var on = ref.on
-                    return [
-                      _c(
-                        "v-btn",
-                        _vm._g(
-                          {
-                            staticClass: "mb-2",
-                            attrs: { color: "blue", dark: "" },
-                            on: { click: _vm.reset }
-                          },
-                          on
-                        ),
-                        [_vm._v("New")]
-                      )
-                    ]
-                  }
-                }
-              ]),
-              model: {
-                value: _vm.dialog,
-                callback: function($$v) {
-                  _vm.dialog = $$v
-                },
-                expression: "dialog"
-              }
-            },
-            [
-              _vm._v(" "),
-              _c(
-                "v-card",
-                [
-                  _c("v-card-title", [
-                    _c("span", { staticClass: "headline" }, [
-                      _vm._v("New AHS Adjust")
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "v-form",
-                    {
-                      ref: "form",
-                      attrs: { "lazy-validation": "" },
-                      model: {
-                        value: _vm.valid,
-                        callback: function($$v) {
-                          _vm.valid = $$v
-                        },
-                        expression: "valid"
-                      }
-                    },
-                    [
-                      _c(
-                        "v-card-text",
-                        [
-                          _c(
-                            "v-layout",
-                            [
-                              _c(
-                                "v-flex",
-                                [
-                                  _c("v-text-field", {
-                                    attrs: { label: "ID" },
-                                    model: {
-                                      value: _vm.AHS.kode,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.AHS, "kode", $$v)
-                                      },
-                                      expression: "AHS.kode"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-layout",
-                            [
-                              _c(
-                                "v-flex",
-                                [
-                                  _c("v-select", {
-                                    attrs: {
-                                      label: "Project",
-                                      items: _vm.project,
-                                      "item-text": "name",
-                                      "item-value": "id_project",
-                                      "return-object": false
-                                    },
-                                    on: {
-                                      change: function($event) {
-                                        return _vm.filterAHS(_vm.AHS.id_project)
-                                      }
-                                    },
-                                    model: {
-                                      value: _vm.AHS.id_project,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.AHS, "id_project", $$v)
-                                      },
-                                      expression: "AHS.id_project"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-layout",
-                            [
-                              _c("v-select", {
-                                attrs: {
-                                  label: "AHS",
-                                  items: _vm.filter,
-                                  "item-text": "name",
-                                  "item-value": "id_ahs",
-                                  "return-object": false
-                                },
-                                on: {
-                                  change: function($event) {
-                                    return _vm.getDetails(_vm.AHS.id_ahs)
-                                  }
-                                },
-                                model: {
-                                  value: _vm.AHS.id_ahs,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.AHS, "id_ahs", $$v)
-                                  },
-                                  expression: "AHS.id_ahs"
-                                }
-                              })
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _vm.tambah
-                            ? _c(
-                                "v-flex",
-                                {
-                                  staticClass: "text-md-center",
-                                  attrs: { sm12: "", "mt-2": "" }
-                                },
-                                [
-                                  _c(
-                                    "div",
-                                    [
-                                      _c("v-data-table", {
-                                        staticClass: "elevation-1",
-                                        attrs: {
-                                          headers: _vm.headersAHS,
-                                          sortBy: "status",
-                                          "update:": "",
-                                          "sort-desc": "",
-                                          items: _vm.detailsDefault
-                                        },
-                                        scopedSlots: _vm._u(
-                                          [
-                                            {
-                                              key: "item.sub_adjustment",
-                                              fn: function(props) {
-                                                return [
-                                                  _c(
-                                                    "v-edit-dialog",
-                                                    {
-                                                      attrs: {
-                                                        "return-value":
-                                                          props.item
-                                                            .sub_adjustment,
-                                                        lazy: "",
-                                                        persistent: "",
-                                                        dark: ""
-                                                      },
-                                                      on: {
-                                                        "update:returnValue": function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.$set(
-                                                            props.item,
-                                                            "sub_adjustment",
-                                                            $event
-                                                          )
-                                                        },
-                                                        "update:return-value": function(
-                                                          $event
-                                                        ) {
-                                                          return _vm.$set(
-                                                            props.item,
-                                                            "sub_adjustment",
-                                                            $event
-                                                          )
-                                                        },
-                                                        save: function($event) {
-                                                          return _vm.save(props)
-                                                        },
-                                                        cancel: _vm.cancel
-                                                      },
-                                                      scopedSlots: _vm._u(
-                                                        [
-                                                          {
-                                                            key: "input",
-                                                            fn: function() {
-                                                              return [
-                                                                _c(
-                                                                  "v-text-field",
-                                                                  {
-                                                                    attrs: {
-                                                                      label:
-                                                                        "Edit",
-                                                                      "single-line":
-                                                                        "",
-                                                                      counter:
-                                                                        ""
-                                                                    },
-                                                                    model: {
-                                                                      value:
-                                                                        props
-                                                                          .item
-                                                                          .sub_adjustment,
-                                                                      callback: function(
-                                                                        $$v
-                                                                      ) {
-                                                                        _vm.$set(
-                                                                          props.item,
-                                                                          "sub_adjustment",
-                                                                          $$v
-                                                                        )
-                                                                      },
-                                                                      expression:
-                                                                        "props.item.sub_adjustment"
-                                                                    }
-                                                                  }
-                                                                )
-                                                              ]
-                                                            },
-                                                            proxy: true
-                                                          }
-                                                        ],
-                                                        null,
-                                                        true
-                                                      )
-                                                    },
-                                                    [
-                                                      _vm._v(
-                                                        " " +
-                                                          _vm._s(
-                                                            props.item
-                                                              .sub_adjustment
-                                                          ) +
-                                                          "\n                    "
-                                                      )
-                                                    ]
-                                                  )
-                                                ]
-                                              }
-                                            }
-                                          ],
-                                          null,
-                                          false,
-                                          227035506
-                                        )
-                                      }),
-                                      _vm._v(" "),
-                                      _c(
-                                        "v-snackbar",
-                                        {
-                                          attrs: {
-                                            timeout: 3000,
-                                            color: _vm.snackColor
-                                          },
-                                          model: {
-                                            value: _vm.snack,
-                                            callback: function($$v) {
-                                              _vm.snack = $$v
-                                            },
-                                            expression: "snack"
-                                          }
-                                        },
-                                        [
-                                          _vm._v(
-                                            "\n                  " +
-                                              _vm._s(_vm.snackText) +
-                                              "\n                  "
-                                          ),
-                                          _c(
-                                            "v-btn",
-                                            {
-                                              attrs: { text: "" },
-                                              on: {
-                                                click: function($event) {
-                                                  _vm.snack = false
-                                                }
-                                              }
-                                            },
-                                            [_vm._v("Close")]
-                                          )
-                                        ],
-                                        1
-                                      )
-                                    ],
-                                    1
-                                  )
-                                ]
-                              )
-                            : _vm._e(),
-                          _vm._v(" "),
-                          _c(
-                            "v-layout",
-                            [
-                              _c(
-                                "v-flex",
-                                [
-                                  _c("v-text-field", {
-                                    attrs: {
-                                      label: "Adjustment*",
-                                      required: ""
-                                    },
-                                    model: {
-                                      value: _vm.AHS.adjustment,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.AHS, "adjustment", $$v)
-                                      },
-                                      expression: "AHS.adjustment"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "v-layout",
-                            [
-                              _c(
-                                "v-flex",
-                                [
-                                  _c("v-text-field", {
-                                    attrs: { label: "Total", required: "" },
-                                    model: {
-                                      value: _vm.AHS.total,
-                                      callback: function($$v) {
-                                        _vm.$set(_vm.AHS, "total", $$v)
-                                      },
-                                      expression: "AHS.total"
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            ],
-                            1
-                          )
-                        ],
-                        1
-                      )
-                    ],
-                    1
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-card-actions",
-                    [
-                      _c("div", { staticClass: "flex-grow-1" }),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "ma-2",
-                          attrs: { rounded: "", color: "green", dark: "" },
-                          on: { click: _vm.close }
-                        },
-                        [_vm._v("Cancel")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "v-btn",
-                        {
-                          staticClass: "ma-2",
-                          attrs: {
-                            rounded: "",
-                            color: "orange",
-                            disabled: !_vm.valid,
-                            dark: ""
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.addItem()
-                            }
-                          }
-                        },
-                        [_vm._v("Save")]
-                      )
-                    ],
-                    1
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
+          })
         ],
         1
       ),
@@ -18511,7 +17627,15 @@ var render = function() {
         _vm._l(_vm.filtered, function(data) {
           return _c(
             "v-expansion-panel",
-            { key: data.id_ahs_adjust, attrs: { search: _vm.search } },
+            {
+              key: data.id_ahs_lokal,
+              attrs: { search: _vm.search },
+              on: {
+                click: function($event) {
+                  return _vm.getItem(data.id_ahs_lokal)
+                }
+              }
+            },
             [
               _c(
                 "v-expansion-panel-header",
@@ -18528,7 +17652,7 @@ var render = function() {
                                 attrs: { color: "cyan" },
                                 on: {
                                   click: function($event) {
-                                    return _vm.getItem(data.id_ahs_adjust)
+                                    return _vm.getItem(data.id_ahs_lokal)
                                   }
                                 }
                               },
@@ -18553,18 +17677,10 @@ var render = function() {
                           _vm._v("ID")
                         ]),
                         _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(data.kode))])
+                        _c("div", [_vm._v(_vm._s(data.id_ahs_lokal))])
                       ]),
                       _vm._v(" "),
                       _c("v-flex", { attrs: { xs2: "" } }, [
-                        _c("div", { staticClass: "caption grey--text" }, [
-                          _vm._v("Project")
-                        ]),
-                        _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(data.project))])
-                      ]),
-                      _vm._v(" "),
-                      _c("v-flex", { attrs: { xs1: "" } }, [
                         _c("div", { staticClass: "caption grey--text" }, [
                           _vm._v("Task Group")
                         ]),
@@ -18572,7 +17688,7 @@ var render = function() {
                         _c("div", [_vm._v(_vm._s(data.name_sub))])
                       ]),
                       _vm._v(" "),
-                      _c("v-flex", { attrs: { xs1: "" } }, [
+                      _c("v-flex", { attrs: { xs2: "" } }, [
                         _c("div", { staticClass: "caption grey--text" }, [
                           _vm._v("Task")
                         ]),
@@ -18611,7 +17727,7 @@ var render = function() {
                           _vm._v("Total")
                         ]),
                         _vm._v(" "),
-                        _c("div", [_vm._v("Rp. " + _vm._s(data.total))])
+                        _c("div", [_vm._v("Rp. " + _vm._s(data.HSP))])
                       ]),
                       _vm._v(" "),
                       _c(
@@ -18679,7 +17795,7 @@ var render = function() {
                             _vm._v(" "),
                             _c("v-card-text", [
                               _vm._v(
-                                "Are you sure want to delete this AHS Adjustment?"
+                                "Are you sure want to delete this AHS Lokal?"
                               )
                             ]),
                             _vm._v(" "),
@@ -18698,7 +17814,7 @@ var render = function() {
                                     on: {
                                       click: function($event) {
                                         _vm.dialog2 = false
-                                        _vm.deleteItem(data.id_ahs_adjust)
+                                        _vm.deleteItem(data.id_ahs_lokal)
                                       }
                                     }
                                   },
@@ -19333,7 +18449,7 @@ var render = function() {
                                                       click: function($event) {
                                                         _vm.dialog6 = false
                                                         _vm.deleteDetail(
-                                                          item.id_ahs_details_adjust
+                                                          item.id_ahs_lokal_details
                                                         )
                                                       }
                                                     }
@@ -20096,7 +19212,7 @@ var render = function() {
                               attrs: { color: "green" },
                               on: {
                                 click: function($event) {
-                                  _vm.itemEdit(data)
+                                  _vm.itemHandler(data)
                                   _vm.dialog5 = true
                                 }
                               }
@@ -20110,6 +19226,7 @@ var render = function() {
                               attrs: { color: "red" },
                               on: {
                                 click: function($event) {
+                                  _vm.itemHandler(data)
                                   _vm.dialogDelete = true
                                 }
                               }
@@ -20164,7 +19281,7 @@ var render = function() {
                                     on: {
                                       click: function($event) {
                                         _vm.dialogDelete = false
-                                        _vm.deleteItem(data.id_ahs)
+                                        _vm.deleteItem(_vm.AHS.id_ahs)
                                       }
                                     }
                                   },
@@ -29820,7 +28937,19 @@ var render = function() {
                     return [
                       _c(
                         "v-btn",
-                        _vm._g({ attrs: { color: "blue", dark: "" } }, on),
+                        _vm._g(
+                          {
+                            attrs: { color: "blue", dark: "" },
+                            on: {
+                              click: function($event) {
+                                _vm.filterProjects()
+                                _vm.reset()
+                                _vm.dialog8 = true
+                              }
+                            }
+                          },
+                          on
+                        ),
                         [_vm._v("New")]
                       )
                     ]
@@ -29852,6 +28981,8 @@ var render = function() {
                           on: {
                             click: function($event) {
                               _vm.dialog = false
+                              _vm.dialog7 = false
+                              _vm.dialog8 = false
                             }
                           }
                         },
@@ -29859,24 +28990,53 @@ var render = function() {
                         1
                       ),
                       _vm._v(" "),
-                      _c("v-toolbar-title", [_vm._v("New RAB")]),
+                      _vm.dialog8
+                        ? _c("v-toolbar-title", [_vm._v("New RAB")])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.dialog7
+                        ? _c("v-toolbar-title", [_vm._v("Edit RAB")])
+                        : _vm._e(),
                       _vm._v(" "),
                       _c("v-spacer"),
                       _vm._v(" "),
-                      _c(
-                        "v-toolbar-items",
-                        [
-                          _c(
-                            "v-btn",
-                            {
-                              attrs: { dark: "", text: "" },
-                              on: { click: _vm.addAllItem }
-                            },
-                            [_vm._v("Save")]
+                      _vm.dialog8
+                        ? _c(
+                            "v-toolbar-items",
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { dark: "", text: "" },
+                                  on: { click: _vm.addAllItem }
+                                },
+                                [_vm._v("Save")]
+                              )
+                            ],
+                            1
                           )
-                        ],
-                        1
-                      )
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.dialog7
+                        ? _c(
+                            "v-toolbar-items",
+                            [
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { dark: "", text: "" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.updateItem(_vm.rab.id_rab)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Save")]
+                              )
+                            ],
+                            1
+                          )
+                        : _vm._e()
                     ],
                     1
                   ),
@@ -29946,7 +29106,9 @@ var render = function() {
                                 _c("v-icon", { attrs: { left: "" } }, [
                                   _vm._v("work")
                                 ]),
-                                _vm._v("\n                Sub\n              ")
+                                _vm._v(
+                                  "\n                Task Group\n              "
+                                )
                               ],
                               1
                             ),
@@ -29956,11 +29118,9 @@ var render = function() {
                               { attrs: { ripple: "", href: "#tab-5" } },
                               [
                                 _c("v-icon", { attrs: { left: "" } }, [
-                                  _vm._v("work_outline")
+                                  _vm._v("payment")
                                 ]),
-                                _vm._v(
-                                  "\n                Detail \n              "
-                                )
+                                _vm._v("\n                AHS \n              ")
                               ],
                               1
                             ),
@@ -29970,7 +29130,8 @@ var render = function() {
                               { attrs: { value: "tab-1" } },
                               [
                                 _c(
-                                  "Vform",
+                                  "v-form",
+                                  { ref: "form" },
                                   [
                                     _c(
                                       "v-card-text",
@@ -29998,10 +29159,11 @@ var render = function() {
                                             _c("v-select", {
                                               attrs: {
                                                 label: "Project",
-                                                items: _vm.project,
-                                                "item-text": "name",
+                                                items: _vm.filterProject,
+                                                "item-text": "project",
                                                 "item-value": "id_project",
-                                                "return-object": false
+                                                "return-object": false,
+                                                readonly: _vm.edit
                                               },
                                               model: {
                                                 value: _vm.rab.id_project,
@@ -30040,7 +29202,10 @@ var render = function() {
                                           "v-layout",
                                           [
                                             _c("v-text-field", {
-                                              attrs: { label: "Nominal" },
+                                              attrs: {
+                                                label: "Nominal",
+                                                readonly: ""
+                                              },
                                               model: {
                                                 value: _vm.rab.total_rab,
                                                 callback: function($$v) {
@@ -30086,6 +29251,7 @@ var render = function() {
                                             },
                                             on: {
                                               click: function($event) {
+                                                _vm.filterStructures()
                                                 _vm.tambahS = true
                                               }
                                             }
@@ -30103,7 +29269,7 @@ var render = function() {
                                             staticClass: "text-md-center",
                                             attrs: { sm12: "", "mt-2": "" }
                                           },
-                                          _vm._l(_vm.Structure, function(
+                                          _vm._l(_vm.detailStructure, function(
                                             detail_structure,
                                             index
                                           ) {
@@ -30149,12 +29315,13 @@ var render = function() {
                                                           staticClass: "pa-1",
                                                           attrs: {
                                                             label: "Building",
-                                                            "item-text": "name",
+                                                            "item-text":
+                                                              "structure",
                                                             "item-value":
                                                               "id_structure",
                                                             items:
-                                                              _vm.Structure,
-                                                            disabled: ""
+                                                              _vm.detailStructure,
+                                                            readonly: ""
                                                           },
                                                           model: {
                                                             value:
@@ -30266,7 +29433,7 @@ var render = function() {
                                                                 _c("v-select", {
                                                                   attrs: {
                                                                     items:
-                                                                      _vm.structure,
+                                                                      _vm.filterStructure,
                                                                     label:
                                                                       "Building",
                                                                     "item-text":
@@ -30325,7 +29492,7 @@ var render = function() {
                                 _c("v-data-table", {
                                   attrs: {
                                     headers: _vm.headers_detail_building,
-                                    items: _vm.Structure,
+                                    items: _vm.detailStructure,
                                     height: "150px"
                                   },
                                   scopedSlots: _vm._u([
@@ -30360,25 +29527,57 @@ var render = function() {
                                         var item = ref.item
                                         return [
                                           _c(
-                                            "VBtn",
+                                            "v-tooltip",
                                             {
-                                              attrs: {
-                                                fab: "",
-                                                dark: "",
-                                                color: "light-blue darken-4",
-                                                small: ""
-                                              },
-                                              on: {
-                                                click: function($event) {
-                                                  _vm.tambahF = true
-                                                  _vm.itemStructure(item)
-                                                }
-                                              }
+                                              attrs: { bottom: "" },
+                                              scopedSlots: _vm._u(
+                                                [
+                                                  {
+                                                    key: "activator",
+                                                    fn: function(ref) {
+                                                      var on = ref.on
+                                                      return [
+                                                        _c(
+                                                          "v-btn",
+                                                          _vm._g(
+                                                            {
+                                                              attrs: {
+                                                                icon: "",
+                                                                color:
+                                                                  "light-blue darken-4",
+                                                                dark: ""
+                                                              },
+                                                              on: {
+                                                                click: function(
+                                                                  $event
+                                                                ) {
+                                                                  _vm.tambahF = true
+                                                                  _vm.filterGroups(
+                                                                    item
+                                                                  )
+                                                                }
+                                                              }
+                                                            },
+                                                            on
+                                                          ),
+                                                          [
+                                                            _c("v-icon", [
+                                                              _vm._v("add_box")
+                                                            ])
+                                                          ],
+                                                          1
+                                                        )
+                                                      ]
+                                                    }
+                                                  }
+                                                ],
+                                                null,
+                                                true
+                                              )
                                             },
                                             [
-                                              _vm._v(
-                                                "\n                    Add\n                    "
-                                              )
+                                              _vm._v(" "),
+                                              _c("span", [_vm._v("Add Floor")])
                                             ]
                                           )
                                         ]
@@ -30456,8 +29655,9 @@ var render = function() {
                                                               "structure",
                                                             "item-value":
                                                               "id_structure",
-                                                            items: _vm.Groups,
-                                                            disabled: ""
+                                                            items:
+                                                              _vm.detailGroup,
+                                                            readonly: ""
                                                           },
                                                           model: {
                                                             value:
@@ -30493,26 +29693,28 @@ var render = function() {
                                                           staticClass: "pa-1",
                                                           attrs: {
                                                             label: "Floor*",
-                                                            items: _vm.Groups,
-                                                            "item-text": "name",
+                                                            items:
+                                                              _vm.detailGroup,
+                                                            "item-text":
+                                                              "floor",
                                                             "item-value":
-                                                              "id_group",
-                                                            disabled: ""
+                                                              "id_groups",
+                                                            readonly: ""
                                                           },
                                                           model: {
                                                             value:
-                                                              detail_group.id_group,
+                                                              detail_group.id_groups,
                                                             callback: function(
                                                               $$v
                                                             ) {
                                                               _vm.$set(
                                                                 detail_group,
-                                                                "id_group",
+                                                                "id_groups",
                                                                 $$v
                                                               )
                                                             },
                                                             expression:
-                                                              "detail_group.id_group"
+                                                              "detail_group.id_groups"
                                                           }
                                                         })
                                                       ],
@@ -30620,14 +29822,12 @@ var render = function() {
                                                                     label:
                                                                       "Building",
                                                                     "item-text":
-                                                                      "name",
+                                                                      "structure",
                                                                     "item-value":
                                                                       "id_structure",
                                                                     items:
-                                                                      _vm.Structure,
-                                                                    required:
-                                                                      "",
-                                                                    disabled: ""
+                                                                      _vm.detailStructure,
+                                                                    readonly: ""
                                                                   },
                                                                   model: {
                                                                     value:
@@ -30668,7 +29868,7 @@ var render = function() {
                                                                     label:
                                                                       "Floor*",
                                                                     items:
-                                                                      _vm.sub,
+                                                                      _vm.filterGroup,
                                                                     "item-text":
                                                                       "name",
                                                                     "item-value":
@@ -30679,18 +29879,18 @@ var render = function() {
                                                                     value:
                                                                       _vm
                                                                         .group_data
-                                                                        .id_group,
+                                                                        .id_groups,
                                                                     callback: function(
                                                                       $$v
                                                                     ) {
                                                                       _vm.$set(
                                                                         _vm.group_data,
-                                                                        "id_group",
+                                                                        "id_groups",
                                                                         $$v
                                                                       )
                                                                     },
                                                                     expression:
-                                                                      "group_data.id_group"
+                                                                      "group_data.id_groups"
                                                                   }
                                                                 })
                                                               ],
@@ -30732,7 +29932,7 @@ var render = function() {
                                         _c("v-data-table", {
                                           attrs: {
                                             headers: _vm.headers_detail_floor,
-                                            items: _vm.Groups,
+                                            items: _vm.detailGroup,
                                             height: "150px"
                                           },
                                           scopedSlots: _vm._u([
@@ -30767,28 +29967,65 @@ var render = function() {
                                                 var item = ref.item
                                                 return [
                                                   _c(
-                                                    "VBtn",
+                                                    "v-tooltip",
                                                     {
-                                                      attrs: {
-                                                        fab: "",
-                                                        dark: "",
-                                                        color:
-                                                          "light-blue darken-4",
-                                                        small: ""
-                                                      },
-                                                      on: {
-                                                        click: function(
-                                                          $event
-                                                        ) {
-                                                          _vm.tambahT = true
-                                                          _vm.itemGroups(item)
-                                                        }
-                                                      }
+                                                      attrs: { bottom: "" },
+                                                      scopedSlots: _vm._u(
+                                                        [
+                                                          {
+                                                            key: "activator",
+                                                            fn: function(ref) {
+                                                              var on = ref.on
+                                                              return [
+                                                                _c(
+                                                                  "v-btn",
+                                                                  _vm._g(
+                                                                    {
+                                                                      attrs: {
+                                                                        icon:
+                                                                          "",
+                                                                        color:
+                                                                          "light-blue darken-4",
+                                                                        dark: ""
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          _vm.tambahT = true
+                                                                          _vm.filterTaskGroups(
+                                                                            item
+                                                                          )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    on
+                                                                  ),
+                                                                  [
+                                                                    _c(
+                                                                      "v-icon",
+                                                                      [
+                                                                        _vm._v(
+                                                                          "add_box"
+                                                                        )
+                                                                      ]
+                                                                    )
+                                                                  ],
+                                                                  1
+                                                                )
+                                                              ]
+                                                            }
+                                                          }
+                                                        ],
+                                                        null,
+                                                        true
+                                                      )
                                                     },
                                                     [
-                                                      _vm._v(
-                                                        "\n                        Add\n                        "
-                                                      )
+                                                      _vm._v(" "),
+                                                      _c("span", [
+                                                        _vm._v("Add Task Group")
+                                                      ])
                                                     ]
                                                   )
                                                 ]
@@ -30872,8 +30109,9 @@ var render = function() {
                                                               "structure",
                                                             "item-value":
                                                               "id_structure",
-                                                            items: _vm.TaskSub,
-                                                            disabled: ""
+                                                            items:
+                                                              _vm.detailTask,
+                                                            readonly: ""
                                                           },
                                                           model: {
                                                             value:
@@ -30910,11 +30148,12 @@ var render = function() {
                                                           attrs: {
                                                             label: "Floor",
                                                             "item-text":
-                                                              "groups",
+                                                              "floor",
                                                             "item-value":
                                                               "id_groups",
-                                                            items: _vm.TaskSub,
-                                                            disabled: ""
+                                                            items:
+                                                              _vm.detailTask,
+                                                            readonly: ""
                                                           },
                                                           model: {
                                                             value:
@@ -30951,11 +30190,12 @@ var render = function() {
                                                           attrs: {
                                                             label:
                                                               "Type of Task",
-                                                            "item-text": "name",
+                                                            "item-text": "task",
                                                             "item-value":
                                                               "id_sub",
-                                                            items: _vm.type,
-                                                            disabled: ""
+                                                            items:
+                                                              _vm.detailTask,
+                                                            readonly: ""
                                                           },
                                                           model: {
                                                             value:
@@ -31094,8 +30334,8 @@ var render = function() {
                                                                           "item-value":
                                                                             "id_structure",
                                                                           items:
-                                                                            _vm.Groups,
-                                                                          disabled:
+                                                                            _vm.detailGroup,
+                                                                          readonly:
                                                                             ""
                                                                         },
                                                                         model: {
@@ -31138,32 +30378,32 @@ var render = function() {
                                                                           "pa-1",
                                                                         attrs: {
                                                                           label:
-                                                                            "Floor*",
+                                                                            "Floor",
                                                                           items:
-                                                                            _vm.Groups,
+                                                                            _vm.detailGroup,
                                                                           "item-text":
-                                                                            "groups",
+                                                                            "floor",
                                                                           "item-value":
-                                                                            "id_group",
-                                                                          disabled:
+                                                                            "id_groups",
+                                                                          readonly:
                                                                             ""
                                                                         },
                                                                         model: {
                                                                           value:
                                                                             _vm
                                                                               .group_unit
-                                                                              .id_group,
+                                                                              .id_groups,
                                                                           callback: function(
                                                                             $$v
                                                                           ) {
                                                                             _vm.$set(
                                                                               _vm.group_unit,
-                                                                              "id_group",
+                                                                              "id_groups",
                                                                               $$v
                                                                             )
                                                                           },
                                                                           expression:
-                                                                            "group_unit.id_group"
+                                                                            "group_unit.id_groups"
                                                                         }
                                                                       }
                                                                     )
@@ -31194,7 +30434,7 @@ var render = function() {
                                                                           "item-value":
                                                                             "id_sub",
                                                                           items:
-                                                                            _vm.type,
+                                                                            _vm.filterTaskGroup,
                                                                           required:
                                                                             ""
                                                                         },
@@ -31256,7 +30496,7 @@ var render = function() {
                                     _c("v-data-table", {
                                       attrs: {
                                         headers: _vm.headers_detail_task,
-                                        items: _vm.TaskSub,
+                                        items: _vm.detailTask,
                                         height: "150px"
                                       },
                                       scopedSlots: _vm._u([
@@ -31327,65 +30567,6 @@ var render = function() {
                                                               [
                                                                 _c("v-icon", [
                                                                   _vm._v(
-                                                                    "add_circle"
-                                                                  )
-                                                                ])
-                                                              ],
-                                                              1
-                                                            )
-                                                          ]
-                                                        }
-                                                      }
-                                                    ],
-                                                    null,
-                                                    true
-                                                  )
-                                                },
-                                                [
-                                                  _vm._v(" "),
-                                                  _c("span", [
-                                                    _vm._v("Add AHS")
-                                                  ])
-                                                ]
-                                              ),
-                                              _vm._v(" "),
-                                              _c(
-                                                "v-tooltip",
-                                                {
-                                                  attrs: { bottom: "" },
-                                                  scopedSlots: _vm._u(
-                                                    [
-                                                      {
-                                                        key: "activator",
-                                                        fn: function(ref) {
-                                                          var on = ref.on
-                                                          return [
-                                                            _c(
-                                                              "v-btn",
-                                                              _vm._g(
-                                                                {
-                                                                  attrs: {
-                                                                    icon: "",
-                                                                    color:
-                                                                      "light-green darken-4",
-                                                                    dark: ""
-                                                                  },
-                                                                  on: {
-                                                                    click: function(
-                                                                      $event
-                                                                    ) {
-                                                                      _vm.filterAHSAdjustment(
-                                                                        item
-                                                                      )
-                                                                      _vm.tambahAdjust = true
-                                                                    }
-                                                                  }
-                                                                },
-                                                                on
-                                                              ),
-                                                              [
-                                                                _c("v-icon", [
-                                                                  _vm._v(
                                                                     "add_box"
                                                                   )
                                                                 ])
@@ -31403,7 +30584,7 @@ var render = function() {
                                                 [
                                                   _vm._v(" "),
                                                   _c("span", [
-                                                    _vm._v("Add AHS Adjust")
+                                                    _vm._v("Add AHS")
                                                   ])
                                                 ]
                                               )
@@ -31491,8 +30672,8 @@ var render = function() {
                                                                 "item-value":
                                                                   "id_structure",
                                                                 items:
-                                                                  _vm.details,
-                                                                disabled: ""
+                                                                  _vm.detailDetails,
+                                                                readonly: ""
                                                               },
                                                               model: {
                                                                 value:
@@ -31530,12 +30711,12 @@ var render = function() {
                                                               attrs: {
                                                                 label: "Floor",
                                                                 "item-text":
-                                                                  "groups",
+                                                                  "floor",
                                                                 "item-value":
                                                                   "id_groups",
                                                                 items:
-                                                                  _vm.details,
-                                                                disabled: ""
+                                                                  _vm.detailDetails,
+                                                                readonly: ""
                                                               },
                                                               model: {
                                                                 value:
@@ -31572,14 +30753,14 @@ var render = function() {
                                                                 "pa-1",
                                                               attrs: {
                                                                 label:
-                                                                  "Type of Task",
+                                                                  "Task Group",
                                                                 "item-text":
-                                                                  "name",
+                                                                  "task",
                                                                 "item-value":
                                                                   "id_sub",
                                                                 items:
-                                                                  _vm.details,
-                                                                disabled: ""
+                                                                  _vm.detailDetails,
+                                                                readonly: ""
                                                               },
                                                               model: {
                                                                 value:
@@ -31601,191 +30782,48 @@ var render = function() {
                                                           1
                                                         ),
                                                         _vm._v(" "),
-                                                        detail.id_ahs != null
-                                                          ? _c(
-                                                              "v-flex",
-                                                              {
-                                                                attrs: {
-                                                                  xs12: "",
-                                                                  sm4: "",
-                                                                  md4: ""
-                                                                }
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: {
+                                                              xs12: "",
+                                                              sm4: "",
+                                                              md4: ""
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("v-select", {
+                                                              staticClass:
+                                                                "pa-1",
+                                                              attrs: {
+                                                                label: "AHS",
+                                                                "item-text":
+                                                                  "name",
+                                                                "item-value":
+                                                                  "id_ahs",
+                                                                items:
+                                                                  _vm.detailDetails,
+                                                                readonly: ""
                                                               },
-                                                              [
-                                                                _c("v-select", {
-                                                                  staticClass:
-                                                                    "pa-1",
-                                                                  attrs: {
-                                                                    label:
-                                                                      "AHS",
-                                                                    "item-text":
-                                                                      "ahs",
-                                                                    "item-value":
-                                                                      "id_ahs",
-                                                                    items:
-                                                                      _vm.details,
-                                                                    disabled: ""
-                                                                  },
-                                                                  model: {
-                                                                    value:
-                                                                      detail.id_ahs,
-                                                                    callback: function(
-                                                                      $$v
-                                                                    ) {
-                                                                      _vm.$set(
-                                                                        detail,
-                                                                        "id_ahs",
-                                                                        $$v
-                                                                      )
-                                                                    },
-                                                                    expression:
-                                                                      "detail.id_ahs"
-                                                                  }
-                                                                })
-                                                              ],
-                                                              1
-                                                            )
-                                                          : _vm._e(),
-                                                        _vm._v(" "),
-                                                        detail.id_ahs != null
-                                                          ? _c(
-                                                              "v-flex",
-                                                              {
-                                                                attrs: {
-                                                                  xs10: "",
-                                                                  sm2: "",
-                                                                  md2: ""
-                                                                }
-                                                              },
-                                                              [
-                                                                _c("v-select", {
-                                                                  staticClass:
-                                                                    "pa-1",
-                                                                  attrs: {
-                                                                    label:
-                                                                      "HSP",
-                                                                    "item-text":
-                                                                      "sub_total",
-                                                                    "item-value":
-                                                                      "id_ahs",
-                                                                    items:
-                                                                      _vm.details,
-                                                                    disabled: ""
-                                                                  },
-                                                                  model: {
-                                                                    value:
-                                                                      detail.id_ahs,
-                                                                    callback: function(
-                                                                      $$v
-                                                                    ) {
-                                                                      _vm.$set(
-                                                                        detail,
-                                                                        "id_ahs",
-                                                                        $$v
-                                                                      )
-                                                                    },
-                                                                    expression:
-                                                                      "detail.id_ahs"
-                                                                  }
-                                                                })
-                                                              ],
-                                                              1
-                                                            )
-                                                          : _vm._e(),
-                                                        _vm._v(" "),
-                                                        detail.id_ahs_adjust !=
-                                                        null
-                                                          ? _c(
-                                                              "v-flex",
-                                                              {
-                                                                attrs: {
-                                                                  xs12: "",
-                                                                  sm4: "",
-                                                                  md4: ""
-                                                                }
-                                                              },
-                                                              [
-                                                                _c("v-select", {
-                                                                  staticClass:
-                                                                    "pa-1",
-                                                                  attrs: {
-                                                                    label:
-                                                                      "AHS Adjust*",
-                                                                    "item-text":
-                                                                      "ahs_adjust",
-                                                                    "item-value":
-                                                                      "id_ahs_adjust",
-                                                                    items:
-                                                                      _vm.details,
-                                                                    disabled: ""
-                                                                  },
-                                                                  model: {
-                                                                    value:
-                                                                      detail.id_ahs_adjust,
-                                                                    callback: function(
-                                                                      $$v
-                                                                    ) {
-                                                                      _vm.$set(
-                                                                        detail,
-                                                                        "id_ahs_adjust",
-                                                                        $$v
-                                                                      )
-                                                                    },
-                                                                    expression:
-                                                                      "detail.id_ahs_adjust"
-                                                                  }
-                                                                })
-                                                              ],
-                                                              1
-                                                            )
-                                                          : _vm._e(),
-                                                        _vm._v(" "),
-                                                        detail.id_ahs_adjust !=
-                                                        null
-                                                          ? _c(
-                                                              "v-flex",
-                                                              {
-                                                                attrs: {
-                                                                  xs10: "",
-                                                                  sm2: "",
-                                                                  md2: ""
-                                                                }
-                                                              },
-                                                              [
-                                                                _c("v-select", {
-                                                                  staticClass:
-                                                                    "pa-1",
-                                                                  attrs: {
-                                                                    label:
-                                                                      "HSP Adjust*",
-                                                                    "item-text":
-                                                                      "sub_total_adjust",
-                                                                    "item-value":
-                                                                      "id_ahs_adjust",
-                                                                    items:
-                                                                      _vm.details,
-                                                                    disabled: ""
-                                                                  },
-                                                                  model: {
-                                                                    value:
-                                                                      detail.id_ahs_adjust,
-                                                                    callback: function(
-                                                                      $$v
-                                                                    ) {
-                                                                      _vm.$set(
-                                                                        detail,
-                                                                        "id_ahs_adjust",
-                                                                        $$v
-                                                                      )
-                                                                    },
-                                                                    expression:
-                                                                      "detail.id_ahs_adjust"
-                                                                  }
-                                                                })
-                                                              ],
-                                                              1
-                                                            )
-                                                          : _vm._e(),
+                                                              model: {
+                                                                value:
+                                                                  detail.id_ahs,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    detail,
+                                                                    "id_ahs",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "detail.id_ahs"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        ),
                                                         _vm._v(" "),
                                                         _c(
                                                           "v-flex",
@@ -31801,8 +30839,41 @@ var render = function() {
                                                               staticClass:
                                                                 "pa-1",
                                                               attrs: {
+                                                                label: "HSP",
+                                                                readonly: ""
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  detail.HSP,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    detail,
+                                                                    "HSP",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "detail.HSP"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: { xs1: "" }
+                                                          },
+                                                          [
+                                                            _c("v-text-field", {
+                                                              staticClass:
+                                                                "pa-1",
+                                                              attrs: {
                                                                 label: "Volume",
-                                                                disabled: ""
+                                                                readonly: ""
                                                               },
                                                               model: {
                                                                 value:
@@ -31827,6 +30898,77 @@ var render = function() {
                                                         _c(
                                                           "v-flex",
                                                           {
+                                                            attrs: { xs1: "" }
+                                                          },
+                                                          [
+                                                            _c("v-text-field", {
+                                                              staticClass:
+                                                                "pa-1",
+                                                              attrs: {
+                                                                label:
+                                                                  "Adjustment",
+                                                                readonly: ""
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  detail.adjustment,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    detail,
+                                                                    "adjustment",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "detail.adjustment"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-flex",
+                                                          {
+                                                            attrs: {
+                                                              xs10: "",
+                                                              sm2: "",
+                                                              md2: ""
+                                                            }
+                                                          },
+                                                          [
+                                                            _c("v-text-field", {
+                                                              staticClass:
+                                                                "pa-1",
+                                                              attrs: {
+                                                                label: "HP",
+                                                                readonly: ""
+                                                              },
+                                                              model: {
+                                                                value:
+                                                                  detail.HP,
+                                                                callback: function(
+                                                                  $$v
+                                                                ) {
+                                                                  _vm.$set(
+                                                                    detail,
+                                                                    "HP",
+                                                                    $$v
+                                                                  )
+                                                                },
+                                                                expression:
+                                                                  "detail.HP"
+                                                              }
+                                                            })
+                                                          ],
+                                                          1
+                                                        ),
+                                                        _vm._v(" "),
+                                                        _c(
+                                                          "v-flex",
+                                                          {
                                                             attrs: {
                                                               xs10: "",
                                                               sm2: "",
@@ -31839,23 +30981,23 @@ var render = function() {
                                                                 "pa-1",
                                                               attrs: {
                                                                 label:
-                                                                  "Adjustment*",
-                                                                disabled: ""
+                                                                  "HP Adjustment",
+                                                                readonly: ""
                                                               },
                                                               model: {
                                                                 value:
-                                                                  detail.coefficient,
+                                                                  detail.HPAdjust,
                                                                 callback: function(
                                                                   $$v
                                                                 ) {
                                                                   _vm.$set(
                                                                     detail,
-                                                                    "coefficient",
+                                                                    "HPAdjust",
                                                                     $$v
                                                                   )
                                                                 },
                                                                 expression:
-                                                                  "detail.coefficient"
+                                                                  "detail.HPAdjust"
                                                               }
                                                             })
                                                           ],
@@ -31975,8 +31117,8 @@ var render = function() {
                                                                           "item-value":
                                                                             "id_structure",
                                                                           items:
-                                                                            _vm.TaskSub,
-                                                                          disabled:
+                                                                            _vm.detailTask,
+                                                                          readonly:
                                                                             ""
                                                                         },
                                                                         model: {
@@ -32021,12 +31163,12 @@ var render = function() {
                                                                           label:
                                                                             "Floor",
                                                                           "item-text":
-                                                                            "groups",
+                                                                            "floor",
                                                                           "item-value":
                                                                             "id_groups",
                                                                           items:
-                                                                            _vm.TaskSub,
-                                                                          disabled:
+                                                                            _vm.detailTask,
+                                                                          readonly:
                                                                             ""
                                                                         },
                                                                         model: {
@@ -32069,14 +31211,14 @@ var render = function() {
                                                                           "pa-1",
                                                                         attrs: {
                                                                           label:
-                                                                            "Type of Task",
+                                                                            "Task Group",
                                                                           "item-text":
-                                                                            "name",
+                                                                            "task",
                                                                           "item-value":
                                                                             "id_sub",
                                                                           items:
-                                                                            _vm.TaskSub,
-                                                                          disabled:
+                                                                            _vm.detailTask,
+                                                                          readonly:
                                                                             ""
                                                                         },
                                                                         model: {
@@ -32130,8 +31272,12 @@ var render = function() {
                                                                             ""
                                                                         },
                                                                         on: {
-                                                                          change:
-                                                                            _vm.getSelectedIndex
+                                                                          change: function(
+                                                                            $event
+                                                                          ) {
+                                                                            _vm.getSelectedIndex()
+                                                                            _vm.detail = true
+                                                                          }
                                                                         },
                                                                         model: {
                                                                           value:
@@ -32180,14 +31326,8 @@ var render = function() {
                                                                             "id_ahs",
                                                                           items:
                                                                             _vm.filterAHSAll,
-                                                                          disabled:
-                                                                            "",
-                                                                          required:
+                                                                          readonly:
                                                                             ""
-                                                                        },
-                                                                        on: {
-                                                                          change:
-                                                                            _vm.getSelectedIndex
                                                                         },
                                                                         model: {
                                                                           value:
@@ -32212,529 +31352,207 @@ var render = function() {
                                                                   1
                                                                 ),
                                                                 _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs10: "",
-                                                                      sm2: "",
-                                                                      md2: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
+                                                                _vm.detail
+                                                                  ? _c(
+                                                                      "v-flex",
                                                                       {
-                                                                        staticClass:
-                                                                          "pa-1",
                                                                         attrs: {
-                                                                          label:
-                                                                            "Volume"
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .rab_details
-                                                                              .volume,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.rab_details,
-                                                                              "volume",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "rab_details.volume"
+                                                                          xs1:
+                                                                            ""
                                                                         }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs10: "",
-                                                                      sm2: "",
-                                                                      md2: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
-                                                                      {
-                                                                        staticClass:
-                                                                          "pa-1",
-                                                                        attrs: {
-                                                                          label:
-                                                                            "Adjustment*"
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .rab_details
-                                                                              .coefficient,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.rab_details,
-                                                                              "coefficient",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "rab_details.coefficient"
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                )
-                                                              ],
-                                                              1
-                                                            )
-                                                          ],
-                                                          1
-                                                        )
-                                                      ],
-                                                      1
-                                                    )
-                                                  ],
-                                                  1
-                                                )
-                                              : _vm._e(),
-                                            _vm._v(" "),
-                                            _vm.tambahAdjust
-                                              ? _c(
-                                                  "v-layout",
-                                                  [
-                                                    _c(
-                                                      "v-flex",
-                                                      {
-                                                        staticClass:
-                                                          "text-md-center",
-                                                        attrs: {
-                                                          sm12: "",
-                                                          "mt-2": ""
-                                                        }
-                                                      },
-                                                      [
-                                                        _c(
-                                                          "VCard",
-                                                          [
-                                                            _c(
-                                                              "v-card-title",
-                                                              [
-                                                                _c(
-                                                                  "v-btn",
-                                                                  {
-                                                                    attrs: {
-                                                                      icon: "",
-                                                                      color:
-                                                                        "red",
-                                                                      dark: ""
-                                                                    },
-                                                                    on: {
-                                                                      click: function(
-                                                                        $event
-                                                                      ) {
-                                                                        _vm.tambahAdjust = false
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-icon",
+                                                                      },
                                                                       [
-                                                                        _vm._v(
-                                                                          "remove_circle"
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            staticClass:
+                                                                              "pa-1",
+                                                                            attrs: {
+                                                                              label:
+                                                                                "Volume"
+                                                                            },
+                                                                            on: {
+                                                                              input: function(
+                                                                                $event
+                                                                              ) {
+                                                                                _vm.change()
+                                                                                _vm.adjust()
+                                                                              }
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm
+                                                                                  .ahs_lokal
+                                                                                  .volume,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.$set(
+                                                                                  _vm.ahs_lokal,
+                                                                                  "volume",
+                                                                                  $$v
+                                                                                )
+                                                                              },
+                                                                              expression:
+                                                                                "ahs_lokal.volume"
+                                                                            }
+                                                                          }
                                                                         )
-                                                                      ]
+                                                                      ],
+                                                                      1
                                                                     )
-                                                                  ],
-                                                                  1
-                                                                ),
+                                                                  : _vm._e(),
                                                                 _vm._v(" "),
-                                                                _c(
-                                                                  "v-btn",
-                                                                  {
-                                                                    attrs: {
-                                                                      icon: "",
-                                                                      color:
-                                                                        "green",
-                                                                      dark: ""
-                                                                    },
-                                                                    on: {
-                                                                      click: function(
-                                                                        $event
-                                                                      ) {
-                                                                        return _vm.addList()
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-icon",
+                                                                _vm.detail
+                                                                  ? _c(
+                                                                      "v-flex",
+                                                                      {
+                                                                        attrs: {
+                                                                          xs1:
+                                                                            ""
+                                                                        }
+                                                                      },
                                                                       [
-                                                                        _vm._v(
-                                                                          "add_circle"
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            staticClass:
+                                                                              "pa-1",
+                                                                            attrs: {
+                                                                              label:
+                                                                                "Adjustment"
+                                                                            },
+                                                                            on: {
+                                                                              input:
+                                                                                _vm.adjust,
+                                                                              change: function(
+                                                                                $event
+                                                                              ) {
+                                                                                _vm.getMaterialDetails()
+                                                                                _vm.adjustM = true
+                                                                              }
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm
+                                                                                  .ahs_lokal
+                                                                                  .adjustment,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.$set(
+                                                                                  _vm.ahs_lokal,
+                                                                                  "adjustment",
+                                                                                  $$v
+                                                                                )
+                                                                              },
+                                                                              expression:
+                                                                                "ahs_lokal.adjustment"
+                                                                            }
+                                                                          }
                                                                         )
-                                                                      ]
+                                                                      ],
+                                                                      1
                                                                     )
-                                                                  ],
-                                                                  1
-                                                                ),
+                                                                  : _vm._e(),
                                                                 _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs11: "",
-                                                                      sm3: "",
-                                                                      md3: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-select",
+                                                                _vm.detail
+                                                                  ? _c(
+                                                                      "v-flex",
                                                                       {
-                                                                        staticClass:
-                                                                          "pa-1",
                                                                         attrs: {
-                                                                          label:
-                                                                            "Building",
-                                                                          "item-text":
-                                                                            "structure",
-                                                                          "item-value":
-                                                                            "id_structure",
-                                                                          items:
-                                                                            _vm.TaskSub,
-                                                                          disabled:
+                                                                          xs10:
+                                                                            "",
+                                                                          sm2:
+                                                                            "",
+                                                                          md2:
                                                                             ""
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .tasksub_unit
-                                                                              .id_structure,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.tasksub_unit,
-                                                                              "id_structure",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "tasksub_unit.id_structure"
                                                                         }
-                                                                      }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            staticClass:
+                                                                              "pa-1",
+                                                                            attrs: {
+                                                                              label:
+                                                                                "HP",
+                                                                              readonly:
+                                                                                ""
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm
+                                                                                  .ahs_lokal
+                                                                                  .HP,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.$set(
+                                                                                  _vm.ahs_lokal,
+                                                                                  "HP",
+                                                                                  $$v
+                                                                                )
+                                                                              },
+                                                                              expression:
+                                                                                "ahs_lokal.HP"
+                                                                            }
+                                                                          }
+                                                                        )
+                                                                      ],
+                                                                      1
                                                                     )
-                                                                  ],
-                                                                  1
-                                                                ),
+                                                                  : _vm._e(),
                                                                 _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs11: "",
-                                                                      sm3: "",
-                                                                      md3: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-select",
+                                                                _vm.detail
+                                                                  ? _c(
+                                                                      "v-flex",
                                                                       {
-                                                                        staticClass:
-                                                                          "pa-1",
                                                                         attrs: {
-                                                                          label:
-                                                                            "Floor",
-                                                                          "item-text":
-                                                                            "groups",
-                                                                          "item-value":
-                                                                            "id_groups",
-                                                                          items:
-                                                                            _vm.TaskSub,
-                                                                          disabled:
+                                                                          xs10:
+                                                                            "",
+                                                                          sm2:
+                                                                            "",
+                                                                          md2:
                                                                             ""
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .tasksub_unit
-                                                                              .id_groups,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.tasksub_unit,
-                                                                              "id_groups",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "tasksub_unit.id_groups"
                                                                         }
-                                                                      }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-text-field",
+                                                                          {
+                                                                            staticClass:
+                                                                              "pa-1",
+                                                                            attrs: {
+                                                                              label:
+                                                                                "HP After Adjust",
+                                                                              readonly:
+                                                                                ""
+                                                                            },
+                                                                            model: {
+                                                                              value:
+                                                                                _vm
+                                                                                  .ahs_lokal
+                                                                                  .HPAdjust,
+                                                                              callback: function(
+                                                                                $$v
+                                                                              ) {
+                                                                                _vm.$set(
+                                                                                  _vm.ahs_lokal,
+                                                                                  "HPAdjust",
+                                                                                  $$v
+                                                                                )
+                                                                              },
+                                                                              expression:
+                                                                                "ahs_lokal.HPAdjust"
+                                                                            }
+                                                                          }
+                                                                        )
+                                                                      ],
+                                                                      1
                                                                     )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs12: "",
-                                                                      sm4: "",
-                                                                      md4: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-select",
-                                                                      {
-                                                                        staticClass:
-                                                                          "pa-1",
-                                                                        attrs: {
-                                                                          label:
-                                                                            "Type of Task",
-                                                                          "item-text":
-                                                                            "name",
-                                                                          "item-value":
-                                                                            "id_sub",
-                                                                          items:
-                                                                            _vm.TaskSub,
-                                                                          disabled:
-                                                                            ""
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .tasksub_unit
-                                                                              .id_sub,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.tasksub_unit,
-                                                                              "id_sub",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "tasksub_unit.id_sub"
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs12: "",
-                                                                      sm4: "",
-                                                                      md4: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-select",
-                                                                      {
-                                                                        staticClass:
-                                                                          "pa-1",
-                                                                        attrs: {
-                                                                          label:
-                                                                            "AHS Adjust*",
-                                                                          "item-text":
-                                                                            "name",
-                                                                          "item-value":
-                                                                            "id_ahs_adjust",
-                                                                          items:
-                                                                            _vm.filterAHSAdjust,
-                                                                          required:
-                                                                            ""
-                                                                        },
-                                                                        on: {
-                                                                          change:
-                                                                            _vm.getSelectedIndexAdjust
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .ahs_adjust
-                                                                              .id_ahs_adjust,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.ahs_adjust,
-                                                                              "id_ahs_adjust",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "ahs_adjust.id_ahs_adjust"
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs10: "",
-                                                                      sm2: "",
-                                                                      md2: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-select",
-                                                                      {
-                                                                        staticClass:
-                                                                          "pa-1",
-                                                                        attrs: {
-                                                                          label:
-                                                                            "HSP Adjust*",
-                                                                          "item-text":
-                                                                            "total",
-                                                                          "item-value":
-                                                                            "id_ahs_adjust",
-                                                                          items:
-                                                                            _vm.filterAHSAdjust,
-                                                                          disabled:
-                                                                            ""
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .ahs_adjust
-                                                                              .id_ahs_adjust,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.ahs_adjust,
-                                                                              "id_ahs_adjust",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "ahs_adjust.id_ahs_adjust"
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs10: "",
-                                                                      sm2: "",
-                                                                      md2: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-text-field",
-                                                                      {
-                                                                        staticClass:
-                                                                          "pa-1",
-                                                                        attrs: {
-                                                                          label:
-                                                                            "Volume"
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .rab_details
-                                                                              .volume,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.rab_details,
-                                                                              "volume",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "rab_details.volume"
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                ),
-                                                                _vm._v(" "),
-                                                                _c(
-                                                                  "v-flex",
-                                                                  {
-                                                                    attrs: {
-                                                                      xs10: "",
-                                                                      sm2: "",
-                                                                      md2: ""
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    _c(
-                                                                      "v-select",
-                                                                      {
-                                                                        staticClass:
-                                                                          "pa-1",
-                                                                        attrs: {
-                                                                          label:
-                                                                            "Adjustment*",
-                                                                          "item-text":
-                                                                            "adjustment",
-                                                                          "item-value":
-                                                                            "id_ahs_adjust",
-                                                                          items:
-                                                                            _vm.filterAHSAdjust,
-                                                                          disabled:
-                                                                            ""
-                                                                        },
-                                                                        model: {
-                                                                          value:
-                                                                            _vm
-                                                                              .ahs_adjust
-                                                                              .id_ahs_adjust,
-                                                                          callback: function(
-                                                                            $$v
-                                                                          ) {
-                                                                            _vm.$set(
-                                                                              _vm.ahs_adjust,
-                                                                              "id_ahs_adjust",
-                                                                              $$v
-                                                                            )
-                                                                          },
-                                                                          expression:
-                                                                            "ahs_adjust.id_ahs_adjust"
-                                                                        }
-                                                                      }
-                                                                    )
-                                                                  ],
-                                                                  1
-                                                                )
+                                                                  : _vm._e()
                                                               ],
                                                               1
                                                             )
@@ -32756,7 +31574,131 @@ var render = function() {
                                     )
                                   ],
                                   1
-                                )
+                                ),
+                                _vm._v(" "),
+                                _vm.adjustM
+                                  ? _c(
+                                      "v-flex",
+                                      {
+                                        staticClass: "text-md-center",
+                                        attrs: { sm12: "", "mt-2": "" }
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          [
+                                            _c("v-data-table", {
+                                              staticClass: "elevation-1",
+                                              attrs: {
+                                                headers:
+                                                  _vm.headers_filter_materials,
+                                                sortBy: "status",
+                                                "update:": "",
+                                                "sort-desc": "",
+                                                items: _vm.filterMaterialsAll
+                                              },
+                                              scopedSlots: _vm._u(
+                                                [
+                                                  {
+                                                    key: "top",
+                                                    fn: function() {
+                                                      return [
+                                                        _c(
+                                                          "v-toolbar",
+                                                          [
+                                                            _c(
+                                                              "v-toolbar-title",
+                                                              [
+                                                                _vm._v(
+                                                                  "Detail Materials/Labor"
+                                                                )
+                                                              ]
+                                                            ),
+                                                            _vm._v(" "),
+                                                            _c("v-divider", {
+                                                              staticClass:
+                                                                "mx-4",
+                                                              attrs: {
+                                                                inset: "",
+                                                                vertical: ""
+                                                              }
+                                                            }),
+                                                            _vm._v(" "),
+                                                            _c(
+                                                              "v-btn",
+                                                              {
+                                                                staticClass:
+                                                                  "mb-2",
+                                                                attrs: {
+                                                                  color: "blue",
+                                                                  dark: ""
+                                                                },
+                                                                on: {
+                                                                  click: function(
+                                                                    $event
+                                                                  ) {
+                                                                    _vm.adjustM = false
+                                                                  }
+                                                                }
+                                                              },
+                                                              [_vm._v("Close")]
+                                                            )
+                                                          ],
+                                                          1
+                                                        )
+                                                      ]
+                                                    },
+                                                    proxy: true
+                                                  }
+                                                ],
+                                                null,
+                                                false,
+                                                3201867123
+                                              )
+                                            }),
+                                            _vm._v(" "),
+                                            _c(
+                                              "v-snackbar",
+                                              {
+                                                attrs: {
+                                                  timeout: 3000,
+                                                  color: _vm.snackColor
+                                                },
+                                                model: {
+                                                  value: _vm.snack,
+                                                  callback: function($$v) {
+                                                    _vm.snack = $$v
+                                                  },
+                                                  expression: "snack"
+                                                }
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\n                      " +
+                                                    _vm._s(_vm.snackText) +
+                                                    "\n                      "
+                                                ),
+                                                _c(
+                                                  "v-btn",
+                                                  {
+                                                    attrs: { text: "" },
+                                                    on: {
+                                                      click: function($event) {
+                                                        _vm.snack = false
+                                                      }
+                                                    }
+                                                  },
+                                                  [_vm._v("Close")]
+                                                )
+                                              ],
+                                              1
+                                            )
+                                          ],
+                                          1
+                                        )
+                                      ]
+                                    )
+                                  : _vm._e()
                               ],
                               1
                             )
@@ -32782,7 +31724,14 @@ var render = function() {
         _vm._l(_vm.filtered, function(data) {
           return _c(
             "v-expansion-panel",
-            { key: data.name },
+            {
+              key: data.id_rab,
+              on: {
+                click: function($event) {
+                  return _vm.getstructure(data.id_rab)
+                }
+              }
+            },
             [
               _c(
                 "v-expansion-panel-header",
@@ -32799,7 +31748,7 @@ var render = function() {
                                 attrs: { color: "cyan" },
                                 on: {
                                   click: function($event) {
-                                    return _vm.itemPanelsStructure(data)
+                                    return _vm.getstructure(data.id_rab)
                                   }
                                 }
                               },
@@ -32832,7 +31781,7 @@ var render = function() {
                           _vm._v("Project")
                         ]),
                         _vm._v(" "),
-                        _c("div", [_vm._v(_vm._s(data.name))])
+                        _c("div", [_vm._v(_vm._s(data.project))])
                       ]),
                       _vm._v(" "),
                       _c("v-flex", { attrs: { xs2: "" } }, [
@@ -32865,7 +31814,9 @@ var render = function() {
                               attrs: { color: "green" },
                               on: {
                                 click: function($event) {
-                                  return _vm.itemPanelsStructure(data)
+                                  _vm.itemEdit(data)
+                                  _vm.dialog = true
+                                  _vm.dialog7 = true
                                 }
                               }
                             },
@@ -32878,12 +31829,78 @@ var render = function() {
                               attrs: { color: "red" },
                               on: {
                                 click: function($event) {
-                                  _vm.itemPanelsStructure(data)
+                                  _vm.itemDelete(data)
                                   _vm.dialog2 = true
                                 }
                               }
                             },
                             [_vm._v("delete")]
+                          )
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _vm._v(" "),
+                  _c(
+                    "v-dialog",
+                    {
+                      attrs: { "max-width": "290px" },
+                      model: {
+                        value: _vm.dialog2,
+                        callback: function($$v) {
+                          _vm.dialog2 = $$v
+                        },
+                        expression: "dialog2"
+                      }
+                    },
+                    [
+                      _c(
+                        "v-card",
+                        [
+                          _c("v-card-title", { staticClass: "headline" }, [
+                            _vm._v("Confirmation")
+                          ]),
+                          _vm._v(" "),
+                          _c("v-card-text", [
+                            _vm._v("Are you sure want to delete this RAB?")
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "v-card-actions",
+                            [
+                              _c("v-spacer"),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "green darken-1", text: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.dialog2 = false
+                                      _vm.deleteItem(_vm.rab.id_rab)
+                                    }
+                                  }
+                                },
+                                [_vm._v("Yes")]
+                              ),
+                              _vm._v(" "),
+                              _c(
+                                "v-btn",
+                                {
+                                  attrs: { color: "red darken-1", text: "" },
+                                  on: {
+                                    click: function($event) {
+                                      _vm.dialog2 = false
+                                    }
+                                  }
+                                },
+                                [_vm._v("No")]
+                              )
+                            ],
+                            1
                           )
                         ],
                         1
@@ -32904,7 +31921,14 @@ var render = function() {
                     _vm._l(_vm.Structure, function(data) {
                       return _c(
                         "v-expansion-panel",
-                        { key: data.id_structure_details },
+                        {
+                          key: data.id_structure_details,
+                          on: {
+                            click: function($event) {
+                              return _vm.getfloor(data.id_structure_details)
+                            }
+                          }
+                        },
                         [
                           _c(
                             "v-expansion-panel-header",
@@ -32923,8 +31947,8 @@ var render = function() {
                                             },
                                             on: {
                                               click: function($event) {
-                                                return _vm.itemPanelsGroups(
-                                                  data
+                                                return _vm.getfloor(
+                                                  data.id_structure_details
                                                 )
                                               }
                                             }
@@ -32965,14 +31989,89 @@ var render = function() {
                                           },
                                           on: {
                                             click: function($event) {
-                                              _vm.itemPanelsStructureHandler(
-                                                data
-                                              )
                                               _vm.dialog3 = true
                                             }
                                           }
                                         },
                                         [_vm._v("delete")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ],
+                                1
+                              ),
+                              _vm._v(" "),
+                              _vm._v(" "),
+                              _c(
+                                "v-dialog",
+                                {
+                                  attrs: { "max-width": "290px" },
+                                  model: {
+                                    value: _vm.dialog3,
+                                    callback: function($$v) {
+                                      _vm.dialog3 = $$v
+                                    },
+                                    expression: "dialog3"
+                                  }
+                                },
+                                [
+                                  _c(
+                                    "v-card",
+                                    [
+                                      _c(
+                                        "v-card-title",
+                                        { staticClass: "headline" },
+                                        [_vm._v("Confirmation")]
+                                      ),
+                                      _vm._v(" "),
+                                      _c("v-card-text", [
+                                        _vm._v(
+                                          "Are you sure want to delete this structure?"
+                                        )
+                                      ]),
+                                      _vm._v(" "),
+                                      _c(
+                                        "v-card-actions",
+                                        [
+                                          _c("v-spacer"),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: {
+                                                color: "green darken-1",
+                                                text: ""
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  _vm.dialog3 = false
+                                                  _vm.deleteStructureDetails(
+                                                    data.id_structure_details
+                                                  )
+                                                }
+                                              }
+                                            },
+                                            [_vm._v("Yes")]
+                                          ),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-btn",
+                                            {
+                                              attrs: {
+                                                color: "red darken-1",
+                                                text: ""
+                                              },
+                                              on: {
+                                                click: function($event) {
+                                                  _vm.dialog3 = false
+                                                }
+                                              }
+                                            },
+                                            [_vm._v("No")]
+                                          )
+                                        ],
+                                        1
                                       )
                                     ],
                                     1
@@ -32993,7 +32092,16 @@ var render = function() {
                                 _vm._l(_vm.Groups, function(data) {
                                   return _c(
                                     "v-expansion-panel",
-                                    { key: data.id_group_details },
+                                    {
+                                      key: data.id_group_details,
+                                      on: {
+                                        click: function($event) {
+                                          return _vm.gettasksub(
+                                            data.id_group_details
+                                          )
+                                        }
+                                      }
+                                    },
                                     [
                                       _c(
                                         "v-expansion-panel-header",
@@ -33015,8 +32123,8 @@ var render = function() {
                                                           click: function(
                                                             $event
                                                           ) {
-                                                            return _vm.itemPanelsTask(
-                                                              data
+                                                            return _vm.gettasksub(
+                                                              data.id_group_details
                                                             )
                                                           }
                                                         }
@@ -33044,7 +32152,7 @@ var render = function() {
                                                     staticClass:
                                                       "subtitle-2 black--text"
                                                   },
-                                                  [_vm._v(_vm._s(data.group))]
+                                                  [_vm._v(_vm._s(data.floor))]
                                                 )
                                               ]),
                                               _vm._v(" "),
@@ -33069,14 +32177,95 @@ var render = function() {
                                                         click: function(
                                                           $event
                                                         ) {
-                                                          _vm.itemPanelsGroupHandler(
-                                                            data
-                                                          )
                                                           _vm.dialog4 = true
                                                         }
                                                       }
                                                     },
                                                     [_vm._v("delete")]
+                                                  )
+                                                ],
+                                                1
+                                              )
+                                            ],
+                                            1
+                                          ),
+                                          _vm._v(" "),
+                                          _vm._v(" "),
+                                          _c(
+                                            "v-dialog",
+                                            {
+                                              attrs: { "max-width": "290px" },
+                                              model: {
+                                                value: _vm.dialog4,
+                                                callback: function($$v) {
+                                                  _vm.dialog4 = $$v
+                                                },
+                                                expression: "dialog4"
+                                              }
+                                            },
+                                            [
+                                              _c(
+                                                "v-card",
+                                                [
+                                                  _c(
+                                                    "v-card-title",
+                                                    { staticClass: "headline" },
+                                                    [_vm._v("Confirmation")]
+                                                  ),
+                                                  _vm._v(" "),
+                                                  _c("v-card-text", [
+                                                    _vm._v(
+                                                      "Are you sure want to delete this floor?"
+                                                    )
+                                                  ]),
+                                                  _vm._v(" "),
+                                                  _c(
+                                                    "v-card-actions",
+                                                    [
+                                                      _c("v-spacer"),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-btn",
+                                                        {
+                                                          attrs: {
+                                                            color:
+                                                              "green darken-1",
+                                                            text: ""
+                                                          },
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              _vm.dialog4 = false
+                                                              _vm.deleteGroupDetails(
+                                                                data.id_group_details
+                                                              )
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("Yes")]
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-btn",
+                                                        {
+                                                          attrs: {
+                                                            color:
+                                                              "red darken-1",
+                                                            text: ""
+                                                          },
+                                                          on: {
+                                                            click: function(
+                                                              $event
+                                                            ) {
+                                                              _vm.dialog4 = false
+                                                            }
+                                                          }
+                                                        },
+                                                        [_vm._v("No")]
+                                                      )
+                                                    ],
+                                                    1
                                                   )
                                                 ],
                                                 1
@@ -33097,7 +32286,16 @@ var render = function() {
                                             _vm._l(_vm.TaskSub, function(data) {
                                               return _c(
                                                 "v-expansion-panel",
-                                                { key: data.id_sub_details },
+                                                {
+                                                  key: data.id_sub_details,
+                                                  on: {
+                                                    click: function($event) {
+                                                      return _vm.getdetails(
+                                                        data.id_sub_details
+                                                      )
+                                                    }
+                                                  }
+                                                },
                                                 [
                                                   _c(
                                                     "v-expansion-panel-header",
@@ -33119,8 +32317,8 @@ var render = function() {
                                                                       click: function(
                                                                         $event
                                                                       ) {
-                                                                        return _vm.itemPanelsDetail(
-                                                                          data
+                                                                        return _vm.getdetails(
+                                                                          data.id_sub_details
                                                                         )
                                                                       }
                                                                     }
@@ -33188,9 +32386,6 @@ var render = function() {
                                                                     click: function(
                                                                       $event
                                                                     ) {
-                                                                      _vm.itemPanelsTaskHandler(
-                                                                        data
-                                                                      )
                                                                       _vm.dialog5 = true
                                                                     }
                                                                   }
@@ -33200,6 +32395,115 @@ var render = function() {
                                                                     "delete"
                                                                   )
                                                                 ]
+                                                              )
+                                                            ],
+                                                            1
+                                                          )
+                                                        ],
+                                                        1
+                                                      ),
+                                                      _vm._v(" "),
+                                                      _vm._v(" "),
+                                                      _c(
+                                                        "v-dialog",
+                                                        {
+                                                          attrs: {
+                                                            "max-width": "290px"
+                                                          },
+                                                          model: {
+                                                            value: _vm.dialog5,
+                                                            callback: function(
+                                                              $$v
+                                                            ) {
+                                                              _vm.dialog5 = $$v
+                                                            },
+                                                            expression:
+                                                              "dialog5"
+                                                          }
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "v-card",
+                                                            [
+                                                              _c(
+                                                                "v-card-title",
+                                                                {
+                                                                  staticClass:
+                                                                    "headline"
+                                                                },
+                                                                [
+                                                                  _vm._v(
+                                                                    "Confirmation"
+                                                                  )
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-card-text",
+                                                                [
+                                                                  _vm._v(
+                                                                    "Are you sure want to delete this task group?"
+                                                                  )
+                                                                ]
+                                                              ),
+                                                              _vm._v(" "),
+                                                              _c(
+                                                                "v-card-actions",
+                                                                [
+                                                                  _c(
+                                                                    "v-spacer"
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "v-btn",
+                                                                    {
+                                                                      attrs: {
+                                                                        color:
+                                                                          "green darken-1",
+                                                                        text: ""
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          _vm.dialog5 = false
+                                                                          _vm.deleteTaskDetails(
+                                                                            data.id_sub_details
+                                                                          )
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        "Yes"
+                                                                      )
+                                                                    ]
+                                                                  ),
+                                                                  _vm._v(" "),
+                                                                  _c(
+                                                                    "v-btn",
+                                                                    {
+                                                                      attrs: {
+                                                                        color:
+                                                                          "red darken-1",
+                                                                        text: ""
+                                                                      },
+                                                                      on: {
+                                                                        click: function(
+                                                                          $event
+                                                                        ) {
+                                                                          _vm.dialog5 = false
+                                                                        }
+                                                                      }
+                                                                    },
+                                                                    [
+                                                                      _vm._v(
+                                                                        "No"
+                                                                      )
+                                                                    ]
+                                                                  )
+                                                                ],
+                                                                1
                                                               )
                                                             ],
                                                             1
@@ -33226,582 +32530,478 @@ var render = function() {
                                                               "v-expansion-panel",
                                                               {
                                                                 key:
-                                                                  data.id_rab_details
+                                                                  data.id_ahs_lokal
                                                               },
                                                               [
                                                                 _c(
                                                                   "v-expansion-panel-header",
                                                                   [
-                                                                    data.id_ahs !=
-                                                                    null
-                                                                      ? _c(
-                                                                          "v-layout",
+                                                                    _c(
+                                                                      "v-layout",
+                                                                      {
+                                                                        attrs: {
+                                                                          row:
+                                                                            "",
+                                                                          wrap:
+                                                                            ""
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-flex",
+                                                                          [
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticClass:
+                                                                                  "caption grey--text"
+                                                                              },
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Task"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  _vm._s(
+                                                                                    data.name
+                                                                                  )
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-flex",
+                                                                          [
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticClass:
+                                                                                  "caption grey--text"
+                                                                              },
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Satuan"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  _vm._s(
+                                                                                    data.satuan
+                                                                                  )
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-flex",
+                                                                          [
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticClass:
+                                                                                  "caption grey--text"
+                                                                              },
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "HSP"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Rp. " +
+                                                                                    _vm._s(
+                                                                                      data.HSP
+                                                                                    )
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        data.status ==
+                                                                        "Price"
+                                                                          ? _c(
+                                                                              "v-flex",
+                                                                              [
+                                                                                _c(
+                                                                                  "div",
+                                                                                  {
+                                                                                    staticClass:
+                                                                                      "caption grey--text"
+                                                                                  },
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "HSP Adjust"
+                                                                                    )
+                                                                                  ]
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "div",
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "Rp. " +
+                                                                                        _vm._s(
+                                                                                          data.HSPAdj
+                                                                                        )
+                                                                                    )
+                                                                                  ]
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          : _vm._e(),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-flex",
+                                                                          [
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticClass:
+                                                                                  "caption grey--text"
+                                                                              },
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Volume"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  _vm._s(
+                                                                                    data.volume
+                                                                                  )
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        data.status ==
+                                                                        "Volume"
+                                                                          ? _c(
+                                                                              "v-flex",
+                                                                              [
+                                                                                _c(
+                                                                                  "div",
+                                                                                  {
+                                                                                    staticClass:
+                                                                                      "caption grey--text"
+                                                                                  },
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "Volume Adjust"
+                                                                                    )
+                                                                                  ]
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "div",
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      _vm._s(
+                                                                                        data.volumeAdj
+                                                                                      )
+                                                                                    )
+                                                                                  ]
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          : _vm._e(),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-flex",
+                                                                          [
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticClass:
+                                                                                  "caption grey--text"
+                                                                              },
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Adjustment"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  _vm._s(
+                                                                                    data.adjustment
+                                                                                  )
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-flex",
+                                                                          [
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticClass:
+                                                                                  "caption grey--text"
+                                                                              },
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "HP"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Rp. " +
+                                                                                    _vm._s(
+                                                                                      data.HP
+                                                                                    )
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-flex",
+                                                                          [
+                                                                            _c(
+                                                                              "div",
+                                                                              {
+                                                                                staticClass:
+                                                                                  "caption grey--text"
+                                                                              },
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "HP Adjustment"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "div",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Rp. " +
+                                                                                    _vm._s(
+                                                                                      data.HPAdj
+                                                                                    )
+                                                                                )
+                                                                              ]
+                                                                            )
+                                                                          ]
+                                                                        ),
+                                                                        _vm._v(
+                                                                          " "
+                                                                        ),
+                                                                        _c(
+                                                                          "v-flex",
                                                                           {
                                                                             attrs: {
-                                                                              row:
+                                                                              xs12:
                                                                                 "",
-                                                                              wrap:
+                                                                              sm12:
+                                                                                "",
+                                                                              md1:
                                                                                 ""
                                                                             }
                                                                           },
                                                                           [
                                                                             _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Task"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.ahs
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Price"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Rp. " +
-                                                                                        _vm._s(
-                                                                                          data.price
-                                                                                        )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Satuan"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.satuan
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Status"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.status
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Volume"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.volume
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Coefficient"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.coefficient
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Sub Total"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Rp. " +
-                                                                                        _vm._s(
-                                                                                          data.sub_total
-                                                                                        )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
+                                                                              "v-icon",
                                                                               {
                                                                                 attrs: {
-                                                                                  xs12:
-                                                                                    "",
-                                                                                  sm12:
-                                                                                    "",
-                                                                                  md1:
-                                                                                    ""
+                                                                                  color:
+                                                                                    "light-blue lighten-2"
+                                                                                },
+                                                                                on: {
+                                                                                  click: function(
+                                                                                    $event
+                                                                                  ) {
+                                                                                    _vm.dialog6 = true
+                                                                                  }
                                                                                 }
                                                                               },
                                                                               [
-                                                                                _c(
-                                                                                  "v-icon",
-                                                                                  {
-                                                                                    attrs: {
-                                                                                      color:
-                                                                                        "light-blue lighten-2"
-                                                                                    },
-                                                                                    on: {
-                                                                                      click: function(
-                                                                                        $event
-                                                                                      ) {
-                                                                                        _vm.itemPanelsDetailTask(
-                                                                                          data
-                                                                                        )
-                                                                                        _vm.dialog6 = true
-                                                                                      }
-                                                                                    }
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "delete"
-                                                                                    )
-                                                                                  ]
+                                                                                _vm._v(
+                                                                                  "delete"
                                                                                 )
-                                                                              ],
-                                                                              1
+                                                                              ]
                                                                             )
                                                                           ],
                                                                           1
                                                                         )
-                                                                      : _vm._e(),
+                                                                      ],
+                                                                      1
+                                                                    ),
                                                                     _vm._v(" "),
-                                                                    data.id_ahs_adjust !=
-                                                                    null
-                                                                      ? _c(
-                                                                          "v-layout",
-                                                                          {
-                                                                            attrs: {
-                                                                              row:
-                                                                                "",
-                                                                              wrap:
-                                                                                ""
-                                                                            }
+                                                                    _c(
+                                                                      "v-dialog",
+                                                                      {
+                                                                        attrs: {
+                                                                          "max-width":
+                                                                            "290px"
+                                                                        },
+                                                                        model: {
+                                                                          value:
+                                                                            _vm.dialog6,
+                                                                          callback: function(
+                                                                            $$v
+                                                                          ) {
+                                                                            _vm.dialog6 = $$v
                                                                           },
+                                                                          expression:
+                                                                            "dialog6"
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        _c(
+                                                                          "v-card",
                                                                           [
                                                                             _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Task"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.ahs_adjust
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Price"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Rp. " +
-                                                                                        _vm._s(
-                                                                                          data.price_adjust
-                                                                                        )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Satuan"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.satuan_adjust
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Status"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.status_adjust
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Volume"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.volume
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Coefficient"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      _vm._s(
-                                                                                        data.coefficient
-                                                                                      )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
-                                                                              [
-                                                                                _c(
-                                                                                  "div",
-                                                                                  {
-                                                                                    staticClass:
-                                                                                      "caption grey--text"
-                                                                                  },
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Sub Total"
-                                                                                    )
-                                                                                  ]
-                                                                                ),
-                                                                                _vm._v(
-                                                                                  " "
-                                                                                ),
-                                                                                _c(
-                                                                                  "div",
-                                                                                  [
-                                                                                    _vm._v(
-                                                                                      "Rp. " +
-                                                                                        _vm._s(
-                                                                                          data.sub_total
-                                                                                        )
-                                                                                    )
-                                                                                  ]
-                                                                                )
-                                                                              ]
-                                                                            ),
-                                                                            _vm._v(
-                                                                              " "
-                                                                            ),
-                                                                            _c(
-                                                                              "v-flex",
+                                                                              "v-card-title",
                                                                               {
-                                                                                attrs: {
-                                                                                  xs12:
-                                                                                    "",
-                                                                                  sm12:
-                                                                                    "",
-                                                                                  md1:
-                                                                                    ""
-                                                                                }
+                                                                                staticClass:
+                                                                                  "headline"
                                                                               },
                                                                               [
+                                                                                _vm._v(
+                                                                                  "Confirmation"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "v-card-text",
+                                                                              [
+                                                                                _vm._v(
+                                                                                  "Are you sure want to delete this task?"
+                                                                                )
+                                                                              ]
+                                                                            ),
+                                                                            _vm._v(
+                                                                              " "
+                                                                            ),
+                                                                            _c(
+                                                                              "v-card-actions",
+                                                                              [
                                                                                 _c(
-                                                                                  "v-icon",
+                                                                                  "v-spacer"
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "v-btn",
                                                                                   {
                                                                                     attrs: {
                                                                                       color:
-                                                                                        "light-blue lighten-2"
+                                                                                        "green darken-1",
+                                                                                      text:
+                                                                                        ""
                                                                                     },
                                                                                     on: {
                                                                                       click: function(
                                                                                         $event
                                                                                       ) {
-                                                                                        return _vm.itemHandler2(
-                                                                                          data
+                                                                                        _vm.dialog6 = false
+                                                                                        _vm.deleteDetail(
+                                                                                          data.id_ahs_lokal
                                                                                         )
                                                                                       }
                                                                                     }
                                                                                   },
                                                                                   [
                                                                                     _vm._v(
-                                                                                      "delete"
+                                                                                      "Yes"
+                                                                                    )
+                                                                                  ]
+                                                                                ),
+                                                                                _vm._v(
+                                                                                  " "
+                                                                                ),
+                                                                                _c(
+                                                                                  "v-btn",
+                                                                                  {
+                                                                                    attrs: {
+                                                                                      color:
+                                                                                        "red darken-1",
+                                                                                      text:
+                                                                                        ""
+                                                                                    },
+                                                                                    on: {
+                                                                                      click: function(
+                                                                                        $event
+                                                                                      ) {
+                                                                                        _vm.dialog6 = false
+                                                                                      }
+                                                                                    }
+                                                                                  },
+                                                                                  [
+                                                                                    _vm._v(
+                                                                                      "No"
                                                                                     )
                                                                                   ]
                                                                                 )
@@ -33811,7 +33011,9 @@ var render = function() {
                                                                           ],
                                                                           1
                                                                         )
-                                                                      : _vm._e()
+                                                                      ],
+                                                                      1
+                                                                    )
                                                                   ],
                                                                   1
                                                                 ),
@@ -33864,333 +33066,6 @@ var render = function() {
             1
           )
         }),
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "290px" },
-          model: {
-            value: _vm.dialog2,
-            callback: function($$v) {
-              _vm.dialog2 = $$v
-            },
-            expression: "dialog2"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "headline" }, [
-                _vm._v("Confirmation")
-              ]),
-              _vm._v(" "),
-              _c("v-card-text", [
-                _vm._v("Are you sure want to delete this RAB?")
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog2 = false
-                          _vm.deleteItem(_vm.rab.id_rab)
-                        }
-                      }
-                    },
-                    [_vm._v("Yes")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "red darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog2 = false
-                        }
-                      }
-                    },
-                    [_vm._v("No")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "290px" },
-          model: {
-            value: _vm.dialog3,
-            callback: function($$v) {
-              _vm.dialog3 = $$v
-            },
-            expression: "dialog3"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "headline" }, [
-                _vm._v("Confirmation")
-              ]),
-              _vm._v(" "),
-              _c("v-card-text", [
-                _vm._v("Are you sure want to delete this structure?")
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog3 = false
-                          _vm.deleteStructureDetails(
-                            _vm.detail.id_structure_details
-                          )
-                        }
-                      }
-                    },
-                    [_vm._v("Yes")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "red darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog3 = false
-                        }
-                      }
-                    },
-                    [_vm._v("No")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "290px" },
-          model: {
-            value: _vm.dialog4,
-            callback: function($$v) {
-              _vm.dialog4 = $$v
-            },
-            expression: "dialog4"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "headline" }, [
-                _vm._v("Confirmation")
-              ]),
-              _vm._v(" "),
-              _c("v-card-text", [
-                _vm._v("Are you sure want to delete this floor?")
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog4 = false
-                          _vm.deleteGroupDetails(_vm.detail.id_group_details)
-                        }
-                      }
-                    },
-                    [_vm._v("Yes")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "red darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog4 = false
-                        }
-                      }
-                    },
-                    [_vm._v("No")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "290px" },
-          model: {
-            value: _vm.dialog5,
-            callback: function($$v) {
-              _vm.dialog5 = $$v
-            },
-            expression: "dialog5"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "headline" }, [
-                _vm._v("Confirmation")
-              ]),
-              _vm._v(" "),
-              _c("v-card-text", [
-                _vm._v("Are you sure want to delete this task group?")
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog5 = false
-                          _vm.deleteTaskDetails(_vm.detail.id_sub_details)
-                        }
-                      }
-                    },
-                    [_vm._v("Yes")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "red darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog5 = false
-                        }
-                      }
-                    },
-                    [_vm._v("No")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c(
-        "v-dialog",
-        {
-          attrs: { "max-width": "290px" },
-          model: {
-            value: _vm.dialog6,
-            callback: function($$v) {
-              _vm.dialog6 = $$v
-            },
-            expression: "dialog6"
-          }
-        },
-        [
-          _c(
-            "v-card",
-            [
-              _c("v-card-title", { staticClass: "headline" }, [
-                _vm._v("Confirmation")
-              ]),
-              _vm._v(" "),
-              _c("v-card-text", [
-                _vm._v("Are you sure want to delete this task?")
-              ]),
-              _vm._v(" "),
-              _c(
-                "v-card-actions",
-                [
-                  _c("v-spacer"),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "green darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog6 = false
-                          _vm.deleteDetail(_vm.rab_details.id_rab_details)
-                        }
-                      }
-                    },
-                    [_vm._v("Yes")]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "v-btn",
-                    {
-                      attrs: { color: "red darken-1", text: "" },
-                      on: {
-                        click: function($event) {
-                          _vm.dialog6 = false
-                        }
-                      }
-                    },
-                    [_vm._v("No")]
-                  )
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ],
         1
       )
     ],
@@ -90879,7 +89754,7 @@ var routes = [{
     // ])
 
   }, {
-    path: '/analisa_adjustment',
+    path: '/analisa_lokal',
     name: 'adjust',
     component: _components_AHSAdjustComponent__WEBPACK_IMPORTED_MODULE_14__["default"]
   }, {
@@ -90975,20 +89850,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../http */ "./resources/js/http.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  add: function add(payload) {
-    return new Promise(function (resolve, reject) {
-      var successCallback = function successCallback(res) {
-        var data = res.data;
-        resolve(data);
-      };
-
-      var errorCallback = function errorCallback(err) {
-        reject(err);
-      };
-
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/ahs_adjust/store', payload, successCallback, errorCallback);
-    });
-  },
   "delete": function _delete(id) {
     return new Promise(function (resolve, reject) {
       var successCallback = function successCallback(res) {
@@ -91000,7 +89861,7 @@ __webpack_require__.r(__webpack_exports__);
         reject(err);
       };
 
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]('/api/ahs_adjust/delete/' + id, successCallback, errorCallback);
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]('/api/rab_details/delete/' + id, successCallback, errorCallback);
     });
   },
   get: function get() {
@@ -91014,7 +89875,7 @@ __webpack_require__.r(__webpack_exports__);
         reject(err);
       };
 
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/ahs_adjust', successCallback, errorCallback);
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/rab_details', successCallback, errorCallback);
     });
   },
   getDetails: function getDetails() {
@@ -91028,17 +89889,31 @@ __webpack_require__.r(__webpack_exports__);
         reject(err);
       };
 
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/ahs_adjust_details', successCallback, errorCallback);
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/ahs_lokal_details', successCallback, errorCallback);
+    });
+  },
+  getItem: function getItem() {
+    return new Promise(function (resolve, reject) {
+      var successCallback = function successCallback(res) {
+        var data = res.data;
+        resolve(data);
+      };
+
+      var errorCallback = function errorCallback(err) {
+        reject(err);
+      };
+
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/ahs_lokal_details/delete/' + id, successCallback, errorCallback);
     });
   }
 });
 
 /***/ }),
 
-/***/ "./resources/js/service/AHSAdjustDetails.js":
-/*!**************************************************!*\
-  !*** ./resources/js/service/AHSAdjustDetails.js ***!
-  \**************************************************/
+/***/ "./resources/js/service/AHSLokalDetails.js":
+/*!*************************************************!*\
+  !*** ./resources/js/service/AHSLokalDetails.js ***!
+  \*************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -91058,7 +89933,7 @@ __webpack_require__.r(__webpack_exports__);
         reject(err);
       };
 
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]('/api/ahs_adjust_details/delete/' + id, successCallback, errorCallback);
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]('/api/ahs_lokal_details/delete/' + id, successCallback, errorCallback);
     });
   },
   getItem: function getItem(id) {
@@ -91072,7 +89947,7 @@ __webpack_require__.r(__webpack_exports__);
         reject(err);
       };
 
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/ahs_adjust_details/show/' + id, successCallback, errorCallback);
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/ahs_lokal_details/show/' + id, successCallback, errorCallback);
     });
   },
   updateDetail: function updateDetail(payload, id) {
@@ -91086,7 +89961,7 @@ __webpack_require__.r(__webpack_exports__);
         reject(err);
       };
 
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"].patch('/api/ahs_adjust_details/update/' + id, payload, successCallback, errorCallback);
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].patch('/api/ahs_lokal_details/update/' + id, payload, successCallback, errorCallback);
     });
   }
 });
@@ -91619,20 +90494,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _http__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../http */ "./resources/js/http.js");
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  addItem: function addItem(payload) {
-    return new Promise(function (resolve, reject) {
-      var successCallback = function successCallback(res) {
-        var data = res.data;
-        resolve(data);
-      };
-
-      var errorCallback = function errorCallback(err) {
-        reject(err);
-      };
-
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/rabs/store', payload, successCallback, errorCallback);
-    });
-  },
   addAllItem: function addAllItem(payload) {
     return new Promise(function (resolve, reject) {
       var successCallback = function successCallback(res) {
@@ -91644,7 +90505,7 @@ __webpack_require__.r(__webpack_exports__);
         reject(err);
       };
 
-      _http__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/rabs/storeN', payload, successCallback, errorCallback);
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/rabs/store', payload, successCallback, errorCallback);
     });
   },
   updateItem: function updateItem(payload, id) {
@@ -91730,6 +90591,20 @@ __webpack_require__.r(__webpack_exports__);
 
       _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/rab_details', successCallback, errorCallback);
     });
+  },
+  showD: function showD(id) {
+    return new Promise(function (resolve, reject) {
+      var successCallback = function successCallback(res) {
+        var data = res.data;
+        resolve(data);
+      };
+
+      var errorCallback = function errorCallback(err) {
+        reject(err);
+      };
+
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/rab_details/show/' + id, successCallback, errorCallback);
+    });
   }
 });
 
@@ -91787,6 +90662,48 @@ __webpack_require__.r(__webpack_exports__);
       };
 
       _http__WEBPACK_IMPORTED_MODULE_0__["default"]["delete"]('/api/tasksub_details/delete/' + id, successCallback, errorCallback);
+    });
+  },
+  show: function show(id) {
+    return new Promise(function (resolve, reject) {
+      var successCallback = function successCallback(res) {
+        var data = res.data;
+        resolve(data);
+      };
+
+      var errorCallback = function errorCallback(err) {
+        reject(err);
+      };
+
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/structure_details/show/' + id, successCallback, errorCallback);
+    });
+  },
+  showG: function showG(id) {
+    return new Promise(function (resolve, reject) {
+      var successCallback = function successCallback(res) {
+        var data = res.data;
+        resolve(data);
+      };
+
+      var errorCallback = function errorCallback(err) {
+        reject(err);
+      };
+
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/group_details/show/' + id, successCallback, errorCallback);
+    });
+  },
+  showT: function showT(id) {
+    return new Promise(function (resolve, reject) {
+      var successCallback = function successCallback(res) {
+        var data = res.data;
+        resolve(data);
+      };
+
+      var errorCallback = function errorCallback(err) {
+        reject(err);
+      };
+
+      _http__WEBPACK_IMPORTED_MODULE_0__["default"].get('/api/tasksub_details/show/' + id, successCallback, errorCallback);
     });
   }
 });

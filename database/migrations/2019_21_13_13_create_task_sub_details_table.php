@@ -17,7 +17,6 @@ class CreateTaskSubDetailsTable extends Migration
             $table->increments('id_sub_details');
             $table->unsignedInteger('id_group_details');
             $table->unsignedInteger('id_sub');
-            $table->string('name');
             $table->SoftDeletes();
 
             $table->foreign('id_sub')->references('id_sub')->on('task_subs');

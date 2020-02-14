@@ -23,7 +23,7 @@ class AHSDetailsTransformers extends TransformerAbstract
             'spesification'   => $ahs_details->materials->spesification,
             'status'          => $ahs_details->materials->status,
             'store'           => $ahs_details->materials->stores->name,
-            'sub_adjustment'  => 1,
+            // 'adjustment'      => 1,
         ];
     }
 }

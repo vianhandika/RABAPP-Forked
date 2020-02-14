@@ -7,6 +7,7 @@ use App\StructureDetails;
 use App\GroupDetails;
 use App\TaskSubDetails;
 use App\RABDetails;
+use App\AHSLokalDetails;
 use App\Transformers\RABDetailsTransformers;
 use App\RAB;
 use App\AHS;
@@ -61,22 +62,34 @@ class RABDetailsController extends RestController
 
     public function destroy($id)
     {
-        $rab_details = RABDetails::findOrFail($id);
+        $details = RABDetails::findOrFail($id);
         $tasksub = TaskSubDetails::where('id_sub_details',$rab_details->id_sub_details)->first();
         $group = GroupDetails::where('id_group_details',$tasksub->id_group_details)->first();
         $structure = StructureDetails::where('id_structure_details',$group->id_structure_details)->first();
 
         $rab = RAB::where('id_rab',$structure->id_rab)->first();
-        $rab->total_rab -= $rab_details->sub_total;
-        // dd($rab->total_rab);
+        $rab->total_rab -= $rab_details->HP;
         $rab->save();
-        // dd($rab->total_rab);
 
-        $status = $rab_details->delete();
+        $ahs = AHSLokalDetails::where('id_ahs_lokal',$details->id_ahs_lokal)->get();
+        foreach($ahs as $ahs_data)
+        {
+            if(AHSLokalDetails::where('id_ahs_lokal',$ahs_data->id_ahs_lokal)->get() != null)
+                $delete = AHSLokalDetails::where('id_ahs_lokal',$ahs_data->id_ahs_lokal)->delete();
+        }
+
+        $status = $details->delete();
 
         return response()->json([
             'status' => $status,
             'message' => $status ? 'Success' : 'Error Delete'
         ]);
+    }
+
+    public function show($id)
+    {
+        $rab_details = RABDetails::where('id_sub_details',$id)->get();
+        $response = $this->generateCollection($rab_details);
+        return $this->sendResponse($response,200);
     }
 }

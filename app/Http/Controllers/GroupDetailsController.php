@@ -8,6 +8,7 @@ use App\StructureDetails;
 use App\GroupDetails;
 use App\TaskSubDetails;
 use App\RABDetails;
+use App\AHSLokalDetails;
 use App\RAB;
 
 class GroupDetailsController extends RestController
@@ -37,17 +38,22 @@ class GroupDetailsController extends RestController
             {   
                 if(RABDetails::where('id_sub_details',$detail->id_sub_details)->get() != null)
                 {
-                    $total += $detail->sub_total;
+                    $total += $detail->HP;
                     $delete = RABDetails::where('id_sub_details',$detail->id_sub_details)->delete();
+                }
+
+                $ahs = AHSLokalDetails::where('id_ahs_lokal',$detail->id_ahs_lokal)->get();
+                foreach($ahs as $ahs_data)
+                {
+                    if(AHSLokalDetails::where('id_ahs_lokal',$ahs_data->id_ahs_lokal)->get() != null)
+                        $delete = AHSLokalDetails::where('id_ahs_lokal',$ahs_data->id_ahs_lokal)->delete();
                 }
             }
         }
         $structure = StructureDetails::where('id_structure_details',$group->id_structure_details)->first();
-        // dd($structure->id_rab);
         $rab=RAB::findOrFail($structure->id_rab);
         $rab->total_rab = $rab->total_rab - $total;
         $rab->save();
-        // dd($rab->total_rab);
 
         $status = $group->delete();
         
@@ -55,5 +61,12 @@ class GroupDetailsController extends RestController
             'status' => $status,
             'message' => $status ? 'Deleted' : 'Error Delete'
         ]);
+    }
+
+    public function show($id)
+    {
+        $group = GroupDetails::where('id_structure_details',$id)->get();
+        $response = $this->generateCollection($group);
+        return $this->sendResponse($response,200);
     }
 }

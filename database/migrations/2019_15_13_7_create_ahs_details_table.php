@@ -17,7 +17,7 @@ class CreateAHSDetailsTable extends Migration
             $table->increments('id_ahs_details');
             $table->unsignedInteger('id_ahs');
             $table->unsignedInteger('id_material');
-            $table->double('coefficient');
+            $table->double('coefficient',3);
             $table->double('sub_total');
             $table->timestamps();
             $table->softDeletes();

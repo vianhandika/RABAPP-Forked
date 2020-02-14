@@ -9,6 +9,7 @@ use App\StructureDetails;
 use App\GroupDetails;
 use App\TaskSubDetails;
 use App\RABDetails;
+use App\AHSLokalDetails;
 use App\RAB;
 
 class StructureDetailsController extends RestController
@@ -43,8 +44,15 @@ class StructureDetailsController extends RestController
                     {   
                         if(RABDetails::where('id_sub_details',$detail->id_sub_details)->get() != null)
                         {
-                            $total += $detail->sub_total;
+                            $total += $detail->HP;
                             $delete = RABDetails::where('id_sub_details',$detail->id_sub_details)->delete();
+                        }
+
+                        $ahs = AHSLokalDetails::where('id_ahs_lokal',$detail->id_ahs_lokal)->get();
+                        foreach($ahs as $ahs_data)
+                        {
+                            if(AHSLokalDetails::where('id_ahs_lokal',$ahs_data->id_ahs_lokal)->get() != null)
+                                $delete = AHSLokalDetails::where('id_ahs_lokal',$ahs_data->id_ahs_lokal)->delete();
                         }
                     }
                 }
@@ -60,5 +68,12 @@ class StructureDetailsController extends RestController
             'status' => $status,
             'message' => $status ? 'Deleted' : 'Error Delete'
         ]);
+    }
+
+    public function show($id)
+    {
+        $structure = StructureDetails::where('id_rab',$id)->get();
+        $response = $this->generateCollection($structure);
+        return $this->sendResponse($response,200);
     }
 }

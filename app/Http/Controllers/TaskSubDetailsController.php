@@ -8,6 +8,7 @@ use App\StructureDetails;
 use App\GroupDetails;
 use App\TaskSubDetails;
 use App\RABDetails;
+use App\AHSLokalDetails;
 use App\RAB;
 
 class TaskSubDetailsController extends RestController
@@ -25,29 +26,40 @@ class TaskSubDetailsController extends RestController
     {
         $total = 0;
         $tasksub = TaskSubDetails::findOrFail($id);
+        
         $details = RABDetails::where('id_sub_details',$tasksub->id_sub_details)->get();
         foreach($details as $detail)
         {   
             if(RABDetails::where('id_sub_details',$detail->id_sub_details)->get() != null)
             {
-                $total += $detail->sub_total;
+                $total += $detail->HP;
                 $delete = RABDetails::where('id_sub_details',$detail->id_sub_details)->delete();
             }
+            
+            $ahs = AHSLokalDetails::where('id_ahs_lokal',$detail->id_ahs_lokal)->get();
+            foreach($ahs as $ahs_data)
+            {
+                if(AHSLokalDetails::where('id_ahs_lokal',$ahs_data->id_ahs_lokal)->get() != null)
+                    $delete = AHSLokalDetails::where('id_ahs_lokal',$ahs_data->id_ahs_lokal)->delete();
+            }
         }
-        // dd($total);
         $group = GroupDetails::where('id_group_details',$tasksub->id_group_details)->first();
         $structure = StructureDetails::where('id_structure_details',$group->id_structure_details)->first();
-        // dd($structure->id_rab);
         $rab=RAB::findOrFail($structure->id_rab);
         $rab->total_rab = $rab->total_rab - $total;
         $rab->save();
-        // dd($rab->total_rab);
-
         $status = $tasksub->delete();
         
         return response()->json([
             'status' => $status,
             'message' => $status ? 'Deleted' : 'Error Delete'
         ]);
+    }
+
+    public function show($id)
+    {
+        $tasksub = TaskSubDetails::where('id_group_details',$id)->get();
+        $response = $this->generateCollection($tasksub);
+        return $this->sendResponse($response,200);
     }
 }

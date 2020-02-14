@@ -14,7 +14,7 @@ class TaskSubDetails extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'id_sub','id_group_details', 'name'
+        'id_sub','id_group_details'
     ];
 
     protected $dates = [

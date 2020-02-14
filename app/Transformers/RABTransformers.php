@@ -14,10 +14,10 @@ class RABTransformers extends TransformerAbstract
         return [
             'id_rab'            => $rab->id_rab,
             'id_project'        => $rab->id_project,
+            'project'           => $rab->projects->name,
             'kode'              => $rab->kode,
             'total_rab'         => $rab->total_rab,
             'desc'              => $rab->desc,
-            'name'              => $rab->projects->name,
         ]; 
     }
 

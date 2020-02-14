@@ -1,18 +1,6 @@
 import Http from '../http'
 
 export default {
-    add(payload) {
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.post('/api/ahs_adjust/store', payload, successCallback, errorCallback)
-        })
-    },
     delete(id){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
@@ -22,7 +10,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.delete('/api/ahs_adjust/delete/'+id, successCallback, errorCallback)
+            Http.delete('/api/rab_details/delete/'+id, successCallback, errorCallback)
         })
     },
     get(){
@@ -35,7 +23,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/ahs_adjust', successCallback, errorCallback)
+            Http.get('/api/rab_details', successCallback, errorCallback)
         })
     },
     getDetails(){
@@ -48,7 +36,19 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/ahs_adjust_details', successCallback, errorCallback)
+            Http.get('/api/ahs_lokal_details', successCallback, errorCallback)
+        })
+    },
+    getItem(){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/ahs_lokal_details/delete/'+id, successCallback, errorCallback)
         })
     }
 }

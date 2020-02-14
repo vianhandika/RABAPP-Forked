@@ -37,142 +37,25 @@
         dense
       >
       </v-text-field>
-    
-      <div class="flex-grow-1"></div>
-      <v-dialog v-model="dialog" max-width="600px">
-        <template v-slot:activator="{ on }">
-          <v-btn color="blue" dark class="mb-2" @click="reset" v-on="on">New</v-btn>
-        </template>
-        <v-card>
-          <v-card-title>
-            <span class="headline">New AHS Adjust</span>
-          </v-card-title>
-          
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-card-text>
-              <v-layout>
-                <v-flex>
-                  <v-text-field
-                    v-model="AHS.kode"
-                    label="ID"
-                ></v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
-                <v-flex>
-                  <v-select
-                    v-model="AHS.id_project"
-                    label="Project"
-                    :items="project"
-                    item-text="name"
-                    item-value="id_project"
-                    :return-object="false"
-                    @change="filterAHS(AHS.id_project)"
-                ></v-select>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
-                <v-select
-                  v-model="AHS.id_ahs"
-                  label="AHS"
-                  :items="filter"
-                  item-text="name"
-                  item-value="id_ahs"
-                  :return-object="false"
-                  @change="getDetails(AHS.id_ahs)"
-                ></v-select>
-              </v-layout>
-
-              <v-flex class="text-md-center" sm12 mt-2 v-if="tambah">
-                <div>
-                  <v-data-table
-                    :headers="headersAHS"
-                    sortBy="status"
-                    update: sort-desc
-                    class="elevation-1"
-                    :items="detailsDefault"
-                  >
-                  <template v-slot:item.sub_adjustment="props">
-                    <v-edit-dialog
-                      :return-value.sync="props.item.sub_adjustment"
-                      @save="save(props)"
-                      @cancel="cancel"
-                      lazy
-                      persistent
-                      dark
-                    > {{ props.item.sub_adjustment }}
-                      <template v-slot:input>
-                        <v-text-field
-                          v-model="props.item.sub_adjustment"
-                          label="Edit"
-                          single-line
-                          counter
-                        ></v-text-field>
-                      </template>
-                    </v-edit-dialog>
-                  </template>
-                  </v-data-table>
-
-                  <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-                    {{ snackText }}
-                    <v-btn text @click="snack = false">Close</v-btn>
-                  </v-snackbar>
-                  
-                </div>
-              </v-flex>
-
-                <v-layout >
-                  <v-flex>
-                    <v-text-field 
-                      v-model="AHS.adjustment" 
-                      label="Adjustment*"
-                      required
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-                
-                <v-layout >
-                  <v-flex>
-                    <v-text-field 
-                      v-model="AHS.total" 
-                      label="Total"
-                      required
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-            </v-card-text>
-          </v-form>
-
-          <v-card-actions>
-            <div class="flex-grow-1"></div>
-            <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-            <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Save</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
     </v-toolbar>
 
     <v-expansion-panels accordion>
-      <v-expansion-panel v-for="data in filtered" :key="data.id_ahs_adjust"  :search="search">
+      <v-expansion-panel v-for="data in filtered" :key="data.id_ahs_lokal"  :search="search" @click="getItem(data.id_ahs_lokal)">
           <v-expansion-panel-header>
             <v-layout row wrap :class="`pa-3 ahs`">
               <v-flex xs1>
                 <div class="caption grey--text">ID</div>
-                <div>{{ data.kode }}</div>
+                <div>{{ data.id_ahs_lokal }}</div>
               </v-flex>
-              <v-flex xs2>
+              <!-- <v-flex xs2>
                 <div class="caption grey--text">Project</div>
                 <div>{{ data.project }}</div>
-              </v-flex>
-              <v-flex xs1>
+              </v-flex> -->
+              <v-flex xs2>
                 <div class="caption grey--text">Task Group</div>
                 <div>{{ data.name_sub }}</div>
               </v-flex>
-              <v-flex xs1>
+              <v-flex xs2>
                 <div class="caption grey--text">Task</div>
                 <div>{{ data.name }}</div>
               </v-flex>
@@ -190,7 +73,7 @@
               </v-flex>
               <v-flex xs1>
                 <div class="caption grey--text">Total</div>
-                <div>Rp. {{ data.total }}</div>
+                <div>Rp. {{ data.HSP }}</div>
               </v-flex>
               <v-flex xs1>
                 <div class="caption grey--text">Actions</div>
@@ -200,7 +83,7 @@
             </v-layout>
             
             <template v-slot:actions>
-              <v-icon color="cyan" @click="getItem(data.id_ahs_adjust)">expand_more</v-icon>
+              <v-icon color="cyan" @click="getItem(data.id_ahs_lokal)">expand_more</v-icon>
             </template>
 
             <!-- template dialog delete ahs -->
@@ -208,10 +91,10 @@
               <v-dialog v-model="dialog2" max-width="290px">
                 <v-card>
                   <v-card-title class="headline">Confirmation</v-card-title>
-                    <v-card-text>Are you sure want to delete this AHS Adjustment?</v-card-text>
+                    <v-card-text>Are you sure want to delete this AHS Lokal?</v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(data.id_ahs_adjust)">Yes</v-btn>
+                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(data.id_ahs_lokal)">Yes</v-btn>
                     <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -381,7 +264,7 @@
                             <v-card-text>Are you sure want to delete this detail?</v-card-text>
                           <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(item.id_ahs_details_adjust)">Yes</v-btn>
+                            <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(item.id_ahs_lokal_details)">Yes</v-btn>
                             <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
                           </v-card-actions>
                         </v-card>
@@ -408,9 +291,10 @@ import Controller from './../service/Job'
 import materialController from './../service/Material'
 import ahsController from './../service/AHSAdjust'
 import ahs from './../service/AHS'
-import detailController from './../service/AHSAdjustDetails'
+import detailController from './../service/AHSLokalDetails'
 import task from './../service/TaskSub'
 import project from './../service/Project'
+import rabdetails from './../service/RAB'
 
   export default {
     data: () => ({
@@ -510,13 +394,16 @@ import project from './../service/Project'
           text: 'Item', align: 'left', sortable: false, value: 'name',
         },
         { 
-          text: 'Price AHS', align: 'left', sortable: false, value: 'price_ahs',
+          text: 'Price', align: 'left', sortable: false, value: 'price',
         },
         { 
-          text: 'Sub Adjustment', align: 'left', sortable: false, value: 'sub_adjustment',
+          text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient',
         },
         { 
           text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total',
+        },
+        { 
+          text: 'Adjustment', align: 'left', sortable: false, value: 'adjustment',
         },
         {
           text: 'Actions', align: 'left', sortable: false, value: 'action'
@@ -566,13 +453,11 @@ import project from './../service/Project'
                   return data
                 else{
                   return (data.name.match(this.search) ||
-                    data.kode.match(this.search) ||
                     data.volume.toLocaleString().match(this.search))
                 }
               }
             }else{
               return (data.name.match(this.search) ||
-                data.kode.match(this.search) ||
                 data.volume.toLocaleString().match(this.search))
             }
         });
@@ -738,10 +623,6 @@ import project from './../service/Project'
         this.index = this.material.map(function(e) { return e.id_material; }).indexOf(this.Material.id_material);
         console.log(this.index)
       },
-      getSelectedIndexD(){
-        this.index = this.material.map(function(e) { return e.id_material; }).indexOf(this.detail.id_material);
-        console.log(this.index)
-      },
       async getTask()
       {
         try{
@@ -791,38 +672,6 @@ import project from './../service/Project'
       {
         
       },
-      async addItem(){
-        let total_labor=0
-        let total_material=0
-        for(let detail of this.details)
-        {
-          let material = this.material.find(obj=>obj.id_material == detail.id_material)
-          console.log('ini material')
-          console.log(material)
-          if(material.status == "labor")
-            total_labor += detail.sub_total
-          if(material.status == "material")
-            total_material += detail.sub_total 
-        }
-        try{
-          const payload = {
-            kode            : this.AHS.kode,
-            id_project      : this.AHS.id_project,
-            id_job          : this.AHS.id_job,
-            id_sub          : this.AHS.id_sub,
-            // volume          : this.AHS.volume,
-            adjustment      : this.AHS.adjustment,
-            total_labor     : total_labor,
-            total_material  : total_material,
-            total           : this.AHS.total,
-            detail          : this.details
-          }
-          await ahsController.add(payload)
-          this.close()
-        }catch(err){
-          console.log(err)
-        }
-      },
       // async updateItem(id){
       //   try{
       //       const payload = {
@@ -855,7 +704,7 @@ import project from './../service/Project'
       }, 
       async deleteItem(id){
         try{
-          await ahsController.delete(id).data
+          await rab.deleteDetail(id).data
           this.getallAHS()
         }catch(err){
           console.log(err)
@@ -863,9 +712,9 @@ import project from './../service/Project'
       },
       async deleteDetail(id){
         try{
-          let ahs = this.details.find(obj=>obj.id_ahs_details_adjust == id)
+          let ahs = this.details.find(obj=>obj.id_ahs_lokal_details == id)
           await detailController.deleteItem(id).data
-          this.getItem(ahs.id_ahs_adjust)
+          this.getItem(ahs.id_ahs_lokal)
           this.close()
         }catch(err){
           console.log(err)

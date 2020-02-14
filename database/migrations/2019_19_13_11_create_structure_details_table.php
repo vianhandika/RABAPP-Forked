@@ -17,7 +17,6 @@ class CreateStructureDetailsTable extends Migration
             $table->increments('id_structure_details');
             $table->unsignedInteger('id_rab');
             $table->unsignedInteger('id_structure');
-            $table->string('name');
             $table->SoftDeletes();
 
             $table->foreign('id_structure')->references('id_structure')->on('structures');

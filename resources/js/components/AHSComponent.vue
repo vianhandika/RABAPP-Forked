@@ -228,8 +228,8 @@
               </v-flex>
               <v-flex xs1>
                 <div class="caption grey--text">Actions</div>
-                <v-icon color="green" @click="itemEdit(data);dialog5=true">edit</v-icon>
-                <v-icon color="red" @click="dialogDelete=true">delete</v-icon>
+                <v-icon color="green" @click="itemHandler(data);dialog5=true">edit</v-icon>
+                <v-icon color="red" @click="itemHandler(data);dialogDelete=true">delete</v-icon>
               </v-flex>
             </v-layout>
             
@@ -244,7 +244,7 @@
                     <v-card-text>Are you sure want to delete this AHS?</v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(data.id_ahs)">Yes</v-btn>
+                    <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(AHS.id_ahs)">Yes</v-btn>
                     <v-btn color="red darken-1" text @click="dialogDelete = false">No</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -621,7 +621,7 @@ import task from './../service/TaskSub'
         this.filter=[...this.filter]
         this.temp = this.filter
       },
-      itemEdit(item){
+      itemHandler(item){
         this.AHS = item
         this.details = item.ahs_details.data
       },

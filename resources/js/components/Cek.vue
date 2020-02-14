@@ -654,15 +654,6 @@
                       </template>
 
                       <template v-slot:item.action="{ item }">
-                        <!-- <VBtn
-                          fab dark
-                          color="light-blue darken-4"
-                          small
-                          @click="itemTask(item);tambah=true;"
-                        >
-                        Add
-                        </VBtn> -->
-                        
                         <v-tooltip bottom>
                           <template v-slot:activator="{ on }">
                             <v-btn 
