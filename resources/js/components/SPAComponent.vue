@@ -1,167 +1,65 @@
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer
+  <v-app>
+    <v-navigation-drawer 
       v-model="drawer"
       app
       dark
-      color="teal"
+      color="blue darken-2"
     >
+    <v-layout column align-center>
+      <v-flex class="mt-8 mb-6">
+        <v-avatar dark width="100px">
+          <!-- <v-icon>home_work</v-icon> -->
+          <!-- <v-text>Vastu Cipta Persada</v-text> -->
+        </v-avatar>
+      </v-flex>
+    </v-layout>
       <v-list dense>
-        <v-list-item @click="home">
+        <v-list-item v-for="link in links" :key="link.title" router :to="link.route" active-class="border">
           <v-list-item-action>
             <v-btn icon>
-              <v-icon>dashboard</v-icon>
+              <v-icon>{{link.icon}}</v-icon>
             </v-btn>
           </v-list-item-action>
-
           <v-list-item-content>
-            <v-list-item-title>Dashboard</v-list-item-title>
+            <v-list-item-title>{{link.title}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <v-list-item @click="project">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>home_work</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Project</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="store">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>store</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Store</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="job">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>work</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Task</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="materials">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>waves</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Materials/Labor</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="analisa">
-          <v-list-item-action>
-            <v-btn icon>
-            <v-icon>money</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>AHS</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="adjust">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>trending_up</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>AHS Lokal</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="transaction">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>payment</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>RAB</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- <v-list-item @click="reports">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>file_copy</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Report</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
-
       </v-list>
-
-      <!-- <v-expansion-panels accordion v-if="expand">
-        <v-expansion-panel>
-            <v-expansion-panel-header>cek</v-expansion-panel-header>
-          <v-expansion-panel-content v-for="(item,i) in items" :key="i">
-            {{ item }}
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels> -->
-
     </v-navigation-drawer>
     
     <v-app-bar
       app
-      color="green"
+      color="blue accent-2"
       dark
     >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer">
+      <v-app-bar-nav-icon @click.stop="drawer= !drawer">
         <v-icon>reorder</v-icon>
       </v-app-bar-nav-icon>
-      <v-toolbar-title
-        style="width: 300px"
-      >
-        Vastu Cipta Persada
-      </v-toolbar-title>
-      
-      <v-spacer></v-spacer>
+      <v-toolbar-title>Dashboard</v-toolbar-title>
 
-       <div class="logout" >
-          <v-btn @click="logout" outlined color="white">
-            <v-icon>logout</v-icon>
-            Log Out
-          </v-btn>
-        </div>
+      <v-flex class="padding">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-icon dark v-on="on">account_circle</v-icon>
+          </template>
+          <span>Profile</span>
+        </v-tooltip>
+      </v-flex>
+      
+      <v-flex>
+        <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-icon dark v-on="on" @click="logout">power_settings_new</v-icon>
+        </template>
+        <span>Log Out</span>
+      </v-tooltip>
+      </v-flex>
     </v-app-bar>
 
     <v-content>
       <router-view></router-view>
     </v-content>
-    
-    <!-- <v-footer
-      color="light-blue"
-      app
-    >
-      <span class="white--text">&copy; copyright 2019</span>
-    </v-footer> -->
   </v-app>
 </template>
 
@@ -176,10 +74,15 @@ import Structure from '../service/Structure'
     data: () => ({
       drawer: null,
       expand: false,
-      items: [
-        'Building',
-        'Floor',
-        'Task Group',
+      links : [
+        {icon: 'dashboard', title: 'Dashboard', route: '/dashboard'},
+        {icon: 'home_work', title: 'Project', route: '/project'},
+        {icon: 'store', title: 'Store', route: '/store'},
+        {icon: 'work', title: 'Task', route: '/job'},
+        {icon: 'waves', title: 'Materials/Labor', route: '/materials'},
+        {icon: 'money', title: 'AHS', route: '/analisa'},
+        {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
+        {icon: 'payment', title: 'RAB', route: '/rab'},
       ],
     }),
     computed: {
@@ -201,34 +104,16 @@ import Structure from '../service/Structure'
           await this.destroyToken()
           this.$router.push({ name : 'login' })
       },
-      project (){
-          this.$router.push({name: 'project'});
-      },
-      job () {
-        this.$router.push({name: 'job'});
-      },
-      materials(){
-        this.$router.push({name: 'materials'});
-      },
-      transaction(){
-        this.expand = true
-        this.$router.push({name: 'transaction'});
-      },
-      analisa(){
-        this.$router.push({name: 'analisa'})
-      },
-      home(){
-        this.$router.push({name: 'dashboard'})
-      },
-      store(){
-        this.$router.push({name: 'store'})
-      },
-      reports(){
-        this.$router.push({name : 'reports'})
-      },
-      adjust(){
-        this.$router.push({name: 'adjust'})
-      }
+      
     }
   }
 </script>
+
+<style>
+.border{
+  border-left: 4px solid rgb(4, 110, 180);
+}
+.padding{
+  padding-left: 77%
+}
+</style>

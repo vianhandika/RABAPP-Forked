@@ -51,10 +51,9 @@
                 <tbody>
                     <tr>
                         <td>{{$datas[0]->kode_task}}</td>
-                        <td>{{$datas[0]->task}}</td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
+                        <td colspan="2">{{$datas[0]->task}}</td>
+                        <td></td> 
+                        <td></td> 
                         <td></td> 
                         <td></td> 
                         <td>satuan : {{$datas[0]->satuan_task}}</td> 
@@ -91,20 +90,21 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                         <td ></td>
+                        
                         @if ($j == $i+1)
                         {
-                            <td style="border-bottom: 0.2px solid black">Total Material</td>
+                            <td colspan="2" style="border-bottom: 0.2px solid black">Total Material</td>
                             <td style="border-bottom: 0.2px solid black">Rp. {{ $data->total_material }}</td>
                         }
                         @endif
+                        
                         
                         @if($data->status == "labor")
                         {
                             @if($loop->last)
                             {
-                                <td style="border-bottom: 0.2px solid black">Total Tenaga</td>
+                                <td colspan="2" style="border-bottom: 0.2px solid black">Total Tenaga</td>
                                 <td style="border-bottom: 0.2px solid black">Rp. {{ $data->total_labor }}</td>
                             }
                             @endif
@@ -122,8 +122,7 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td>Biaya Total</td>
+                        <td colspan="2">Biaya Total</td>
                         <td>Rp. {{$data->total}}</td>
                     </tr>
                 </tbody>

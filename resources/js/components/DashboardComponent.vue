@@ -1,561 +1,173 @@
 <template>
-  <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-      dark
-      color="teal"
-    >
-      <v-list dense>
-        <v-list-item @click="home">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>dashboard</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Dashboard</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="project">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>home_work</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Project</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="store">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>store</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Store</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="job">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>work</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Task</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="materials">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>waves</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Materials/Labor</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="analisa">
-          <v-list-item-action>
-            <v-btn icon>
-            <v-icon>money</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>AHS</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="adjust">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>trending_up</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>AHS Lokal</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <v-list-item @click="transaction">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>payment</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>RAB</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-
-        <!-- <v-list-item @click="reports">
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>file_copy</v-icon>
-            </v-btn>
-          </v-list-item-action>
-
-          <v-list-item-content>
-            <v-list-item-title>Report</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item> -->
-
-      </v-list>
-    </v-navigation-drawer>
-
-    <!-- <v-expansion-panel expand>
-      <v-expansion-panel-content v-for="(item,i) in 5" :key="i" :value="item === 2">
-        <div slot="header">Item</div>
-        <v-card>
-          <v-card-text>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
-        </v-card>
-      </v-expansion-panel-content>
-    </v-expansion-panel> -->
-
-    
-
-    <v-app-bar
-      app
-      color="green"
-      dark
-    >
-      <v-app-bar-nav-icon @click.stop="drawer = !drawer">
-        <v-icon>reorder</v-icon>
-      </v-app-bar-nav-icon>
-      <v-toolbar-title
-        style="width: 300px"
-      >
-        <!-- Dashboard -->
-          Vastu Cipta Persada
-      </v-toolbar-title>
-      
-      <v-spacer></v-spacer>
-
-       <div class="logout" >
-          <v-btn @click="logout" outlined color="white">
-            <v-icon>logout</v-icon>
-            Log Out
-          </v-btn>
-        </div>
-    </v-app-bar>
-
-    <v-content>
-      <div>
-        <v-card color="white">
-          <v-breadcrumbs :items="items"></v-breadcrumbs>
-        </v-card> 
-
-        <br>
-        <v-container >
+  <v-app class="blue lighten-4">
+    <v-container>
+      <v-layout row="ma-4"></v-layout>
+      <v-app style="background-color: grey lighten-2" class="elevation-8">
+        <v-container>
           <v-layout row wrap>
-            <v-flex
-              sm6
-              xs12
-              md6
-              lg3
-            >
+            <v-flex sm6 xs12 md6 lg3 v-for="panel in panels" :key="panel.title">
             <v-card class="ma-3">
               <v-list-item>
                 <v-list-item-avatar
                   tile
                   class="mt-n7"
                 >
-                <v-sheet color="green" width="80" height="80" elevation="10">
-                  <v-icon dark large>home_work</v-icon>
+                <v-sheet :style="{'background-color': panel.color}" width="80" height="80" elevation="10">
+                  <v-icon dark large>{{panel.icon}}</v-icon>
                 </v-sheet>
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <div class="overline text-right">Project</div>
-                  <v-list-item-title class="headline mb-1 text-right" v-for="projects in counter" :key="projects.count">{{ projects.count }}</v-list-item-title>
+                  <div class="overline text-right">{{panel.title}}</div>
+                  <v-list-item-title class="headline mb-1 text-right">2</v-list-item-title>
                   <div><v-divider></v-divider></div>
                 </v-list-item-content> 
               </v-list-item>
 
               <v-card-actions>
-                <v-icon text class="ma-2">house</v-icon>
-                <div class="overline">Vastu Cipta Persada</div>
+                <v-icon text class="ma-2">{{panel.footer}}</v-icon>
+                <div class="overline">{{panel.text}}</div>
               </v-card-actions>
             </v-card>
             </v-flex>
-
-            <v-flex
-              sm6
-              xs12
-              md6
-              lg3
-            >
-            <v-card class="ma-3">
-              <v-list-item>
-                <v-list-item-avatar
-                  tile
-                  class="mt-n7"
-                >
-                <v-sheet color="#F44336" width="80" height="80" elevation="10">
-                      <v-icon dark large>waves</v-icon>
-                </v-sheet>
-                </v-list-item-avatar>
-
-                <v-list-item-content>
-                  <div class="overline text-right">Materials/Labor</div>
-                  <v-list-item-title class="headline mb-1 text-right" v-for="counts in materials" :key="counts.count">{{ counts.count }}</v-list-item-title>
-                  <div><v-divider></v-divider></div>
-                </v-list-item-content> 
-              </v-list-item>
-
-              <v-card-actions>
-                <v-icon text class="ma-2">house</v-icon>
-                <div class="overline">Vastu Cipta Persada</div>
-              </v-card-actions>
-            </v-card>
-            </v-flex>
-
-            <v-flex
-              sm6
-              xs12
-              md6
-              lg3
-            >
-              <v-card class="ma-3">
-                <v-list-item>
-                  <v-list-item-avatar
-                    tile
-                    class="mt-n7"
-                  >
-                  <v-sheet color="#03A9F4" width="80" height="80" elevation="10">
-                        <v-icon dark large>money</v-icon>
-                  </v-sheet>
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <div class="overline text-right">AHS</div>
-                    <v-list-item-title class="headline mb-1 text-right" v-for="counts in ahs" :key="counts.count">{{ counts.count }}</v-list-item-title>
-                    <div><v-divider></v-divider></div>
-                  </v-list-item-content> 
-                </v-list-item>
-
-                <v-card-actions>
-                  <v-icon text class="ma-2">house</v-icon>
-                  <div class="overline">VISA Card</div>
-                </v-card-actions>
-              </v-card>
-            </v-flex>
-
-          <v-flex
-            sm6
-            xs12
-            md6
-            lg3
-          >
-          <v-card class="ma-3">
-            <v-list-item >
-              <v-list-item-avatar
-                tile
-                class="mt-n7"
-              >
-              <v-sheet color="#FFC107" width="80" height="80" elevation="10">
-                    <v-icon dark large>payment</v-icon>
-              </v-sheet>
-              </v-list-item-avatar>
-              <v-list-item-content>
-                <div class="overline text-right">Total RAB</div>
-                <v-list-item-title class="headline mb-1 text-right" v-for="counts in rab" :key="counts.total">Rp. {{ counts.total }}</v-list-item-title>
-                <div><v-divider></v-divider></div>
-              </v-list-item-content> 
-            </v-list-item>
-
-            <v-card-actions>
-              <v-icon text class="ma-2">folder</v-icon>
-              <div class="overline">Prodect</div>
-            </v-card-actions>
-          </v-card>
-          </v-flex>
-
-          <!-- <v-flex xs12 sm6 md4 lg3>
-            <v-card class="text-center ma-3">
-              <v-responsive class="pt-4">
-              </v-responsive>
-              <v-card-text>
-                <div class="subheading">{{person.count}}</div>
-                <div class="grey--text">{{person.count}}</div>
-              </v-card-text>
-              <v-card-actions>
-                  <v-btn outlined color="orange">
-                      <v-icon small left >message</v-icon>
-                      <span>Message</span>
-                  </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-flex> -->
-
-          <!-- <v-flex>
-            <v-card class="text-center ma-3">
-              <v-card-title>
-                What
-              </v-card-title>
-            </v-card>
-          </v-flex> -->
-          
-          <v-flex>
-            <v-card class="text-center ma-3">
-              <v-card-title>
-                Reports
-              </v-card-title>
-
-              <!-- <v-responsive class="pt-4">
-                <v-data-table
-                :headers="headers"
-                :items="item">
-                  <template v-slot:item.action="{ item }">
-                    <v-dialog v-model="dialog3" max-width="450px">
-                      <template v-slot:activator="{ on }">
-                        <v-icon
-                          small
-                          class="mr-2"
-                          color="green"
-                          v-on="on"
-                        >
-                          picture_as_pdf
-                        </v-icon>
-                      </template>
-                        <v-card>
-                          <v-card-title>
-                            <span class="headline">Edit Task</span>
-                          </v-card-title>
-                        
-                          <Vform>
-                            <v-card-text>
-                              <v-layout>
-                                <v-flex>
-                                  <v-text-field 
-                                    v-model="Job.kode" 
-                                    label="ID Task"
-                                    :error-messages="idErrors"
-                                    @input="$v.Job.kode.$touch()"
-                                    @blur="$v.Job.kode.$touch()"
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-                              </v-layout>
-
-                              <v-layout>
-                                  <v-flex>
-                                    <v-text-field 
-                                      v-model="Job.name" 
-                                      label="Name"
-                                      :error-messages="nameErrors"
-                                      @input="$v.Job.name.$touch()"
-                                      @blur="$v.Job.name.$touch()"
-                                    >
-                                    </v-text-field>
-                                  </v-flex>
-                                </v-layout>
-
-                                <v-container row>
-                                  <v-select row
-                                    v-model="Job.satuan"
-                                    :items="satuan"
-                                    item-text="name"
-                                    item-value="name"
-                                    label="Satuan"
-                                    :error-messages="satuanErrors"
-                                    @input="$v.Job.satuan.$touch()"
-                                    @blur="$v.Job.satuan.$touch()"
-                                  ></v-select>
-                                  <v-btn 
-                                    width="50px" 
-                                    color="blue" 
-                                    @click="dialog4=true"
-                                  > 
-                                  Add
-                                  </v-btn>
-                                </v-container>
-
-                                <template>
-                                <v-dialog v-model="dialog4" width="300px" style="color: blue">
-                                  <v-card-text>
-                                    <v-layout>
-                                      <v-text-field
-                                        label="Satuan"
-                                        v-model="name"
-                                      >
-                                      </v-text-field>
-                                    </v-layout>
-                                    <div class="flex-grow-1"></div>
-                                      <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
-                                      <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
-                                  </v-card-text>
-                                </v-dialog>
-                                </template>
-
-                                <v-radio-group v-model="Job.status" row> 
-                                  <v-radio label="Volume" value="v"></v-radio>
-                                  <v-radio label="Price" value="p"></v-radio>
-                                </v-radio-group> 
-
-                                <v-select row
-                                    v-model="Job.status"
-                                    :items="items"
-                                    label="Status"
-                                    :error-messages="statusErrors"
-                                    @input="$v.Job.status.$touch()"
-                                    @blur="$v.Job.status.$touch()"
-                                  ></v-select>
-
-                                <v-layout>
-                                  <v-flex>
-                                    <v-text-field 
-                                      v-model="Job.details" 
-                                      label="Spesification"
-                                      :error-messages="detailsErrors"
-                                      @input="$v.Job.details.$touch()"
-                                      @blur="$v.Job.details.$touch()"
-                                    >
-                                    </v-text-field>
-                                  </v-flex>
-                                </v-layout>
-                            </v-card-text>
-                          </Vform>
-
-                          <v-card-actions>
-                            <div class="flex-grow-1"></div>
-                            <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-                            <v-btn class="ma-2" rounded color="orange" dark @click="updateItem(Job.id_job)">Save</v-btn>
-                          </v-card-actions> 
-                        </v-card>
-                    </v-dialog>
-
-                    <v-dialog v-model="dialog2" max-width="290px">
-                      <template v-slot:activator="{ on }">
-                        <v-icon
-                          small
-                          color="red"
-                          v-on="on"
-                          @click="itemHandler(item)"
-                        >
-                          delete
-                        </v-icon>
-                      </template>
-                          <v-card>
-                            <v-card-title class="headline">Confirmation</v-card-title>
-                              <v-card-text>Are you sure want to delete this task?</v-card-text>
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Job.id_job)">Yes</v-btn>
-                              <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
-                            </v-card-actions>
-                          </v-card>
-                    </v-dialog>
-                  </template>
-                </v-data-table>
-              </v-responsive>  -->
-              <template>
-                <v-expansion-panels focusable>
-                  <v-expansion-panel
-                    v-for="(item,i) in 5"
-                    :key="i"
-                  >
-                    <v-expansion-panel-header>Item</v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </v-expansion-panel-content>
-                  </v-expansion-panel>
-                </v-expansion-panels>
-              </template>
-              
-            </v-card>
-          </v-flex>
-
           </v-layout>
+          <v-col cols="12" class="body-2 grey--text"><h1>Reports</h1></v-col>
         </v-container>
-      </div>
-    </v-content>
 
-    <!-- <v-footer
-      color="blue lighten-1"
-      app
-    >
-      <span class="white--text">&copy; copyright 2019</span>
-    </v-footer> -->
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-container>
+              <v-card>
+                <v-row>
+                  <v-col cols="4" align-center>
+                    <v-card-title class="headline red--text">RAB</v-card-title>
+                  </v-col>
+                  
+                  <v-col cols="7">
+                    <v-text-field
+                      v-model="search"
+                      append-icon="search"
+                      label="Search"
+                      single-line
+                      hide details    
+                      color="red"
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+
+                <v-list>
+                  <v-list-item v-for="data in filtered" :key="data.id_rab">
+                    <v-list-item-avatar color="red">
+                      <v-icon dark>picture_as_pdf</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
+                      <v-list-item-title>{{data.project}}</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content align="right">
+                      <v-list-item-subtitle>Nominal</v-list-item-subtitle>
+                      <v-list-item-title>Rp. {{ Number(data.total_rab).toLocaleString() }}</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-container>
+          </v-col>
+
+          <v-col cols="12" md="6">
+            <v-container>
+              <v-card>
+                <v-row>
+                  <v-col cols="4" align-center>
+                    <v-card-title class="headline blue--text">AHS</v-card-title>
+                  </v-col>
+                  
+                  <v-col cols="7">
+                    <v-text-field
+                      v-model="searchAHS"
+                      append-icon="search"
+                      label="Search"
+                      single-line
+                      hide details    
+                      color="blue"
+                    >
+                    </v-text-field>
+                  </v-col>
+                </v-row>
+
+                <v-list>
+                  <v-list-item v-for="data in filteredAHS" :key="data.id_ahs">
+                    <v-list-item-avatar color="blue">
+                      <v-icon dark @click="generateReports(data.id_ahs)">picture_as_pdf</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>{{data.name_sub}}</v-list-item-subtitle>
+                      <v-list-item-title>{{data.name}}</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content align="right">
+                      <v-list-item-subtitle>HSP</v-list-item-subtitle>
+                      <v-list-item-title>Rp. {{ Number(data.total).toLocaleString()}}</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-card>
+            </v-container>
+          </v-col>
+        </v-row>
+      </v-app>
+    </v-container>
   </v-app>
 </template>
+  
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import Controller from './../service/Project'
+import RAB from './../service/RAB'
+import ahs from './../service/AHS'
+import report from './../service/Reports'
 
   export default {
-    counter:[],
-    materials:[],
-    rab:[],
-    ahs:[],
     props: {
       source: String,
     },
     data: () => ({
       dialog2: false,
       dialog3: false,
-      items: [
-      {
-        text: 'Dashboard',
-        disabled: false,
-        href: 'transaction'
-      },
-      {
-        text: 'Reports',
-        disabled: false,
-        href: 'reports'
-      }
-    ],
-    headers: [
-        {
-          text : 'No',
-          sortable: false,
-          value : 'no'
-        },
-        {
-          text: 'Name',
-          align: 'left',
-          sortable: false,
-          value: 'name',
-        },
-        {
-          sortable: false,
-          text: 'Cek',
-          value: 'status'
-        },
-        { 
-          text: 'Actions', 
-          value: 'action', 
-          sortable: false 
-        },
+
+      search:'',
+      searchAHS:'',
+
+      counter:[],
+      materials:[],
+      RAB:[],
+      ahs:[],
+
+      links : [
+        {icon: 'dashboard', title: 'Dashboard', route: '/dashboard'},
+        {icon: 'home_work', title: 'Project', route: '/project'},
+        {icon: 'store', title: 'Store', route: '/store'},
+        {icon: 'work', title: 'Task', route: '/job'},
+        {icon: 'waves', title: 'Materials/Labor', route: '/materials'},
+        {icon: 'money', title: 'AHS', route: '/analisa'},
+        {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
+        {icon: 'payment', title: 'RAB', route: '/rab'},
       ],
-      item:[
-        {
-          no: '1', name: 'Laporan Rencana Anggaran Biaya', sortable: false
-        }
+      panels:[
+        {icon: 'home_work',title:'Project',count:'project',color:'green',footer:'house',text:'Vastu Cipta Persada'},
+        {icon: 'waves',title:'Materials/Labor',count:'materials',color:'#F44336',footer:'house',text:'Vastu Cipta Persada'},
+        {icon: 'money',title:'AHS',count:'ahs',footer:'house',color:'#03A9F4',text:'Vastu Cipta Persada'},
+        {icon: 'payment',title:'Total RAB',count:'rab',footer:'house',color:'#FFC107',text:'Vastu Cipta Persada'},
       ],
-      drawer: null,
     }),
     mounted() {
-      this.counter()
-      this.counter_materials()
-      this.counter_ahs()
-      this.total()
+      this.getRAB()    
+      this.getAHS()  
     },
     computed: {
       ...mapState({
@@ -563,6 +175,16 @@ import Controller from './../service/Project'
           error: state => state.Token.error,
           token: state => state.Token.token,
         }),
+      filtered:function(){
+        return this.RAB.filter((data)=>{
+          return data.project.match(this.search);
+        });
+      },
+      filteredAHS:function(){
+        return this.ahs.filter((data)=>{
+          return data.name.match(this.searchAHS)
+        })
+      }
     },
     methods: {
       ...mapActions({
@@ -573,57 +195,29 @@ import Controller from './../service/Project'
         loggedIn: 'Token/loggedIn',
       }),
       async logout() {
-          await this.destroyToken()
-          this.$router.push({ name : 'login' })
+        await this.destroyToken()
+        this.$router.push({ name : 'login' })
       },
-      project (){
-          this.$router.push({name: 'project'});
-      },
-      job () {
-        this.$router.push({name: 'job'});
-      },
-      materials(){
-        this.$router.push({name: 'materials'});
-      },
-      transaction(){
-        this.$router.push({name: 'transaction'});
-      },
-      analisa(){
-        this.$router.push({name: 'analisa'})
-      },
-      home(){
-        this.$router.push({name: 'dashboard'})
-      },
-      store(){
-        this.$router.push({name: 'store'})
-      },
-      adjust(){
-        this.$router.push({name: 'adjust'})
-      },
-      async counter(){
+      async getRAB(){
         try{
-          this.counter = (await Controller.count()).data
+          this.RAB = (await RAB.getallItem()).data
         }catch(err){
           console.log(err)
         }
       },
-      async counter_materials(){
+      async getAHS()
+      {
         try{
-          this.materials = (await Controller.count_materials()).data
+          this.ahs = (await ahs.getallItem()).data
         }catch(err){
           console.log(err)
         }
       },
-      async total(){
+      async generateReports(id)
+      {
+        console.log(id)
         try{
-          this.rab = (await Controller.total()).data
-        }catch(err){
-          console.log(err)
-        }
-      },
-      async counter_ahs(){
-        try{
-          this.ahs = (await Controller.count_ahs()).data
+          await report.reports(id)
         }catch(err){
           console.log(err)
         }
@@ -631,3 +225,12 @@ import Controller from './../service/Project'
     }
   }
 </script>
+
+<style>
+.border{
+  border-left: 4px solid rgb(4, 110, 180);
+}
+.rounded{
+  border-radius: 30px
+}
+</style>

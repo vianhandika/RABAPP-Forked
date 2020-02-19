@@ -1,336 +1,341 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="material"
-    :pagination.sync="pagination"
-    sortBy="status"
-    update: sort-desc    
-    :search="search"
-    sort-by="date"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar dark color="cyan">
-        <v-toolbar-title>Materials/Labor</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
-
-        <v-text-field
-            flat
-            solo-inverted
-            hide-details
-            prepend-inner-icon="search"
-            label="Search"
-            class="hidden-sm-and-down"
-            color="blue"
-            v-model="search"
-            dense
-        >
-        </v-text-field>
+  <v-app class="grey lighten-4">
+    <v-container>
+      <v-data-table
+        :headers="headers"
+        :items="material"
+        :pagination.sync="pagination"
+        sortBy="status"
+        update: sort-desc    
+        :search="search"
+        sort-by="date"
+        class="elevation-8"
+      >
+      <template v-slot:item.price="{ item }">
+        {{'Rp. '}}{{ Number(item.price).toLocaleString() }}
+      </template>
       
-        <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="450px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="blue" dark class="mb-2" @click="reset" v-on="on">New</v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">New Materials/Labor</span>
-            </v-card-title>
-            
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-card-text>
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Material.kode" 
-                    label="ID"
-                    :rules="idRules"
-                  >
-                  </v-text-field>
-                </v-flex>
+        <template v-slot:top>
+          <v-toolbar dark color="light-blue accent-3">
+            <v-toolbar-title>Materials/Labor</v-toolbar-title>
+            <v-divider
+              class="mx-4"
+              inset
+              vertical
+            ></v-divider>
 
-                <v-radio-group v-model="Material.status" row :rules="statusRules">
-                  <v-radio label="Material" value="material"></v-radio>
-                  <v-radio label="Labor" value="labor"></v-radio>
-                </v-radio-group>
-              </v-layout>
-
-              <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Material.name" 
-                      label="Name"
-                      required
-                      :rules="nameRules"
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout>
-                    <v-flex>
-                      <v-text-field
-                        v-model="Material.type"
-                        label="Type"
-                        required
-                        :rules="typeRules"
-                      >
-                      </v-text-field>
-                    </v-flex>
-                </v-layout>
-
-                <v-container row>
-                  <v-select row
-                    v-model="Material.satuan"
-                    :items="satuan"
-                    item-text="name"
-                    item-value="name"
-                    label="Satuan"
-                    required
-                    :rules="satuanRules"
-                  ></v-select>
-                  <v-btn 
-                    width="50px" 
-                    color="blue" 
-                    @click="dialog4=true"
-                  > 
-                  Add
-                  </v-btn>
-                </v-container>
-
-                <template>
-                <v-dialog v-model="dialog4" width="300px" style="color: blue">
-                  <v-card-text>
-                    <v-layout>
-                      <v-text-field
-                        label="Satuan"
-                        v-model="name">
-                      </v-text-field>
-                    </v-layout>
-                    <div class="flex-grow-1"></div>
-                      <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
-                      <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
-                  </v-card-text>
-                </v-dialog>
-                </template>
-                
-                <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Material.price"
-                        label="Price"
-                        required
-                        :rules="priceRules"
-                      >
-                      </v-text-field>
-                    </v-flex>
-                </v-layout>
-
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Material.spesification" 
-                      label="Spesification"
-                      required
-                      :rules="specRules"
-                    >
-                      </v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout>
-                  <v-select
-                    v-model="Material.store"
-                    :items="store"
-                    item-text="name"
-                    item-value="id_store"
-                    label="Store"
-                    :rules="storeRules"
-                  >
-                  </v-select>
-                </v-layout>
-            </v-card-text>
-          </v-form>
-
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-
-        </v-dialog>
-      </v-toolbar>
-    </template>
-
-    <template v-slot:item.action="{ item }">
-      <v-dialog v-model="dialog3" max-width="450px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            class="mr-2"
-            color="green"
-            @click="itemHandler(item)"
-            v-on="on"
-          >
-            edit
-          </v-icon>
-        </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">Edit Material/Labor</span>
-            </v-card-title>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+              style="width: 5px"
+            >
+            </v-text-field>
           
-            <v-form ref="form" v-model="valid" lazy-validation>
-              <v-card-text>
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Material.kode" 
-                      label="ID"
-                      :rules="idRules"
-                    >
-                    </v-text-field>
-                  </v-flex>
-
-                  <v-radio-group v-model="Material.status" row :rules="statusRules">
-                    <v-radio label="Material" value="material"></v-radio>
-                    <v-radio label="Labor" value="labor"></v-radio>
-                  </v-radio-group>
-                </v-layout>
-
-                <v-layout>
+            <div class="flex-grow-1"></div>
+            <v-dialog v-model="dialog" max-width="500px">
+              <template v-slot:activator="{ on }">
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset" v-on="on">New</v-btn>
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span class="headline">New Materials/Labor</span>
+                </v-card-title>
+                
+              <v-form ref="form" v-model="valid" lazy-validation>
+                <v-card-text>
+                  <v-layout>
                     <v-flex>
                       <v-text-field 
-                        v-model="Material.name" 
-                        label="Name"
-                        required
-                        :rules="nameRules"
+                        v-model="Material.kode" 
+                        label="ID"
+                        :rules="idRules"
                       >
                       </v-text-field>
                     </v-flex>
+
+                    <v-radio-group v-model="Material.status" row :rules="statusRules">
+                      <v-radio label="Material" value="material"></v-radio>
+                      <v-radio label="Labor" value="labor"></v-radio>
+                    </v-radio-group>
                   </v-layout>
 
-                  <v-layout>
-                      <v-flex>
-                        <v-text-field
-                          v-model="Material.type"
-                          label="Type"
-                          required
-                          :rules="typeRules"
-                        >
-                        </v-text-field>
-                      </v-flex>
-                  </v-layout>
-
-                  <v-container row>
-                    <v-select row
-                      v-model="Material.satuan"
-                      :items="satuan"
-                      item-text="name"
-                      item-value="name"
-                      label="Satuan"
-                      required
-                      :rules="satuanRules"
-                    ></v-select>
-                    <v-btn 
-                      width="50px" 
-                      color="blue" 
-                      @click="dialog4=true"
-                    > 
-                    Add
-                    </v-btn>
-                  </v-container>
-
-                  <template>
-                  <v-dialog v-model="dialog4" width="300px" style="color: blue">
-                    <v-card-text>
-                      <v-layout>
-                        <v-text-field
-                          label="Satuan"
-                          v-model="name">
-                        </v-text-field>
-                      </v-layout>
-                      <div class="flex-grow-1"></div>
-                        <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
-                        <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
-                    </v-card-text>
-                  </v-dialog>
-                  </template>
-                  
                   <v-layout>
                       <v-flex>
                         <v-text-field 
-                          v-model="Material.price"
-                          label="Price"
+                          v-model="Material.name" 
+                          label="Name"
                           required
-                          :rules="priceRules"
+                          :rules="nameRules"
                         >
                         </v-text-field>
                       </v-flex>
-                  </v-layout>
+                    </v-layout>
 
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Material.spesification" 
-                        label="Spesification"
+                    <v-layout>
+                        <v-flex>
+                          <v-text-field
+                            v-model="Material.type"
+                            label="Type"
+                            required
+                            :rules="typeRules"
+                          >
+                          </v-text-field>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-container row>
+                      <v-select row
+                        v-model="Material.satuan"
+                        :items="satuan"
+                        item-text="name"
+                        item-value="name"
+                        label="Satuan"
                         required
-                        :rules="specRules"
+                        :rules="satuanRules"
+                      ></v-select>
+                      <v-btn 
+                        width="50px" 
+                        color="blue" 
+                        @click="dialog4=true"
+                      > 
+                      Add
+                      </v-btn>
+                    </v-container>
+
+                    <template>
+                    <v-dialog v-model="dialog4" width="300px" style="color: blue">
+                      <v-card-text>
+                        <v-layout>
+                          <v-text-field
+                            label="Satuan"
+                            v-model="name">
+                          </v-text-field>
+                        </v-layout>
+                        <div class="flex-grow-1"></div>
+                          <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
+                          <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
+                      </v-card-text>
+                    </v-dialog>
+                    </template>
+                    
+                    <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Material.price"
+                            label="Price"
+                            required
+                            :rules="priceRules"
+                          >
+                          </v-text-field>
+                        </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Material.spesification" 
+                          label="Spesification"
+                          required
+                          :rules="specRules"
+                        >
+                          </v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-select
+                        v-model="Material.store"
+                        :items="store"
+                        item-text="name"
+                        item-value="id_store"
+                        label="Store"
+                        :rules="storeRules"
                       >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
+                      </v-select>
+                    </v-layout>
+                </v-card-text>
+              </v-form>
 
-                  <v-layout>
-                    <v-select
-                      v-model="Material.store"
-                      :items="store"
-                      item-text="name"
-                      item-value="id_store"
-                      label="Store"
-                      :rules="storeRules"
-                    >
-                    </v-select>
-                  </v-layout>
-              </v-card-text>
-            </v-form>
+                <v-card-actions>
+                  <div class="flex-grow-1"></div>
+                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Save</v-btn>
+                </v-card-actions>
+              </v-card>
 
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(Material.id_material)">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-      </v-dialog>
-
-      <v-dialog v-model="dialog2" max-width="290px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            color="red"
-            v-on="on"
-            @click="itemHandler(item)"
-          >
-            delete
-          </v-icon>
+            </v-dialog>
+          </v-toolbar>
         </template>
-            <v-card>
-              <v-card-title class="headline">Confirmation</v-card-title>
-                <v-card-text>Are you sure want to delete this material/labor?</v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Material.id_material)">Yes</v-btn>
-                <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
-              </v-card-actions>
-            </v-card>
-      </v-dialog>
-    </template>
-  </v-data-table>
+
+        <template v-slot:item.action="{ item }">
+          <v-dialog v-model="dialog3" max-width="500px">
+            <template v-slot:activator="{ on }">
+              <v-icon
+                small
+                class="mr-2"
+                color="green"
+                @click="itemHandler(item)"
+                v-on="on"
+              >
+                edit
+              </v-icon>
+            </template>
+              <v-card>
+                <v-card-title>
+                  <span class="headline">Edit Material/Labor</span>
+                </v-card-title>
+              
+                <v-form ref="form" v-model="valid" lazy-validation>
+                  <v-card-text>
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Material.kode" 
+                          label="ID"
+                          :rules="idRules"
+                        >
+                        </v-text-field>
+                      </v-flex>
+
+                      <v-radio-group v-model="Material.status" row :rules="statusRules">
+                        <v-radio label="Material" value="material"></v-radio>
+                        <v-radio label="Labor" value="labor"></v-radio>
+                      </v-radio-group>
+                    </v-layout>
+
+                    <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Material.name" 
+                            label="Name"
+                            required
+                            :rules="nameRules"
+                          >
+                          </v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                          <v-flex>
+                            <v-text-field
+                              v-model="Material.type"
+                              label="Type"
+                              required
+                              :rules="typeRules"
+                            >
+                            </v-text-field>
+                          </v-flex>
+                      </v-layout>
+
+                      <v-container row>
+                        <v-select row
+                          v-model="Material.satuan"
+                          :items="satuan"
+                          item-text="name"
+                          item-value="name"
+                          label="Satuan"
+                          required
+                          :rules="satuanRules"
+                        ></v-select>
+                        <v-btn 
+                          width="50px" 
+                          color="blue" 
+                          @click="dialog4=true"
+                        > 
+                        Add
+                        </v-btn>
+                      </v-container>
+
+                      <template>
+                      <v-dialog v-model="dialog4" width="300px" style="color: blue">
+                        <v-card-text>
+                          <v-layout>
+                            <v-text-field
+                              label="Satuan"
+                              v-model="name">
+                            </v-text-field>
+                          </v-layout>
+                          <div class="flex-grow-1"></div>
+                            <v-btn class="ma-2" rounded color="green" dark @click="dialog4=false">Cancel</v-btn>
+                            <v-btn class="ma-2" rounded color="orange" dark @click="addSatuan()">Save</v-btn>                  
+                        </v-card-text>
+                      </v-dialog>
+                      </template>
+                      
+                      <v-layout>
+                          <v-flex>
+                            <v-text-field 
+                              v-model="Material.price"
+                              label="Price"
+                              required
+                              :rules="priceRules"
+                            >
+                            </v-text-field>
+                          </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Material.spesification" 
+                            label="Spesification"
+                            required
+                            :rules="specRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-select
+                          v-model="Material.store"
+                          :items="store"
+                          item-text="name"
+                          item-value="id_store"
+                          label="Store"
+                          :rules="storeRules"
+                        >
+                        </v-select>
+                      </v-layout>
+                  </v-card-text>
+                </v-form>
+
+                <v-card-actions>
+                  <div class="flex-grow-1"></div>
+                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(Material.id_material)">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="dialog2" max-width="290px">
+            <template v-slot:activator="{ on }">
+              <v-icon
+                small
+                color="red"
+                v-on="on"
+                @click="itemHandler(item)"
+              >
+                delete
+              </v-icon>
+            </template>
+                <v-card>
+                  <v-card-title class="headline">Confirmation</v-card-title>
+                    <v-card-text>Are you sure want to delete this material/labor?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Material.id_material)">Yes</v-btn>
+                    <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                  </v-card-actions>
+                </v-card>
+          </v-dialog>
+        </template>
+      </v-data-table>
+    </v-container>
+  </v-app>
 </template>
 
 <script>

@@ -1,289 +1,283 @@
 <template>
-  <div class="ahs">
-    <v-toolbar dark color="cyan">
-      <v-toolbar-title>AHS Lokal</v-toolbar-title>
-      <v-divider
-        class="mx-4"
-        inset
-        vertical
-      ></v-divider>
+  <v-app class="grey lighten-4">
+    <v-container>
+      <v-toolbar dark color="light-blue accent-3">
+        <v-toolbar-title>AHS Lokal</v-toolbar-title>
+          <v-divider
+            class="mx-4"
+            inset
+            vertical
+          ></v-divider>
 
-      <v-select
-        flat
-        solo-inverted
-        hide-details
-        label="Choose Project"
-        class="hidden-sm-and-down"
-        color="blue"
-        v-model="select"
-        :items="project"
-        item-text="name"
-        item-value="id_project"
-        dense
-        prepend-inner-icon="expand_more"
-      >
-      </v-select>
-      <v-spacer></v-spacer>
+          <v-select
+            hide-details
+            label="Choose Project"
+            v-model="select"
+            :items="project"
+            item-text="name"
+            item-value="id_project"
+            prepend-inner-icon="expand_more"
+            single-line
+          >
+          </v-select>
+          <v-spacer></v-spacer>
 
-      <v-text-field
-        flat
-        solo-inverted
-        hide-details
-        prepend-inner-icon="search"
-        label="Search"
-        class="hidden-sm-and-down"
-        color="blue"
-        v-model="search"
-        dense
-      >
-      </v-text-field>
-    </v-toolbar>
+          <v-text-field
+            v-model="search"
+            append-icon="search"
+            label="Search"
+            single-line
+            hide-details
+          >
+          </v-text-field>
+        </v-toolbar>
 
-    <v-expansion-panels accordion>
-      <v-expansion-panel v-for="data in filtered" :key="data.id_ahs_lokal"  :search="search" @click="getItem(data.id_ahs_lokal)">
-          <v-expansion-panel-header>
-            <v-layout row wrap :class="`pa-3 ahs`">
-              <v-flex xs1>
-                <div class="caption grey--text">ID</div>
-                <div>{{ data.id_ahs_lokal }}</div>
-              </v-flex>
-              <!-- <v-flex xs2>
-                <div class="caption grey--text">Project</div>
-                <div>{{ data.project }}</div>
-              </v-flex> -->
-              <v-flex xs2>
-                <div class="caption grey--text">Task Group</div>
-                <div>{{ data.name_sub }}</div>
-              </v-flex>
-              <v-flex xs2>
-                <div class="caption grey--text">Task</div>
-                <div>{{ data.name }}</div>
-              </v-flex>
-              <v-flex xs1>
-                <div class="caption grey--text">Adjustment</div>
-                <div>{{ data.adjustment }}</div>
-              </v-flex>
-              <v-flex xs2>
-                <div class="caption grey--text">Total of Labor</div>
-                <div>Rp. {{ data.total_labor }}</div>
-              </v-flex>
-              <v-flex xs2>
-                <div class="caption grey--text">Total of Materials</div>
-                <div>Rp. {{ data.total_material }}</div>
-              </v-flex>
-              <v-flex xs1>
-                <div class="caption grey--text">Total</div>
-                <div>Rp. {{ data.HSP }}</div>
-              </v-flex>
-              <v-flex xs1>
-                <div class="caption grey--text">Actions</div>
-                <v-icon color="green" @click="itemEdit(data);dialog5=true">edit</v-icon>
-                <v-icon color="red" @click="dialog2=true">delete</v-icon>
-              </v-flex>
-            </v-layout>
-            
-            <template v-slot:actions>
-              <v-icon color="cyan" @click="getItem(data.id_ahs_lokal)">expand_more</v-icon>
-            </template>
+      <v-expansion-panels accordion class="elevation-8">
+        <v-expansion-panel v-for="data in filtered" :key="data.id_ahs_lokal"  :search="search" @click="getItem(data.id_ahs_lokal)" active-class="border-ahs">
+            <v-expansion-panel-header>
+              <v-layout row wrap>
+                <!-- <v-flex xs1>
+                  <div class="caption grey--text">ID</div>
+                  <div>{{ data.id_ahs_lokal }}</div>
+                </v-flex> -->
+                <v-flex xs2>
+                  <div class="caption grey--text">Project</div>
+                  <div>{{ data.project }}</div>
+                </v-flex>
+                <v-flex xs1>
+                  <div class="caption grey--text">Task Group</div>
+                  <div>{{ data.name_sub }}</div>
+                </v-flex>
+                <v-flex xs2>
+                  <div class="caption grey--text">Task</div>
+                  <div>{{ data.name }}</div>
+                </v-flex>
+                <v-flex xs1>
+                  <div class="caption grey--text">Adjustment</div>
+                  <div>{{ data.adjustment }}</div>
+                </v-flex>
+                <v-flex xs2>
+                  <div class="caption grey--text">Total of Labor</div>
+                  <div>Rp. {{ Number(data.total_labor).toLocaleString() }}</div>
+                </v-flex>
+                <v-flex xs2>
+                  <div class="caption grey--text">Total of Materials</div>
+                  <div>Rp. {{ Number(data.total_material).toLocaleString() }}</div>
+                </v-flex>
+                <v-flex xs1>
+                  <div class="caption grey--text">Total</div>
+                  <div>Rp. {{ Number(data.HSP).toLocaleString() }}</div>
+                </v-flex>
+                <v-flex xs1>
+                  <div class="caption grey--text">Actions</div>
+                  <v-icon color="green" @click="itemEdit(data);dialog5=true">edit</v-icon>
+                  <v-icon color="red" @click="dialog2=true">delete</v-icon>
+                </v-flex>
+              </v-layout>
+              
+              <template v-slot:actions>
+                <v-icon color="light-blue accent-3" @click="getItem(data.id_ahs_lokal)">expand_more</v-icon>
+              </template>
 
-            <!-- template dialog delete ahs -->
-            <template>
-              <v-dialog v-model="dialog2" max-width="290px">
+              <!-- template dialog delete ahs -->
+              <template>
+                <v-dialog v-model="dialog2" max-width="290px">
+                  <v-card>
+                    <v-card-title class="headline">Confirmation</v-card-title>
+                      <v-card-text>Are you sure want to delete this AHS Lokal?</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(data.id_ahs_lokal)">Yes</v-btn>
+                      <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+              </template>
+              <!-- template dialog edit ahs -->
+              <template>
+              </template>
+
+              <v-dialog v-model="dialog5" max-width="600px">
                 <v-card>
-                  <v-card-title class="headline">Confirmation</v-card-title>
-                    <v-card-text>Are you sure want to delete this AHS Lokal?</v-card-text>
+                  <v-card-title>
+                    <span class="headline">Edit AHS Adjust</span>
+                  </v-card-title>
+
+                  <v-form ref="form" v-model="valid" lazy-validation>
+                    <v-card-text>
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field
+                            v-model="AHS.kode"
+                            label="ID"
+                        ></v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-select
+                            v-model="AHS.id_project"
+                            label="Project"
+                            :items="project"
+                            item-text="name"
+                            item-value="id_project"
+                            :return-object="false"
+                            @change="filterAHS(AHS.id_project)"
+                        ></v-select>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-select
+                          v-model="AHS.id_job"
+                          label="AHS"
+                          :items="job"
+                          item-text="name"
+                          item-value="id_job"
+                          :return-object="false"
+                          disabled
+                        ></v-select>
+                      </v-layout>
+
+                      <v-flex class="text-md-center" sm12 mt-2 v-if="tambah">
+                        <div>
+                          <v-data-table
+                            :headers="headersAHS"
+                            sortBy="status"
+                            update: sort-desc
+                            class="elevation-10"
+                            :items="details"
+                          >
+                          <template v-slot:item.sub_adjustment="props">
+                            <v-edit-dialog
+                              :return-value.sync="props.item.sub_adjustment"
+                              @save="save(props)"
+                              @cancel="cancel"
+                              lazy
+                              persistent
+                              dark
+                            > {{ props.item.sub_adjustment }}
+                              <template v-slot:input>
+                                <v-text-field
+                                  v-model="props.item.sub_adjustment"
+                                  label="Edit"
+                                  single-line
+                                  counter
+                                ></v-text-field>
+                              </template>
+                            </v-edit-dialog>
+                          </template>
+                          </v-data-table>
+
+                          <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+                            {{ snackText }}
+                            <v-btn text @click="snack = false">Close</v-btn>
+                          </v-snackbar>
+                          
+                        </div>
+                      </v-flex>
+
+                        <v-layout >
+                          <v-flex>
+                            <v-text-field 
+                              v-model="AHS.adjustment" 
+                              label="Adjustment*"
+                              required
+                            >
+                            </v-text-field>
+                          </v-flex>
+                        </v-layout>
+                        
+                        <v-layout >
+                          <v-flex>
+                            <v-text-field 
+                              v-model="AHS.total" 
+                              label="Total"
+                              required
+                            >
+                            </v-text-field>
+                          </v-flex>
+                        </v-layout>
+                    </v-card-text>
+                  </v-form>
+
                   <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(data.id_ahs_lokal)">Yes</v-btn>
-                    <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                    <div class="flex-grow-1"></div>
+                    <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                    <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(AHS.id_ahs)">Save</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
-            </template>
-            <!-- template dialog edit ahs -->
-            <template>
-            </template>
-
-            <v-dialog v-model="dialog5" max-width="600px">
-              <v-card>
-                <v-card-title>
-                  <span class="headline">Edit AHS Adjust</span>
-                </v-card-title>
-
-                <v-form ref="form" v-model="valid" lazy-validation>
-                  <v-card-text>
-                    <v-layout>
-                      <v-flex>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content class="grey--text">
+              <template>
+                <div>
+                  <v-data-table
+                    :headers="headers"
+                    sortBy="status"
+                    update: sort-desc
+                    class="elevation-10"
+                    :items="details"
+                  >
+                  <template v-slot:item.sub_adjustment="props">
+                    <v-edit-dialog
+                      :return-value.sync="props.item.sub_adjustment"
+                      @save="editSub(props)"
+                      @cancel="cancel"
+                      lazy
+                      persistent
+                      dark
+                      large
+                    > {{ props.item.sub_adjustment }}
+                      <template v-slot:input>
                         <v-text-field
-                          v-model="AHS.kode"
-                          label="ID"
-                      ></v-text-field>
-                      </v-flex>
-                    </v-layout>
+                          v-model="props.item.sub_adjustment"
+                          label="Edit"
+                          single-line
+                          counter
+                        ></v-text-field>
+                      </template>
+                    </v-edit-dialog>
+                  </template>
 
-                    <v-layout>
-                      <v-flex>
-                        <v-select
-                          v-model="AHS.id_project"
-                          label="Project"
-                          :items="project"
-                          item-text="name"
-                          item-value="id_project"
-                          :return-object="false"
-                          @change="filterAHS(AHS.id_project)"
-                      ></v-select>
-                      </v-flex>
-                    </v-layout>
-
-                    <v-layout>
-                      <v-select
-                        v-model="AHS.id_job"
-                        label="AHS"
-                        :items="job"
-                        item-text="name"
-                        item-value="id_job"
-                        :return-object="false"
-                        disabled
-                      ></v-select>
-                    </v-layout>
-
-                    <v-flex class="text-md-center" sm12 mt-2 v-if="tambah">
-                      <div>
-                        <v-data-table
-                          :headers="headersAHS"
-                          sortBy="status"
-                          update: sort-desc
-                          class="elevation-1"
-                          :items="details"
+                  <template v-slot:item.action="{ item }">
+                    <v-dialog v-model="dialog6" max-width="290px">
+                      <template v-slot:activator="{ on }">
+                        <v-icon
+                          small
+                          color="red"
+                          v-on="on"
                         >
-                        <template v-slot:item.sub_adjustment="props">
-                          <v-edit-dialog
-                            :return-value.sync="props.item.sub_adjustment"
-                            @save="save(props)"
-                            @cancel="cancel"
-                            lazy
-                            persistent
-                            dark
-                          > {{ props.item.sub_adjustment }}
-                            <template v-slot:input>
-                              <v-text-field
-                                v-model="props.item.sub_adjustment"
-                                label="Edit"
-                                single-line
-                                counter
-                              ></v-text-field>
-                            </template>
-                          </v-edit-dialog>
-                        </template>
-                        </v-data-table>
+                          delete
+                        </v-icon>
+                      </template>
+                          <v-card>
+                            <v-card-title class="headline">Confirmation</v-card-title>
+                              <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                            <v-card-actions>
+                              <v-spacer></v-spacer>
+                              <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(item.id_ahs_lokal_details)">Yes</v-btn>
+                              <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
+                            </v-card-actions>
+                          </v-card>
+                    </v-dialog>
+                  </template>
 
-                        <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-                          {{ snackText }}
-                          <v-btn text @click="snack = false">Close</v-btn>
-                        </v-snackbar>
-                        
-                      </div>
-                    </v-flex>
+                  </v-data-table>
 
-                      <v-layout >
-                        <v-flex>
-                          <v-text-field 
-                            v-model="AHS.adjustment" 
-                            label="Adjustment*"
-                            required
-                          >
-                          </v-text-field>
-                        </v-flex>
-                      </v-layout>
-                      
-                      <v-layout >
-                        <v-flex>
-                          <v-text-field 
-                            v-model="AHS.total" 
-                            label="Total"
-                            required
-                          >
-                          </v-text-field>
-                        </v-flex>
-                      </v-layout>
-                  </v-card-text>
-                </v-form>
-
-                <v-card-actions>
-                  <div class="flex-grow-1"></div>
-                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-                  <v-btn class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(AHS.id_ahs)">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content class="grey--text">
-            <template>
-              <div>
-                <v-data-table
-                  :headers="headers"
-                  sortBy="status"
-                  update: sort-desc
-                  class="elevation-1"
-                  :items="details"
-                >
-                <template v-slot:item.sub_adjustment="props">
-                  <v-edit-dialog
-                    :return-value.sync="props.item.sub_adjustment"
-                    @save="editSub(props)"
-                    @cancel="cancel"
-                    lazy
-                    persistent
-                    dark
-                    large
-                  > {{ props.item.sub_adjustment }}
-                    <template v-slot:input>
-                      <v-text-field
-                        v-model="props.item.sub_adjustment"
-                        label="Edit"
-                        single-line
-                        counter
-                      ></v-text-field>
-                    </template>
-                  </v-edit-dialog>
-                </template>
-
-                <template v-slot:item.action="{ item }">
-                  <v-dialog v-model="dialog6" max-width="290px">
-                    <template v-slot:activator="{ on }">
-                      <v-icon
-                        small
-                        color="red"
-                        v-on="on"
-                      >
-                        delete
-                      </v-icon>
-                    </template>
-                        <v-card>
-                          <v-card-title class="headline">Confirmation</v-card-title>
-                            <v-card-text>Are you sure want to delete this detail?</v-card-text>
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(item.id_ahs_lokal_details)">Yes</v-btn>
-                            <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
-                          </v-card-actions>
-                        </v-card>
-                  </v-dialog>
-                </template>
-
-                </v-data-table>
-
-                <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-                  {{ snackText }}
-                  <v-btn text @click="snack = false">Close</v-btn>
-                </v-snackbar>
-                
-              </div>
-            </template>
-          </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-expansion-panels>
-  </div>
+                  <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+                    {{ snackText }}
+                    <v-btn text @click="snack = false">Close</v-btn>
+                  </v-snackbar>
+                  
+                </div>
+              </template>
+            </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -715,6 +709,7 @@ import rabdetails from './../service/RAB'
           let ahs = this.details.find(obj=>obj.id_ahs_lokal_details == id)
           await detailController.deleteItem(id).data
           this.getItem(ahs.id_ahs_lokal)
+          this.getallAHS()
           this.close()
         }catch(err){
           console.log(err)
@@ -764,5 +759,8 @@ import rabdetails from './../service/RAB'
 
   /* background-color: #5f37e2; */
   color: aqua;
+}
+.border-ahs{
+  border-left: 4px solid #0277BD
 }
 </style>

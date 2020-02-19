@@ -23,7 +23,8 @@ class ReportsController extends Controller
         INNER JOIN materials m ON m.id_material = d.id_material
         WHERE a.id_ahs = $id AND d.deleted_at is null
         ORDER BY m.status DESC");
-
+        
+        $j=0;
         $index = count($datas);
         for($i=0;$i<$index;$i++)
         {
@@ -31,6 +32,10 @@ class ReportsController extends Controller
             {
                 $j = $i;
                 break;
+            }
+            if($datas[$i]->status == "material")
+            {
+                $j +=1;
             }
         }
         $pdf = PDF::loadView('analisa_task_report',['datas' => $datas, 'j'=>$j]);
@@ -73,5 +78,32 @@ class ReportsController extends Controller
         $pdf = PDF::loadView('analisa_task_all_report',['datas' => $datas,'count'=>$count,'index'=>$index]);
         $pdf->setPaper([0,0,550,900]);
         return $pdf->stream();
+    }
+
+    public function rab($id)
+    {
+        $rab = DB::select("SELECT p.kode, p.name, p.address, p.owner, p.date, p.no_telp, p.phone, p.type, 
+                        p.nominal, st.name as structure, gr.name as floor, ts.name as taskgroup, 
+                        j.name as task, a.volume, j.satuan, a.HSP, a.HP
+        FROM rabs r
+        INNER JOIN projects p ON p.id_project = r.id_project
+        INNER JOIN structure_details s ON s.id_rab = r.id_rab
+        INNER JOIN group_details g ON g.id_structure_details = s.id_structure_details
+        INNER JOIN task_sub_details t ON t.id_group_details = g.id_group_details
+        INNER JOIN ahs_lokals a ON a.id_sub_details = t.id_sub_details
+        INNER JOIN structures st ON st.id_structure = s.id_structure
+        INNER JOIN groups gr ON gr.id_groups = g.id_groups
+        INNER JOIN task_subs ts ON ts.id_sub = t.id_sub
+        INNER JOIN jobs j ON j.id_job = a.id_job
+        WHERE r.id_rab = $id");
+
+        return response()->json([
+            'data' => $rab,
+            'message' => $rab ? 'Success' : 'Error'
+        ]);
+
+        // $pdf = PDF::loadView('rab_report',['rab'=>$rab]);
+        // $pdf->setPaper([0,0,50,900]);
+        // return $pdf->stream();
     }
 }

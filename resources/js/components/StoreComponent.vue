@@ -1,275 +1,276 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="store"
-    :search="search"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar dark color="cyan">
-        <v-toolbar-title>Store</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+  <v-app class="grey lighten-4">
+    <v-container>
+      <v-data-table
+        :headers="headers"
+        :items="store"
+        :search="search"
+        class="elevation-8"
+      >
+        <template v-slot:top>
+          <v-toolbar dark color="light-blue accent-3">
+            <v-toolbar-title>Store</v-toolbar-title>
+            <v-divider
+              class="mx-4"
+              inset
+              vertical
+            ></v-divider>
 
-        <v-text-field
-          flat
-          solo-inverted
-          hide-details
-          prepend-inner-icon="search"
-          label="Search"
-          class="hidden-sm-and-down"
-          color="blue"
-          v-model="search"
-          dense
-        >
-        </v-text-field>
-      
-        <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="450px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="blue" dark class="mb-2" v-on="on">New</v-btn>
-          </template>
-
-          <v-card>
-            <v-card-title>
-              <span class="headline">New Store</span>
-            </v-card-title>
-            
-            <v-form 
-              ref="form"
-              lazy-validation
-              v-model="valid"
-              > 
-              <v-card-text>
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.kode" 
-                      label="ID Store"
-                      :rules="idRules"
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.name" 
-                        label="Name"
-                        :rules="nameRules"
-                      >
-                      </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.address" 
-                        label="Address"
-                        :rules="addressRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.type" 
-                        label="Type of Material"
-                        :rules="typeRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.no_telp" 
-                        label="Telp Number"
-                        :rules="noRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.phone" 
-                        label="Phone Number"
-                        :rules="phoneRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.owner" 
-                        label="Owner"
-                        :rules="ownerRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-              </v-card-text>
-            </v-form>
-
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="reset();dialog=false">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem();dialog=false">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-toolbar>
-    </template>
-
-    <template v-slot:item.action="{ item }">
-      <v-dialog v-model="dialog3" max-width="450px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            class="mr-2"
-            color="green"
-            @click="itemHandler(item)"
-            v-on="on"
-          >
-            edit
-          </v-icon>
-        </template>
-
-          <v-card>
-            <v-card-title>
-              <span class="headline">Edit Store</span>
-            </v-card-title>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+              style="width: 5px"
+            >
+            </v-text-field>
           
-            <v-form 
-              ref="form"
-              lazy-validation
-              v-model="valid"
-              > 
-              <v-card-text>
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Store.kode" 
-                      label="ID Store"
-                      :rules="idRules"
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
+            <div class="flex-grow-1"></div>
+            <v-dialog v-model="dialog" max-width="500px">
+              <template v-slot:activator="{ on }">
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" v-on="on">New</v-btn>
+              </template>
 
-                <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.name" 
-                        label="Name"
-                        :rules="nameRules"
-                      >
-                      </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.address" 
-                        label="Address"
-                        :rules="addressRules"
-                      >
+              <v-card>
+                <v-card-title>
+                  <span class="headline">New Store</span>
+                </v-card-title>
+                
+                <v-form 
+                  ref="form"
+                  lazy-validation
+                  v-model="valid"
+                  > 
+                  <v-card-text>
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Store.kode" 
+                          label="ID Store"
+                          :rules="idRules"
+                        >
                         </v-text-field>
-                    </v-flex>
-                  </v-layout>
+                      </v-flex>
+                    </v-layout>
 
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.type" 
-                        label="Type of Material"
-                        :rules="typeRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
+                    <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.name" 
+                            label="Name"
+                            :rules="nameRules"
+                          >
+                          </v-text-field>
+                        </v-flex>
+                      </v-layout>
 
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.no_telp" 
-                        label="Telp Number"
-                        :rules="noRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.address" 
+                            label="Address"
+                            :rules="addressRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
 
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.phone" 
-                        label="Phone Number"
-                        :rules="phoneRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.type" 
+                            label="Type of Materials"
+                            :rules="typeRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
 
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Store.owner" 
-                        label="Owner"
-                        :rules="ownerRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.no_telp" 
+                            label="Telephone Number"
+                            :rules="noRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
 
-              </v-card-text>
-            </v-form>
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.phone" 
+                            label="Phone Number"
+                            :rules="phoneRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
 
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="reset();dialog3=false">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Store.id_store);dialog3=false">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-      </v-dialog>
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.owner" 
+                            label="Owner"
+                            :rules="ownerRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
 
-      <v-dialog v-model="dialog2" max-width="290px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            color="red"
-            v-on="on"
-            @click="itemHandler(item)"
-          >
-            delete
-          </v-icon>
+                  </v-card-text>
+                </v-form>
+
+                <v-card-actions>
+                  <div class="flex-grow-1"></div>
+                  <v-btn class="ma-2" rounded color="green" dark @click="reset();dialog=false">Cancel</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem();dialog=false">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-toolbar>
         </template>
-          <v-card>
-            <v-card-title class="headline">Confirmation</v-card-title>
-            <v-card-text>Are you sure want to delete this store?</v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Store.id_store)">Yes</v-btn>
-              <v-btn color="red darken-1" text @click="reset(); dialog2=false">No</v-btn>
-            </v-card-actions>
-          </v-card>
-      </v-dialog>
-    </template>
-  </v-data-table>
+
+        <template v-slot:item.action="{ item }">
+          <v-dialog v-model="dialog3" max-width="500px">
+            <template v-slot:activator="{ on }">
+              <v-icon
+                small
+                class="mr-2"
+                color="green"
+                @click="itemHandler(item)"
+                v-on="on"
+              >
+                edit
+              </v-icon>
+            </template>
+
+              <v-card>
+                <v-card-title>
+                  <span class="headline">Edit Store</span>
+                </v-card-title>
+              
+                <v-form 
+                  ref="form"
+                  lazy-validation
+                  v-model="valid"
+                  > 
+                  <v-card-text>
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Store.kode" 
+                          label="ID Store"
+                          :rules="idRules"
+                        >
+                        </v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.name" 
+                            label="Name"
+                            :rules="nameRules"
+                          >
+                          </v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.address" 
+                            label="Address"
+                            :rules="addressRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.type" 
+                            label="Type of Materials"
+                            :rules="typeRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.no_telp" 
+                            label="Telephone Number"
+                            :rules="noRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.phone" 
+                            label="Phone Number"
+                            :rules="phoneRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                      <v-layout>
+                        <v-flex>
+                          <v-text-field 
+                            v-model="Store.owner" 
+                            label="Owner"
+                            :rules="ownerRules"
+                          >
+                            </v-text-field>
+                        </v-flex>
+                      </v-layout>
+
+                  </v-card-text>
+                </v-form>
+
+                <v-card-actions>
+                  <div class="flex-grow-1"></div>
+                  <v-btn class="ma-2" rounded color="green" dark @click="reset();dialog3=false">Cancel</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Store.id_store);dialog3=false">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="dialog2" max-width="290px">
+            <template v-slot:activator="{ on }">
+              <v-icon
+                small
+                color="red"
+                v-on="on"
+                @click="itemHandler(item)"
+              >
+                delete
+              </v-icon>
+            </template>
+              <v-card>
+                <v-card-title class="headline">Confirmation</v-card-title>
+                <v-card-text>Are you sure want to delete this store?</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Store.id_store)">Yes</v-btn>
+                  <v-btn color="red darken-1" text @click="reset(); dialog2=false">No</v-btn>
+                </v-card-actions>
+              </v-card>
+          </v-dialog>
+        </template>
+      </v-data-table>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -355,8 +356,8 @@ import Controller from './../service/Store'
         v => (v && !v.numeric) || 'Phone number must be numeric'
       ],
       noRules: [
-        v => !!v || 'Telp number is required',
-        v => (v && !v.numeric) || 'Telp number must be numeric'
+        v => !!v || 'Telephone number is required',
+        v => (v && !v.numeric) || 'Telephone number must be numeric'
       ],
       ownerRules:[
         v => !!v || 'Owner is required'

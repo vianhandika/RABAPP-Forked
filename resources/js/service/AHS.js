@@ -51,5 +51,5 @@ export default {
             }
             Http.delete('/api/ahs/delete/'+id, successCallback, errorCallback)
         })
-    }
+    },
 }

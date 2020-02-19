@@ -159,6 +159,8 @@ class RABController extends RestController
     {
         try{
             $rab=RAB::findOrFail($id);
+            // $rab->desc = $request->desc;
+            // $rab->save();
             $this->destroyAllDetail($id);
             $this->storeAll($rab,$request);
         }catch(\Exception $e){

@@ -23,7 +23,7 @@ export const routes = [
     component: Login,
   },
   {
-    path: '/dashboard',
+    path: '/spa/dashboard',
     name: 'dashboard',
     component: Dashboard,
     // beforeEnter: middleware([
@@ -35,6 +35,11 @@ export const routes = [
     name: 'spa',
     component: SPA,
     children:[
+      {
+        path: '/dashboard',
+        name: 'dashboard',
+        component: Dashboard,
+      },
       {
         path: '/project',
         name: 'project',
@@ -60,7 +65,7 @@ export const routes = [
         // ])
       },
       {
-        path: '/transaction',
+        path: '/rab',
         name: 'transaction',
         component: Transaction,
         // beforeEnter: middleware([

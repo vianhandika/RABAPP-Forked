@@ -13,23 +13,16 @@ import Vuetify from 'vuetify';
 import store from './store'
 import axios from 'axios';
 import Vuelidate from 'vuelidate';
-//import http from './service/Http'
 import { routes } from './routes'
-
 import 'vuetify/dist/vuetify.min.css';
 // import 'font-awesome/css/font-awesome.min.css';
 // import 'font-awesome/css/font-awesome.css';
-
-
 import App from './components/App'
-
-//http.init(); 
-
 //setupComponents(Vue);
-Vue.use(VueRouter);
+
+Vue.use(VueRouter); 
 Vue.use(Vuetify);
 Vue.use(Vuelidate);
-
 // Vue.component('apexchart', VueApexCharts)
 
 const router = new VueRouter({

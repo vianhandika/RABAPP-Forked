@@ -57,6 +57,7 @@ Route::patch('/ahs/update/{id}','AHSController@update');
 Route::delete('/ahs/delete/{id}','AHSController@destroy');
 Route::get('/ahs/show/{id}', 'AHSController@showByID');
 Route::get('/count_ahs','AHSController@count_ahs');
+Route::get('/ahs/paginate','AHSController@paginate');
 //AHS Details
 Route::get('/ahs_details','AHSDetailsController@index');
 Route::patch('/ahs_details/update/{id}','AHSDetailsController@update');
@@ -114,6 +115,7 @@ Route::get('tasksub_details/show/{id}','TaskSubDetailsController@show');
 //Reports
 Route::get('/analisa_task/{id}','ReportsController@analisa_task');
 Route::get('/analisa_task_all','ReportsController@analisa_task_all');
+Route::get('/report_rab/{id}','ReportsController@rab');
 //AHS Adjust
 Route::get('/ahs_adjust','AHSAdjustController@index');
 Route::post('/ahs_adjust/store','AHSAdjustController@store');

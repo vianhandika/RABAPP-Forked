@@ -1,339 +1,350 @@
 <template>
-  <v-data-table
-    :headers="headers"
-    :items="project"
-    :search="search"
-    class="elevation-1"
-  >
-    <template v-slot:top>
-      <v-toolbar dark color="cyan">
-        <v-toolbar-title>Project</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
+  <v-app class="grey lighten-4">
+    <v-container>
+      <v-data-table
+        :headers="headers"
+        :items="project"
+        :search="search"
+        class="elevation-8"
+      >
+      <template v-slot:item.date="{ item }">
+        {{ formatDate(item.date) }}
+      </template>
 
-        <v-text-field
-            flat
-            solo-inverted
-            hide-details
-            prepend-inner-icon="search"
-            label="Search"
-            class="hidden-sm-and-down"
-            color="blue"
-            v-model="search"
-            dense
-        >
-        </v-text-field>
-      
-        <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="450px">
-          <template v-slot:activator="{ on }">
-            <v-btn color="blue" dark class="mb-2" @click="reset" v-on="on">New</v-btn>
-          </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">New Project</span>
-            </v-card-title>
-            
-          <v-form ref="form" lazy-validation v-model="valid">
-            <v-card-text>
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Project.kode" 
-                    label="ID Project"
-                    :rules="idRules"
-                  >
-                  </v-text-field>
-                </v-flex>
-              </v-layout>
+      <template v-slot:item.nominal="{ item }">
+        {{'Rp. '}}{{ Number(item.nominal).toLocaleString() }}
+      </template>
 
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Project.name" 
-                    label="Project"
-                    :rules="nameRules"
-                  >
-                  </v-text-field>
-                </v-flex>
-              </v-layout>
+        <template v-slot:top>
+          <v-toolbar dark color="light-blue accent-3">
+            <v-toolbar-title>Project</v-toolbar-title>
+            <v-divider
+              class="mx-4"
+              inset
+              vertical
+            ></v-divider>
 
-              <v-layout>
-                <v-flex>
-                  <v-text-field
-                    v-model="Project.address"
-                    label="Address"
-                    :rules="addressRules"
-                    ></v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Project.owner" 
-                    label="Owner"
-                    :rules="ownerRules"
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
-                <v-flex xs12>
-                  <v-menu 
-                  ref="menu1"
-                  v-model="menu1"
-                  :close-on-content-click="false"
-                  :nudge-right="40"
-                  lazy
-                  transition="scale-transition"
-                  offset-y
-                  full-width
-                  max-width="290px"
-                  min-width="290px"
-                >
-
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="Project.date"
-                    label="Date"
-                    required
-                    v-on="on"
-                    :rules="dateRules"
-                  ></v-text-field>
-                </template>
-                  <v-date-picker v-model="Project.date" no-title @input="menu1 = false"></v-date-picker>
-                </v-menu>
-                </v-flex>
-              </v-layout>
-      
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Project.no_telp" 
-                    label="Telp Number"
-                    :rules="noRules"
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
-                <v-flex>
-                  <v-text-field 
-                    v-model="Project.phone" 
-                    label="Phone Number"
-                    :rules="phoneRules"
-                  >
-                    </v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
-                <v-flex>
-                  <v-text-field
-                    v-model="Project.type"
-                    label="Type"
-                    :rules="typeRules"
-                    ></v-text-field>
-                </v-flex>
-              </v-layout>
-
-              <v-layout>
-                <v-flex>
-                  <v-text-field
-                    v-model="Project.nominal"
-                    label="Nominal"
-                    :rules="nominalRules"
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-card-text>
-          </v-form>
-
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem()">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-
-        </v-dialog>
-      </v-toolbar>
-    </template>
-
-    <template v-slot:item.action="{ item }">
-      <v-dialog v-model="dialog3" max-width="450px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            class="mr-2"
-            color="green"
-            @click="itemHandler(item)"
-            v-on="on"
-          >
-            edit
-          </v-icon>
-        </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">Edit Project</span>
-            </v-card-title>
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+              style="width: 5px"
+            >
+            </v-text-field>
           
-            <v-form ref="form" lazy-validation v-model="valid">
-              <v-card-text>
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Project.kode" 
-                      label="ID Project"
-                      :rules="idRules"
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
+            <div class="flex-grow-1"></div>
+            <v-dialog v-model="dialog" max-width="500px">
+              <template v-slot:activator="{ on }">
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset" v-on="on">New</v-btn>
+              </template>
+              <v-card>
+                <v-card-title>
+                  <span class="headline">New Project</span>
+                </v-card-title>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Project.name" 
-                      label="Project"
-                      :rules="nameRules"
-                    >
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout>
-                  <v-flex>
-                    <v-text-field
-                      v-model="Project.address"
-                      label="Address"
-                      :rules="addressRules"
-                      ></v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Project.owner" 
-                      label="Owner"
-                      :rules="ownerRules"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout>
-                  <v-flex xs12>
-                    <v-menu 
-                    ref="menu1"
-                    v-model="menu1"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    max-width="290px"
-                    min-width="290px"
-                  >
-
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="Project.date"
-                      label="Date"
-                      required
-                      v-on="on"
-                      :rules="dateRules"
-                    ></v-text-field>
-                  </template>
-                    <v-date-picker v-model="Project.date" no-title @input="menu1 = false"></v-date-picker>
-                  </v-menu>
-                  </v-flex>
-                </v-layout>
-        
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Project.no_telp" 
-                      label="Telp Number"
-                      :rules="noRules"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-
-                <v-layout>
-                  <v-flex>
-                    <v-text-field 
-                      v-model="Project.phone" 
-                      label="Phone Number"
-                      :rules="phoneRules"
-                    >
+              <v-form ref="form" lazy-validation v-model="valid">
+                <v-card-text>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Project.kode" 
+                        label="ID Project"
+                        :rules="idRules"
+                      >
                       </v-text-field>
-                  </v-flex>
-                </v-layout>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field
-                      v-model="Project.type"
-                      label="Type"
-                      :rules="typeRules"
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Project.project" 
+                        label="Project"
+                        :rules="nameRules"
+                      >
+                      </v-text-field>
+                    </v-flex>
+                  </v-layout>
+
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field
+                        v-model="Project.address"
+                        label="Address"
+                        :rules="addressRules"
+                        ></v-text-field>
+                    </v-flex>
+                  </v-layout>
+
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Project.owner" 
+                        label="Owner"
+                        :rules="ownerRules"
                       ></v-text-field>
-                  </v-flex>
-                </v-layout>
+                    </v-flex>
+                  </v-layout>
 
-                <v-layout>
-                  <v-flex>
-                    <v-text-field
-                      v-model="Project.nominal"
-                      label="Nominal"
-                      :rules="nominalRules"
-                    ></v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-card-text>
-            </v-form>
+                  <v-layout>
+                    <v-flex xs12>
+                      <v-menu 
+                      ref="menu1"
+                      v-model="menu1"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      max-width="290px"
+                      min-width="290px"
+                    >
 
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Project.id_project)">Save</v-btn>
-            </v-card-actions>
-          </v-card>
-      </v-dialog>
+                    <template v-slot:activator="{ on }">
+                      <v-text-field
+                        label="Date"
+                        required
+                        v-on="on"
+                        :rules="dateRules"
+                        :value="dateFormat"
+                      ></v-text-field>
+                    </template>
+                      <v-date-picker v-model="Project.date" @input="menu1 = false"></v-date-picker>
+                    </v-menu>
+                    </v-flex>
+                  </v-layout>
+          
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Project.no_telp" 
+                        label="Telp Number"
+                        :rules="noRules"
+                      ></v-text-field>
+                    </v-flex>
+                  </v-layout>
 
-      <v-dialog v-model="dialog2" max-width="290px">
-        <template v-slot:activator="{ on }">
-          <v-icon
-            small
-            color="red"
-            v-on="on"
-            @click="itemHandler(item)"
-          >
-            delete
-          </v-icon>
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Project.phone" 
+                        label="Phone Number"
+                        :rules="phoneRules"
+                      >
+                        </v-text-field>
+                    </v-flex>
+                  </v-layout>
+
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field
+                        v-model="Project.type"
+                        label="Type"
+                        :rules="typeRules"
+                        ></v-text-field>
+                    </v-flex>
+                  </v-layout>
+
+                  <v-layout>
+                    <v-flex>
+                      <v-text-field
+                        v-model="Project.nominal"
+                        label="Nominal"
+                        :rules="nominalRules"
+                      ></v-text-field>
+                    </v-flex>
+                  </v-layout>
+                </v-card-text>
+              </v-form>
+
+                <v-card-actions>
+                  <div class="flex-grow-1"></div>
+                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem()">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+
+            </v-dialog>
+          </v-toolbar>
         </template>
-            <v-card>
-              <v-card-title class="headline">Confirmation</v-card-title>
-                <v-card-text>Are you sure want to delete this project?</v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Project.id_project)">Yes</v-btn>
-                <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
-              </v-card-actions>
-            </v-card>
-      </v-dialog>
-    </template>
 
-  </v-data-table>
+        <template v-slot:item.action="{ item }">
+          <v-dialog v-model="dialog3" max-width="500px">
+            <template v-slot:activator="{ on }">
+              <v-icon
+                small
+                class="mr-2"
+                color="green"
+                @click="itemHandler(item)"
+                v-on="on"
+              >
+                edit
+              </v-icon>
+            </template>
+              <v-card>
+                <v-card-title>
+                  <span class="headline">Edit Project</span>
+                </v-card-title>
+              
+                <v-form ref="form" lazy-validation v-model="valid">
+                  <v-card-text>
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Project.kode" 
+                          label="ID Project"
+                          :rules="idRules"
+                        >
+                        </v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Project.project" 
+                          label="Project"
+                          :rules="nameRules"
+                        >
+                        </v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field
+                          v-model="Project.address"
+                          label="Address"
+                          :rules="addressRules"
+                          ></v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Project.owner" 
+                          label="Owner"
+                          :rules="ownerRules"
+                        ></v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-flex xs12>
+                        <v-menu 
+                        ref="menu2"
+                        v-model="menu2"
+                        :close-on-content-click="false"
+                        :nudge-right="40"
+                        lazy
+                        transition="scale-transition"
+                        offset-y
+                        full-width
+                        max-width="290px"
+                        min-width="290px"
+                      >
+
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          label="Date"
+                          required
+                          v-on="on"
+                          :rules="dateRules"
+                          :value="dateFormat"
+                        ></v-text-field>
+                      </template>
+                        <v-date-picker v-model="Project.date" no-title @input="menu2 = false"></v-date-picker>
+                      </v-menu>
+                      </v-flex>
+                    </v-layout>
+            
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Project.no_telp" 
+                          label="Telephone Number"
+                          :rules="noRules"
+                        ></v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field 
+                          v-model="Project.phone" 
+                          label="Phone Number"
+                          :rules="phoneRules"
+                        >
+                          </v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field
+                          v-model="Project.type"
+                          label="Type"
+                          :rules="typeRules"
+                          ></v-text-field>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-layout>
+                      <v-flex>
+                        <v-text-field
+                          v-model="Project.nominal"
+                          label="Nominal"
+                          :rules="nominalRules"
+                        ></v-text-field>
+                      </v-flex>
+                    </v-layout>
+                  </v-card-text>
+                </v-form>
+
+                <v-card-actions>
+                  <div class="flex-grow-1"></div>
+                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Project.id_project)">Save</v-btn>
+                </v-card-actions>
+              </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="dialog2" max-width="290px">
+            <template v-slot:activator="{ on }">
+              <v-icon
+                small
+                color="red"
+                v-on="on"
+                @click="itemHandler(item)"
+              >
+                delete
+              </v-icon>
+            </template>
+                <v-card>
+                  <v-card-title class="headline">Confirmation</v-card-title>
+                    <v-card-text>Are you sure want to delete this project?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Project.id_project)">Yes</v-btn>
+                    <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                  </v-card-actions>
+                </v-card>
+          </v-dialog>
+        </template>
+      </v-data-table>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
 import Controller from './../service/Project'
+import format from 'date-fns/format'
+import parse from 'date-fns/parse'
+import { parseISO } from 'date-fns'
 
   export default {
     data: () => ({
@@ -349,19 +360,7 @@ import Controller from './../service/Project'
       project: [],
       Project: {
         id_project: '',
-        name:'',
-        address: '',
-        owner: '',
-        date: new Date().toISOString().substr(0, 10),
-        no_telp: '',
-        phone: '',
-        type: '',
-        nominal: 0,
-        kode: ''
-      },
-      ProjectDefault:{
-        id_project: '',
-        name:'',
+        project:'',
         address: '',
         owner: '',
         date: new Date().toISOString().substr(0, 10),
@@ -377,6 +376,7 @@ import Controller from './../service/Project'
           align: 'left',
           sortable: false,
           value: 'kode',
+          width: '6%'
         },
         {
           text: 'Project',
@@ -397,27 +397,32 @@ import Controller from './../service/Project'
         { 
           sortable: false,
           text: 'Date', 
-          value: 'date'
+          value: 'date',
+          width: '14%'
         },
         { 
           sortable: false,
           text: 'Telp Number', 
-          value: 'no_telp'
+          value: 'no_telp',
+          align: 'left'
         },
         { 
           sortable: false,
           text: 'Phone Number', 
-          value: 'phone'
+          value: 'phone',
+          align: 'left'
         },
         { 
           sortable: false,
           text: 'Type', 
-          value: 'type'
+          value: 'type',
+          align: 'center'
         },
         { 
           sortable: false,
           text: 'Nominal', 
-          value: 'nominal'
+          value: 'nominal',
+          width: '15%'
         },
         { 
           text: 'Actions', 
@@ -450,7 +455,7 @@ import Controller from './../service/Project'
         v => !!v || 'Date is required'
       ],
       noRules: [
-        v => !!v || 'Telp number is required',
+        v => !!v || 'Telephone number is required',
         v => (v && !v.numeric) || 'Telp number must be numeric'
       ],
       typeRules: [
@@ -465,9 +470,17 @@ import Controller from './../service/Project'
       this.getallItem()
     },
     computed: {
-      
+      dateFormat(){
+        let date = parseISO(this.Project.date)
+        return this.Project.date ? format(date, 'dd MMMM yyyy') : ''
+      },
     },
     methods: {
+      formatDate(item)
+      {
+        let date = parseISO(item)
+        return item ? format(date,'dd MMMM yyyy') : ''
+      },
       async getallItem(){
         try{
           this.project = (await Controller.getallItem()).data
@@ -479,7 +492,7 @@ import Controller from './../service/Project'
         try{
           const payload = {
             kode        : this.Project.kode,
-            name        : this.Project.name,
+            name        : this.Project.project,
             address     : this.Project.address,
             owner       : this.Project.owner,
             date        : this.Project.date,
@@ -498,7 +511,7 @@ import Controller from './../service/Project'
       async updateItem(id){
         try{
             const payload = {
-              name        : this.Project.name,
+              name        : this.Project.project,
               address     : this.Project.address,
               owner       : this.Project.owner,
               date        : this.Project.date,
@@ -544,3 +557,7 @@ import Controller from './../service/Project'
     },
   }
 </script>
+
+<style>
+
+</style>
