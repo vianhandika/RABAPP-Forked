@@ -17,6 +17,7 @@ class AHSLokalDetailsTransformers extends TransformerAbstract
             'sub_total'             => $ahs_lokal_details->sub_total,
             'adjustment'            => $ahs_lokal_details->adjustment,
             
+            // 'kode'                  => $ahs_lokal_details->materials->kode,
             'name'                  => $ahs_lokal_details->materials->name,
             'type'                  => $ahs_lokal_details->materials->type,
             'price'                 => $ahs_lokal_details->materials->price,

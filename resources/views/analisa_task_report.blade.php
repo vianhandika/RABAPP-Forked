@@ -21,15 +21,33 @@
             }
             .table-section table thead tr th {
                 border-bottom: 0.2px solid black;
-                padding: 8px;
+                border-right: 0.2px solid black;
             }
             /* .table-section table tbody tr td {
-                border: 0.2px solid black;
+                border-right: 0.2px solid black;
             } */
+            .top{
+                border-top: 0.2px solid black;
+                padding-top: -2px;
+                /* border-collapse: collapse; */
+            }
+            .bottom{
+                border-bottom: 0.2px solid black;
+            }
+            .left{
+                border-left: 0.2px solid black;
+            }
+            .right{
+                border-right: 0.2px solid black;
+            }
+            .bottomLeft{
+                border-bottom: 0.2px solid black;
+                border-left: 0.2px solid black
+            }
         </style>
     </head>
     <body>
-        <img src="{{public_path('images/logo.png')}}" width="120px">
+        <img src="{{public_path('images/logo.png')}}" width="400px">
         <div class="title">
             <h3>Daftar Analisa Pekerjaan {{$datas[0]->task}} (Master)</h3>
         </div>
@@ -38,35 +56,30 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Id. Pek.</th>
-                        <th>Uraian Pekerjaan</th>
-                        <th>Koef</th>
-                        <th>Id. B&T</th>
-                        <th>Uraian B&T</th>
-                        <th>Sat.</th>
-                        <th>Harga B&T</th>
-                        <th>Harga Satuan</th>
+                        <th style="padding: 5px" width="50px">Id. Pek.</th>
+                        <th width="150px" align="left" >Uraian Pekerjaan</th>
+                        <th>Koef.</th>
+                        <th style="padding: 5px" width="50px">Id. B&T</th>
+                        <th width="120px" align="left">Uraian B&T</th>
+                        <th style="padding: 5px" width="40px">Sat.</th>
+                        <th style="padding: 5px" colspan="2">Harga B&T</th>
+                        <th style="padding: 5px" colspan="2">Harga Satuan</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>{{$datas[0]->kode_task}}</td>
-                        <td colspan="2">{{$datas[0]->task}}</td>
+                        <td class="right">{{$datas[0]->kode_task}}</td>
+                        <td class="right" align="left" >{{$datas[0]->task}}</td>
+                        <td class="right"></td> 
+                        <td class="right"></td> 
+                        <td class="right"></td> 
+                        <td class="right"></td> 
                         <td></td> 
-                        <td></td> 
-                        <td></td> 
-                        <td></td> 
-                        <td>satuan : {{$datas[0]->satuan_task}}</td> 
+                        <td class="right"></td> 
+                        <td colspan="2">satuan : {{$datas[0]->satuan_task}}</td> 
                     </tr>
                     <tr> 
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
-                        <td style="border-bottom: 0.2px solid black"></td>
+                        <td colspan="10" class="top"></td>
                     </tr>
 
                     @php
@@ -76,54 +89,53 @@
                     @foreach ($datas as $data)  
                     <tr>
                         <td></td>
-                        <td></td>
-                        <td>{{$data->coefficient}}</td>
-                        <td>{{$data->kode_material}}</td>
-                        <td>{{$data->material}}</td>
-                        <td>{{$data->satuan_material}}</td>
-                        <td>Rp. {{$data->price}}</td>
-                        <td>Rp. {{$data->price_satuan}}</td>
+                        <td class="right"></td>
+                        <td class="right">{{$data->coefficient}}</td>
+                        <td class="right">{{$data->kode_material}}</td>
+                        <td class="right" align="left">{{$data->material}}</td>
+                        <td class="right">{{$data->satuan_material}}</td>
+                        <td class="left" align="right">Rp.</td>
+                        <td class="right" align="right" style="padding-right: 2px">{{number_format($data->price,0,',','.')}}</td>
+                        <td class="left" align="right">Rp.</td>
+                        <td class="right" align="right" style="padding-right: 5px">{{number_format($data->price_satuan,0,',','.')}}</td>
                     </tr>
 
                     <tr>
                         <td></td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td ></td>
-                        
+                        <td class="top" colspan="8"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"></td>
                         @if ($j == $i+1)
                         {
-                            <td colspan="2" style="border-bottom: 0.2px solid black">Total Material</td>
-                            <td style="border-bottom: 0.2px solid black">Rp. {{ $data->total_material }}</td>
+                            <td colspan="5" class="bottomLeft" class="left" style="padding-right:10px" align="left">Subtotal Material</td>
+                            <td class="bottom">:</td>
+                            <td class="bottom" align="right">Rp. </td>
+                            <td class="bottom" align="right" style="padding-right: 5px">{{ number_format($data->total_material,0,',','.') }}</td>
                         }
+                        @else
                         @endif
-                        
-                        
-                        @if($data->status == "labor")
-                        {
-                            @if($loop->last)
-                            {
-                                <td colspan="2" style="border-bottom: 0.2px solid black">Total Tenaga</td>
-                                <td style="border-bottom: 0.2px solid black">Rp. {{ $data->total_labor }}</td>
-                            }
-                            @endif
-                        }
-                        @endif       
                     </tr>
                     @php
                         $i++
                     @endphp 
-                    @endforeach    
+                    @endforeach   
+                    
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="5" class="bottomLeft" style="padding-right:10px" align="left">Subtotal Tenaga</td>
+                        <td class="bottom">:</td>
+                        <td class="bottom" align="right">Rp.</td>
+                        <td class="bottom" align="right" style="padding-right: 5px">{{ number_format($data->total_labor,0,',','.') }}</td>
+                    </tr>
 
                     <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td colspan="2">Biaya Total</td>
-                        <td>Rp. {{$data->total}}</td>
+                        <td colspan="2"></td>
+                        <td colspan="5" class="left" style="padding-right:10px" align="left">Biaya Total</td>
+                        <td class="bottom">:</td>
+                        <td align="right">Rp.</td>
+                        <td align="right" style="padding-right: 5px">{{number_format($data->total,0,',','.')}}</td>
                     </tr>
                 </tbody>
             </table>

@@ -3,7 +3,6 @@ import Http from '../http'
 export default {
     getallItem(){
         return new Promise((resolve, reject) => {
-            
             const successCallback = (res) => {
                 const data = res.data
                 resolve(data)
@@ -32,11 +31,9 @@ export default {
                 const data = res.data
                 resolve(data)
             }
-
             const errorCallback = (err) => {
                 reject(err)
             }
-
             Http.patch('/api/ahs/update/'+id, payload, successCallback, errorCallback)
         })
     },
@@ -50,6 +47,18 @@ export default {
                 reject(err)
             }
             Http.delete('/api/ahs/delete/'+id, successCallback, errorCallback)
+        })
+    },
+    copy(id) {
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.post('/api/ahs/copy/'+id,successCallback, errorCallback)
         })
     },
 }

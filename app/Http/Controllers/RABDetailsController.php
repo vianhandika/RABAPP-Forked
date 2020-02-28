@@ -12,6 +12,7 @@ use App\Transformers\RABDetailsTransformers;
 use App\RAB;
 use App\AHS;
 use App\Job;
+use App\Project;
 
 class RABDetailsController extends RestController
 {
@@ -63,13 +64,17 @@ class RABDetailsController extends RestController
     public function destroy($id)
     {
         $details = RABDetails::findOrFail($id);
-        $tasksub = TaskSubDetails::where('id_sub_details',$rab_details->id_sub_details)->first();
+        $tasksub = TaskSubDetails::where('id_sub_details',$details->id_sub_details)->first();
         $group = GroupDetails::where('id_group_details',$tasksub->id_group_details)->first();
         $structure = StructureDetails::where('id_structure_details',$group->id_structure_details)->first();
 
         $rab = RAB::where('id_rab',$structure->id_rab)->first();
-        $rab->total_rab -= $rab_details->HP;
+        $rab->total_rab -= $details->HP;
         $rab->save();
+
+        $project = Project::where('id_project',$rab->id_project)->first();
+        $project->nominal = $rab->total_rab;
+        $project->save();
 
         $ahs = AHSLokalDetails::where('id_ahs_lokal',$details->id_ahs_lokal)->get();
         foreach($ahs as $ahs_data)

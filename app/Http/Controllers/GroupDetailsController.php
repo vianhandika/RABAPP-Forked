@@ -10,6 +10,7 @@ use App\TaskSubDetails;
 use App\RABDetails;
 use App\AHSLokalDetails;
 use App\RAB;
+use App\Project;
 
 class GroupDetailsController extends RestController
 {
@@ -54,6 +55,10 @@ class GroupDetailsController extends RestController
         $rab=RAB::findOrFail($structure->id_rab);
         $rab->total_rab = $rab->total_rab - $total;
         $rab->save();
+
+        $project = Project::where('id_project',$rab->id_project)->first();
+        $project->nominal = $rab->total_rab;
+        $project->save();
 
         $status = $group->delete();
         

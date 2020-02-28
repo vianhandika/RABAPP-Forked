@@ -29,7 +29,7 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" v-on="on">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" v-on="on" @click="getallItem">New</v-btn>
               </template>
 
               <v-card>
@@ -48,7 +48,7 @@
                         <v-text-field 
                           v-model="Store.kode" 
                           label="ID Store"
-                          :rules="idRules"
+                          readonly
                         >
                         </v-text-field>
                       </v-flex>
@@ -163,7 +163,7 @@
                         <v-text-field 
                           v-model="Store.kode" 
                           label="ID Store"
-                          :rules="idRules"
+                          readonly
                         >
                         </v-text-field>
                       </v-flex>
@@ -338,10 +338,6 @@ import Controller from './../service/Store'
         },
       ],
       //validation
-      idRules: [
-        v => !!v || 'ID is required',
-        v => (v && v.length <= 4) || 'ID must be less than 4 characters',
-      ],
       nameRules: [
         v => !!v || 'Name is required',
       ],
@@ -373,6 +369,7 @@ import Controller from './../service/Store'
       async getallItem(){
         try{
           this.store = (await Controller.getallItem()).data
+          this.Store.kode = 'St-0'+(this.store.length+1)
         }catch(err){
           console.log(err)
         }
@@ -435,13 +432,6 @@ import Controller from './../service/Store'
         this.resetForm()
         this.resetValidation()
       },
-      // close () {
-      //   // this.reset()
-      //   this.dialog = false
-      //   this.dialog2 = false
-      //   this.dialog3 = false
-      //   this.getallItem()
-      // },
     },
   }
 </script>

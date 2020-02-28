@@ -29,4 +29,17 @@ class SatuanController extends RestController
             'message' => $satuan ? 'Success' : 'Error Satuan'
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+        $satuan = Satuan::findOrFail($id);
+        $satuan->name = $request->name;
+        $satuan->save();
+    }
+
+    public function destroy($id)
+    {
+        $satuan = Satuan::findOrFail($id);
+        $status = $satuan->delete();
+    }
 }

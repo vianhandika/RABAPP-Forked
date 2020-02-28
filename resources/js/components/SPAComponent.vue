@@ -6,14 +6,14 @@
       dark
       color="blue darken-2"
     >
-    <v-layout column align-center>
+    <!-- <v-layout column align-center>
       <v-flex class="mt-8 mb-6">
         <v-avatar dark width="100px">
-          <!-- <v-icon>home_work</v-icon> -->
-          <!-- <v-text>Vastu Cipta Persada</v-text> -->
+          <v-icon>home_work</v-icon>
+          <v-text>Vastu Cipta Persada</v-text>
         </v-avatar>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
       <v-list dense>
         <v-list-item v-for="link in links" :key="link.title" router :to="link.route" active-class="border">
           <v-list-item-action>
@@ -25,6 +25,22 @@
             <v-list-item-title>{{link.title}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        <!-- <v-list-group sub-group active-class="border">
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-list-item-title>More</v-list-item-title>
+            </v-list-item-content>
+          </template>
+          <v-list-item v-for="list in rab" :key="list.title">
+            <v-btn icon>
+              <v-icon>{{list.icon}}</v-icon>
+            </v-btn>
+            <v-list-item-content>
+              <v-list-item-title>{{list.title}}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-group> -->
       </v-list>
     </v-navigation-drawer>
     
@@ -80,10 +96,16 @@ import Structure from '../service/Structure'
         {icon: 'store', title: 'Store', route: '/store'},
         {icon: 'work', title: 'Task', route: '/job'},
         {icon: 'waves', title: 'Materials/Labor', route: '/materials'},
-        {icon: 'money', title: 'AHS', route: '/analisa'},
+        {icon: 'money', title: 'AHS Master', route: '/analisa'},
         {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
         {icon: 'payment', title: 'RAB', route: '/rab'},
+        {icon: 'post_add', title: 'Detail', route: '/reference'},
       ],
+      rab : [
+        {icon: 'home',title: 'Building', route:''},
+        {icon: 'group_work',title: 'Floor', route:''},
+        {icon: 'work',title: 'Task Group', route:''},
+      ]
     }),
     computed: {
       ...mapState({

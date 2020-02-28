@@ -10,6 +10,7 @@ use App\TaskSubDetails;
 use App\RABDetails;
 use App\AHSLokalDetails;
 use App\RAB;
+use App\Project;
 
 class TaskSubDetailsController extends RestController
 {
@@ -46,8 +47,13 @@ class TaskSubDetailsController extends RestController
         $group = GroupDetails::where('id_group_details',$tasksub->id_group_details)->first();
         $structure = StructureDetails::where('id_structure_details',$group->id_structure_details)->first();
         $rab=RAB::findOrFail($structure->id_rab);
-        $rab->total_rab = $rab->total_rab - $total;
+        $rab->total_rab -= $total;
         $rab->save();
+
+        $project = Project::where('id_project',$rab->id_project)->first();
+        $project->nominal = $rab->total_rab;
+        $project->save();
+
         $status = $tasksub->delete();
         
         return response()->json([

@@ -12,7 +12,8 @@ import Store from './components/StoreComponent'
 import Report from './components/ReportsComponent'
 import SPA from './components/SPAComponent'
 import Cek from './components/Cek'
-import AHSAdjust from './components/AHSAdjustComponent'
+import AHSLokal from './components/AHSLokalComponent'
+import Reference from './components/ReferenceComponent'
 
 import VueRouter from 'vue-router';
 
@@ -107,12 +108,17 @@ export const routes = [
       {
         path: '/analisa_lokal',
         name: 'adjust',
-        component: AHSAdjust
+        component: AHSLokal
       },
       {
         path: '/cek',
         name: 'cek',
         component: Cek
+      },
+      {
+        path: '/reference',
+        name: 'reference',
+        component: Reference
       },
     ]
   },

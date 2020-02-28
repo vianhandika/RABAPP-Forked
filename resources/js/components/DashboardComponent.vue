@@ -40,7 +40,7 @@
               <v-card>
                 <v-row>
                   <v-col cols="4" align-center>
-                    <v-card-title class="headline red--text">RAB</v-card-title>
+                    <v-card-title class="headline green--text">RAB</v-card-title>
                   </v-col>
                   
                   <v-col cols="7">
@@ -50,7 +50,7 @@
                       label="Search"
                       single-line
                       hide details    
-                      color="red"
+                      color="green"
                     >
                     </v-text-field>
                   </v-col>
@@ -58,8 +58,8 @@
 
                 <v-list>
                   <v-list-item v-for="data in filtered" :key="data.id_rab">
-                    <v-list-item-avatar color="red">
-                      <v-icon dark>picture_as_pdf</v-icon>
+                    <v-list-item-avatar color="green">
+                      <v-icon dark @click="generateRAB(data.id_rab)">picture_as_pdf</v-icon>
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
@@ -68,7 +68,7 @@
                     </v-list-item-content>
                     <v-list-item-content align="right">
                       <v-list-item-subtitle>Nominal</v-list-item-subtitle>
-                      <v-list-item-title>Rp. {{ Number(data.total_rab).toLocaleString() }}</v-list-item-title>
+                      <v-list-item-title>Rp. {{ Number(data.total_rab).toLocaleString('id-ID') }}</v-list-item-title>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
                   </v-list-item>
@@ -110,7 +110,7 @@
                     </v-list-item-content>
                     <v-list-item-content align="right">
                       <v-list-item-subtitle>HSP</v-list-item-subtitle>
-                      <v-list-item-title>Rp. {{ Number(data.total).toLocaleString()}}</v-list-item-title>
+                      <v-list-item-title>Rp. {{ Number(data.total).toLocaleString('id-ID')}}</v-list-item-title>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
                   </v-list-item>
@@ -148,16 +148,6 @@ import report from './../service/Reports'
       RAB:[],
       ahs:[],
 
-      links : [
-        {icon: 'dashboard', title: 'Dashboard', route: '/dashboard'},
-        {icon: 'home_work', title: 'Project', route: '/project'},
-        {icon: 'store', title: 'Store', route: '/store'},
-        {icon: 'work', title: 'Task', route: '/job'},
-        {icon: 'waves', title: 'Materials/Labor', route: '/materials'},
-        {icon: 'money', title: 'AHS', route: '/analisa'},
-        {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
-        {icon: 'payment', title: 'RAB', route: '/rab'},
-      ],
       panels:[
         {icon: 'home_work',title:'Project',count:'project',color:'green',footer:'house',text:'Vastu Cipta Persada'},
         {icon: 'waves',title:'Materials/Labor',count:'materials',color:'#F44336',footer:'house',text:'Vastu Cipta Persada'},
@@ -218,6 +208,14 @@ import report from './../service/Reports'
         console.log(id)
         try{
           await report.reports(id)
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async generateRAB(id)
+      {
+        try{
+          await report.rab(id)
         }catch(err){
           console.log(err)
         }

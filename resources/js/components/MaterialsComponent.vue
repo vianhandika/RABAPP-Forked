@@ -12,7 +12,11 @@
         class="elevation-8"
       >
       <template v-slot:item.price="{ item }">
-        {{'Rp. '}}{{ Number(item.price).toLocaleString() }}
+        <v-layout>
+          Rp.
+          <v-spacer></v-spacer>
+          {{ Number(item.price).toLocaleString('id-ID') }}
+        </v-layout>
       </template>
       
         <template v-slot:top>
@@ -37,7 +41,7 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset" v-on="on">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getallItem()" v-on="on">New</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -51,7 +55,7 @@
                       <v-text-field 
                         v-model="Material.kode" 
                         label="ID"
-                        :rules="idRules"
+                        readonly
                       >
                       </v-text-field>
                     </v-flex>
@@ -185,7 +189,7 @@
             </template>
               <v-card>
                 <v-card-title>
-                  <span class="headline">Edit Material/Labor</span>
+                  <span class="headline">Edit Materials/Labor</span>
                 </v-card-title>
               
                 <v-form ref="form" v-model="valid" lazy-validation>
@@ -195,7 +199,7 @@
                         <v-text-field 
                           v-model="Material.kode" 
                           label="ID"
-                          :rules="idRules"
+                          readonly
                         >
                         </v-text-field>
                       </v-flex>
@@ -291,7 +295,7 @@
 
                       <v-layout>
                         <v-select
-                          v-model="Material.store"
+                          v-model="Material.id_store"
                           :items="store"
                           item-text="name"
                           item-value="id_store"
@@ -394,7 +398,8 @@ import storeController from './../service/Store'
         {
           sortable: false,
           text: 'Price',
-          value: 'price'
+          value: 'price',
+          width: '11%',
         },
         {
           sortable: false,
@@ -418,10 +423,6 @@ import storeController from './../service/Store'
         },
       ],
       //validation
-      idRules: [
-        v => !!v || 'ID is required',
-        v => (v && v.length <= 4) || 'ID must be less than 4 characters',
-      ],
       statusRules:[
         v => !!v || 'Status is required'
       ],
@@ -486,6 +487,7 @@ import storeController from './../service/Store'
       async getallItem(){
         try{
           this.material = (await Controller.getallItem()).data
+          this.Material.kode = "M/L-0"+(this.material.length+1)
         }catch(err){
           console.log(err)
         }

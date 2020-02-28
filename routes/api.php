@@ -58,6 +58,7 @@ Route::delete('/ahs/delete/{id}','AHSController@destroy');
 Route::get('/ahs/show/{id}', 'AHSController@showByID');
 Route::get('/count_ahs','AHSController@count_ahs');
 Route::get('/ahs/paginate','AHSController@paginate');
+Route::post('/ahs/copy/{id}','AHSController@copy_ahs');
 //AHS Details
 Route::get('/ahs_details','AHSDetailsController@index');
 Route::patch('/ahs_details/update/{id}','AHSDetailsController@update');
@@ -85,6 +86,8 @@ Route::get('/stores/show/{id}', 'StoreController@showByID');
 //Satuan
 Route::get('/satuans','SatuanController@index');
 Route::post('/satuans/store', 'SatuanController@store');
+Route::patch('/satuans/update/{id}','SatuanController@update');
+Route::delete('/satuans/delete/{id}','SatuanController@destroy');
 //Structure
 Route::get('/structure','StructureController@index');
 Route::post('/structure/store', 'StructureController@store');

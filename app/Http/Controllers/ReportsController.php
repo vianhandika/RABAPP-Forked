@@ -7,7 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 use App\AHS;
 use PDF;
-
+use App\RAB;
+use App\StructureDetails;
+use App\GroupDetails;
+use App\TaskSubDetails;
+use App\RABDetails;
+use App\Structure;
+use App\Groups;
+use App\TaskSub;
 
 class ReportsController extends Controller
 {
@@ -34,9 +41,7 @@ class ReportsController extends Controller
                 break;
             }
             if($datas[$i]->status == "material")
-            {
                 $j +=1;
-            }
         }
         $pdf = PDF::loadView('analisa_task_report',['datas' => $datas, 'j'=>$j]);
         $pdf->setPaper([0,0,550,900]);
@@ -63,9 +68,6 @@ class ReportsController extends Controller
                 $j = $i;
                 break;
             }
-            else{
-
-            }
         }
         $count=1;
         for($i=0;$i<$index-1;$i++)
@@ -76,34 +78,100 @@ class ReportsController extends Controller
             }
         }
         $pdf = PDF::loadView('analisa_task_all_report',['datas' => $datas,'count'=>$count,'index'=>$index]);
-        $pdf->setPaper([0,0,550,900]);
+        $pdf->setPaper('A4','potrait');
         return $pdf->stream();
+    }
+
+    function integerToRoman($integer)
+    {
+        $integer = intval($integer);
+        $result = '';
+     
+        $lookup = array('M' => 1000,'CM' => 900,'D' => 500,'CD' => 400,'C' => 100,'XC' => 90,'L' => 50,
+                        'XL' => 40,'X' => 10,'IX' => 9,'V' => 5,'IV' => 4,'I' => 1);
+        
+        foreach($lookup as $roman => $value)
+        {
+            $matches = intval($integer/$value);
+            $result .= str_repeat($roman,$matches);
+            $integer = $integer % $value;
+        }
+        return $result;
     }
 
     public function rab($id)
     {
-        $rab = DB::select("SELECT p.kode, p.name, p.address, p.owner, p.date, p.no_telp, p.phone, p.type, 
-                        p.nominal, st.name as structure, gr.name as floor, ts.name as taskgroup, 
-                        j.name as task, a.volume, j.satuan, a.HSP, a.HP
-        FROM rabs r
-        INNER JOIN projects p ON p.id_project = r.id_project
-        INNER JOIN structure_details s ON s.id_rab = r.id_rab
-        INNER JOIN group_details g ON g.id_structure_details = s.id_structure_details
-        INNER JOIN task_sub_details t ON t.id_group_details = g.id_group_details
-        INNER JOIN ahs_lokals a ON a.id_sub_details = t.id_sub_details
-        INNER JOIN structures st ON st.id_structure = s.id_structure
-        INNER JOIN groups gr ON gr.id_groups = g.id_groups
-        INNER JOIN task_subs ts ON ts.id_sub = t.id_sub
-        INNER JOIN jobs j ON j.id_job = a.id_job
-        WHERE r.id_rab = $id");
+        $rab = DB::table('rabs')
+            ->select('projects.name','projects.owner','projects.date','projects.address', 'projects.phone',
+                        'task_subs.id_sub','groups.id_groups','ahs_lokals.volume','ahs_lokals.HSP',
+                        'ahs_lokals.HP','jobs.name as job', 'jobs.satuan')
+            ->join('projects','projects.id_project','=','rabs.id_project')
+            ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
+            ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
+            ->join('task_sub_details','task_sub_details.id_group_details','=','group_details.id_group_details')
+            ->join('ahs_lokals','ahs_lokals.id_sub_details','=','task_sub_details.id_sub_details')
+            ->join('jobs','jobs.id_job','=','ahs_lokals.id_job')
+            ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
+            ->join('groups','groups.id_groups','=','group_details.id_groups')
+            ->where('rabs.id_rab','=',$id)
+            ->get();
+        // dd($rab);
+        $totalSt = DB::table('rabs')
+            ->select(DB::raw('SUM(ahs_lokals.HP) as Total,structure_details.id_structure'))
+            ->join('projects','projects.id_project','=','rabs.id_project')
+            ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
+            ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
+            ->join('task_sub_details','task_sub_details.id_group_details','=','group_details.id_group_details')
+            ->join('ahs_lokals','ahs_lokals.id_sub_details','=','task_sub_details.id_sub_details')
+            ->join('jobs','jobs.id_job','=','ahs_lokals.id_job')
+            ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
+            ->join('groups','groups.id_groups','=','group_details.id_groups')
+            ->where('rabs.id_rab','=',$id) 
+            ->groupBy('structure_details.id_structure')
+            ->get();
+        // dd($totalSt);
+        $structure = DB::table('rabs')
+            ->select('structures.id_structure','structures.name')
+            ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
+            ->join('structures','structure_details.id_structure','=','structures.id_structure')
+            ->where('rabs.id_rab','=',$id)
+            ->get();
 
-        return response()->json([
-            'data' => $rab,
-            'message' => $rab ? 'Success' : 'Error'
-        ]);
+        $group = DB::table('rabs')
+            ->select('structure_details.id_structure','groups.id_groups','groups.name')
+            ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
+            ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
+            ->join('groups','groups.id_groups','=','group_details.id_groups')
+            ->where('rabs.id_rab','=',$id)
+            ->get();
+        // dd($group);
 
-        // $pdf = PDF::loadView('rab_report',['rab'=>$rab]);
-        // $pdf->setPaper([0,0,50,900]);
-        // return $pdf->stream();
+        $tasksub = DB::table('rabs')
+            ->select('structure_details.id_structure','group_details.id_groups','task_subs.id_sub','task_subs.name')
+            ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
+            ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
+            ->join('task_sub_details','task_sub_details.id_group_details','=','group_details.id_group_details')
+            ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
+            ->where('rabs.id_rab','=',$id)
+            ->get();
+        // dd($tasksub);
+        $alphabet=[];
+        foreach(range('A','Z') as $alphabet_data)
+        {
+            array_push($alphabet,$alphabet_data);
+        }
+
+        $index = count($group);
+        $roman=[];
+        for($i=1;$i<=$index;$i++)
+        {
+            $data = $this->integerToRoman($i);
+            array_push($roman,$data);
+        }
+        // dd($roman);
+        $pdf = PDF::loadView('rab_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
+                            'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,'totalSt'=>$totalSt]);
+        $pdf->setPaper('A4','potrait');
+        return $pdf->stream();
     }
 }

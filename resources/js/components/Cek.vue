@@ -20,7 +20,7 @@
         </v-text-field>
       
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" width="700px" max-height="200px">  
+        <v-dialog v-model="dialog" width="750px" max-height="200px">  
           <template v-slot:activator="{ on }">
             <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="filterProjects();reset();dialog8=true">New</v-btn>
           </template>
@@ -515,7 +515,7 @@
                       </v-data-table>
                     </v-flex>
 
-                    <v-card>
+                    <v-card v-if="!dialog7">
                       <v-form>
                         <v-card-text>
                           <v-flex class="text-md-center" sm12>
@@ -575,8 +575,258 @@
                                   label="AHS" 
                                   class="pa-1"
                                   v-model="detail.id_ahs"
-                                  item-text="ahs"
+                                  item-text="name"
                                   item-value="id_ahs"
+                                  :items="detailDetails"
+                                  readonly 
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs10 sm2 md2>
+                                <v-text-field
+                                  v-model="detail.HSP"
+                                  label="HSP"
+                                  class="pa-1"
+                                  readonly
+                                >
+                                </v-text-field>
+                              </v-flex>
+
+                              <v-flex xs1>
+                                <v-text-field
+                                  v-model="detail.volume"
+                                  label="Volume"
+                                  class="pa-1"
+                                  readonly
+                                >
+                                </v-text-field>
+                              </v-flex>
+
+                              <v-flex xs1>
+                                <v-text-field
+                                  v-model="detail.adjustment"
+                                  label="Adjustment"
+                                  class="pa-1"
+                                  readonly
+                                >
+                                </v-text-field>
+                              </v-flex>
+
+                              <v-flex xs10 sm2 md2>
+                                <v-text-field
+                                  v-model="detail.HP"
+                                  label="HP"
+                                  class="pa-1"
+                                  readonly
+                                >
+                                </v-text-field>
+                              </v-flex>
+
+                              <v-flex xs10 sm2 md2>
+                                <v-text-field
+                                  v-model="detail.HPAdjust"
+                                  label="HP Adjustment"
+                                  class="pa-1"
+                                  readonly
+                                >
+                                </v-text-field>
+                              </v-flex>
+
+                              </v-card-title>
+                            </Vcard>
+                          </v-flex>
+
+                          <v-layout v-if="tambah">
+                            <v-flex class="text-md-center" sm12 mt-2>
+                              <VCard elevation="8"> 
+                                <v-card-title>
+                                  <v-btn 
+                                    icon
+                                    color="red"
+                                    dark @click="tambah=false"
+                                    >
+                                    <v-icon>remove_circle</v-icon>
+                                  </v-btn>
+                                  <v-btn 
+                                    icon
+                                    color="green"
+                                    dark @click="addList()"
+                                    >
+                                    <v-icon>add_circle</v-icon>
+                                  </v-btn>
+                                  <!-- buat tambah data -->
+                                  <v-flex xs11 sm3 md3>
+                                    <v-select
+                                      label="Building" 
+                                      class="pa-1"
+                                      v-model="tasksub_unit.id_structure"
+                                      item-text="structure"
+                                      item-value="id_structure"
+                                      :items="detailTask"
+                                      readonly 
+                                    ></v-select>
+                                  </v-flex>
+
+                                  <v-flex xs11 sm3 md3>
+                                    <v-select
+                                      label="Floor" 
+                                      class="pa-1"
+                                      v-model="tasksub_unit.id_groups"
+                                      item-text="floor"
+                                      item-value="id_groups"
+                                      :items="detailTask"
+                                      readonly 
+                                    ></v-select>
+                                  </v-flex>
+
+                                  <v-flex xs12 sm4 md4>
+                                    <v-select
+                                      label="Task Group" 
+                                      class="pa-1"
+                                      v-model="tasksub_unit.id_sub"
+                                      item-text="task"
+                                      item-value="id_sub"
+                                      :items="detailTask"
+                                      readonly 
+                                    ></v-select>
+                                  </v-flex>
+                                  
+                                  <v-flex xs12 sm4 md4>
+                                    <v-select 
+                                      label="AHS" 
+                                      class="pa-1"
+                                      v-model="AHS.id_ahs"
+                                      item-text="name"
+                                      item-value="id_ahs"
+                                      :items="filterAHSAll"
+                                      @change="getSelectedIndex();detail=true"
+                                      required 
+                                    ></v-select>
+                                  </v-flex>
+
+                                  <v-flex xs10 sm2 md2>
+                                    <v-select
+                                      label="HSP" 
+                                      class="pa-1"
+                                      v-model="AHS.id_ahs"
+                                      item-text="total"
+                                      item-value="id_ahs"
+                                      :items="filterAHSAll"
+                                      readonly
+                                    ></v-select>
+                                  </v-flex>
+
+                                  <v-flex xs1 v-if="detail">
+                                    <v-text-field
+                                      v-model="ahs_lokal.volume"
+                                      label="Volume"
+                                      class="pa-1"
+                                      @input="change();adjust()"
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+
+                                  <v-flex xs1 v-if="detail">
+                                    <v-text-field
+                                      v-model="ahs_lokal.adjustment"
+                                      label="Adjustment"
+                                      class="pa-1"
+                                      @input="adjust"
+                                      @change="getMaterialDetails();adjustM=true"
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+
+                                  <v-flex xs10 sm2 md2 v-if="detail">
+                                    <v-text-field
+                                      v-model="ahs_lokal.HP"
+                                      label="HP"
+                                      class="pa-1"
+                                      readonly
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+
+                                  <v-flex xs10 sm2 md2 v-if="detail">
+                                    <v-text-field
+                                      v-model="ahs_lokal.HPAdjust"
+                                      label="HP After Adjust"
+                                      class="pa-1"
+                                      readonly
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+
+                                </v-card-title>
+                              </Vcard>
+                            </v-flex>
+                          </v-layout> 
+                        </v-card-text>
+                      </v-form>
+                    </v-card>
+
+                    <v-card v-if="dialog7">
+                      <v-form>
+                        <v-card-text>
+                          <v-flex class="text-md-center" sm12>
+                            <VCard
+                              v-for="(detail,index) in details"
+                              :key="index"
+                              style="margin-top: 4px"
+                              elevation="8"
+                            > 
+                              <v-card-title>
+                              <v-btn 
+                                  icon
+                                  color="red"
+                                  dark @click="deleteList(detail)"
+                                  >
+                                  <v-icon>remove_circle</v-icon>
+                              </v-btn>
+
+                              <v-flex xs11 sm3 md3>
+                                <v-select
+                                  label="Building" 
+                                  class="pa-1"
+                                  v-model="detail.id_structure"
+                                  item-text="structure"
+                                  item-value="id_structure"
+                                  :items="detailDetails"
+                                  readonly 
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs11 sm3 md3>
+                                <v-select
+                                  label="Floor" 
+                                  class="pa-1"
+                                  v-model="detail.id_groups"
+                                  item-text="floor"
+                                  item-value="id_groups"
+                                  :items="detailDetails"
+                                  readonly 
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                  label="Task Group" 
+                                  class="pa-1"
+                                  v-model="detail.id_sub"
+                                  item-text="task"
+                                  item-value="id_sub"
+                                  :items="detailDetails"
+                                  readonly 
+                                ></v-select>
+                              </v-flex>
+
+                              <v-flex xs12 sm4 md4>
+                                <v-select
+                                  label="AHS" 
+                                  class="pa-1"
+                                  v-model="detail.id_job"
+                                  item-text="name"
+                                  item-value="id_job"
                                   :items="detailDetails"
                                   readonly 
                                 ></v-select>
@@ -801,230 +1051,166 @@
           </v-card>
         </v-dialog>
       </v-toolbar>
-
-      <v-expansion-panels accordion class="elevation-8">
-        <v-expansion-panel v-for="data in filtered" :key="data.id_rab" @click="getstructure(data.id_rab)" active-class="border-rab">
-            <v-expansion-panel-header>
-              <v-layout row wrap :class="`pa-3 ahs`">
-                <v-flex xs2>
+      
+      <v-card elevation="10">
+        <v-list-group v-for="data in filtered" active-class="borderRab" :key="data.id_rab" @click="getstructure(data.id_rab)">
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-layout>
+                <v-flex xs3>
                   <div class="caption grey--text">ID RAB</div>
                   <div>{{ data.kode }}</div>
                 </v-flex>
-                <v-flex xs3>
+                <v-flex xs4>
                   <div class="caption grey--text">Project</div>
                   <div>{{ data.project }}</div>
                 </v-flex>
-                <v-flex xs2>
+                <v-flex xs4>
                   <div class="caption grey--text">Nominal</div>
                   <div>Rp. {{ Number(data.total_rab).toLocaleString() }}</div>
                 </v-flex>
-                <v-flex xs3>
+                <v-flex xs4>
                   <div class="caption grey--text">Description</div>
                   <div>{{ data.desc }}</div>
                 </v-flex>
-                <v-flex xs2>
+                <v-flex xs1>
                   <div class="caption grey--text">Actions</div>
                   <v-icon color="green" @click="itemEdit(data);dialog=true;dialog7=true">edit</v-icon>
                   <v-icon color="red" @click="itemDelete(data);dialog2=true">delete</v-icon>
                 </v-flex>
               </v-layout>
-              
-              <template v-slot:actions>
-                <v-icon color="blue darken-4" @click="getstructure(data.id_rab)">expand_more</v-icon>
-              </template>
-              <!-- dialog delete rab -->
-              <v-dialog v-model="dialog2" max-width="290px">
+            </v-list-item-content>
+          </template>
+          <v-list-group v-for="data in Structure" :key="data.id_structure_details" @click="getfloor(data.id_structure_details)">
+            <template v-slot:activator>
+              <v-list-item-content class="borderStructure">
+                <v-list-item-title class="marginBorder">{{ data.structure }}</v-list-item-title>
+                <!-- <v-flex >
+                  {{ data.structure}}
+                </v-flex> -->
+              </v-list-item-content>
+              <v-icon color="blue darken-3" @click="dialog3=true">delete</v-icon>
+            </template>
+            <!-- dialog delete structure -->
+              <v-dialog v-model="dialog3" max-width="290px">
                 <v-card>
                   <v-card-title class="headline">Confirmation</v-card-title>
-                    <v-card-text>Are you sure want to delete this RAB?</v-card-text>
+                    <v-card-text>Are you sure want to delete this structure?</v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(rab.id_rab)">Yes</v-btn>
-                    <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                    <v-btn color="green darken-1" text @click="dialog3 = false; deleteStructureDetails(data.id_structure_details)">Yes</v-btn>
+                    <v-btn color="red darken-1" text @click="dialog3 = false">No</v-btn>
                   </v-card-actions>
                 </v-card>
               </v-dialog>
+            <!--  -->
+            <v-list-group v-for="data in Groups" :key="data.id_group_details" @click="gettasksub(data.id_group_details)">
+              <template v-slot:activator>
+                <v-list-item-content class="borderFloor">
+                  <v-list-item-title class="marginBorder">{{data.floor}}</v-list-item-title>
+                </v-list-item-content>
+                <v-icon color="light-blue accent-3" @click="dialog4=true">delete</v-icon>
+              </template>
+              <!-- dialog delete floor -->
+                <v-dialog v-model="dialog4" max-width="290px">
+                  <v-card>
+                    <v-card-title class="headline">Confirmation</v-card-title>
+                      <v-card-text>Are you sure want to delete this floor?</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" text @click="dialog4 = false; deleteGroupDetails(data.id_group_details)">Yes</v-btn>
+                      <v-btn color="red darken-1" text @click="dialog4 = false">No</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
               <!--  -->
-            </v-expansion-panel-header>
-            <v-expansion-panel-content class="grey--text">
-              <!-- expansion structure -->
-              <v-expansion-panels>
-                <v-expansion-panel v-for="data in Structure" :key="data.id_structure_details" @click="getfloor(data.id_structure_details)" active-class="border-structure">
-                    <v-expansion-panel-header>
-                      <v-layout row wrap>
-                        <v-flex>
-                          <div class="subtitle-2 black--text">{{data.structure}}</div>
+              <v-list-group v-for="data in TaskSub" :key="data.id_sub_details" @click="getdetails(data.id_sub_details)">
+                <template v-slot:activator>
+                  <v-list-item-content class="borderTask">
+                    <v-list-item-title class="marginBorder">{{data.task}}</v-list-item-title>
+                  </v-list-item-content>
+                  <v-icon color="light-blue lighten-2" @click="dialog5=true">delete</v-icon>
+                </template>
+                <!-- dialog delete task group -->
+                  <v-dialog v-model="dialog5" max-width="290px">
+                    <v-card>
+                      <v-card-title class="headline">Confirmation</v-card-title>
+                        <v-card-text>Are you sure want to delete this task group?</v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="green darken-1" text @click="dialog5 = false; deleteTaskDetails(data.id_sub_details)">Yes</v-btn>
+                        <v-btn color="red darken-1" text @click="dialog5 = false">No</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                <!--  -->
+                <v-list-group v-for="data in details" :key="data.id_ahs_lokal">
+                  <template v-slot:activator>
+                    <v-list-item-content class="borderDetail">
+                      <v-layout class="marginBorder">
+                        <v-flex xs2>
+                          <div class="caption grey--text">Task</div>
+                          <div>{{ data.name }}</div>
                         </v-flex>
-                        <v-flex xs12 sm12 md1>
-                          <v-icon color="light-blue darken-3" @click="dialog3=true">delete</v-icon>
+                        <v-flex xs1>
+                          <div class="caption grey--text">Satuan</div>
+                          <div>{{ data.satuan }}</div>
+                        </v-flex>
+                        <v-flex xs1> 
+                          <div class="caption grey--text">Status</div>
+                          <div>{{ data.status }}</div>
+                        </v-flex>
+                        <v-flex xs2>
+                          <div class="caption grey--text">HSP</div>
+                          <div>Rp. {{ Number(data.HSP).toLocaleString() }}</div>
+                        </v-flex>
+                        <v-flex xs1>
+                          <div class="caption grey--text">Volume</div>
+                          <div>{{ data.volume }}</div>
+                        </v-flex>
+                        <!-- <v-flex v-if="data.status == 'Price'" xs2> 
+                          <div class="caption grey--text">HSP.Adjust</div>
+                          <div>Rp. {{ Number(data.HSPAdj).toLocaleString() }}</div>
+                        </v-flex>
+                        <v-flex v-if="data.status == 'Volume'" xs2>
+                          <div class="caption grey--text">V.Adjust</div>
+                          <div>{{ data.volumeAdj }}</div>
+                        </v-flex> -->
+                        <v-flex xs1>
+                          <div class="caption grey--text">Adjust</div>
+                          <div >{{ data.adjustment }}</div>
+                        </v-flex>
+                        <v-flex xs2>
+                          <div class="caption grey--text">HP</div>
+                          <div>Rp. {{ Number(data.HP).toLocaleString() }}</div>
+                        </v-flex>
+                        <v-flex>
+                          <div class="caption grey--text">HP Adjust</div>
+                          <div>Rp. {{ Number(data.HPAdj).toLocaleString() }}</div>
                         </v-flex>
                       </v-layout>
-                      
-                      <template v-slot:actions>
-                        <v-icon color="light-blue darken-3" @click="getfloor(data.id_structure_details)">expand_more</v-icon>
-                      </template>
-
-                      <!-- dialog delete structure -->
-                      <v-dialog v-model="dialog3" max-width="290px">
-                        <v-card>
-                          <v-card-title class="headline">Confirmation</v-card-title>
-                            <v-card-text>Are you sure want to delete this structure?</v-card-text>
-                          <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" text @click="dialog3 = false; deleteStructureDetails(data.id_structure_details)">Yes</v-btn>
-                            <v-btn color="red darken-1" text @click="dialog3 = false">No</v-btn>
-                          </v-card-actions>
-                        </v-card>
-                      </v-dialog>
-                      <!--  -->
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content class="grey--text">
-                      <!-- expansion floor -->
-                      <v-expansion-panels>
-                        <v-expansion-panel v-for="data in Groups" :key="data.id_group_details" @click="gettasksub(data.id_group_details)" active-class="border-floor">
-                            <v-expansion-panel-header>
-                              <v-layout row wrap>
-                                <v-flex>
-                                  <div class="subtitle-2 black--text">{{data.floor}}</div>
-                                </v-flex>
-                                <v-flex xs12 sm12 md1>
-                                  <v-icon color="light-blue accent-4" @click="dialog4=true">delete</v-icon>
-                                </v-flex>
-                              </v-layout>
-                              
-                              <template v-slot:actions>
-                                <v-icon color="light-blue accent-4" @click="gettasksub(data.id_group_details)">expand_more</v-icon>
-                              </template>
-
-                              <!-- dialog delete floor -->
-                              <v-dialog v-model="dialog4" max-width="290px">
-                                <v-card>
-                                  <v-card-title class="headline">Confirmation</v-card-title>
-                                    <v-card-text>Are you sure want to delete this floor?</v-card-text>
-                                  <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="green darken-1" text @click="dialog4 = false; deleteGroupDetails(data.id_group_details)">Yes</v-btn>
-                                    <v-btn color="red darken-1" text @click="dialog4 = false">No</v-btn>
-                                  </v-card-actions>
-                                </v-card>
-                              </v-dialog>
-                              <!--  -->
-                            </v-expansion-panel-header>
-                            <v-expansion-panel-content class="grey--text">
-                              <!-- expansion task sub  -->
-                              <v-expansion-panels>
-                                <v-expansion-panel v-for="data in TaskSub" :key="data.id_sub_details" @click="getdetails(data.id_sub_details)" active-class="border-task">
-                                    <v-expansion-panel-header>
-                                      <v-layout row wrap>
-                                        <v-flex>
-                                          <div class="subtitle-2 black--text">{{data.task}}</div>
-                                        </v-flex>
-                                        <v-flex xs12 sm12 md1>
-                                          <v-icon color="cyan accent-4" @click="dialog5=true">delete</v-icon>
-                                        </v-flex>
-                                      </v-layout>
-                                      
-                                      <template v-slot:actions>
-                                        <v-icon color="cyan accent-4" @click="getdetails(data.id_sub_details)">expand_more</v-icon>
-                                      </template>
-                                      <!-- dialog delete task group -->
-                                      <v-dialog v-model="dialog5" max-width="290px">
-                                        <v-card>
-                                          <v-card-title class="headline">Confirmation</v-card-title>
-                                            <v-card-text>Are you sure want to delete this task group?</v-card-text>
-                                          <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn color="green darken-1" text @click="dialog5 = false; deleteTaskDetails(data.id_sub_details)">Yes</v-btn>
-                                            <v-btn color="red darken-1" text @click="dialog5 = false">No</v-btn>
-                                          </v-card-actions>
-                                        </v-card>
-                                      </v-dialog>
-                                      <!--  -->
-                                    </v-expansion-panel-header>
-                                    <v-expansion-panel-content class="grey--text">
-                                      <!-- expansion details -->
-                                      <v-expansion-panels>
-                                        <v-expansion-panel v-for="data in details" :key="data.id_ahs_lokal" active-class="border-ahs">
-                                            <v-expansion-panel-header>
-                                              <v-layout row wrap>
-                                                <v-flex xs2>
-                                                  <div class="caption grey--text">Task</div>
-                                                  <div>{{ data.name }}</div>
-                                                </v-flex>
-                                                <v-flex xs1>
-                                                  <div class="caption grey--text">Satuan</div>
-                                                  <div>{{ data.satuan }}</div>
-                                                </v-flex>
-                                                <v-flex xs1>
-                                                  <div class="caption grey--text">Status</div>
-                                                  <div>{{ data.status }}</div>
-                                                </v-flex>
-                                                <v-flex xs2>
-                                                  <div class="caption grey--text">HSP</div>
-                                                  <div>Rp. {{ Number(data.HSP).toLocaleString() }}</div>
-                                                </v-flex>
-                                                <v-flex xs1>
-                                                  <div class="caption grey--text" xs1>Volume</div>
-                                                  <div>{{ data.volume }}</div>
-                                                </v-flex>
-                                                <!-- <v-flex v-if="data.status == 'Price'" xs2> 
-                                                  <div class="caption grey--text">HSP.Adjust</div>
-                                                  <div>Rp. {{ Number(data.HSPAdj).toLocaleString() }}</div>
-                                                </v-flex>
-                                                <v-flex v-if="data.status == 'Volume'" xs2>
-                                                  <div class="caption grey--text">V.Adjust</div>
-                                                  <div>{{ data.volumeAdj }}</div>
-                                                </v-flex> -->
-                                                <v-flex xs1>
-                                                  <div class="caption grey--text">Adjust</div>
-                                                  <div >{{ data.adjustment }}</div>
-                                                </v-flex>
-                                                <v-flex xs2>
-                                                  <div class="caption grey--text">HP</div>
-                                                  <div>Rp. {{ Number(data.HP).toLocaleString() }}</div>
-                                                </v-flex>
-                                                <v-flex>
-                                                  <div class="caption grey--text">HP Adjust</div>
-                                                  <div>Rp. {{ Number(data.HPAdj).toLocaleString() }}</div>
-                                                </v-flex>
-                                                <v-flex>
-                                                  <v-icon color="light-blue lighten-2" @click="dialog6=true">delete</v-icon>
-                                                </v-flex>
-                                              </v-layout>
-                                              <!-- dialog delete detail -->
-                                              <v-dialog v-model="dialog6" max-width="290px">
-                                                <v-card>
-                                                  <v-card-title class="headline">Confirmation</v-card-title>
-                                                    <v-card-text>Are you sure want to delete this task?</v-card-text>
-                                                  <v-card-actions>
-                                                    <v-spacer></v-spacer>
-                                                    <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(data.id_ahs_lokal)">Yes</v-btn>
-                                                    <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
-                                                  </v-card-actions>
-                                                </v-card>
-                                              </v-dialog>
-                                              <!--  -->
-                                            </v-expansion-panel-header>
-                                            <v-expansion-panel-content class="grey--text">
-                                            </v-expansion-panel-content>
-                                        </v-expansion-panel>
-                                      </v-expansion-panels>
-
-                                    </v-expansion-panel-content>
-                                </v-expansion-panel>
-                              </v-expansion-panels>
-
-                            </v-expansion-panel-content>
-                        </v-expansion-panel>
-                      </v-expansion-panels>
-
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-              </v-expansion-panels>
-
-            </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>  
+                    </v-list-item-content>
+                    <v-icon color="cyan accent-2" @click="dialog6=true">delete</v-icon>
+                  </template>
+                  <!-- dialog delete detail -->
+                    <v-dialog v-model="dialog6" max-width="290px">
+                      <v-card>
+                        <v-card-title class="headline">Confirmation</v-card-title>
+                          <v-card-text>Are you sure want to delete this task?</v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(data.id_ahs_lokal)">Yes</v-btn>
+                          <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                  <!--  -->
+                </v-list-group>
+              </v-list-group>
+            </v-list-group>
+          </v-list-group>
+        </v-list-group>
+      </v-card>
     </v-container>
   </v-app>
 </template>
@@ -1638,7 +1824,7 @@ import material from './../service/Material'
           task : tasksub.name,
           id_job : data.id_job,
           id_ahs : data.id_ahs,
-          ahs : data.name
+          name : data.name
         }
         this.details.push(ahs)
         this.detailDetails.push(detail)
@@ -1940,19 +2126,26 @@ import material from './../service/Material'
 </script>
 
 <style>
-.mytable table tr {
-    /* background-color: gainsboro; */
+.marginBorder{
+  margin-left: 10px;
 }
-/* .border-rab{
-  border-left: 4px solid #0D47A1
+.borderRab{
+  border-left: 4px solid #1565C0
 }
-.border-structure{
-  border-left: 4px solid #0091EA
+.borderStructure{
+  /* margin-left: 10px; */
+  border-left: 4px solid #0091EA;
 }
-.border-floor{
-  border-left: 4px solid #00B8D4
+.borderFloor{
+  margin-left: 10px;
+  border-left: 4px solid #00B0FF
 }
-.border-task{
+.borderTask{
+  margin-left: 20px;
   border-left: 4px solid #4FC3F7
-} */
+}
+.borderDetail{
+ margin-left: 30px;
+ border-left: 4px solid #18FFFF
+}
 </style>

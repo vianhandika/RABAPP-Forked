@@ -36,7 +36,7 @@
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" max-width="550px">
           <template v-slot:activator="{ on }">
-            <v-btn color="green darken-1" elevation="8" rounded class="mb-2" @click="dialogAdd=true;dialogEdit=false" v-on="on">New</v-btn>
+            <v-btn color="green darken-1" elevation="8" rounded class="mb-2" @click="dialogAdd=true;dialogEdit=false;getallAHS()" v-on="on">New</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -51,6 +51,7 @@
                     <v-text-field 
                       v-model="AHS.kode" 
                       label="ID AHS"
+                      readonly
                     >
                     </v-text-field>
                   </v-flex>
@@ -292,11 +293,12 @@
         </v-dialog>
       </v-toolbar>
 
-      <v-expansion-panels accordion class="elevation-8">
-        <v-expansion-panel v-for="data in filtered" :key="data.id_ahs" :search="search" @click="getItem(data.id_ahs)" active-class="border-ahs">
-            <v-expansion-panel-header>
-              <v-layout row wrap>
-                <v-flex xs1>
+      <v-card elevation="10">
+        <v-list-group v-for="data in filtered" :key="data.id_ahs" active-class="borderAhs">
+          <template v-slot:activator>
+            <v-list-item-content>
+              <v-layout>
+                <v-flex xs2>
                   <div class="caption grey--text">ID AHS</div>
                   <div>{{ data.kode }}</div>
                 </v-flex>
@@ -304,117 +306,151 @@
                   <div class="caption grey--text">Task Group</div>
                   <div style>{{ data.name_sub }}</div>
                 </v-flex>
-                <v-flex xs2>
+                <v-flex xs3>
                   <div class="caption grey--text">Task</div>
                   <div>{{ data.name }}</div>
                 </v-flex>
-                <v-flex xs2>
+                <v-flex xs3>
                   <div class="caption grey--text">Total of Labor</div>
-                  <div>Rp. {{ Number(data.total_labor).toLocaleString() }}</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:90px">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
+                  </v-layout>
                 </v-flex>
-                <v-flex xs2>
+                <v-flex xs3>
                   <div class="caption grey--text">Total of Materials</div>
-                  <div>Rp. {{ Number(data.total_material).toLocaleString() }}</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:90px">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
+                  </v-layout>
+                </v-flex>
+                <v-flex xs3>
+                  <div class="caption grey--text">Total</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:90px">{{ Number(data.total).toLocaleString('id-ID') }}</div>
+                  </v-layout>
                 </v-flex>
                 <v-flex xs2>
-                  <div class="caption grey--text">Total</div>
-                  <div>Rp. {{ Number(data.total).toLocaleString() }}</div>
-                </v-flex>
-                <v-flex xs1>
                   <div class="caption grey--text">Actions</div>
                   <v-icon color="green" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true">edit</v-icon>
-                  <v-icon color="red" @click="itemHandler(data);dialogDelete=true">delete</v-icon>
+                  <v-icon color="red" @click="itemHandler(data);dialogDelete=true;detail=false">delete</v-icon>
+                  <v-icon color="blue" @click="itemHandler(data);dialogCopy=true">file_copy</v-icon>
                 </v-flex>
               </v-layout>
-              
-              <template v-slot:actions>
-                <v-icon color="cyan" @click="getItem(data.id_ahs)">expand_more</v-icon>
+            </v-list-item-content>
+              <v-icon color="light-blue accent-3">expand_more</v-icon>
+          </template>
+
+          <template>
+            <div>
+              <v-data-table
+                :headers="headers"
+                sortBy="status"
+                update: sort-desc
+                class="elevation-10"
+                :items="data.ahs_details.data"
+              >
+              <template v-slot:item.sub_total="{ item }">
+                <v-layout>
+                  {{ 'Rp. '}}
+                  <v-spacer></v-spacer>
+                  {{ Number(item.sub_total).toLocaleString('id-ID') }}
+                </v-layout>
               </template>
-              <!-- template dialog delete ahs -->
-              <template>
-                <v-dialog v-model="dialogDelete" max-width="290px">
-                  <v-card>
-                    <v-card-title class="headline">Confirmation</v-card-title>
-                      <v-card-text>Are you sure want to delete this AHS?</v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(AHS.id_ahs)">Yes</v-btn>
-                      <v-btn color="red darken-1" text @click="dialogDelete = false">No</v-btn>
-                    </v-card-actions>
-                  </v-card>
+
+              <template v-slot:item.price="{ item }">
+                <v-layout>
+                  {{ 'Rp. '}}
+                  <v-spacer></v-spacer>
+                  {{ Number(item.price).toLocaleString('id-ID') }}
+                </v-layout>
+              </template>
+
+              <template v-slot:item.coefficient="props">
+                <v-edit-dialog
+                  :return-value.sync="props.item.coefficient"
+                  @save="save(props)"
+                  @cancel="cancel"
+                  lazy
+                  large
+                  persistent
+                  dark
+                > {{ props.item.coefficient }}
+                  <template v-slot:input>
+                    <v-text-field
+                      v-model="props.item.coefficient"
+                      label="Edit"
+                      single-line
+                      counter
+                    ></v-text-field>
+                  </template>
+                </v-edit-dialog>
+              </template>
+
+              <template v-slot:item.action="{ item }">
+                <v-dialog v-model="dialogDetail" max-width="290px">
+                  <template v-slot:activator="{ on }">
+                    <v-icon
+                      small
+                      color="red"
+                      v-on="on"
+                      @click="itemDetail(item)"
+                    >
+                      delete
+                    </v-icon>
+                  </template>
+                      <v-card>
+                        <v-card-title class="headline">Confirmation</v-card-title>
+                          <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="green darken-1" text @click="dialogDetail = false; deleteDetail(ahs_details.id_ahs_details)">Yes</v-btn>
+                          <v-btn color="red darken-1" text @click="dialogDetail = false">No</v-btn>
+                        </v-card-actions>
+                      </v-card>
                 </v-dialog>
               </template>
+              </v-data-table>
+
+              <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+                {{ snackText }}
+                <v-btn text @click="snack = false">Close</v-btn>
+              </v-snackbar>
               
-            </v-expansion-panel-header>
-            <v-expansion-panel-content class="grey--text">
-              <template>
-                <div>
-                  <v-data-table
-                    :headers="headers"
-                    sortBy="status"
-                    update: sort-desc
-                    class="elevation-10"
-                    :items="detailsData"
-                  >
-                  <template v-slot:item.sub_total="{ item }">
-                    {{ 'Rp. '}}{{ Number(item.sub_total).toLocaleString() }}
-                  </template>
+            </div>
+          </template>
+        </v-list-group>
+      </v-card>
+      
+      <template>
+        <v-dialog v-model="dialogDelete" max-width="290px">
+          <v-card>
+            <v-card-title class="headline">Confirmation</v-card-title>
+              <v-card-text>Are you sure want to delete this AHS?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(AHS.id_ahs)">Yes</v-btn>
+              <v-btn color="red darken-1" text @click="dialogDelete = false">No</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
 
-                  <template v-slot:item.coefficient="props">
-                    <v-edit-dialog
-                      :return-value.sync="props.item.coefficient"
-                      @save="save(props)"
-                      @cancel="cancel"
-                      lazy
-                      large
-                      persistent
-                      dark
-                    > {{ props.item.coefficient }}
-                      <template v-slot:input>
-                        <v-text-field
-                          v-model="props.item.coefficient"
-                          label="Edit"
-                          single-line
-                          counter
-                        ></v-text-field>
-                      </template>
-                    </v-edit-dialog>
-                  </template>
+      <template>
+        <v-dialog v-model="dialogCopy" max-width="290px">
+          <v-card>
+            <v-card-title class="headline">Confirmation</v-card-title>
+              <v-card-text>Are you sure want to copy this AHS?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialogCopy = false; copyItem(AHS.id_ahs)">Yes</v-btn>
+              <v-btn color="red darken-1" text @click="dialogCopy = false">No</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
 
-                  <template v-slot:item.action="{ item }">
-                    <v-dialog v-model="dialogDetail" max-width="290px">
-                      <template v-slot:activator="{ on }">
-                        <v-icon
-                          small
-                          color="red"
-                          v-on="on"
-                        >
-                          delete
-                        </v-icon>
-                      </template>
-                          <v-card>
-                            <v-card-title class="headline">Confirmation</v-card-title>
-                              <v-card-text>Are you sure want to delete this detail?</v-card-text>
-                            <v-card-actions>
-                              <v-spacer></v-spacer>
-                              <v-btn color="green darken-1" text @click="dialogDetail = false; deleteDetail(item.id_ahs_details)">Yes</v-btn>
-                              <v-btn color="red darken-1" text @click="dialogDetail = false">No</v-btn>
-                            </v-card-actions>
-                          </v-card>
-                    </v-dialog>
-                  </template>
-                  </v-data-table>
-
-                  <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-                    {{ snackText }}
-                    <v-btn text @click="snack = false">Close</v-btn>
-                  </v-snackbar>
-                  
-                </div>
-              </template>
-            </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
       <!-- <div>
         <v-pagination
           v-model="page"
@@ -451,18 +487,22 @@ import task from './../service/TaskSub'
       dialogDelete: false,
       dialogEdit: false,
       dialogDetail: false,
+      dialogCopy: false,
       tambah: false,
       edit: false,
       detailAHS: false,
+      detail: false,
 
       search:'',
       select: '',
+      id_ahs: '',
       
       ahs: [],
       job: [],
       material:[],
       details:[],
       detailsData:[],
+      detailsTemp:[],
       task:[],
       filter:[],
       temp:[],
@@ -487,34 +527,41 @@ import task from './../service/TaskSub'
         total: 0
       },
       ahs_details:{
+        id_ahs_details:'',
         id_material: '',
         coefficient: 0,
         sub_total : 0,
+      },
+      details_default:{
+        id_ahs_details:'',
+        id_material:'',
+        coefficient: 0,
+        sub_total:0,
       },
       Material:{
         id_material:'',
       },
       headers: [
         { 
-          text: 'ID Materials/Labor', align: 'left', sortable: false, value: 'kode',
+          text: 'ID Materials/Labor', align: 'left', sortable: false, value: 'kode',width:'15%'
         },
         { 
-          text: 'Type', align: 'left', sortable: true, value: 'status',
+          text: 'Type', align: 'left', sortable: true, value: 'status',width:'15%'
         },
         { 
-          text: 'Item', align: 'left', sortable: false, value: 'name',
+          text: 'Item', align: 'left', sortable: false, value: 'name',width:'15%'
         },
         { 
-          text: 'Price', align: 'left', sortable: false, value: 'price',
+          text: 'Price', align: 'left', sortable: false, value: 'price', width:'10%'
         },
         { 
-          text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient',
+          text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', width:'15%', align: 'center'
         },
         { 
-          text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total',
+          text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total', width:'10%'
         },
         {
-          text: 'Actions', align: 'left', sortable: false, value: 'action'
+          text: 'Actions', align: 'left', sortable: false, value: 'action', width:'15%'
         },
       ],
     }),
@@ -536,7 +583,7 @@ import task from './../service/TaskSub'
                 else{
                   return (data.name.match(this.search) ||
                     data.kode.match(this.search))
-                }
+                }                
               }
             }else{
               return (data.name.match(this.search) ||
@@ -590,7 +637,6 @@ import task from './../service/TaskSub'
       },
       itemHandler(item){
         this.AHS = item
-        // this.details = item.ahs_details.data
         for(let detail of item.ahs_details.data)
         {
           let each_detail = {
@@ -603,6 +649,9 @@ import task from './../service/TaskSub'
         }
         this.temp = this.job
         console.log(this.details)
+      },
+      itemDetail(item){
+        this.ahs_details = item
       },
       async addList()
       {
@@ -618,7 +667,7 @@ import task from './../service/TaskSub'
        
         this.tambah = false
         this.Material.id_material=''
-        this.ahs_details.coefficient=0
+        this.ahs_details.coefficient = 0
 
         console.log('Detail AHS')
         console.log(this.details)
@@ -646,6 +695,7 @@ import task from './../service/TaskSub'
       },
       editList(data)
       {
+        // this.filterMaterials()
         let material = this.material.find(obj=>obj.id_material == data.id_material)
         this.delOfTotal(material,data)
 
@@ -703,6 +753,7 @@ import task from './../service/TaskSub'
       {
         try{
           this.ahs = (await ahsController.getallItem()).data
+          this.AHS.kode = 'AHS-0'+(this.ahs.length+1)
         }catch(err){
           console.log(err)
         }
@@ -741,6 +792,15 @@ import task from './../service/TaskSub'
           console.log(err);
         }
       },
+      async copyItem(id)
+      {
+        try{
+          await ahsController.copy(id)
+          this.getallAHS()
+        }catch(err){
+          console.log(err)
+        }
+      },
       async updateDetail(props){
         try{
             const payload = {
@@ -767,6 +827,7 @@ import task from './../service/TaskSub'
           await detailController.deleteItem(id).data
           this.getItem(ahs.id_ahs)
           this.getallAHS()
+          this.ahs_details = Object.assign({},this.details_default)
         }catch(err){
           console.log(err)
         }
@@ -811,10 +872,14 @@ import task from './../service/TaskSub'
   color: aqua;
   border: 4px solid 
 }
-.border-ahs{
-  border-left: 4px solid #0277BD
+.borderAhs{
+  border-left: 4px solid #40C4FF
 }
-.border-material{
-  border-left: 2px solid #448AFF
+.borderMaterial{
+  margin-left: 10px;
+  border-left: 4px solid #448AFF
+}
+.right{
+  text-align: right
 }
 </style>

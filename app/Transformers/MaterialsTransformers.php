@@ -18,6 +18,7 @@ class MaterialsTransformers extends TransformerAbstract
             'status'            => $material->status,
             'price'             => $material->price,
             'spesification'     => $material->spesification,
+            'id_store'          => $material->stores->id_store,
             'store'             => $material->stores->name,
         ];
     }

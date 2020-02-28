@@ -12,7 +12,11 @@
       </template>
 
       <template v-slot:item.nominal="{ item }">
-        {{'Rp. '}}{{ Number(item.nominal).toLocaleString() }}
+        <v-layout>
+          Rp.
+          <v-spacer></v-spacer>
+          {{ Number(item.nominal).toLocaleString('id-ID') }}
+        </v-layout>
       </template>
 
         <template v-slot:top>
@@ -37,7 +41,7 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset" v-on="on">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getallItem()" v-on="on">New</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -51,7 +55,7 @@
                       <v-text-field 
                         v-model="Project.kode" 
                         label="ID Project"
-                        :rules="idRules"
+                        readonly
                       >
                       </v-text-field>
                     </v-flex>
@@ -196,7 +200,7 @@
                         <v-text-field 
                           v-model="Project.kode" 
                           label="ID Project"
-                          :rules="idRules"
+                          readonly
                         >
                         </v-text-field>
                       </v-flex>
@@ -376,7 +380,7 @@ import { parseISO } from 'date-fns'
           align: 'left',
           sortable: false,
           value: 'kode',
-          width: '6%'
+          width: '7%'
         },
         {
           text: 'Project',
@@ -398,7 +402,7 @@ import { parseISO } from 'date-fns'
           sortable: false,
           text: 'Date', 
           value: 'date',
-          width: '14%'
+          width: '12%'
         },
         { 
           sortable: false,
@@ -431,10 +435,6 @@ import { parseISO } from 'date-fns'
         },
       ],
       //validation
-      idRules: [
-        v => !!v || 'ID is required',
-        v => (v && v.length <= 4) || 'ID must be less than 4 characters',
-      ],
       nameRules: [
         v => !!v || 'Name is required',
       ],
@@ -472,18 +472,19 @@ import { parseISO } from 'date-fns'
     computed: {
       dateFormat(){
         let date = parseISO(this.Project.date)
-        return this.Project.date ? format(date, 'dd MMMM yyyy') : ''
+        return this.Project.date ? format(date, 'dd MMMM yyyy',) : ''
       },
     },
     methods: {
       formatDate(item)
       {
         let date = parseISO(item)
-        return item ? format(date,'dd MMMM yyyy') : ''
+        return item ? format(date,'dd MMM yyyy') : ''
       },
       async getallItem(){
         try{
           this.project = (await Controller.getallItem()).data
+          this.Project.kode = 'Pr-0'+(this.project.length+1)
         }catch(err){
           console.log(err)
         }

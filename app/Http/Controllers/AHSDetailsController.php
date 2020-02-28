@@ -57,7 +57,6 @@ class AHSDetailsController extends RestController
     public function destroy($id)
     {
         $detail = AHSDetails::findOrFail($id);
-        // dd($detail);
         $ahs = AHS::findOrFail($detail->id_ahs);
 
         $material = Materials::where('id_material',$detail->id_material)->first();

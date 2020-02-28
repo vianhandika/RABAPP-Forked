@@ -59,7 +59,7 @@ class RABController extends RestController
         {
             $Material = $request->get('detail_material');
         }
-
+        // dd($Material);
         $rab->id_project    = $request->get('id_project');
         $rab->kode          = $request->get('kode');
         $rab->total_rab     = $request->get('total_rab');
@@ -94,10 +94,12 @@ class RABController extends RestController
         {
             foreach($TaskSub as $task)
             {
-                $data = GroupDetails::find($group->id_group_details)->structure;
-                $id_structure = $data['id_structure'];
+                // $data = GroupDetails::find($group->id_group_details)->structure;
+                // $id_structure = $data['id_structure'];
 
-                if($id_structure == $task['id_structure']) 
+                $structure = StructureDetails::findOrFail($group->id_structure_details);
+
+                if($structure->id_structure == $task['id_structure']) 
                 {
                     if($group->id_groups == $task['id_groups'])
                         array_push($task_sub_data,$group->task_subs()->create($task));
@@ -110,15 +112,18 @@ class RABController extends RestController
         {
             foreach($detail as $detail_o)
             {
-                $data = TaskSubDetails::find($task->id_sub_details)->sub;
-                $id_group_details = $data['id_group_details'];
-                $id_groups = $data['id_groups'];
-                $groups = GroupDetails::find($id_group_details)->structure;
-                $id_structure = $groups['id_structure'];
+                // $data = TaskSubDetails::find($task->id_sub_details)->sub;
+                // $id_group_details = $data['id_group_details'];
+                // $id_groups = $data['id_groups'];
+                // $groups = GroupDetails::find($id_group_details)->structure;
+                // $id_structure = $groups['id_structure'];
+
+                $group = GroupDetails::findOrFail($task->id_group_details);
+                $structure = StructureDetails::findOrFail($group->id_structure_details);
                 
-                if($id_structure == $detail_o['id_structure'])
+                if($structure->id_structure == $detail_o['id_structure'])
                 {
-                    if($id_groups == $detail_o['id_groups']) 
+                    if($group->id_groups == $detail_o['id_groups']) 
                     {
                         if($task->id_sub == $detail_o['id_sub'])
                             array_push($detail_data,$task->detail_rab()->create($detail_o));
@@ -132,14 +137,12 @@ class RABController extends RestController
             foreach($Material as $material)
             {
                 $task = TaskSubDetails::find($detail_o->id_sub_details);
-                $data = TaskSubDetails::find($detail_o->id_sub_details)->sub;
-                $id_groups = $data['id_groups'];
-                $groups = GroupDetails::find($id_group_details)->structure;
-                $id_structure = $groups['id_structure'];
+                $group = GroupDetails::find($task->id_group_details);
+                $structure = StructureDetails::find($group->id_structure_details);
                 
-                if($id_structure == $material['id_structure'])
+                if($structure->id_structure == $material['id_structure'])
                 {
-                    if($id_groups == $material['id_groups']) 
+                    if($group->id_groups == $material['id_groups']) 
                     {
                         if($task->id_sub == $material['id_sub'])
                         {
@@ -212,8 +215,11 @@ class RABController extends RestController
     public function destroy($id)
     {
         $this->destroyAllDetail($id);
-        
         $rab=RAB::findOrFail($id);
+        $project = Project::where('id_project',$rab->id_project)->first();
+        $project->nominal = 0;
+        $project->save();
+
         $status = $rab->delete();
         
         return response()->json([

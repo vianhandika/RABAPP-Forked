@@ -29,7 +29,7 @@
         </style>
     </head>
     <body>
-        <img src="{{public_path('images/logo.png')}}" width="120px">
+        <img src="{{public_path('images/logo.png')}}" width="400px">
         <div class="title">
             <h3>Daftar Analisa Pekerjaan (Master)</h3>
         </div>
