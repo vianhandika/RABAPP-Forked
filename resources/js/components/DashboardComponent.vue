@@ -63,12 +63,22 @@
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
-                      <v-list-item-title>{{data.project}}</v-list-item-title>
+                      <v-layout>
+                        <v-list-item-title>{{data.project}}</v-list-item-title>
+                        <!-- <v-list-item-title style="margin-left:120px">Rp.</v-list-item-title> -->
+                      </v-layout>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
-                    <v-list-item-content align="right">
-                      <v-list-item-subtitle>Nominal</v-list-item-subtitle>
-                      <v-list-item-title>Rp. {{ Number(data.total_rab).toLocaleString('id-ID') }}</v-list-item-title>
+                    <v-list-item-content>
+                      <v-list-item-subtitle style="text-color:white">.</v-list-item-subtitle>
+                      <v-list-item-title align="right">Rp.</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content>
+                      <v-list-item-subtitle align="right">Nominal</v-list-item-subtitle>
+                      <v-layout>
+                        <v-list-item-title align="right">{{ Number(data.total_rab).toLocaleString('id-ID') }}</v-list-item-title>
+                      </v-layout>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
                   </v-list-item>
@@ -101,23 +111,32 @@
                 <v-list>
                   <v-list-item v-for="data in filteredAHS" :key="data.id_ahs">
                     <v-list-item-avatar color="blue">
-                      <v-icon dark @click="generateReports(data.id_ahs)">picture_as_pdf</v-icon>
+                        <v-btn icon dark @click="generateAHS(data.id_ahs)" :loading="loading">
+                          <v-icon>picture_as_pdf</v-icon> 
+                        </v-btn>
                     </v-list-item-avatar>
                     <v-list-item-content>
-                      <v-list-item-subtitle>{{data.name_sub}}</v-list-item-subtitle>
+                      <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
                       <v-list-item-title>{{data.name}}</v-list-item-title>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
                     <v-list-item-content align="right">
                       <v-list-item-subtitle>HSP</v-list-item-subtitle>
-                      <v-list-item-title>Rp. {{ Number(data.total).toLocaleString('id-ID')}}</v-list-item-title>
+                      <v-layout>
+                        <v-list-item-title style="padding-left:30px">Rp.</v-list-item-title>
+                        <v-list-item-title align="right">{{ Number(data.total).toLocaleString('id-ID')}}</v-list-item-title>  
+                      </v-layout>
                       <div><v-divider></v-divider></div>
-                    </v-list-item-content>
+                    </v-list-item-content>                    
                   </v-list-item>
                 </v-list>
               </v-card>
             </v-container>
           </v-col>
+
+          <v-overlay :value="overlay">
+            <v-progress-circular indeterminate size="64"></v-progress-circular>
+          </v-overlay>
         </v-row>
       </v-app>
     </v-container>
@@ -131,6 +150,7 @@ import Controller from './../service/Project'
 import RAB from './../service/RAB'
 import ahs from './../service/AHS'
 import report from './../service/Reports'
+import Http from '../service/Http'
 
   export default {
     props: {
@@ -139,6 +159,9 @@ import report from './../service/Reports'
     data: () => ({
       dialog2: false,
       dialog3: false,
+      snack: false,
+      loading: false,
+      overlay: false,
 
       search:'',
       searchAHS:'',
@@ -184,6 +207,12 @@ import report from './../service/Reports'
       ...mapGetters({
         loggedIn: 'Token/loggedIn',
       }),
+
+      save (props) {
+        this.snack = true
+        this.snackColor = 'green'
+        this.snackText = 'Loading Data'
+      },
       async logout() {
         await this.destroyToken()
         this.$router.push({ name : 'login' })
@@ -203,22 +232,19 @@ import report from './../service/Reports'
           console.log(err)
         }
       },
-      async generateReports(id)
+      async generateAHS(id)
       {
-        console.log(id)
-        try{
-          await report.reports(id)
-        }catch(err){
-          console.log(err)
-        }
+        this.overlay = true
+        Http.download('/api/analisa_task/'+id).then(() => {
+          this.overlay = false
+        })
       },
       async generateRAB(id)
       {
-        try{
-          await report.rab(id)
-        }catch(err){
-          console.log(err)
-        }
+        this.overlay = true
+        Http.download('/api/report_rab/'+id).then(() => {
+          this.overlay = false
+        })
       }
     }
   }

@@ -34,7 +34,7 @@
               <v-toolbar-title v-if="dialog7">Edit RAB</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-toolbar-items v-if="dialog8">
-                <v-btn dark text @click="addAllItem">Save</v-btn>
+                <v-btn dark text @click="addAllItem" :loading="loading">Save</v-btn>
               </v-toolbar-items>
               <v-toolbar-items v-if="dialog7">
                 <v-btn dark text @click="updateItem(rab.id_rab)">Save</v-btn>
@@ -134,7 +134,7 @@
                               <v-btn 
                                 icon
                                 color="red"
-                                dark @click="deletestructure(detail_structure)"
+                                dark @click="dialogdeletestructure=true"
                                 >
                                 <v-icon>remove_circle</v-icon>
                               </v-btn>
@@ -151,6 +151,19 @@
                                 ></v-select>
                               </v-flex>
                             </v-card-title>
+                            <!-- dialog delete detail structure -->
+                              <v-dialog v-model="dialogdeletestructure" max-width="290px">
+                                <v-card>
+                                  <v-card-title class="headline">Confirmation</v-card-title>
+                                    <v-card-text>Are you sure want to delete this building?</v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="green darken-1" text @click="dialogdeletestructure = false; deletestructure(detail_structure)">Yes</v-btn>
+                                    <v-btn color="red darken-1" text @click="dialogdeletestructure = false">No</v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
+                            <!--  -->
                           </v-card>
                         </v-flex>
                           
@@ -238,7 +251,7 @@
                               <v-btn 
                                   icon
                                   color="red"
-                                  dark @click="deletefloor(detail_group)"
+                                  dark @click="dialogdeletefloor=true"
                                   >
                                   <v-icon>remove_circle</v-icon>
                               </v-btn>
@@ -267,6 +280,19 @@
                                 ></v-select>
                               </v-flex>
                             </v-card-title>
+                            <!-- dialog delete detail floor -->
+                              <v-dialog v-model="dialogdeletefloor" max-width="290px">
+                                <v-card>
+                                  <v-card-title class="headline">Confirmation</v-card-title>
+                                    <v-card-text>Are you sure want to delete this floor?</v-card-text>
+                                  <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="green darken-1" text @click="dialogdeletefloor = false; deletefloor(detail_group)">Yes</v-btn>
+                                    <v-btn color="red darken-1" text @click="dialogdeletefloor = false">No</v-btn>
+                                  </v-card-actions>
+                                </v-card>
+                              </v-dialog>
+                            <!--  -->
                           </Vcard>
                         </v-flex>
                           
@@ -372,7 +398,7 @@
                             <v-btn 
                                 icon
                                 color="red"
-                                dark @click="deletetasksub(detail_task)"
+                                dark @click="dialogdeletetask=true"
                                 >
                                 <v-icon>remove_circle</v-icon>
                             </v-btn>
@@ -412,8 +438,20 @@
                                 readonly 
                               ></v-select>
                             </v-flex>
-
                           </v-card-title>
+                          <!-- dialog delete detail task group -->
+                            <v-dialog v-model="dialogdeletetask" max-width="290px">
+                              <v-card>
+                                <v-card-title class="headline">Confirmation</v-card-title>
+                                  <v-card-text>Are you sure want to delete this task group?</v-card-text>
+                                <v-card-actions>
+                                  <v-spacer></v-spacer>
+                                  <v-btn color="green darken-1" text @click="dialogdeletetask = false; deletetasksub(detail_task)">Yes</v-btn>
+                                  <v-btn color="red darken-1" text @click="dialogdeletetask = false">No</v-btn>
+                                </v-card-actions>
+                              </v-card>
+                            </v-dialog>
+                          <!--  -->
                         </Vcard>
                       </v-flex>
                         
@@ -530,7 +568,7 @@
                               <v-btn 
                                   icon
                                   color="red"
-                                  dark @click="deleteList(detail)"
+                                  dark @click="dialogdeletedetail=true"
                                   >
                                   <v-icon>remove_circle</v-icon>
                               </v-btn>
@@ -632,8 +670,20 @@
                                 >
                                 </v-text-field>
                               </v-flex>
-
                               </v-card-title>
+                              <!-- dialog delete detail task -->
+                                <v-dialog v-model="dialogdeletedetail" max-width="290px">
+                                  <v-card>
+                                    <v-card-title class="headline">Confirmation</v-card-title>
+                                      <v-card-text>Are you sure want to delete this detail task?</v-card-text>
+                                    <v-card-actions>
+                                      <v-spacer></v-spacer>
+                                      <v-btn color="green darken-1" text @click="dialogdeletedetail = false; deleteList(detail)">Yes</v-btn>
+                                      <v-btn color="red darken-1" text @click="dialogdeletedetail = false">No</v-btn>
+                                    </v-card-actions>
+                                  </v-card>
+                                </v-dialog>
+                              <!--  -->
                             </Vcard>
                           </v-flex>
 
@@ -780,7 +830,7 @@
                               <v-btn 
                                   icon
                                   color="red"
-                                  dark @click="deleteList(detail)"
+                                  dark @click="dialogdeletedetail=true"
                                   >
                                   <v-icon>remove_circle</v-icon>
                               </v-btn>
@@ -882,8 +932,20 @@
                                 >
                                 </v-text-field>
                               </v-flex>
-
                               </v-card-title>
+                              <!-- dialog delete detail task -->
+                                <v-dialog v-model="dialogdeletedetail" max-width="290px">
+                                  <v-card>
+                                    <v-card-title class="headline">Confirmation</v-card-title>
+                                      <v-card-text>Are you sure want to delete this detail task?</v-card-text>
+                                    <v-card-actions>
+                                      <v-spacer></v-spacer>
+                                      <v-btn color="green darken-1" text @click="dialogdeletedetail = false; deleteList(detail)">Yes</v-btn>
+                                      <v-btn color="red darken-1" text @click="dialogdeletedetail = false">No</v-btn>
+                                    </v-card-actions>
+                                  </v-card>
+                                </v-dialog>
+                              <!--  -->
                             </Vcard>
                           </v-flex>
 
@@ -1069,8 +1131,8 @@
                 <v-flex xs5>
                   <div class="caption grey--text">Nominal</div>
                   <v-layout>
-                    <div style="text-align: left;width:30px">Rp.</div>
-                    <div style="text-align: right;width:140px">{{ Number(data.total_rab).toLocaleString('id-ID') }}</div>  
+                    <div style="text-align:left;width:30px">Rp.</div>
+                    <div style="text-align:right;width:140px">{{ Number(data.total_rab).toLocaleString('id-ID') }}</div>  
                   </v-layout>
                 </v-flex>
                 <v-flex xs4>
@@ -1091,7 +1153,7 @@
               <v-list-item-content class="borderStructure">
                 <v-list-item-title class="marginBorder">{{ structure.structure }}</v-list-item-title>
               </v-list-item-content>
-              <v-icon color="blue darken-3" @click="dialog3=true">delete</v-icon>
+              <v-icon color="blue darken-3" @click="dialog3=true;itemDelete(structure)">delete</v-icon>
             </template>
             <!-- dialog delete structure -->
               <v-dialog v-model="dialog3" max-width="290px">
@@ -1100,7 +1162,7 @@
                     <v-card-text>Are you sure want to delete this building?</v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialog3 = false; deleteStructureDetails(data.id_structure_details)">Yes</v-btn>
+                    <v-btn color="green darken-1" text @click="dialog3 = false; deleteStructureDetails(detail.id_structure_details)">Yes</v-btn>
                     <v-btn color="red darken-1" text @click="dialog3 = false">No</v-btn>
                   </v-card-actions>
                 </v-card>
@@ -1111,7 +1173,7 @@
                 <v-list-item-content class="borderFloor">
                   <v-list-item-title class="marginBorder">{{group.floor}}</v-list-item-title>
                 </v-list-item-content>
-                <v-icon color="light-blue accent-3" @click="dialog4=true">delete</v-icon>
+                <v-icon color="light-blue accent-3" @click="dialog4=true;itemDelete(group)">delete</v-icon>
               </template>
               <!-- dialog delete floor -->
                 <v-dialog v-model="dialog4" max-width="290px">
@@ -1120,7 +1182,7 @@
                       <v-card-text>Are you sure want to delete this floor?</v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn color="green darken-1" text @click="dialog4 = false; deleteGroupDetails(data.id_group_details)">Yes</v-btn>
+                      <v-btn color="green darken-1" text @click="dialog4 = false; deleteGroupDetails(detail.id_group_details)">Yes</v-btn>
                       <v-btn color="red darken-1" text @click="dialog4 = false">No</v-btn>
                     </v-card-actions>
                   </v-card>
@@ -1131,7 +1193,7 @@
                   <v-list-item-content class="borderTask">
                     <v-list-item-title class="marginBorder">{{task.task}}</v-list-item-title>
                   </v-list-item-content>
-                  <v-icon color="light-blue lighten-2" @click="dialog5=true">delete</v-icon>
+                  <v-icon color="light-blue lighten-2" @click="dialog5=true;itemDelete(task)">delete</v-icon>
                 </template>
                 <!-- dialog delete task group -->
                   <v-dialog v-model="dialog5" max-width="290px">
@@ -1140,7 +1202,7 @@
                         <v-card-text>Are you sure want to delete this task group?</v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green darken-1" text @click="dialog5 = false; deleteTaskDetails(data.id_sub_details)">Yes</v-btn>
+                        <v-btn color="green darken-1" text @click="dialog5 = false; deleteTaskDetails(detail.id_sub_details)">Yes</v-btn>
                         <v-btn color="red darken-1" text @click="dialog5 = false">No</v-btn>
                       </v-card-actions>
                     </v-card>
@@ -1192,7 +1254,7 @@
                         </v-flex>
                       </v-layout>
                     </v-list-item-content>
-                    <v-icon color="cyan accent-2" @click="dialog6=true">delete</v-icon>
+                    <v-icon color="cyan accent-2" @click="dialog6=true;itemDelete(detail)">delete</v-icon>
                   </template>
                   <!-- dialog delete detail -->
                     <v-dialog v-model="dialog6" max-width="290px">
@@ -1201,7 +1263,7 @@
                           <v-card-text>Are you sure want to delete this task?</v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(data.id_ahs_lokal)">Yes</v-btn>
+                          <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(detail.id_ahs_lokal)">Yes</v-btn>
                           <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
                         </v-card-actions>
                       </v-card>
@@ -1226,6 +1288,8 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    
   </v-app>
 </template>
 
@@ -1260,6 +1324,10 @@ import material from './../service/Material'
         dialog10: false,
         dialog11: false,
         edit: false,
+        dialogdeletestructure: false,
+        dialogdeletefloor: false,
+        dialogdeletetask: false,
+        dialogdeletedetail: false,
 
         menu: false,
         tambah: false,
@@ -1268,6 +1336,7 @@ import material from './../service/Material'
         tambahT: false,
         detail: false,
         adjustM: false,
+        loading: false,
 
         select: null,
         search:'',
@@ -1559,7 +1628,11 @@ import material from './../service/Material'
       },
       itemDelete(item)
       {
+        console.log('item')
+        console.log(item)
         this.rab = item
+        this.detail = item
+        console.log(this.detail)
       },
       filterProjects()
       {
@@ -1679,17 +1752,20 @@ import material from './../service/Material'
         console.log(this.detailStructure)
       },
       deletestructure(index){
-        let structure = this.detailStructure.find(obj=>obj.id_structure == index.id_structure)
+        let structure = this.Structure.find(obj=>obj.id_structure == index.id_structure)
+        console.log('structure')
+        console.log(structure)
+        let detailS = this.detailStructure.find(obj=>obj.id_structure == index.id_structure)
         let Groups = this.Groups.filter(obj=>obj.id_structure == index.id_structure) 
         let Task = this.TaskSub.filter(obj=>obj.id_structure == index.id_structure)
         let Detail = this.details.filter(obj=>obj.id_structure == index.id_structure)
         let DetailGroup = this.detailGroup.filter(obj=>obj.id_structure == index.id_structure)
         let DetailTask = this.detailTask.filter(obj=>obj.id_structure == index.id_structure)
         let Details = this.detailDetails.filter(obj=>obj.id_structure == index.id_structure)
-
+        console.log('index structure')
         console.log(index)
-        this.Structure.splice(this.Structure.indexOf(index),1)
-        this.detailStructure.splice(this.detailStructure.indexOf(structure),1)
+        this.Structure.splice(this.Structure.indexOf(structure),1)
+        this.detailStructure.splice(this.detailStructure.indexOf(detailS),1)
 
         for(let group of Groups)
         {
@@ -1843,7 +1919,7 @@ import material from './../service/Material'
           id_groups : this.tasksub_unit.id_groups,
           id_sub : this.tasksub_unit.id_sub,
           structure : structure.name,
-          floor : floor.name,
+          floor : floor.name,  
           task : tasksub.name,
           id_job : data.id_job,
           id_ahs : data.id_ahs,
@@ -2047,7 +2123,7 @@ import material from './../service/Material'
         try{
           let structure = this.Structure.find(obj=>obj.id_structure_details == id)
           await detail.deleteS(id).data
-          this.getstructure(structure.id_rab)
+          // this.getstructure(structure.id_rab)
           this.getallRAB()
         }catch(err){
           console.log(err)

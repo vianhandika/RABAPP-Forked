@@ -81,11 +81,11 @@
                 <v-flex xs1>
                   <div class="caption grey--text">Actions</div>
                   <!-- <v-icon color="green" @click="itemHandler(data);dialog5=true">edit</v-icon> -->
-                  <v-icon color="red" @click="itemHandler(data);dialog6=true">delete</v-icon>
+                  <v-icon color="red" @click="itemHandler(data);dialog6=true;detailTable=false">delete</v-icon>
                 </v-flex>
               </v-layout>
             </v-list-item-content>
-            <v-icon color="light-blue accent-3">expand_more</v-icon>
+            <v-icon color="light-blue accent-3" @click="detailTable=true">expand_more</v-icon>
           </template>
 
           <v-dialog v-model="dialog6" max-width="290px">
@@ -108,6 +108,7 @@
                 update: sort-desc
                 class="elevation-10"
                 :items="data.detail.data"
+                v-if="detailTable"
               >
               <template v-slot:item.sub_total="{ item }">
                 <v-layout>
@@ -214,6 +215,7 @@ import rabdetails from './../service/RAB'
       dialog8: false,
       menu: false,
       tambah: false,
+      detailTable: false,
 
       search:'',
       select:'',

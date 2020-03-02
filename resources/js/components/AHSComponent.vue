@@ -333,13 +333,13 @@
                 </v-flex>
                 <v-flex xs2>
                   <div class="caption grey--text">Actions</div>
-                  <v-icon color="green" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true">edit</v-icon>
-                  <v-icon color="red" @click="itemHandler(data);dialogDelete=true;detail=false">delete</v-icon>
-                  <v-icon color="blue" @click="itemHandler(data);dialogCopy=true">file_copy</v-icon>
+                  <v-icon color="green" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true;detailTable=false">edit</v-icon>
+                  <v-icon color="red" @click="itemHandler(data);dialogDelete=true;detailTable=false">delete</v-icon>
+                  <v-icon color="blue" @click="itemHandler(data);dialogCopy=true;detailTable=false">file_copy</v-icon>
                 </v-flex>
               </v-layout>
             </v-list-item-content>
-              <v-icon color="light-blue accent-3">expand_more</v-icon>
+              <v-icon color="light-blue accent-3" @click="detailTable=true">expand_more</v-icon>
           </template>
 
           <template>
@@ -350,6 +350,7 @@
                 update: sort-desc
                 class="elevation-10"
                 :items="data.ahs_details.data"
+                v-if="detailTable"
               >
               <template v-slot:item.sub_total="{ item }">
                 <v-layout>
@@ -491,7 +492,7 @@ import task from './../service/TaskSub'
       tambah: false,
       edit: false,
       detailAHS: false,
-      detail: false,
+      detailTable: false,
 
       search:'',
       select: '',
@@ -503,7 +504,7 @@ import task from './../service/TaskSub'
       details:[],
       detailsData:[],
       detailsTemp:[],
-      task:[],
+      task : [],
       filter:[],
       temp:[],
       filterMaterial:[],
@@ -570,24 +571,34 @@ import task from './../service/TaskSub'
       this.getallItem()
       this.getallItemMaterial()
       this.getTask()
+      this.getallDetails()
     },
     computed: {
       filtered:function(){
         return this.ahs.filter((data)=>{
             if(this.select != '')
             {
-              if(this.select == data.id_sub)
+              if(this.select == '-1')
               {
                 if(this.search == '')
                   return data
                 else{
                   return (data.name.match(this.search) ||
                     data.kode.match(this.search))
-                }                
+                }
+              }
+              else if(this.select == data.id_sub)
+              {
+                if(this.search == '')
+                  return data
+                else{
+                  return (data.name.match(this.search) ||
+                    data.kode.match(this.search))
+                }
               }
             }else{
               return (data.name.match(this.search) ||
-                  data.kode.match(this.search))
+                data.kode.match(this.search))
             }
         });
       },
@@ -634,6 +645,16 @@ import task from './../service/TaskSub'
         }
         console.log('THis Filter Material')
         console.log(this.filterMaterial)
+      },
+      filterM()
+      {
+        console.log('cek')
+        let m = this.material
+        for(let detail of this.details)
+        {
+          this.material = m.filter(obj=>obj,id_material != detail.id_material)
+          m = this.material
+        }
       },
       itemHandler(item){
         this.AHS = item
@@ -724,17 +745,24 @@ import task from './../service/TaskSub'
       {
         try{
           this.task = (await task.get()).data
+          let each = {
+            id_sub: -1,
+            name: 'All'
+          }
+          this.task.push(each)
+          console.log("task")
+          console.log(this.task)
         }catch(err){
           console.log(err)
         }
       },
-      // async getallDetails(){
-      //   try{
-      //     this.detailsData = (await detailController.getallItem()).data
-      //   }catch(err){
-      //     console.log(err)
-      //   }
-      // },
+      async getallDetails(){
+        try{
+          this.detailsData = (await detailController.getallItem()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
       async getallItem(){
         try{
           this.job = (await Controller.getallItem()).data
@@ -823,11 +851,12 @@ import task from './../service/TaskSub'
       },
       async deleteDetail(id){
         try{
+          console.log(this.detailsData)
           let ahs = this.detailsData.find(obj=>obj.id_ahs_details == id)
           await detailController.deleteItem(id).data
           this.getItem(ahs.id_ahs)
           this.getallAHS()
-          this.ahs_details = Object.assign({},this.details_default)
+          // this.ahs_details = Object.assign({},this.details_default)
         }catch(err){
           console.log(err)
         }

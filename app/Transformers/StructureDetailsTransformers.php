@@ -13,8 +13,8 @@ class StructureDetailsTransformers extends TransformerAbstract
     {
         return [
             'id_structure'          => $structure_details->id_structure,
-            'id_rab'                => $structure_details->id_rab,
-            'id_structure_details'  => $structure_details->id_structure_details,
+            // 'id_rab'                => $structure_details->id_rab,
+            // 'id_structure_details'  => $structure_details->id_structure_details,
             'structure'             => $structure_details->structure->name,
         ];
     }
