@@ -3,7 +3,7 @@ import App from './components/App'
 import Login from './components/LoginComponent'
 import Dashboard from './components/DashboardComponent'
 import Project from './components/ProjectComponent'
-import Job from './components/JobComponent'
+import Task from './components/TaskComponent'
 import Material from './components/MaterialsComponent'
 import Transaction from './components/RABComponent'
 import AHS from './components/AHSComponent'
@@ -24,14 +24,6 @@ export const routes = [
     component: Login,
   },
   {
-    path: '/spa/dashboard',
-    name: 'dashboard',
-    component: Dashboard,
-    // beforeEnter: middleware([
-    //   auth
-    // ])
-  },
-  {
     path: '/spa',
     name: 'spa',
     component: SPA,
@@ -40,75 +32,81 @@ export const routes = [
         path: '/dashboard',
         name: 'dashboard',
         component: Dashboard,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/project',
         name: 'project',
         component: Project,
-        // beforeEnter: middleware([
-        //   auth
-        // ])
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
-        path: '/job',
-        name: 'job',
-        component: Job,
-        // beforeEnter: middleware([
-        //   auth
-        // ])
+        path: '/task',
+        name: 'task',
+        component: Task,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/materials',
         name: 'materials',
         component: Material,
-        // beforeEnter: middleware([
-        //   auth
-        // ])
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/rab',
         name: 'transaction',
         component: Transaction,
-        // beforeEnter: middleware([
-        //   auth
-        // ])
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/analisa',
         name: 'analisa',
         component: AHS,
-        // beforeEnter: middleware([
-        //   auth
-        // ])
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/home',
         name: 'home',
         component: Home,
-        // beforeEnter: middleware([
-        //   auth
-        // ])
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/store',
         name: 'store',
         component: Store,
-        // beforeEnter: middleware([
-        //   auth
-        // ])
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: 'reports',
         name: 'reports',
         component: Report,
-        // beforeEnter: middleware([
-        //   auth
-        // ])
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/analisa_lokal',
         name: 'adjust',
-        component: AHSLokal
+        component: AHSLokal,
+        beforeEnter: middleware([
+          auth
+        ])
       },
       {
         path: '/cek',
@@ -118,7 +116,10 @@ export const routes = [
       {
         path: '/reference',
         name: 'reference',
-        component: Reference
+        component: Reference,
+        beforeEnter: middleware([
+          auth
+        ])
       },
     ]
   },

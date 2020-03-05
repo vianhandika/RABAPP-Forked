@@ -12,6 +12,8 @@ use App\Project;
 use App\AHSLokalDetails;
 use App\Transformers\RABTransformers;
 use Illuminate\Support\Facades\DB;
+use App\Transformers\IlluminatePaginatorAdapter;
+use League\Fractal\Resource\Collection;
 
 class RABController extends RestController
 {
@@ -19,9 +21,20 @@ class RABController extends RestController
 
     public function index()
     {
+        $rabPaginator = RAB::orderBy('id_rab','DESC')->paginate(3);
+        $rab = new Collection($rabPaginator->items(), new RABTransformers);
+        $rab->setPaginator(new IlluminatePaginatorAdapter($rabPaginator));
+        
+        $rab = $this->manager->createData($rab); 
+        
+        return $rab->toArray(); 
+    }
+
+    public function all()
+    {
         $rab = RAB::all();
         $response = $this->generateCollection($rab);
-        return $this->sendResponse($response,201);
+        return $this->sendResponse($response);
     }
 
     public function store(Request $request)

@@ -12,7 +12,7 @@ class StructureController extends RestController
 
     public function index()
     {
-        $structure = Structure::all();
+        $structure = Structure::orderBy('id_structure','DESC')->get();
         $response = $this->generateCollection($structure);
         return $this->sendResponse($response,200);
     }

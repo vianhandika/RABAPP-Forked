@@ -13,6 +13,8 @@ abstract class RestController extends Controller
 
     protected $transformer;
 
+    // private $fractal;
+
     public function __construct()
     {
         $this->manager = new Manager();
@@ -54,3 +56,4 @@ abstract class RestController extends Controller
         return response()->json($status, 500);
     }
 }
+

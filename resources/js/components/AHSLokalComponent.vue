@@ -38,22 +38,22 @@
             <v-list-item-content>
               <v-layout>
                 <v-flex xs2>
+                  <div class="caption grey--text">ID RAB</div>
+                  <div>{{ data.id_rab }}</div>
+                </v-flex>
+                <v-flex xs2>
                   <div class="caption grey--text">Project</div>
                   <div>{{ data.project }}</div>
                 </v-flex>
-                <!-- <v-flex xs1>
-                  <div class="caption grey--text">ID AHS</div>
-                  <div>{{ data.id_ahs_lokal }}</div>
-                </v-flex> -->
                 <v-flex xs2>
                   <div class="caption grey--text">Task Group</div>
                   <div>{{ data.name_sub }}</div>
                 </v-flex>
-                <v-flex xs3>
+                <v-flex xs2>
                   <div class="caption grey--text">Task</div>
                   <div>{{ data.name }}</div>
                 </v-flex>
-                <v-flex xs1>
+                <v-flex xs2>
                   <div class="caption grey--text">Adjust</div>
                   <div>{{ data.adjustment }}</div>
                 </v-flex>
@@ -72,13 +72,13 @@
                   </v-layout>
                 </v-flex>
                 <v-flex xs2>
-                  <div class="caption grey--text">Total</div>
+                  <div class="caption grey--text">HSP</div>
                   <v-layout>
                     <div style="text-align:left;width:50px">Rp.</div>
                     <div style="text-align:right;width:50px">{{ Number(data.HSP).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
-                <v-flex xs1>
+                <v-flex>
                   <div class="caption grey--text">Actions</div>
                   <!-- <v-icon color="green" @click="itemHandler(data);dialog5=true">edit</v-icon> -->
                   <v-icon color="red" @click="itemHandler(data);dialog6=true;detailTable=false">delete</v-icon>
@@ -172,18 +172,29 @@
 
               </v-data-table>
 
-              <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
+              <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
+                <v-icon dark>done</v-icon>
                 {{ snackText }}
-                <v-btn text @click="snack = false">Close</v-btn>
               </v-snackbar>
               
             </div>
           </template>
         </v-list-group>
       </v-card>
+      <div>
+        <v-pagination
+          v-model="current_page"
+          class="my-4"
+          :length="total_pages"
+          prev-icon="arrow_left"
+          next-icon="arrow_right"
+          circle
+          @input="getPagination"
+          :total-visible="5"
+        >
+        </v-pagination>
+      </div>
     </v-container>
-
-    
   </v-app>
 </template>
 
@@ -199,21 +210,20 @@ import rabdetails from './../service/RAB'
 
   export default {
     data: () => ({
+      current_page: 1,
+      total_pages: 0,
       valid: true,
 
       snack: false,
+      y: 'top',
       snackColor: '',
       snackText: '',
       
       dialog: false,
-      dialog2: false,
-      dialog3: false,
       dialog4: false,
       dialog5: false,
       dialog6: false,
-      dialog7: false,
       dialog8: false,
-      menu: false,
       tambah: false,
       detailTable: false,
 
@@ -226,8 +236,6 @@ import rabdetails from './../service/RAB'
       material:[],
       details:[],
       detailsData:[],
-      detailsDefault:[],
-      detailsTemp:[],
 
       task:[],
       project:[],
@@ -281,58 +289,27 @@ import rabdetails from './../service/RAB'
         coefficient: 0,
         sub_total : 0,
       },
-      
       Material:{
         id_material:'',
       },
       headers: [
-        { 
-          text: 'ID', align: 'left', sortable: false, value: 'kode',
-        },
-        { 
-          text: 'Type', align: 'left', sortable: false, value: 'status',
-        },
-        { 
-          text: 'Item', align: 'left', sortable: false, value: 'name',
-        },
-        { 
-          text: 'Price', align: 'left', sortable: false, value: 'price', width:'10%'
-        },
-        { 
-          text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', align:'center'
-        },
-        { 
-          text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total', width:'10%'
-        },
-        { 
-          text: 'Adjustment', align: 'left', sortable: false, value: 'adjustment', align: 'center'
-        },
-        {
-          text: 'Actions', align: 'left', sortable: false, value: 'action'
-        },
+        {text: 'ID', align: 'left', sortable: false, value: 'kode',},
+        {text: 'Type', align: 'left', sortable: false, value: 'status',},
+        {text: 'Item', align: 'left', sortable: false, value: 'name',},
+        {text: 'Price', align: 'left', sortable: false, value: 'price', width:'10%'},
+        {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', align:'center'},
+        {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total', width:'10%'},
+        {text: 'Adjustment', align: 'left', sortable: false, value: 'adjustment', align: 'center'},
+        {text: 'Actions', align: 'left', sortable: false, value: 'action'},
       ],
       headersAHS: [
-        { 
-          text: 'ID', align: 'left', sortable: false, value: 'kode',
-        },
-        { 
-          text: 'Type', align: 'left', sortable: true, value: 'status',
-        },
-        { 
-          text: 'Item', align: 'left', sortable: false, value: 'name',
-        },
-        { 
-          text: 'Price', align: 'left', sortable: false, value: 'price',
-        },
-        {
-          text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient'
-        },
-        {
-          text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total'
-        },
-        { 
-          text: 'Adjustment', align: 'left', sortable: false, value: 'sub_adjustment',
-        },
+        {text: 'ID', align: 'left', sortable: false, value: 'kode'},
+        {text: 'Type', align: 'left', sortable: true, value: 'status'},
+        {text: 'Item', align: 'left', sortable: false, value: 'name'},
+        {text: 'Price', align: 'left', sortable: false, value: 'price',},
+        {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient'},
+        {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total'},
+        {text: 'Adjustment', align: 'left', sortable: false, value: 'sub_adjustment'},
       ],
     }),
     mounted(){
@@ -343,33 +320,56 @@ import rabdetails from './../service/RAB'
       this.getTask()
       this.getProject()
       this.getallAHSDefault()
+      this.getPagination()
     },
     computed: {
       filtered:function(){
         return this.ahs.filter((data)=>{
           if(this.select != '')
             {
-              if(this.select == data.id_project)
+              if(this.select == '-1'){
+                if(this.search == '')
+                  return data
+                else{
+                  return data.name.match(this.search) 
+                }
+              }
+              else if(this.select == data.id_project)
               {
                 if(this.search == '')
                   return data
                 else{
-                  return (data.name.match(this.search) ||
-                    data.volume.toLocaleString().match(this.search))
+                  return data.name.match(this.search) 
                 }
               }
             }else{
-              return (data.name.match(this.search) ||
-                data.volume.toLocaleString().match(this.search))
+              return data.name.match(this.search) 
             }
         });
       }
     },
     methods: {
-      save () {
+      async getPagination()
+      {
+        try{
+          await rabdetails.get(this.current_page).then(response=>{
+            this.ahs = response.data
+            this.current_page = response.meta.pagination.current_page
+            this.total_pages = response.meta.pagination.total_pages
+          })
+        }catch{
+          console.log(err)
+        }
+      },
+      update(){
         this.snack = true
-        this.snackColor = 'green'
-        this.snackText = 'Data saved'
+        this.snackColor = 'teal darken-1'
+        this.snackText = 'Data Update Successfully'
+      },
+      delete(){
+        this.snack = true
+        this.snackColor = 'red darken-1'
+        this.snackText = 'Data Delete Successfully'
       },
       cancel () {
         this.snack = true
@@ -381,57 +381,6 @@ import rabdetails from './../service/RAB'
         this.ahs_details = item.detail.data
         console.log(this.ahs_details)
         this.tambah = true
-      },
-      itemHandlerAHS(item)
-      {
-        console.log('cek item')
-        console.log(item)
-        this.AHSDefault = item
-        this.detailsDefault = item.ahs_details.data
-        console.log('cek adjust details')
-        console.log(this.detailsDefault)
-        tambah=true
-      },
-      itemDetailHandler(item){
-        this.detail = item
-        console.log(this.detail)
-      },
-      getDetails(id)
-      {
-        let data = this.ahsDefault.find(obj=>obj.id_ahs == id)
-        console.log(data)
-        this.AHS.id_job = data.id_job
-        this.AHS.id_sub = data.id_sub
-        this.detailsDefault = data.ahs_details.data
-        console.log(this.detailsDefault)
-        this.tambah=true
-      },
-      filterAHS(id)
-      {
-        console.log(id)
-        console.log('ahs')
-        this.getallAHSDefault()
-        this.temp=this.ahsDefault
-        console.log(this.temp)
-        for(let ahs of this.ahs)
-        {
-          if(ahs.id_project == id)
-          {
-            for(let ahsdefault of this.ahsDefault)
-            {
-              if(ahsdefault.id_job == ahs.id_job)
-                this.temp.splice(this.temp.indexOf(ahsdefault),1)
-            }
-          }
-          console.log(this.temp)
-        }
-        this.temp=[...this.temp]
-        console.log('temp')
-        console.log(this.temp)
-        this.filter = this.temp
-        console.log('filter')
-        console.log(this.filter)
-        
       },
       async addList()
       {
@@ -515,26 +464,6 @@ import rabdetails from './../service/RAB'
           console.log(err)
         }
       },
-      async getAHSDefaultFilter()
-      {
-        
-      },
-      // async updateItem(id){
-      //   try{
-      //       const payload = {
-      //         kode    : this.AHS.kode,
-      //         id_sub  : this.AHS.id_sub,
-      //         total   : this.AHS.total,
-      //         total_labor : this.AHS.total_labor,
-      //         total_material  : this.AHS.total_material,
-      //         detail  : this.details
-      //       } 
-      //       await ahsController.updateItem(payload,id)
-      //       this.close()
-      //   }catch(err){
-      //     console.log(err);
-      //   }
-      // },
       async updateAdjustment(props){
         try{
             const payload = {
@@ -543,29 +472,16 @@ import rabdetails from './../service/RAB'
             await detailController.updateDetail(payload,props.item.id_ahs_lokal_details)
             this.getItem(props.item.id_ahs_lokal_details)
             this.close()
-            this.save()
+            this.update()
         }catch(err){
           console.log(err);
         }
       }, 
-      // async updateCoefficient(props)
-      // {
-      //   try{
-      //     const payload = {
-      //       coefficient : props.item.coefficient,
-      //     }
-      //     await detailController.(payload, props.item.id_ahs_lokal_details)
-      //     this.getItem(props.item.id_ahs_lokal_details)
-      //     this.close()
-      //     this.save()
-      //   }catch(err){
-      //     console.log(err)
-      //   }
-      // },
       async deleteItem(id){
         try{
           await rabdetails.deleteDetail(id).data
           this.getallAHS()
+          this.delete()
         }catch(err){
           console.log(err)
         }
@@ -577,6 +493,7 @@ import rabdetails from './../service/RAB'
           this.getItem(ahs.id_ahs_lokal)
           this.getallAHS()
           this.close()
+          this.delete()
         }catch(err){
           console.log(err)
         }
@@ -592,6 +509,11 @@ import rabdetails from './../service/RAB'
       {
         try{
           this.project = (await project.getallItem()).data
+          let each = {
+            id_project: -1,
+            project: 'All'
+          }
+          this.project.push(each)
         }catch(err){
           console.log(err)
         }
@@ -601,15 +523,12 @@ import rabdetails from './../service/RAB'
       },
       close () {
         this.dialog = false
-        this.dialog3 = false
         this.dialog5 = false
         this.dialog6 = false
-        this.dialog7 = false
         this.dialog8 = false
         this.details=[]
         this.getallAHS()
         this.getall()
-        this.details=[]
         this.tambah = false
       },
     }

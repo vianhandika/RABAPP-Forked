@@ -181,24 +181,31 @@
                                                     <tr>
                                                         <td>{{$i}}</td>
                                                         <td align="left">{{$rab_data->job}}</td>
-                                                        <td>{{$rab_data->volume}}</td>
+                                                        @php
+                                                        if ($rab_data->status == 'volume') {
+                                                            $volume_adjust = $rab_data->volume * $rab_data->adjustment;
+                                                        } else {
+                                                            $volume_adjust = $rab_data->volume;
+                                                        }
+                                                        @endphp
+                                                        <td>{{$volume_adjust}}</td>
                                                         <td>{{$rab_data->satuan}}</td>
                                                         <td align="left" style="border-right: 1px solid none">Rp.</td>
                                                         <td align="right" >{{number_format($rab_data->HSP,2,',','.')}}</td>
                                                         <td align="left" style="border-right: 1px solid none">Rp.</td>
-                                                        <td align="right">{{number_format($rab_data->HP,2,',','.')}}</td>
+                                                        <td align="right">{{number_format($rab_data->HP_Adjust,2,',','.')}}</td>
                                                         <td colspan="2"></td>
                                                         @foreach ($totalSt as $item)
                                                             @if ($item->id_structure == $structure_data->id_structure)
                                                                 @php
-                                                                    $proc = ($rab_data->HP/$item->Total)*100;
+                                                                    $proc = ($rab_data->HP_Adjust/$item->Total)*100;
                                                                 @endphp
                                                             @endif
                                                         @endforeach
                                                         <td align="right" style="padding-right:2px;font-style:bold">{{number_format($proc,2,',','.')}}%</td>
                                                         <td></td>
                                                         @php
-                                                            $total += $rab_data->HP;
+                                                            $total += $rab_data->HP_Adjust;
                                                             $proc_pek += $proc;
                                                         @endphp
                                                     </tr>

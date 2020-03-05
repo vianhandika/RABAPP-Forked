@@ -12,7 +12,7 @@ class GroupController extends RestController
 
     public function index()
     {
-        $group = Group::all();
+        $group = Group::orderBy('id_groups','DESC')->get();
         $response = $this->generateCollection($group);
         return $this->sendResponse($response,200);
     }

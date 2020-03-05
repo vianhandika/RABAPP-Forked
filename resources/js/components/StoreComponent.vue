@@ -29,12 +29,13 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" v-on="on" @click="getallItem">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" v-on="on" @click="reset">New</v-btn>
               </template>
 
               <v-card>
                 <v-card-title>
-                  <span class="headline">New Store</span>
+                  <span class="headline" v-if="!edit">New Store</span>
+                  <span class="headline" v-if="edit">Edit Store</span>
                 </v-card-title>
                 
                 <v-form 
@@ -119,14 +120,14 @@
                             </v-text-field>
                         </v-flex>
                       </v-layout>
-
                   </v-card-text>
                 </v-form>
 
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
-                  <v-btn class="ma-2" rounded color="green" dark @click="reset();dialog=false">Cancel</v-btn>
-                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem();dialog=false">Save</v-btn>
+                  <v-btn class="ma-2" rounded color="green" dark @click="dialog=false">Cancel</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="!edit" @click="addItem();dialog=false">Save</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="edit" @click="updateItem(Store.id_store);dialog=false">Save</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -134,119 +135,16 @@
         </template>
 
         <template v-slot:item.action="{ item }">
-          <v-dialog v-model="dialog3" max-width="500px">
-            <template v-slot:activator="{ on }">
-              <v-icon
-                small
-                class="mr-2"
-                color="green"
-                @click="itemHandler(item)"
-                v-on="on"
-              >
-                edit
-              </v-icon>
-            </template>
+          <v-icon
+            small
+            class="mr-2"
+            color="green"
+            @click="itemHandler(item);edit=true;dialog=true"
+          >
+            edit
+          </v-icon>
 
-              <v-card>
-                <v-card-title>
-                  <span class="headline">Edit Store</span>
-                </v-card-title>
-              
-                <v-form 
-                  ref="form"
-                  lazy-validation
-                  v-model="valid"
-                  > 
-                  <v-card-text>
-                    <v-layout>
-                      <v-flex>
-                        <v-text-field 
-                          v-model="Store.kode" 
-                          label="ID Store"
-                          readonly
-                        >
-                        </v-text-field>
-                      </v-flex>
-                    </v-layout>
-
-                    <v-layout>
-                        <v-flex>
-                          <v-text-field 
-                            v-model="Store.name" 
-                            label="Name"
-                            :rules="nameRules"
-                          >
-                          </v-text-field>
-                        </v-flex>
-                      </v-layout>
-
-                      <v-layout>
-                        <v-flex>
-                          <v-text-field 
-                            v-model="Store.address" 
-                            label="Address"
-                            :rules="addressRules"
-                          >
-                            </v-text-field>
-                        </v-flex>
-                      </v-layout>
-
-                      <v-layout>
-                        <v-flex>
-                          <v-text-field 
-                            v-model="Store.type" 
-                            label="Type of Materials"
-                            :rules="typeRules"
-                          >
-                            </v-text-field>
-                        </v-flex>
-                      </v-layout>
-
-                      <v-layout>
-                        <v-flex>
-                          <v-text-field 
-                            v-model="Store.no_telp" 
-                            label="Telephone Number"
-                            :rules="noRules"
-                          >
-                            </v-text-field>
-                        </v-flex>
-                      </v-layout>
-
-                      <v-layout>
-                        <v-flex>
-                          <v-text-field 
-                            v-model="Store.phone" 
-                            label="Phone Number"
-                            :rules="phoneRules"
-                          >
-                            </v-text-field>
-                        </v-flex>
-                      </v-layout>
-
-                      <v-layout>
-                        <v-flex>
-                          <v-text-field 
-                            v-model="Store.owner" 
-                            label="Owner"
-                            :rules="ownerRules"
-                          >
-                            </v-text-field>
-                        </v-flex>
-                      </v-layout>
-
-                  </v-card-text>
-                </v-form>
-
-                <v-card-actions>
-                  <div class="flex-grow-1"></div>
-                  <v-btn class="ma-2" rounded color="green" dark @click="reset();dialog3=false">Cancel</v-btn>
-                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Store.id_store);dialog3=false">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-          </v-dialog>
-
-          <v-dialog v-model="dialog2" max-width="290px">
+          <v-dialog v-model="dialogDelete" max-width="290px">
             <template v-slot:activator="{ on }">
               <v-icon
                 small
@@ -262,14 +160,18 @@
                 <v-card-text>Are you sure want to delete this store?</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Store.id_store)">Yes</v-btn>
-                  <v-btn color="red darken-1" text @click="reset(); dialog2=false">No</v-btn>
+                  <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(Store.id_store)">Yes</v-btn>
+                  <v-btn color="red darken-1" text @click="dialogDelete=false">No</v-btn>
                 </v-card-actions>
               </v-card>
           </v-dialog>
         </template>
       </v-data-table>
     </v-container>
+    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
+      <v-icon dark>done</v-icon>
+      {{ snackText }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -278,13 +180,19 @@ import Controller from './../service/Store'
 
   export default {
     data: () => ({
+      snack: false,
+      snackColor: '',
+      snackText: '',
+      y: 'top',
+
       valid: true,
       dialog: false,
-      dialog2: false,
-      dialog3: false,
+      dialogDelete: false,
+      edit: false,
       search:'',
       store: [],
       Store: {
+        id_store: '',
         kode:'',
         name:'',
         address: '',
@@ -292,7 +200,6 @@ import Controller from './../service/Store'
         no_telp: '',
         phone: '',
         owner: '',
-        id_store: '',
       },
       headers: [
         {
@@ -366,10 +273,25 @@ import Controller from './../service/Store'
 
     },
     methods: {
+      save(){
+        this.snack = true
+        this.snackColor = 'green darken-1'
+        this.snackText = 'Data Save Successfully'
+      },
+      update(){
+        this.snack = true
+        this.snackColor = 'teal darken-1'
+        this.snackText = 'Data Update Successfully'
+      },
+      delete(){
+        this.snack = true
+        this.snackColor = 'red darken-1'
+        this.snackText = 'Data Delete Successfully'
+      },
       async getallItem(){
         try{
           this.store = (await Controller.getallItem()).data
-          this.Store.kode = 'St-0'+(this.store.length+1)
+          this.Store.kode = 'St-'+(this.store.length+1)
         }catch(err){
           console.log(err)
         }
@@ -387,6 +309,7 @@ import Controller from './../service/Store'
           }
           await Controller.addItem(payload)
           this.reset()
+          this.save()
         }catch(err){
           console.log(err);
         }
@@ -394,16 +317,17 @@ import Controller from './../service/Store'
       async updateItem(id){
         try{
             const payload = {
-                kode        : this.Store.kode,
-                name        : this.Store.name,
-                address     : this.Store.address,
-                no_telp     : this.Store.no_telp,
-                phone       : this.Store.phone,
-                type        : this.Store.type,
-                owner       : this.Store.owner
+              kode        : this.Store.kode,
+              name        : this.Store.name,
+              address     : this.Store.address,
+              no_telp     : this.Store.no_telp,
+              phone       : this.Store.phone,
+              type        : this.Store.type,
+              owner       : this.Store.owner
             } 
             await Controller.updateItem(payload,id)
             this.reset()
+            this.update()
         }catch(err){
           console.log(err);
         }
@@ -412,6 +336,7 @@ import Controller from './../service/Store'
         try{
           await Controller.deleteItem(id).data
           this.getallItem()
+          this.delete()
         }catch(err){
           console.log(err)
         }

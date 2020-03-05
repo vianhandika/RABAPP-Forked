@@ -94,7 +94,7 @@ import Structure from '../service/Structure'
         {icon: 'dashboard', title: 'Dashboard', route: '/dashboard'},
         {icon: 'home_work', title: 'Project', route: '/project'},
         {icon: 'store', title: 'Store', route: '/store'},
-        {icon: 'work', title: 'Task', route: '/job'},
+        {icon: 'work', title: 'Task', route: '/task'},
         {icon: 'waves', title: 'Materials/Labor', route: '/materials'},
         {icon: 'money', title: 'AHS Master', route: '/analisa'},
         {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},

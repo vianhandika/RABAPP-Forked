@@ -7,6 +7,8 @@ use App\Transformers\AHSTransformers2;
 use Illuminate\Support\Facades\DB;
 use App\AHSDetails;
 use App\AHS;
+use App\Transformers\IlluminatePaginatorAdapter;
+use League\Fractal\Resource\Collection;
 
 class AHSController extends RestController
 {
@@ -14,17 +16,20 @@ class AHSController extends RestController
 
     public function index()
     {
-        $ahs = AHS::all();
-        $response = $this->generateCollection($ahs);
-        return $this->sendResponse($response,200);
+        $ahsPaginator = AHS::orderBy('id_ahs','DESC')->paginate(3);
+        $ahs = new Collection($ahsPaginator->items(), new AHSTransformers2);
+        $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
+        
+        $ahs = $this->manager->createData($ahs); 
+        
+        return $ahs->toArray(); 
     }
 
-    public function paginate()
+    public function all()
     {
-        $ahs = AHS::orderBy('id_ahs','DESC')->paginate(2);
-        return $ahs;
-        // $response = $this->generateCollection($ahs);
-        // return $this->sendResponse($response,200);
+        $ahs = AHS::all();
+        $response = $this->generateCollection($ahs);
+        return $this->sendResponse($response);
     }
 
     public function store(Request $request)
@@ -142,28 +147,33 @@ class AHSController extends RestController
         return $result;
     }
 
-    public function copy_ahs($id)
+    public function copy_ahs(Request $request)
     {
-        $ahs = AHS::findOrFail($id);
-        $details = AHSDetails::where('id_ahs',$id)->get()->toArray();
-
-        $new = new AHS();
-        $new->id_sub = $ahs->id_sub;
-        $new->id_job = $ahs->id_job;
-        $new->kode = 'CPY'. '-'. $ahs->kode; 
-        $new->total_labor = $ahs->total_labor;
-        $new->total_material = $ahs->total_material;
-        $new->total = $ahs->total;
-        $new->save();
-        
-        if($details != null)
+        try
         {
-            $new = DB::transaction(function () use ($new,$details) {
-                $new->detail_ahs()->createMany($details);
-                return $new;
-            });
+            $ahs = AHS::findOrFail($request->get('id_ahs'));
+            $details = AHSDetails::where('id_ahs',$request->get('id_ahs'))->get()->toArray();
+
+            $new = new AHS();
+            $new->id_sub = $ahs->id_sub;
+            $new->id_job = $ahs->id_job;
+            $new->kode = 'CPY'. '-'. $ahs->kode; 
+            $new->total_labor = $ahs->total_labor;
+            $new->total_material = $ahs->total_material;
+            $new->total = $ahs->total;
+            $new->save();
+            
+            if($details != null)
+            {
+                $new = DB::transaction(function () use ($new,$details) {
+                    $new->detail_ahs()->createMany($details);
+                    return $new;
+                });
+            }
+            $response = $this->generateItem($new);
+            return $this->sendResponse($response,201);
+        }catch(\Exception $e){
+            return $this->sendIseResponse($e->getMessage());
         }
-        $response = $this->generateItem($new);
-        return $this->sendResponse($response,201);
     }
 }

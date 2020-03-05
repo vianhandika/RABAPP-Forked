@@ -12,7 +12,7 @@ class TaskSubController extends RestController
 
     public function index()
     {
-        $tasksub = TaskSub::all();
+        $tasksub = TaskSub::orderBy('id_sub','DESC')->get();
         $response = $this->generateCollection($tasksub);
         return $this->sendResponse($response,200);
     }

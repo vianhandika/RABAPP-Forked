@@ -41,158 +41,14 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getallItem()" v-on="on">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset()" v-on="on">New</v-btn>
               </template>
               <v-card>
                 <v-card-title>
-                  <span class="headline">New Project</span>
+                  <span class="headline" v-if="!edit">New Project</span>
+                  <span class="headline" v-if="edit">Edit Project</span>
                 </v-card-title>
 
-              <v-form ref="form" lazy-validation v-model="valid">
-                <v-card-text>
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Project.kode" 
-                        label="ID Project"
-                        readonly
-                      >
-                      </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Project.project" 
-                        label="Project"
-                        :rules="nameRules"
-                      >
-                      </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field
-                        v-model="Project.address"
-                        label="Address"
-                        :rules="addressRules"
-                        ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Project.owner" 
-                        label="Owner"
-                        :rules="ownerRules"
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex xs12>
-                      <v-menu 
-                      ref="menu1"
-                      v-model="menu1"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      max-width="290px"
-                      min-width="290px"
-                    >
-
-                    <template v-slot:activator="{ on }">
-                      <v-text-field
-                        label="Date"
-                        required
-                        v-on="on"
-                        :rules="dateRules"
-                        :value="dateFormat"
-                      ></v-text-field>
-                    </template>
-                      <v-date-picker v-model="Project.date" @input="menu1 = false"></v-date-picker>
-                    </v-menu>
-                    </v-flex>
-                  </v-layout>
-          
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Project.no_telp" 
-                        label="Telp Number"
-                        :rules="noRules"
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field 
-                        v-model="Project.phone" 
-                        label="Phone Number"
-                        :rules="phoneRules"
-                      >
-                        </v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field
-                        v-model="Project.type"
-                        label="Type"
-                        :rules="typeRules"
-                        ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-
-                  <v-layout>
-                    <v-flex>
-                      <v-text-field
-                        v-model="Project.nominal"
-                        label="Nominal"
-                        :rules="nominalRules"
-                      ></v-text-field>
-                    </v-flex>
-                  </v-layout>
-                </v-card-text>
-              </v-form>
-
-                <v-card-actions>
-                  <div class="flex-grow-1"></div>
-                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem()">Save</v-btn>
-                </v-card-actions>
-              </v-card>
-
-            </v-dialog>
-          </v-toolbar>
-        </template>
-
-        <template v-slot:item.action="{ item }">
-          <v-dialog v-model="dialog3" max-width="500px">
-            <template v-slot:activator="{ on }">
-              <v-icon
-                small
-                class="mr-2"
-                color="green"
-                @click="itemHandler(item)"
-                v-on="on"
-              >
-                edit
-              </v-icon>
-            </template>
-              <v-card>
-                <v-card-title>
-                  <span class="headline">Edit Project</span>
-                </v-card-title>
-              
                 <v-form ref="form" lazy-validation v-model="valid">
                   <v-card-text>
                     <v-layout>
@@ -240,8 +96,8 @@
                     <v-layout>
                       <v-flex xs12>
                         <v-menu 
-                        ref="menu2"
-                        v-model="menu2"
+                        ref="menu"
+                        v-model="menu"
                         :close-on-content-click="false"
                         :nudge-right="40"
                         lazy
@@ -261,7 +117,7 @@
                           :value="dateFormat"
                         ></v-text-field>
                       </template>
-                        <v-date-picker v-model="Project.date" no-title @input="menu2 = false"></v-date-picker>
+                        <v-date-picker v-model="Project.date" @input="menu = false"></v-date-picker>
                       </v-menu>
                       </v-flex>
                     </v-layout>
@@ -270,7 +126,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Project.no_telp" 
-                          label="Telephone Number"
+                          label="Telp Number"
                           :rules="noRules"
                         ></v-text-field>
                       </v-flex>
@@ -302,7 +158,7 @@
                         <v-text-field
                           v-model="Project.nominal"
                           label="Nominal"
-                          :rules="nominalRules"
+                          readonly
                         ></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -312,12 +168,25 @@
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
                   <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Project.id_project)">Save</v-btn>
+                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem()">Save</v-btn>
+                  <v-btn v-if="edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Project.id_project)">Save</v-btn>
                 </v-card-actions>
               </v-card>
-          </v-dialog>
+            </v-dialog>
+          </v-toolbar>
+        </template>
 
-          <v-dialog v-model="dialog2" max-width="290px">
+        <template v-slot:item.action="{ item }">
+          <v-icon
+            small
+            class="mr-2"
+            color="green"
+            @click="itemHandler(item);dialog=true;edit=true"
+          >
+            edit
+          </v-icon>
+
+          <v-dialog v-model="dialogDelete" max-width="290px">
             <template v-slot:activator="{ on }">
               <v-icon
                 small
@@ -328,19 +197,23 @@
                 delete
               </v-icon>
             </template>
-                <v-card>
-                  <v-card-title class="headline">Confirmation</v-card-title>
-                    <v-card-text>Are you sure want to delete this project?</v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Project.id_project)">Yes</v-btn>
-                    <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
-                  </v-card-actions>
-                </v-card>
+              <v-card>
+                <v-card-title class="headline">Confirmation</v-card-title>
+                  <v-card-text>Are you sure want to delete this project?</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(Project.id_project)">Yes</v-btn>
+                  <v-btn color="red darken-1" text @click="dialogDelete = false">No</v-btn>
+                </v-card-actions>
+              </v-card>
           </v-dialog>
         </template>
       </v-data-table>
     </v-container>
+    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
+      <v-icon dark>done</v-icon>
+      {{ snackText }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -352,18 +225,22 @@ import { parseISO } from 'date-fns'
 
   export default {
     data: () => ({
+      snack: false,
+      snackColor: '',
+      snackText: '',
+      y: 'top',
+      
       valid: true,
       dialog: false,
-      dialog2: false,
-      dialog3: false,
+      dialogDelete: false,
       menu: false,
-      menu1: false,
-      menu2: false,
+      edit: false,
       search:'',
       
       project: [],
       Project: {
         id_project: '',
+        kode: '',
         project:'',
         address: '',
         owner: '',
@@ -371,8 +248,7 @@ import { parseISO } from 'date-fns'
         no_telp: '',
         phone: '',
         type: '',
-        nominal: 0,
-        kode: ''
+        nominal: 0
       },
       headers: [
         {
@@ -380,7 +256,6 @@ import { parseISO } from 'date-fns'
           align: 'left',
           sortable: false,
           value: 'kode',
-          width: '7%'
         },
         {
           text: 'Project',
@@ -431,7 +306,8 @@ import { parseISO } from 'date-fns'
         { 
           text: 'Actions', 
           value: 'action', 
-          sortable: false 
+          sortable: false,
+          width: '8%' 
         },
       ],
       //validation
@@ -461,10 +337,6 @@ import { parseISO } from 'date-fns'
       typeRules: [
         v => !!v || 'Type is required'
       ],
-      nominalRules: [
-        v => !!v || 'Nominal is required',
-        v => (v && !v.numeric) || 'Nominal number must be numeric'
-      ],
     }),
     mounted(){
       this.getallItem()
@@ -476,6 +348,21 @@ import { parseISO } from 'date-fns'
       },
     },
     methods: {
+      save(){
+        this.snack = true
+        this.snackColor = 'green darken-1'
+        this.snackText = 'Data Save Successfully'
+      },
+      update(){
+        this.snack = true
+        this.snackColor = 'teal darken-1'
+        this.snackText = 'Data Update Successfully'
+      },
+      delete(){
+        this.snack = true
+        this.snackColor = 'red darken-1'
+        this.snackText = 'Data Delete Successfully'
+      },
       formatDate(item)
       {
         let date = parseISO(item)
@@ -484,7 +371,7 @@ import { parseISO } from 'date-fns'
       async getallItem(){
         try{
           this.project = (await Controller.getallItem()).data
-          this.Project.kode = 'Pr-0'+(this.project.length+1)
+          this.Project.kode = 'Pr-'+(this.project.length+1)
         }catch(err){
           console.log(err)
         }
@@ -503,8 +390,8 @@ import { parseISO } from 'date-fns'
             nominal     : this.Project.nominal
           }
           await Controller.addItem(payload)
-          // showAlert
           this.close()
+          this.save()
         }catch(err){
           console.log(err);
         }
@@ -524,6 +411,7 @@ import { parseISO } from 'date-fns'
             } 
             await Controller.updateItem(payload,id)
             this.close()
+            this.update()
         }catch(err){
           console.log(err);
         }
@@ -532,15 +420,16 @@ import { parseISO } from 'date-fns'
         try{
           await Controller.deleteItem(id).data
           this.getallItem()
+          this.delete()
         }catch(err){
           console.log(err)
         }
       },
       itemHandler(item){
         this.Project = item
-        console.log(this.Project)
       },
       reset(){
+        this.getallItem()
         this.resetForm()
         this.resetValidation()
       },
@@ -551,9 +440,9 @@ import { parseISO } from 'date-fns'
         this.$refs.form.resetValidation()
       },
       close () {
-        this.dialog = false
-        this.dialog3 = false
         this.getallItem()
+        this.dialog = false
+        this.edit = false
       },
     },
   }

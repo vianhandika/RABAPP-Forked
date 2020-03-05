@@ -52,13 +52,14 @@ Route::get('/materials/show/{id}', 'MaterialsController@show');
 Route::get('/count_materials', 'MaterialsController@count_materials');
 //AHS 
 Route::get('/ahs','AHSController@index');
+Route::get('/ahs/index','AHSController@all');
 Route::post('/ahs/store','AHSController@store');
 Route::patch('/ahs/update/{id}','AHSController@update');
 Route::delete('/ahs/delete/{id}','AHSController@destroy');
 Route::get('/ahs/show/{id}', 'AHSController@showByID');
 Route::get('/count_ahs','AHSController@count_ahs');
 Route::get('/ahs/paginate','AHSController@paginate');
-Route::post('/ahs/copy/{id}','AHSController@copy_ahs');
+Route::post('/ahs/copy','AHSController@copy_ahs');
 //AHS Details
 Route::get('/ahs_details','AHSDetailsController@index');
 Route::patch('/ahs_details/update/{id}','AHSDetailsController@update');
@@ -66,6 +67,7 @@ Route::delete('/ahs_details/delete/{id}', 'AHSDetailsController@destroy');
 Route::get('/ahs_details/show/{id}', 'AHSDetailsController@showbyID');
 //RAB
 Route::get('/rabs','RABController@index');
+Route::get('/rabs/index','RABController@all');
 Route::post('/rabs/store','RABController@store');
 Route::post('/rabs/storeN','RABController@storeN');
 Route::patch('/rabs/update/{id}','RABController@update');

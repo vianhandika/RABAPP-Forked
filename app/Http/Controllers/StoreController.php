@@ -12,7 +12,7 @@ class StoreController extends RestController
 
     public function index()
     {
-        $store = Store::all();
+        $store = Store::orderBy('id_store','DESC')->get();
         $response = $this->generateCollection($store);
         return $this->sendResponse($response,200);
     }

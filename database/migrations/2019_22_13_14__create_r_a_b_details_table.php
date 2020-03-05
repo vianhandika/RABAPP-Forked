@@ -23,6 +23,7 @@ class CreateRABDetailsTable extends Migration
             $table->double('volume');
             $table->double('adjustment',3);
             $table->double('HP');
+            $table->double('HP_Adjust');
             $table->timestamps();
             $table->softDeletes();
 

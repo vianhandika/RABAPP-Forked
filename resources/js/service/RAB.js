@@ -41,7 +41,6 @@ export default {
     },
     getallItem(){
         return new Promise((resolve, reject) => {
-            
             const successCallback = (res) => {
                 const data = res.data
                 resolve(data)
@@ -52,7 +51,30 @@ export default {
             Http.get('/api/rabs', successCallback, errorCallback)
         })
     },
-
+    getall(){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rabs/index', successCallback, errorCallback)
+        })
+    },
+    pagination(id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rabs?page='+id, successCallback, errorCallback)
+        })
+    },
     deleteDetail(id){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
@@ -102,6 +124,18 @@ export default {
                 reject(err)
             }
             Http.get('/api/rab_details/show/'+id, successCallback, errorCallback)
+        })
+    },
+    get(id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rab_details?page='+id, successCallback, errorCallback)
         })
     },
 }

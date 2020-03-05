@@ -12,7 +12,7 @@ class ProjectController extends RestController
 
     public function index()
     {
-        $project = Project::all();
+        $project = Project::orderBy('id_project','DESC')->get();
         $response = $this->generateCollection($project);
         return $this->sendResponse($response,200);
     }

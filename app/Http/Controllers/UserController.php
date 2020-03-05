@@ -17,7 +17,7 @@ class UserController extends Controller
     public function create (Request $request){
         $request->validate([
             'name' => 'required|string',
-            'email' => 'required|string|email|unique:users',
+            'email' => 'required|string|unique:users',
             'password' => 'required|string'
         ]);
 
@@ -36,7 +36,7 @@ class UserController extends Controller
     public function login (Request $request)
     {
         $request->validate([
-            'email' => 'required|string|email',
+            'email' => 'required|string|',
             'password' => 'required|string',
             'remember_me' => 'boolean'
         ]);

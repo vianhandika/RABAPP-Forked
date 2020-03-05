@@ -41,7 +41,7 @@ class AHSLokalDetailsController extends RestController
             $ahs->total_labor -= $detail->sub_total;
         else
             $ahs->total_material -= $detail->sub_total;
-        $ahs->total -= $detail->sub_total;
+        $ahs->HSP -= $detail->sub_total;
         $ahs->save();
 
         $task = TaskSubDetails::findOrFail($ahs->id_sub_details);
@@ -82,12 +82,14 @@ class AHSLokalDetailsController extends RestController
                 $detail_data->save();
             }
         }
-        $rab->total_rab -= $ahs->HP;
+        $rab->total_rab -= $ahs->HP_Adjust;
+        $rab->save();
+
         $ahs->adjustment = $request->adjustment;
-        $ahs->HP = $ahs->HSP * $request->adjustment * $ahs->volume;
+        $ahs->HP_Adjust = $ahs->HSP * $request->adjustment * $ahs->volume;
         $ahs->save(); 
 
-        $rab->total_rab += $ahs->HP;
+        $rab->total_rab += $ahs->HP_Adjust;
         $rab->save();
 
         $project = Project::findOrFail($rab->id_project);

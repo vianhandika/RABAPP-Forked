@@ -12,7 +12,7 @@ class MaterialsController extends RestController
 
     public function index()
     {
-        $material = Materials::all();
+        $material = Materials::orderBy('id_material','DESC')->get();
         $response = $this->generateCollection($material);
         return $this->sendResponse($response,200);
     }

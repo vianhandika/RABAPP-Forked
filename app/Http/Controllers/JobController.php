@@ -12,7 +12,7 @@ class JobController extends RestController
 
     public function index()
     {
-        $job = Job::all();
+        $job = Job::orderBy('id_job','DESC')->get();
         $response = $this->generateCollection($job);
         return $this->sendResponse($response,200);
     }
@@ -38,7 +38,7 @@ class JobController extends RestController
     {
         $this->validate($request, [
             'kode' => 'required|max:255',
-            'name' => 'required|max:255|unique',
+            'name' => 'required|max:255|',
             'satuan' => 'required|max:255',
             'status' => 'required|max:255',
             'details' => 'required|max:255',

@@ -1,6 +1,18 @@
 import Http from '../http'
 
 export default {
+    getall(){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/ahs/index', successCallback, errorCallback)
+        })
+    },
     getallItem(){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
@@ -49,7 +61,19 @@ export default {
             Http.delete('/api/ahs/delete/'+id, successCallback, errorCallback)
         })
     },
-    copy(id) {
+    copy(payload) {
+            new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.post('/api/ahs/copy/',payload, successCallback, errorCallback)
+        })
+    },
+    get(id){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
                 const data = res.data
@@ -58,7 +82,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.post('/api/ahs/copy/'+id,successCallback, errorCallback)
+            Http.get('/api/ahs?page='+id, successCallback, errorCallback)
         })
     },
 }

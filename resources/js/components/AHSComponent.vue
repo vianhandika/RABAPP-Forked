@@ -14,7 +14,7 @@
           label="Choose Task Group"
           class="hidden-sm-and-down"
           v-model="select"
-          :items="task"
+          :items="taskTemp"
           item-text="name"
           item-value="id_sub"
           prepend-inner-icon="expand_more"
@@ -36,7 +36,7 @@
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" max-width="550px">
           <template v-slot:activator="{ on }">
-            <v-btn color="green darken-1" elevation="8" rounded class="mb-2" @click="dialogAdd=true;dialogEdit=false;getallAHS()" v-on="on">New</v-btn>
+            <v-btn color="green darken-1" elevation="8" rounded class="mb-2" @click="dialogAdd=true;dialogEdit=false;reset()" v-on="on">New</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -66,6 +66,7 @@
                     item-value="id_sub"
                     :return-object="false"
                     @change="filterTask(AHS.id_sub)"
+                    :rules="groupRules"
                   ></v-select>
                 </v-layout>
 
@@ -78,6 +79,7 @@
                     item-value="id_job"
                     :return-object="false"
                     @change="filterTask(AHS.id_sub)"
+                    :rules="taskRules"
                   ></v-select>
                 </v-layout>
 
@@ -128,25 +130,20 @@
                 </v-btn>
                 
                 <v-layout v-if="edit">
-                  <v-flex class="text-md-center" sm12 mt-2>
-                    <v-card
-                      v-for="(detail,index) in details"
-                      :key="index"
-                      elevation="5"
-                      style="margin-top:4px"
-                    > 
+                  <v-flex class="text-md-center" sm12 mt-2 >
+                    <v-card elevation="5"> 
                     <v-card-title>
                     <v-btn 
                       icon
                       color="red"
-                      dark @click="deleteList(detail)"
+                      dark @click="deleteList(ahs_details);edit=false"
                     >
                     <v-icon>remove_circle</v-icon>
                     </v-btn>
                     <v-btn 
                       icon
                       color="blue accent-2"
-                      dark @click="editList(detail); detailAHS=true"
+                      dark @click="editList(ahs_details)"
                     >
                       <v-icon>add_circle</v-icon>
                     </v-btn>
@@ -155,11 +152,11 @@
                       <v-select
                         label="Materials/Labor" 
                         class="pa-1"
-                        v-model="detail.id_material"
+                        v-model="ahs_details.id_material"
                         item-text="name"
                         item-value="id_material"
                         :items="material"
-                        required 
+                        readonly
                       ></v-select>
                     </v-flex>
 
@@ -167,8 +164,9 @@
                       <v-text-field
                         label="Coefficient" 
                         class="pa-1"
-                        v-model="detail.coefficient"
-                        required
+                        v-model="ahs_details.coefficient"
+                        :rules="coefficientRules"
+                        type="number"
                       ></v-text-field>
                     </v-flex>
 
@@ -196,7 +194,7 @@
                     <v-btn
                       icon
                       color="green"
-                      dark @click="detailAHS=false;edit=true;editHandler(index)"
+                      dark @click="editHandler(index,detail)"
                     >
                       <v-icon>edit</v-icon>
                     </v-btn>
@@ -253,7 +251,7 @@
                           item-value="id_material"
                           :return-object="false"
                           :items="filterMaterial"
-                          required 
+                          :rules="materialsRules"                          
                         ></v-select>
                       </v-flex>
 
@@ -262,7 +260,8 @@
                         label="Coefficient" 
                         class="pa-1"
                         v-model="ahs_details.coefficient"
-                        required
+                        :rules="coefficientRules"
+                        type="number"
                         ></v-text-field>
                       </v-flex>
                       </v-card-title>
@@ -298,11 +297,11 @@
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
-                <v-flex xs2>
+                <v-flex xs3>
                   <div class="caption grey--text">ID AHS</div>
                   <div>{{ data.kode }}</div>
                 </v-flex>
-                <v-flex xs2>
+                <v-flex xs3>
                   <div class="caption grey--text">Task Group</div>
                   <div style>{{ data.name_sub }}</div>
                 </v-flex>
@@ -325,7 +324,7 @@
                   </v-layout>
                 </v-flex>
                 <v-flex xs3>
-                  <div class="caption grey--text">Total</div>
+                  <div class="caption grey--text">HSP</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
                     <div style="text-align:right;width:90px">{{ Number(data.total).toLocaleString('id-ID') }}</div>
@@ -371,7 +370,7 @@
               <template v-slot:item.coefficient="props">
                 <v-edit-dialog
                   :return-value.sync="props.item.coefficient"
-                  @save="save(props)"
+                  @save="updateDetail(props)"
                   @cancel="cancel"
                   lazy
                   large
@@ -413,12 +412,6 @@
                 </v-dialog>
               </template>
               </v-data-table>
-
-              <v-snackbar v-model="snack" :timeout="3000" :color="snackColor">
-                {{ snackText }}
-                <v-btn text @click="snack = false">Close</v-btn>
-              </v-snackbar>
-              
             </div>
           </template>
         </v-list-group>
@@ -445,24 +438,31 @@
               <v-card-text>Are you sure want to copy this AHS?</v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="dialogCopy = false; copyItem(AHS.id_ahs)">Yes</v-btn>
+              <v-btn color="green darken-1" text @click="dialogCopy = false; copyItem()">Yes</v-btn>
               <v-btn color="red darken-1" text @click="dialogCopy = false">No</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
       </template>
 
-      <!-- <div>
+      <div>
         <v-pagination
-          v-model="page"
+          v-model="current_page"
           class="my-4"
-          :length="5"
+          :length="total_pages"
           prev-icon="arrow_left"
           next-icon="arrow_right"
+          circle
+          @input="getPagination"
+          :total-visible="5"
         >
         </v-pagination>
-      </div> -->
+      </div>
     </v-container>
+    <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
+      <v-icon dark>done</v-icon>
+      {{ snackText }}
+    </v-snackbar>
   </v-app>
 </template>
 
@@ -472,14 +472,14 @@ import materialController from './../service/Material'
 import ahsController from './../service/AHS'
 import detailController from './../service/Details'
 import task from './../service/TaskSub'
-
   export default {
     data: () => ({
-      page: 1,
-
+      current_page: 1,
+      total_pages: 0,
       valid: true,
 
       snack: false,
+      y: 'top',
       snackColor: '',
       snackText: '',
       
@@ -505,9 +505,11 @@ import task from './../service/TaskSub'
       detailsData:[],
       detailsTemp:[],
       task : [],
+      taskTemp:[],
       filter:[],
       temp:[],
       filterMaterial:[],
+      pagination: [],
 
       AHS:{
         kode:'',
@@ -543,35 +545,38 @@ import task from './../service/TaskSub'
         id_material:'',
       },
       headers: [
-        { 
-          text: 'ID Materials/Labor', align: 'left', sortable: false, value: 'kode',width:'15%'
-        },
-        { 
-          text: 'Type', align: 'left', sortable: true, value: 'status',width:'15%'
-        },
-        { 
-          text: 'Item', align: 'left', sortable: false, value: 'name',width:'15%'
-        },
-        { 
-          text: 'Price', align: 'left', sortable: false, value: 'price', width:'10%'
-        },
-        { 
-          text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', width:'15%', align: 'center'
-        },
-        { 
-          text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total', width:'10%'
-        },
-        {
-          text: 'Actions', align: 'left', sortable: false, value: 'action', width:'15%'
-        },
+        {text: 'ID Materials/Labor', align: 'left', sortable: false, value: 'kode',width:'15%'},
+        {text: 'Type', align: 'left', sortable: true, value: 'status',width:'15%'},
+        {text: 'Item', align: 'left', sortable: false, value: 'name',width:'15%'},
+        {text: 'Price', align: 'left', sortable: false, value: 'price', width:'10%'},
+        {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', width:'15%', align: 'center'},
+        {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total', width:'10%'},
+        {text: 'Actions', align: 'left', sortable: false, value: 'action', width:'15%'},
       ],
+      //validation
+      groupRules: [
+        v => !!v || 'Task Group is required'
+      ],
+      taskRules: [
+        v => !!v || 'Task is required'
+      ],
+      materialsRules: [
+        v => !!v || 'Materials is required'
+      ],
+      coefficientRules: [
+        v => !!v || 'Coefficient is required',
+        v => (v && !v.numeric) || 'Coefficient must be numeric'
+      ]
     }),
     mounted(){
       this.getallAHS()
       this.getallItem()
       this.getallItemMaterial()
       this.getTask()
+      this.getTaskTemp()
       this.getallDetails()
+      this.getPagination()
+      this.getKode()
     },
     computed: {
       filtered:function(){
@@ -604,11 +609,25 @@ import task from './../service/TaskSub'
       },
     },
     methods: {
-      save (props) {
-        this.updateDetail(props)
+      save(){
         this.snack = true
-        this.snackColor = 'green'
-        this.snackText = 'Data saved'
+        this.snackColor = 'green darken-1'
+        this.snackText = 'Data Save Successfully'
+      },
+      update(){
+        this.snack = true
+        this.snackColor = 'teal darken-1'
+        this.snackText = 'Data Update Successfully'
+      },
+      delete(){
+        this.snack = true
+        this.snackColor = 'red darken-1'
+        this.snackText = 'Data Delete Successfully'
+      },
+      copy(){
+        this.snack = true
+        this.snackColor = 'green darken-1'
+        this.snackText = 'Data Copy Successfully'
       },
       cancel () {
         this.snack = true
@@ -643,20 +662,11 @@ import task from './../service/TaskSub'
           this.filterMaterial = m.filter(obj=>obj.id_material != detail.id_material)
           m = this.filterMaterial
         }
-        console.log('THis Filter Material')
-        console.log(this.filterMaterial)
-      },
-      filterM()
-      {
-        console.log('cek')
-        let m = this.material
-        for(let detail of this.details)
-        {
-          this.material = m.filter(obj=>obj,id_material != detail.id_material)
-          m = this.material
-        }
       },
       itemHandler(item){
+        this.details=[]
+        this.tambah=false
+
         this.AHS = item
         for(let detail of item.ahs_details.data)
         {
@@ -669,7 +679,6 @@ import task from './../service/TaskSub'
           this.details.push(each_detail)
         }
         this.temp = this.job
-        console.log(this.details)
       },
       itemDetail(item){
         this.ahs_details = item
@@ -687,9 +696,8 @@ import task from './../service/TaskSub'
         this.sumOfTotal(data,detail)
        
         this.tambah = false
-        this.Material.id_material=''
+        this.Material.id_material= ''
         this.ahs_details.coefficient = 0
-
         console.log('Detail AHS')
         console.log(this.details)
       },
@@ -709,14 +717,14 @@ import task from './../service/TaskSub'
           this.AHS.total_labor -= detail.sub_total
         this.AHS.total = parseInt(this.AHS.total - detail.sub_total,10)
       },
-      editHandler(data)
+      editHandler(index,detail)
       {
-        this.index = data
-        // this.filterMaterials()
+        this.edit = true
+        this.index = index
+        this.ahs_details = detail
       },
       editList(data)
       {
-        // this.filterMaterials()
         let material = this.material.find(obj=>obj.id_material == data.id_material)
         this.delOfTotal(material,data)
 
@@ -745,13 +753,21 @@ import task from './../service/TaskSub'
       {
         try{
           this.task = (await task.get()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getTaskTemp()
+      {
+        try{
+          this.taskTemp = (await task.get()).data
           let each = {
             id_sub: -1,
             name: 'All'
           }
-          this.task.push(each)
+          this.taskTemp.push(each)
           console.log("task")
-          console.log(this.task)
+          console.log(this.taskTemp)
         }catch(err){
           console.log(err)
         }
@@ -781,7 +797,27 @@ import task from './../service/TaskSub'
       {
         try{
           this.ahs = (await ahsController.getallItem()).data
-          this.AHS.kode = 'AHS-0'+(this.ahs.length+1)
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getKode()
+      {
+        try{
+          let ahs = (await ahsController.getall()).data
+          this.AHS.kode = 'AHS-'+(ahs.length+1)
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getPagination()
+      {
+        try{
+            await ahsController.get(this.current_page).then(response =>{
+            this.current_page = response.meta.pagination.current_page
+            this.ahs = response.data
+            this.total_pages = response.meta.pagination.total_pages
+          })
         }catch(err){
           console.log(err)
         }
@@ -799,6 +835,7 @@ import task from './../service/TaskSub'
           }
           await ahsController.addItem(payload)
           this.close()
+          this.save()
         }catch(err){
           console.log(err)
         }
@@ -814,17 +851,21 @@ import task from './../service/TaskSub'
               detail          : this.details
             } 
             await ahsController.updateItem(payload,id)
-            this.getItem(id)
             this.close()
+            this.update()
         }catch(err){
           console.log(err);
         }
       },
-      async copyItem(id)
+      async copyItem()
       {
+        const payload = {
+          id_ahs: this.AHS.id_ahs
+        }
         try{
-          await ahsController.copy(id)
+          await ahsController.copy(payload)
           this.getallAHS()
+          this.copy()
         }catch(err){
           console.log(err)
         }
@@ -837,6 +878,7 @@ import task from './../service/TaskSub'
             await detailController.updateDetail(payload,props.item.id_ahs_details)
             this.getItem(props.item.id_ahs)
             this.close()
+            this.update()
         }catch(err){
           console.log(err);
         }
@@ -845,6 +887,7 @@ import task from './../service/TaskSub'
         try{
           await ahsController.deleteItem(id).data
           this.getallAHS()
+          this.delete()
         }catch(err){
           console.log(err)
         }
@@ -856,7 +899,7 @@ import task from './../service/TaskSub'
           await detailController.deleteItem(id).data
           this.getItem(ahs.id_ahs)
           this.getallAHS()
-          // this.ahs_details = Object.assign({},this.details_default)
+          this.delete()
         }catch(err){
           console.log(err)
         }
@@ -869,18 +912,14 @@ import task from './../service/TaskSub'
         }
       },
       reset () {
-        // this.AHS = ''
+        this.getKode()
         this.$refs.form.reset()
+        this.$refs.form.resetValidation()
         this.details=[]
-        //this.AHS.total = 0
-        // this.AHS.total_labor = 0
-        // this.AHS.total_material = 0
+        this.tambah = false
       },
       close () {
         this.dialog = false
-        this.dialogAdd = false
-        this.dialogEdit = false
-        this.dialogDetail = false
         this.details=[]
         this.getallAHS()
         this.AHS = Object.assign({},this.AHSDefault)
@@ -890,17 +929,6 @@ import task from './../service/TaskSub'
 </script>
 
 <style >
-.table {
-  font-family: Montserrat-Medium;
-  font-size: 40px;
-  /* color: #fff; */
-  line-height: 1.4;
-  text-transform: uppercase;
-
-  /* background-color: #5f37e2; */
-  color: aqua;
-  border: 4px solid 
-}
 .borderAhs{
   border-left: 4px solid #40C4FF
 }

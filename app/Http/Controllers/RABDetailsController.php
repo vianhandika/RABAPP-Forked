@@ -13,6 +13,8 @@ use App\RAB;
 use App\AHS;
 use App\Job;
 use App\Project;
+use League\Fractal\Resource\Collection;
+use App\Transformers\IlluminatePaginatorAdapter;
 
 class RABDetailsController extends RestController
 {
@@ -20,9 +22,13 @@ class RABDetailsController extends RestController
 
     public function index()
     {
-        $rab_details = RABDetails::all();
-        $response = $this->generateCollection($rab_details);
-        return $this->sendResponse($response,200);
+        $detailsPaginator = RABDetails::orderBy('id_ahs_lokal','DESC')->paginate(3);
+        $details = new Collection($detailsPaginator->items(),new RABDetailsTransformers);
+        $details->setPaginator(new IlluminatePaginatorAdapter($detailsPaginator));
+
+        $details = $this->manager->createData($details);
+
+        return $details->toArray();
     }
 
     public function update(Request $request,$id)

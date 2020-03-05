@@ -22,10 +22,10 @@ class RABDetailsTransformers extends TransformerAbstract
             'HSP'           => $rab_details->HSP,
             'volume'        => $rab_details->volume,
             'adjustment'    => $rab_details->adjustment,
-            'HPAdj'         => $rab_details->HP,
+            'HP_Adjust'     => $rab_details->HP_Adjust,
             'volumeAdj'     => $rab_details->adjustment * $rab_details->volume,
             'HSPAdj'        => $rab_details->adjustment * $rab_details->HSP,
-            'HP'            => $rab_details->HP / $rab_details->adjustment,
+            'HP'            => $rab_details->HP,
             
             'id_job'        => $rab_details->id_job,
             'name'          => $rab_details->jobs->name,
@@ -41,7 +41,9 @@ class RABDetailsTransformers extends TransformerAbstract
             'id_sub'        => $rab_details->task_group->task_sub->id_sub,
             'structure'     => $rab_details->task_group->sub->structure->structure->name,
             'floor'         => $rab_details->task_group->sub->group->name,
-            'task'          => $rab_details->task_group->task_sub->name
+            'task'          => $rab_details->task_group->task_sub->name,
+
+            'id_rab'        => $rab_details->task_group->sub->structure->rab->kode
         ];
         $task = TaskSubDetails::find($data['id_sub_details']);
         $ahs = AHS::all();

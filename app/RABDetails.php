@@ -14,7 +14,7 @@ class RABDetails extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'id_sub_details', 'id_job','total_labor','total_material','HSP', 'volume','adjustment', 'HP'
+        'id_sub_details', 'id_job','total_labor','total_material','HSP', 'volume','adjustment', 'HP', 'HP_Adjust'
     ];
 
     protected $dates = [

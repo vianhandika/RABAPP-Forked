@@ -53,7 +53,7 @@
                 <v-form>
                   <v-text-field
                     v-model="email"
-                    label="email"
+                    label="username"
                     name="email"
                     prepend-icon="person"
                     type="text"
