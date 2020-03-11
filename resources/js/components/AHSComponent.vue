@@ -65,12 +65,11 @@
                     item-text="name"
                     item-value="id_sub"
                     :return-object="false"
-                    @change="filterTask(AHS.id_sub)"
                     :rules="groupRules"
                   ></v-select>
                 </v-layout>
 
-                <v-layout v-if="dialogAdd">
+                <v-layout v-if="dialogAdd" @click="filterTask(AHS.id_sub)">
                   <v-select
                     v-model="AHS.id_job"
                     label="Task"
@@ -78,7 +77,6 @@
                     item-text="name"
                     item-value="id_job"
                     :return-object="false"
-                    @change="filterTask(AHS.id_sub)"
                     :rules="taskRules"
                   ></v-select>
                 </v-layout>
@@ -101,13 +99,11 @@
                     :items="task"
                     item-text="name"
                     item-value="id_sub"
-                    :return-object="false"
-                    @change="filterTask(AHS.id_sub)"
-                    readonly
+                    :return-object="false" 
                   ></v-select>
                 </v-layout>
 
-                <v-layout v-if="dialogEdit">
+                <v-layout v-if="dialogEdit" @click="filterTask(AHS.id_sub)">
                   <v-select
                     v-model="AHS.id_job"
                     label="Task"
@@ -115,8 +111,6 @@
                     item-text="name"
                     item-value="id_job"
                     :return-object="false"
-                    @change="filterTask(AHS.id_sub)"
-                    readonly
                   ></v-select>
                 </v-layout>
 
@@ -129,52 +123,6 @@
                 Add 
                 </v-btn>
                 
-                <v-layout v-if="edit">
-                  <v-flex class="text-md-center" sm12 mt-2 >
-                    <v-card elevation="5"> 
-                    <v-card-title>
-                    <v-btn 
-                      icon
-                      color="red"
-                      dark @click="deleteList(ahs_details);edit=false"
-                    >
-                    <v-icon>remove_circle</v-icon>
-                    </v-btn>
-                    <v-btn 
-                      icon
-                      color="blue accent-2"
-                      dark @click="editList(ahs_details)"
-                    >
-                      <v-icon>add_circle</v-icon>
-                    </v-btn>
-                    <!-- buat ditampilkan setelah di clik addList -->
-                    <v-flex xs13 sm5 md5>
-                      <v-select
-                        label="Materials/Labor" 
-                        class="pa-1"
-                        v-model="ahs_details.id_material"
-                        item-text="name"
-                        item-value="id_material"
-                        :items="material"
-                        readonly
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs13 sm5 md5>
-                      <v-text-field
-                        label="Coefficient" 
-                        class="pa-1"
-                        v-model="ahs_details.coefficient"
-                        :rules="coefficientRules"
-                        type="number"
-                      ></v-text-field>
-                    </v-flex>
-
-                    </v-card-title>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
-
                 <v-layout v-if="detailAHS">
                   <v-flex class="text-md-center" sm12 mt-2>
                     <v-card
@@ -187,17 +135,11 @@
                     <v-btn 
                       icon
                       color="red"
-                      dark @click="deleteList(detail)"
+                      dark @click="itemDetail(detail);dialogdeletedetail=true"
                     >
                     <v-icon>remove_circle</v-icon>
                     </v-btn>
-                    <v-btn
-                      icon
-                      color="green"
-                      dark @click="editHandler(index,detail)"
-                    >
-                      <v-icon>edit</v-icon>
-                    </v-btn>
+
                     <v-flex xs13 sm5 md5>
                       <v-select
                         label="Materials/Labor" 
@@ -211,12 +153,30 @@
                     </v-flex>
 
                     <v-flex xs13 sm5 md5>
-                      <v-text-field
-                        label="Coefficient*" 
-                        class="pa-1"
-                        v-model="detail.coefficient"
-                        readonly
-                      ></v-text-field>
+                      <template>
+                        <v-edit-dialog
+                          @save="editList(detail)"
+                          @cancel="cancel" 
+                          lazy
+                          large
+                        >
+                        <v-text-field
+                          label="Coefficient*" 
+                          class="pa-1"
+                          v-model="detail.coefficient"
+                          readonly
+                        ></v-text-field>
+
+                          <template v-slot:input>
+                            <v-text-field
+                              v-model="detail.coefficient"
+                              label="Edit"
+                              single-line
+                              counter
+                            ></v-text-field>
+                          </template>
+                        </v-edit-dialog>
+                      </template>
                     </v-flex>
                     </v-card-title>
                     </v-card>
@@ -236,7 +196,7 @@
                       </v-btn>
                       <v-btn 
                           icon
-                          color="blue accent-2"
+                          color="green"
                           dark @click="addList(); detailAHS=true"
                           >
                           <v-icon>add_circle</v-icon>
@@ -293,7 +253,7 @@
       </v-toolbar>
 
       <v-card elevation="10">
-        <v-list-group v-for="data in filtered" :key="data.id_ahs" active-class="borderAhs">
+        <v-list-group v-for="data in filtered" :key="data.id_ahs" >
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
@@ -445,6 +405,20 @@
         </v-dialog>
       </template>
 
+      <template>
+        <v-dialog v-model="dialogdeletedetail" max-width="290px">
+          <v-card>
+            <v-card-title class="headline">Confirmation</v-card-title>
+              <v-card-text>Are you sure want to delete this detail?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialogdeletedetail = false; deleteList(ahs_details)">Yes</v-btn>
+              <v-btn color="red darken-1" text @click="dialogdeletedetail = false">No</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </template>
+
       <div>
         <v-pagination
           v-model="current_page"
@@ -489,16 +463,18 @@ import task from './../service/TaskSub'
       dialogEdit: false,
       dialogDetail: false,
       dialogCopy: false,
+      dialogdeletedetail: false,
       tambah: false,
-      edit: false,
       detailAHS: false,
       detailTable: false,
+      edit: false,
 
       search:'',
       select: '',
       id_ahs: '',
       
       ahs: [],
+      ahsAll:[],
       job: [],
       material:[],
       details:[],
@@ -532,13 +508,13 @@ import task from './../service/TaskSub'
       ahs_details:{
         id_ahs_details:'',
         id_material: '',
-        coefficient: 0,
+        coefficient: '',
         sub_total : 0,
       },
       details_default:{
         id_ahs_details:'',
         id_material:'',
-        coefficient: 0,
+        coefficient: '',
         sub_total:0,
       },
       Material:{
@@ -634,12 +610,11 @@ import task from './../service/TaskSub'
         this.snackColor = 'blue'
         this.snackText = 'Canceled'
       },
-      filterTask(id)
+      async filterTask(id)
       {
         this.getallItem()
         this.filter = this.job
-        
-        for(let ahs of this.ahs)
+        for(let ahs of this.ahsAll)
         {
           if(ahs.id_sub == id)
           {
@@ -652,6 +627,8 @@ import task from './../service/TaskSub'
         }
         this.filter=[...this.filter]
         this.temp = this.filter
+        console.log('hai')
+        console.log(this.temp)
       },
       filterMaterials()
       {
@@ -678,7 +655,7 @@ import task from './../service/TaskSub'
           }
           this.details.push(each_detail)
         }
-        this.temp = this.job
+        this.temp = this.job  
       },
       itemDetail(item){
         this.ahs_details = item
@@ -697,7 +674,7 @@ import task from './../service/TaskSub'
        
         this.tambah = false
         this.Material.id_material= ''
-        this.ahs_details.coefficient = 0
+        this.ahs_details.coefficient=''
         console.log('Detail AHS')
         console.log(this.details)
       },
@@ -717,12 +694,6 @@ import task from './../service/TaskSub'
           this.AHS.total_labor -= detail.sub_total
         this.AHS.total = parseInt(this.AHS.total - detail.sub_total,10)
       },
-      editHandler(index,detail)
-      {
-        this.edit = true
-        this.index = index
-        this.ahs_details = detail
-      },
       editList(data)
       {
         let material = this.material.find(obj=>obj.id_material == data.id_material)
@@ -738,7 +709,7 @@ import task from './../service/TaskSub'
 
         let newMaterial = this.material.find(obj=>obj.id_material == newDetail.id_material)
         this.sumOfTotal(newMaterial,newDetail)
-        this.edit = false
+        this.update()
       },
       deleteList(data){
         let material = this.material.find(obj=>obj.id_material == data.id_material)
@@ -748,6 +719,7 @@ import task from './../service/TaskSub'
 
         console.log('This Details')
         console.log(this.details)
+        // this.delete()
       },
       async getTask()
       {
@@ -804,8 +776,8 @@ import task from './../service/TaskSub'
       async getKode()
       {
         try{
-          let ahs = (await ahsController.getall()).data
-          this.AHS.kode = 'AHS-'+(ahs.length+1)
+          this.ahsAll = (await ahsController.getall()).data
+          this.AHS.kode = 'AHS-'+(this.ahsAll.length+1)
         }catch(err){
           console.log(err)
         }
@@ -845,6 +817,7 @@ import task from './../service/TaskSub'
             const payload = {
               kode            : this.AHS.kode,
               id_sub          : this.AHS.id_sub,
+              id_job          : this.AHS.id_job,
               total           : this.AHS.total,
               total_labor     : this.AHS.total_labor,
               total_material  : this.AHS.total_material,
@@ -852,6 +825,7 @@ import task from './../service/TaskSub'
             } 
             await ahsController.updateItem(payload,id)
             this.close()
+            // this.getPagination()
             this.update()
         }catch(err){
           console.log(err);
@@ -877,6 +851,7 @@ import task from './../service/TaskSub'
             } 
             await detailController.updateDetail(payload,props.item.id_ahs_details)
             this.getItem(props.item.id_ahs)
+            // this.getPagination()
             this.close()
             this.update()
         }catch(err){
@@ -886,7 +861,7 @@ import task from './../service/TaskSub'
       async deleteItem(id){
         try{
           await ahsController.deleteItem(id).data
-          this.getallAHS()
+          this.getPagination()
           this.delete()
         }catch(err){
           console.log(err)
@@ -921,7 +896,7 @@ import task from './../service/TaskSub'
       close () {
         this.dialog = false
         this.details=[]
-        this.getallAHS()
+        this.getPagination()
         this.AHS = Object.assign({},this.AHSDefault)
       },
     }

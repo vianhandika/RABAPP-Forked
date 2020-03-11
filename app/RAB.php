@@ -26,11 +26,6 @@ class RAB extends Model
         return $this->belongsTo('App\Project','id_project');
     }
     
-    public function detail_ahs()
-    {
-        return $this->hasMany('App\AHS','id_ahs');
-    }
-
     public function structures()
     {
         return $this->hasMany('App\StructureDetails','id_rab');

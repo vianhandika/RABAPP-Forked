@@ -33,7 +33,7 @@
         </v-toolbar>
 
       <v-card elevation="10">
-        <v-list-group v-for="data in filtered" :key="data.id_ahs_lokal" @click="getItem(data.id_ahs_lokal)" active-class="borderAhsLokal">
+        <v-list-group v-for="data in filtered" :key="data.id_ahs_lokal" @click="getItem(data.id_ahs_lokal)">
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>

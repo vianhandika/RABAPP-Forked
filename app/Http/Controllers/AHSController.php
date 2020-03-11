@@ -79,6 +79,7 @@ class AHSController extends RestController
         {
             if($detail_ahs['id_ahs_details'] == null)
             {
+                // dd($detail_ahs);
                 array_push($details,$ahs->detail_ahs()->create($detail_ahs));
             }
             else
@@ -88,9 +89,11 @@ class AHSController extends RestController
                 $detail_data->coefficient = $detail_ahs['coefficient'];
                 $detail_data->sub_total = $detail_ahs['sub_total'];
                 $detail_data->save();
+
+                // array_push($detailTemp,$detail_ahs);
+
             }
         }
-
         foreach($detail as $detail_ahs)
         {
             if($detail_ahs['id_ahs_details'] != null)

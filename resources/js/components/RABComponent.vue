@@ -134,7 +134,7 @@
                         >
                         Add  
                         </VBtn>
-                        
+
                         <v-flex class="text-md-center" sm12> 
                           <v-Card
                             v-for="(detail_structure,index) in Structure"
@@ -150,35 +150,53 @@
                                 >
                                 <v-icon>remove_circle</v-icon>
                               </v-btn>
-                              <!-- buat ditampilkan setelah di clik addList -->
-                              <v-flex >
-                                <v-select
-                                  label="Building" 
-                                  class="pa-1"
-                                  v-model="detail_structure.id_structure"
-                                  item-text="structure"
-                                  item-value="id_structure"
-                                  :items="detailStructure"
-                                  readonly 
-                                ></v-select>
-                              </v-flex>
+                              <template>
+                                <v-edit-dialog
+                                  @save="editstructure(index,detail_structure)"
+                                  @cancel="cancel" 
+                                  lazy
+                                  large
+                                >
+                                <v-flex>
+                                  <v-select
+                                    label="Building" 
+                                    class="pa-1"
+                                    v-model="detail_structure.id_structure"
+                                    item-text="structure"
+                                    item-value="id_structure"
+                                    :items="detailStructure"
+                                    readonly 
+                                  ></v-select>
+                                </v-flex>
+                                  <template v-slot:input>
+                                    <v-flex
+                                      @click="itemstructure(index,detail_structure)"
+                                      v-if="!editList"
+                                    >
+                                      <v-select
+                                        label="Building" 
+                                        v-model="detail_structure.id_structure"
+                                        item-text="structure"
+                                        item-value="id_structure"
+                                        :items="detailStructure"
+                                      ></v-select>
+                                    </v-flex>
+                                    <v-flex v-if="editList">
+                                      <v-select
+                                        label="Building" 
+                                        v-model="structure_data.id_structure"
+                                        item-text="name"
+                                        item-value="id_structure"
+                                        :items="filterStructure"
+                                      ></v-select>
+                                    </v-flex>
+                                  </template>
+                                </v-edit-dialog>
+                              </template>
                             </v-card-title>
-                            <!-- dialog delete detail structure -->
-                              <v-dialog v-model="dialogdeletestructure" max-width="290px">
-                                <v-card>
-                                  <v-card-title class="headline">Confirmation</v-card-title>
-                                    <v-card-text>Are you sure want to delete this building?</v-card-text>
-                                  <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="green darken-1" text @click="dialogdeletestructure = false; deletestructure(structure_data)">Yes</v-btn>
-                                    <v-btn color="red darken-1" text @click="dialogdeletestructure = false">No</v-btn>
-                                  </v-card-actions>
-                                </v-card>
-                              </v-dialog>
-                            <!--  -->
                           </v-card>
                         </v-flex>
-                          
+
                         <v-layout v-if="tambahS">
                           <v-flex class="text-md-center" sm12 mt-2>
                             <v-card elevation="8"> 
@@ -192,13 +210,13 @@
                               </v-btn>
                               <v-btn 
                                 icon
-                                color="blue accent-2"
+                                color="green"
                                 dark @click="addstructure();tambahS=false"
                                 >
                                 <v-icon>add_circle</v-icon>
                               </v-btn>
                               <!-- buat pertama kali input data untuk addList -->
-                                <v-flex>
+                                <v-flex xs5>
                                   <v-select
                                     v-model="structure_data.id_structure"
                                     :items="filterStructure"
@@ -214,6 +232,17 @@
                         </v-layout>
                       </v-card-text>
                     </v-form>
+                    <v-dialog v-model="dialogdeletestructure" max-width="290px">
+                      <v-card>
+                        <v-card-title class="headline">Confirmation</v-card-title>
+                          <v-card-text>Are you sure want to delete this building?</v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="green darken-1" text @click="dialogdeletestructure = false; deletestructure(structure_data)">Yes</v-btn>
+                          <v-btn color="red darken-1" text @click="dialogdeletestructure = false">No</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                   </v-tab-item>
                   <!-- Form Floor -->
                   <v-tab-item value='tab-3'>
@@ -261,13 +290,13 @@
                             > 
                               <v-card-title>
                               <v-btn 
-                                  icon
-                                  color="red"
-                                  dark @click="dialogdeletefloor=true;itemDelete(detail_group)"
-                                  >
-                                  <v-icon>remove_circle</v-icon>
+                                icon
+                                color="red"
+                                dark @click="dialogdeletefloor=true;itemDelete(detail_group)"
+                                >
+                                <v-icon>remove_circle</v-icon>
                               </v-btn>
-                              <!-- buat ditampilkan setelah di clik addList -->
+                              
                               <v-flex xs12 sm4 md4>
                                 <v-select
                                   label="Building" 
@@ -279,32 +308,51 @@
                                   readonly 
                                 ></v-select>
                               </v-flex>
-                            
-                              <v-flex xs12 sm4 md4>
-                                <v-select
-                                label="Floor*" 
-                                class="pa-1"
-                                v-model="detail_group.id_groups"
-                                :items="detailGroup"
-                                item-text="floor"
-                                item-value="id_groups"
-                                readonly
-                                ></v-select>
-                              </v-flex>
+                              <template>
+                                <v-edit-dialog
+                                  @save="editfloor(index,detail_group)"
+                                  @cancel="cancel"
+                                  lazy
+                                  large
+                                >
+                                  <v-flex>
+                                    <v-select
+                                      label="Floor" 
+                                      class="pa-1"
+                                      v-model="detail_group.id_groups"
+                                      :items="detailGroup"
+                                      item-text="floor"
+                                      item-value="id_groups"
+                                      readonly
+                                      >
+                                    </v-select>
+                                  </v-flex>
+                                  <template v-slot:input>
+                                    <v-flex 
+                                      @click="itemfloor(index,detail_group)" 
+                                      v-if="!editList"
+                                    >
+                                      <v-select
+                                        label="Floor" 
+                                        v-model="detail_group.id_groups"
+                                        :items="detailGroup"
+                                        item-text="floor"
+                                        item-value="id_groups"
+                                      ></v-select>
+                                    </v-flex>
+                                    <v-flex v-if="editList">
+                                      <v-select
+                                        label="Floor" 
+                                        v-model="group_data.id_groups"
+                                        item-text="name"
+                                        item-value="id_group"
+                                        :items="filterGroup"
+                                      ></v-select>
+                                    </v-flex>
+                                  </template>
+                                </v-edit-dialog>
+                              </template>
                             </v-card-title>
-                            <!-- dialog delete detail floor -->
-                              <v-dialog v-model="dialogdeletefloor" max-width="290px">
-                                <v-card>
-                                  <v-card-title class="headline">Confirmation</v-card-title>
-                                    <v-card-text>Are you sure want to delete this floor?</v-card-text>
-                                  <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="green darken-1" text @click="dialogdeletefloor = false; deletefloor(group_data)">Yes</v-btn>
-                                    <v-btn color="red darken-1" text @click="dialogdeletefloor = false">No</v-btn>
-                                  </v-card-actions>
-                                </v-card>
-                              </v-dialog>
-                            <!--  -->
                           </Vcard>
                         </v-flex>
                           
@@ -321,7 +369,7 @@
                               </v-btn>
                               <v-btn 
                                   icon
-                                  color="blue accent-2"
+                                  color="green"
                                   dark @click="addfloor();tambahF=false"
                                   >
                                   <v-icon>add_circle</v-icon>
@@ -341,7 +389,7 @@
                                 
                                 <v-flex xs12 sm4 md4>
                                   <v-select
-                                  label="Floor*" 
+                                  label="Floor" 
                                   class="pa-1"
                                   v-model="group_data.id_groups"
                                   :items="filterGroup"
@@ -357,6 +405,17 @@
                         </v-layout>
                       </v-card-text>
                     </v-form>
+                    <v-dialog v-model="dialogdeletefloor" max-width="290px">
+                      <v-card>
+                        <v-card-title class="headline">Confirmation</v-card-title>
+                          <v-card-text>Are you sure want to delete this floor?</v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="green darken-1" text @click="dialogdeletefloor = false; deletefloor(group_data)">Yes</v-btn>
+                          <v-btn color="red darken-1" text @click="dialogdeletefloor = false">No</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
                   </v-tab-item>
                   <!-- Form Type of Task -->
                   <v-tab-item value='tab-4'>
@@ -438,32 +497,50 @@
                                 readonly 
                               ></v-select>
                             </v-flex>
-
                             <v-flex xs12 sm4 md4>
-                              <v-select
-                                label="Type of Task" 
-                                class="pa-1"
-                                v-model="detail_task.id_sub"
-                                item-text="task"
-                                item-value="id_sub"
-                                :items="detailTask"
-                                readonly 
-                              ></v-select>
+                              <template>
+                                <v-edit-dialog
+                                  @save="edittasksub(index,detail_task)"
+                                  @cancel="cancel"
+                                  lazy
+                                  large
+                                >
+                                  <v-select
+                                    label="Type of Task" 
+                                    class="pa-1"
+                                    v-model="detail_task.id_sub"
+                                    item-text="task"
+                                    item-value="id_sub"
+                                    :items="detailTask"
+                                    readonly 
+                                  ></v-select>
+                                  <template v-slot:input>
+                                    <v-flex 
+                                      @click="itemtasksub(index,detail_task)" 
+                                      v-if="!editList"
+                                    >
+                                      <v-select
+                                        label="Type of Task" 
+                                        v-model="detail_task.id_sub"
+                                        item-text="task"
+                                        item-value="id_sub"
+                                        :items="detailTask"
+                                      ></v-select>
+                                    </v-flex>
+                                    <v-flex v-if="editList">
+                                      <v-select
+                                        label="Type of Task" 
+                                        v-model="tasksub_data.id_sub"
+                                        item-text="name"
+                                        item-value="id_sub"
+                                        :items="filterTaskGroup"
+                                      ></v-select>
+                                    </v-flex>
+                                  </template>
+                                </v-edit-dialog>
+                              </template>
                             </v-flex>
                           </v-card-title>
-                          <!-- dialog delete detail task group -->
-                            <v-dialog v-model="dialogdeletetask" max-width="290px">
-                              <v-card>
-                                <v-card-title class="headline">Confirmation</v-card-title>
-                                  <v-card-text>Are you sure want to delete this task group?</v-card-text>
-                                <v-card-actions>
-                                  <v-spacer></v-spacer>
-                                  <v-btn color="green darken-1" text @click="dialogdeletetask = false; deletetasksub(tasksub_data)">Yes</v-btn>
-                                  <v-btn color="red darken-1" text @click="dialogdeletetask = false">No</v-btn>
-                                </v-card-actions>
-                              </v-card>
-                            </v-dialog>
-                          <!--  -->
                         </Vcard>
                       </v-flex>
                         
@@ -481,7 +558,7 @@
                               </v-btn>
                               <v-btn 
                                   icon
-                                  color="blue accent-2"
+                                  color="green"
                                   dark @click="addtasksub();tambahT=false"
                                   >
                                   <v-icon>add_circle</v-icon>
@@ -528,6 +605,17 @@
                       </v-layout>
                       </v-card-text>
                     </v-form>
+                    <v-dialog v-model="dialogdeletetask" max-width="290px">
+                        <v-card>
+                          <v-card-title class="headline">Confirmation</v-card-title>
+                            <v-card-text>Are you sure want to delete this task group?</v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="green darken-1" text @click="dialogdeletetask = false; deletetasksub(tasksub_data)">Yes</v-btn>
+                            <v-btn color="red darken-1" text @click="dialogdeletetask = false">No</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
                   </v-tab-item>
                   <!-- Form Detail -->
                   <v-tab-item value='tab-5'>
@@ -566,278 +654,9 @@
                       </v-data-table>
                     </v-flex>
 
-                    <!-- <v-card v-if="editList">
+                    <!-- <v-card v-if="dialog8">
                       <v-form>
                         <v-card-text>
-                          <v-layout v-if="editList">
-                            <v-flex class="text-md-center" sm12>
-                              <VCard
-                                v-for="(detail,index) in details"
-                                :key="index"
-                                style="margin-top: 4px"
-                                elevation="8"
-                              > 
-                                <v-card-title>
-                                <v-btn 
-                                  icon
-                                  color="red"
-                                  dark @click="dialogdeletedetail=true;itemDelete(detail)"
-                                  >
-                                <v-icon>remove_circle</v-icon>
-                                </v-btn>
-                                <v-btn 
-                                  icon
-                                  color="blue accent-2"
-                                  @click="updateList(detail)"
-                                >
-                                  <v-icon>add_circle</v-icon>
-                                </v-btn>
-
-                                <v-flex xs11 sm3 md3>
-                                  <v-select
-                                    label="Building" 
-                                    class="pa-1"
-                                    v-model="detail.id_structure"
-                                    item-text="structure"
-                                    item-value="id_structure"
-                                    :items="detailDetails"
-                                    readonly 
-                                  ></v-select>
-                                </v-flex>
-
-                                <v-flex xs11 sm3 md3>
-                                  <v-select
-                                    label="Floor" 
-                                    class="pa-1"
-                                    v-model="detail.id_groups"
-                                    item-text="floor"
-                                    item-value="id_groups"
-                                    :items="detailDetails"
-                                    readonly 
-                                  ></v-select>
-                                </v-flex>
-
-                                <v-flex xs12 sm4 md4>
-                                  <v-select
-                                    label="Task Group" 
-                                    class="pa-1"
-                                    v-model="detail.id_sub"
-                                    item-text="task"
-                                    item-value="id_sub"
-                                    :items="detailDetails"
-                                    readonly 
-                                  ></v-select>
-                                </v-flex>
-
-                                <v-flex xs12 sm4 md4>
-                                  <v-select
-                                    label="AHS" 
-                                    class="pa-1"
-                                    v-model="detail.id_ahs"
-                                    item-text="name"
-                                    item-value="id_ahs"
-                                    :items="detailDetails"
-                                  ></v-select>
-                                </v-flex>
-
-                                <v-flex xs10 sm2 md2>
-                                  <v-text-field
-                                    v-model="detail.HSP"
-                                    label="HSP"
-                                    class="pa-1"
-                                    readonly
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs1>
-                                  <v-text-field
-                                    v-model="detail.volume"
-                                    label="Volume"
-                                    class="pa-1"
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs1>
-                                  <v-text-field
-                                    v-model="detail.adjustment"
-                                    label="Adjustment"
-                                    class="pa-1"
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs10 sm2 md2>
-                                  <v-text-field
-                                    v-model="detail.HP"
-                                    label="HP"
-                                    class="pa-1"
-                                    readonly
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs10 sm2 md2>
-                                  <v-text-field
-                                    v-model="detail.HP_Adjust"
-                                    label="HP Adjustment"
-                                    class="pa-1"
-                                    readonly
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-                                </v-card-title>
-                              </Vcard>
-                            </v-flex>
-                          </v-layout>
-                        </v-card-text>
-                      </v-form>
-                    </v-card> -->
-
-                    <v-card v-if="dialog8">
-                      <v-form>
-                        <v-card-text>
-                          <v-layout v-if="list">
-                            <v-flex class="text-md-center" sm12>
-                              <VCard
-                                v-for="(detail,index) in details"
-                                :key="index"
-                                style="margin-top: 4px"
-                                elevation="8"
-                              > 
-                                <v-card-title>
-                                <v-btn 
-                                  icon
-                                  color="red"
-                                  dark @click="dialogdeletedetail=true;itemDelete(detail)"
-                                  >
-                                <v-icon>remove_circle</v-icon>
-                                </v-btn>
-
-                                <v-btn
-                                  icon
-                                  color="green"
-                                  @click="itemList(detail)"
-                                >
-                                <v-icon>edit</v-icon>
-                                </v-btn>
-
-                                <v-flex xs11 sm3 md3>
-                                  <v-select
-                                    label="Building" 
-                                    class="pa-1"
-                                    v-model="detail.id_structure"
-                                    item-text="structure"
-                                    item-value="id_structure"
-                                    :items="detailDetails"
-                                    readonly 
-                                  ></v-select>
-                                </v-flex>
-
-                                <v-flex xs11 sm3 md3>
-                                  <v-select
-                                    label="Floor" 
-                                    class="pa-1"
-                                    v-model="detail.id_groups"
-                                    item-text="floor"
-                                    item-value="id_groups"
-                                    :items="detailDetails"
-                                    readonly 
-                                  ></v-select>
-                                </v-flex>
-
-                                <v-flex xs12 sm4 md4>
-                                  <v-select
-                                    label="Task Group" 
-                                    class="pa-1"
-                                    v-model="detail.id_sub"
-                                    item-text="task"
-                                    item-value="id_sub"
-                                    :items="detailDetails"
-                                    readonly 
-                                  ></v-select>
-                                </v-flex>
-
-                                <v-flex xs12 sm4 md4>
-                                  <v-select
-                                    label="AHS" 
-                                    class="pa-1"
-                                    v-model="detail.id_ahs"
-                                    item-text="name"
-                                    item-value="id_ahs"
-                                    :items="detailDetails"
-                                    readonly 
-                                  ></v-select>
-                                </v-flex>
-
-                                <v-flex xs10 sm2 md2>
-                                  <v-text-field
-                                    v-model="detail.HSP"
-                                    label="HSP"
-                                    class="pa-1"
-                                    readonly
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs1>
-                                  <v-text-field
-                                    v-model="detail.volume"
-                                    label="Volume"
-                                    class="pa-1"
-                                    readonly
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs1>
-                                  <v-text-field
-                                    v-model="detail.adjustment"
-                                    label="Adjustment"
-                                    class="pa-1"
-                                    readonly
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs10 sm2 md2>
-                                  <v-text-field
-                                    v-model="detail.HP"
-                                    label="HP"
-                                    class="pa-1"
-                                    readonly
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-
-                                <v-flex xs10 sm2 md2>
-                                  <v-text-field
-                                    v-model="detail.HP_Adjust"
-                                    label="HP Adjustment"
-                                    class="pa-1"
-                                    readonly
-                                  >
-                                  </v-text-field>
-                                </v-flex>
-                                </v-card-title>
-                                <!-- dialog delete detail task -->
-                                  <v-dialog v-model="dialogdeletedetail" max-width="290px">
-                                    <v-card>
-                                      <v-card-title class="headline">Confirmation</v-card-title>
-                                        <v-card-text>Are you sure want to delete this detail task?</v-card-text>
-                                      <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="green darken-1" text @click="dialogdeletedetail = false; deleteList(ahs_lokal)">Yes</v-btn>
-                                        <v-btn color="red darken-1" text @click="dialogdeletedetail = false">No</v-btn>
-                                      </v-card-actions>
-                                    </v-card>
-                                  </v-dialog>
-                                <!--  -->
-                              </Vcard>
-                            </v-flex>
-                          </v-layout>
-
                           <v-layout v-if="tambah">
                             <v-flex class="text-md-center" sm12 mt-2>
                               <VCard elevation="8"> 
@@ -851,12 +670,12 @@
                                   </v-btn>
                                   <v-btn 
                                     icon
-                                    color="blue accent-2"
-                                    dark @click="addList();list=true"
+                                    color="green"
+                                    dark @click="addList()"
                                     >
                                     <v-icon>add_circle</v-icon>
                                   </v-btn>
-                                  <!-- buat tambah data -->
+
                                   <v-flex xs11 sm3 md3>
                                     <v-select
                                       label="Building" 
@@ -963,7 +782,7 @@
                             </v-flex>
                           </v-layout>
                           
-                          <v-layout v-if="editList">
+                          <v-layout>
                             <v-flex class="text-md-center" sm12>
                               <VCard
                                 v-for="(detail,index) in details"
@@ -981,7 +800,7 @@
                                 </v-btn>
                                 <v-btn 
                                   icon
-                                  color="blue accent-2"
+                                  color="green"
                                   @click="updateList(detail)"
                                 >
                                   <v-icon>add_circle</v-icon>
@@ -1089,9 +908,9 @@
                           </v-layout>
                         </v-card-text>
                       </v-form>
-                    </v-card>
+                    </v-card> -->
 
-                    <v-card v-if="dialog7">
+                    <v-card>
                       <v-form>
                         <v-card-text>
                           <v-flex class="text-md-center" sm12>
@@ -1146,19 +965,52 @@
                                 ></v-select>
                               </v-flex>
 
-                              <v-flex xs12 sm4 md4>
-                                <v-select
-                                  label="AHS" 
-                                  class="pa-1"
-                                  v-model="detail.id_ahs"
-                                  item-text="name"
-                                  item-value="id_ahs"
-                                  :items="detailDetails"
-                                  readonly 
-                                ></v-select>
-                              </v-flex>
+                              <template>
+                                <v-edit-dialog 
+                                  @save="editAHS(index,detail)"
+                                  @cancel="cancel"
+                                  large
+                                  lazy
+                                  persistent
+                                >
+                                  <v-flex>
+                                    <v-select
+                                      label="AHS" 
+                                      class="pa-1"
+                                      v-model="detail.id_ahs"
+                                      item-text="name"
+                                      item-value="id_ahs"
+                                      :items="detailDetails"
+                                      readonly 
+                                    ></v-select>
+                                  </v-flex>
+                                  <template v-slot:input>
+                                    <v-flex 
+                                      @click="itemList(index,detail)"
+                                      v-if="!editList"
+                                    >
+                                      <v-select
+                                        label="AHS" 
+                                        v-model="detail.id_ahs"
+                                        item-text="name"
+                                        item-value="id_ahs"
+                                        :items="detailDetails"
+                                      ></v-select>
+                                    </v-flex>
+                                    <v-flex v-if="editList">
+                                      <v-select
+                                        label="AHS" 
+                                        v-model="ahs_lokal.id_ahs"
+                                        item-text="name"
+                                        item-value="id_ahs"
+                                        :items="filterAHSAll"
+                                      ></v-select>
+                                    </v-flex>
+                                  </template>
+                                </v-edit-dialog>
+                              </template>
 
-                              <v-flex xs10 sm2 md2>
+                              <v-flex>
                                 <v-text-field
                                   v-model="detail.HSP"
                                   label="HSP"
@@ -1168,25 +1020,64 @@
                                 </v-text-field>
                               </v-flex>
 
-                              <v-flex xs1>
-                                <v-text-field
-                                  v-model="detail.volume"
-                                  label="Volume"
-                                  class="pa-1"
-                                  readonly
+                              <template>
+                                <v-edit-dialog
+                                  @save="editvolumeadjust(index,detail)"
+                                  @cancel="cancel"
+                                  large
+                                  persistent
+                                  lazy
                                 >
-                                </v-text-field>
-                              </v-flex>
-
-                              <v-flex xs1>
                                 <v-text-field
-                                  v-model="detail.adjustment"
-                                  label="Adjustment"
-                                  class="pa-1"
-                                  readonly
+                                    v-model="detail.volume"
+                                    label="Volume"
+                                    class="pa-1"
+                                    readonly
+                                  >
+                                  </v-text-field>
+                                <template v-slot:input>
+                                  <v-flex >
+                                    <v-text-field
+                                      v-model="detail.volume"
+                                      label="Edit"
+                                      single-line
+                                      counter
+                                      
+                                      >
+                                    </v-text-field>
+                                  </v-flex>
+                                </template>
+                                </v-edit-dialog>
+                              </template>
+                            
+                              <template>
+                                <v-edit-dialog
+                                  @save="updatevolumeadjust(index,detail)"
+                                  @cancel="cancel"
+                                  large
+                                  persistent
+                                  lazy
                                 >
-                                </v-text-field>
-                              </v-flex>
+                                <v-flex>
+                                  <v-text-field
+                                    v-model="detail.adjustment"
+                                    label="Adjustment"
+                                    class="pa-1"
+                                    readonly
+                                  >
+                                  </v-text-field>
+                                </v-flex>
+                                <template v-slot:input>
+                                  <v-flex>
+                                    <v-text-field
+                                      v-model="detail.adjustment"
+                                      label="Adjustment"
+                                    >
+                                    </v-text-field>
+                                  </v-flex>
+                                </template>
+                                </v-edit-dialog>
+                              </template>
 
                               <v-flex xs10 sm2 md2>
                                 <v-text-field
@@ -1208,7 +1099,6 @@
                                 </v-text-field>
                               </v-flex>
                               </v-card-title>
-                              <!-- dialog delete detail task -->
                                 <v-dialog v-model="dialogdeletedetail" max-width="290px">
                                   <v-card>
                                     <v-card-title class="headline">Confirmation</v-card-title>
@@ -1220,7 +1110,6 @@
                                     </v-card-actions>
                                   </v-card>
                                 </v-dialog>
-                              <!--  -->
                             </Vcard>
                           </v-flex>
 
@@ -1237,12 +1126,12 @@
                                   </v-btn>
                                   <v-btn 
                                     icon
-                                    color="blue accent-2"
+                                    color="green"
                                     dark @click="addList()"
                                     >
                                     <v-icon>add_circle</v-icon>
                                   </v-btn>
-                                  <!-- buat tambah data -->
+
                                   <v-flex xs11 sm3 md3>
                                     <v-select
                                       label="Building" 
@@ -1287,8 +1176,8 @@
                                       item-text="name"
                                       item-value="id_ahs"
                                       :items="filterAHSAll"
-                                      @change="getSelectedIndex();detail=true"
                                       required 
+                                      @input="detailCard=true"
                                     ></v-select>
                                   </v-flex>
 
@@ -1304,7 +1193,7 @@
                                     ></v-select>
                                   </v-flex>
 
-                                  <v-flex xs1 v-if="detail">
+                                  <v-flex xs1 v-if="detailCard">
                                     <v-text-field
                                       v-model="ahs_lokal.volume"
                                       label="Volume"
@@ -1314,18 +1203,18 @@
                                     </v-text-field>
                                   </v-flex>
 
-                                  <v-flex xs1 v-if="detail">
+                                  <v-flex xs1 v-if="detailCard">
                                     <v-text-field
                                       v-model="ahs_lokal.adjustment"
                                       label="Adjustment"
                                       class="pa-1"
-                                      @input="adjust"
-                                      @change="getMaterialDetails();adjustM=true"
+                                      @change="adjust"
+                                      v-on:keyup.enter="adjustM=true;getMaterialDetails()"
                                     >
                                     </v-text-field>
                                   </v-flex>
 
-                                  <v-flex xs10 sm2 md2 v-if="detail">
+                                  <v-flex xs10 sm2 md2 v-if="detailCard">
                                     <v-text-field
                                       v-model="ahs_lokal.HP"
                                       label="HP"
@@ -1335,7 +1224,7 @@
                                     </v-text-field>
                                   </v-flex>
 
-                                  <v-flex xs10 sm2 md2 v-if="detail">
+                                  <v-flex xs10 sm2 md2 v-if="detailCard">
                                     <v-text-field
                                       v-model="ahs_lokal.HP_Adjust"
                                       label="HP After Adjust"
@@ -1344,11 +1233,10 @@
                                     >
                                     </v-text-field>
                                   </v-flex>
-
                                 </v-card-title>
                               </Vcard>
                             </v-flex>
-                          </v-layout> 
+                          </v-layout>
                         </v-card-text>
                       </v-form>
                     </v-card>
@@ -1385,7 +1273,7 @@
       </v-toolbar>
       
       <v-card elevation="10">
-        <v-list-group v-for="data in filtered" active-class="borderRab" :key="data.id_rab">
+        <v-list-group v-for="data in filtered" :key="data.id_rab">
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
@@ -1820,45 +1708,21 @@ import material from './../service/Material'
         });
       },
       change(){
-        if(this.editList = true)
+        if(this.AHS.id_ahs != '')
         {
-          if(this.AHS.id_ahs != '')
-          {
-            let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
-            console.log(data)
-            this.detail.HP = data.total * this.detail.volume
-            return this.detail.HP
-          }
-        }else{
-          if(this.AHS.id_ahs != '')
-          {
-            let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
-            this.ahs_lokal.HP = data.total * this.ahs_lokal.volume
-            return this.ahs_lokal.HP
-          }
+          let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
+          this.ahs_lokal.HP = data.total * this.ahs_lokal.volume
+          return this.ahs_lokal.HP
         }
       },
       adjust(){
-        if(this.editList == true)
+        if(this.AHS.id_ahs != '')
         {
-          if(this.AHS.id_ahs != '')
-          {
-            let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
-            console.log(data)
-            this.detail.HP_Adjust = 0
-            if(this.detail.adjustment != 1)
-              this.detail.HP_Adjust = this.detail.adjustment * data.total * this.detail.volume
-            return this.detail.HP_Adjust
-          }
-        }else{
-          if(this.AHS.id_ahs != '')
-          {
-            let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
-            this.ahs_lokal.HP_Adjust = 0
-            if(this.ahs_lokal.adjustment != 1)
-              this.ahs_lokal.HP_Adjust = this.ahs_lokal.adjustment * data.total * this.ahs_lokal.volume
-            return this.ahs_lokal.HP_Adjust
-          }
+          let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
+          this.ahs_lokal.HP_Adjust = 0
+          if(this.ahs_lokal.adjustment != 1)
+            this.ahs_lokal.HP_Adjust = this.ahs_lokal.adjustment * data.total * this.ahs_lokal.volume
+          return this.ahs_lokal.HP_Adjust
         }
       },
       filterProjects()
@@ -1894,6 +1758,7 @@ import material from './../service/Material'
         this.snack = true
         this.snackColor = 'blue'
         this.snackText = 'Canceled'
+        this.editList = false
       },
       async getPagination()
       {
@@ -1914,16 +1779,23 @@ import material from './../service/Material'
         let tempS=[]
         let tempG=[]
         let tempT=[]
+        let tempM=[]
+
         this.edit = true
         this.rab = item
+        console.log('item')
+        console.log(this.rab)
+        console.log(this.rab.total_rab)
 
         tempS = item.structure.data
         for(let detailS of tempS)
         {
           let structure = {
+            id_structure_details: detailS.id_structure_details,
             id_structure : detailS.id_structure
           }
           let detail = {
+            id_structure_details: detailS.id_structure_details,
             id_structure : detailS.id_structure,
             structure    : detailS.structure
           }
@@ -1936,10 +1808,12 @@ import material from './../service/Material'
           for(let detailgroup of detailG.group.data)
           {
             let group = {
+              id_group_details : detailgroup.id_group_details,
               id_structure  : detailgroup.id_structure,
               id_groups     : detailgroup.id_groups
             }
             let detail = {
+              id_group_details : detailgroup.id_group_details,
               id_structure  : detailgroup.id_structure,
               id_groups     : detailgroup.id_groups,
               structure     : detailgroup.structure,
@@ -1955,11 +1829,13 @@ import material from './../service/Material'
           for(let detailtask of detailT.task_sub.data)
           {
             let task = {
+              id_sub_details : detailtask.id_sub_details,
               id_structure : detailtask.id_structure,
               id_groups    : detailtask.id_groups,
               id_sub       : detailtask.id_sub
             }
             let detail = {
+              id_sub_details : detailtask.id_sub_details,
               id_structure  : detailtask.id_structure,
               id_groups     : detailtask.id_groups,
               id_sub        : detailtask.id_sub,
@@ -1977,14 +1853,13 @@ import material from './../service/Material'
           for(let ahs of detailD.rab_details.data)
           {
             let ahsN = {
+              id_ahs_lokal : ahs.id_ahs_lokal,
               id_structure : ahs.id_structure,
               id_groups : ahs.id_groups,
               id_sub : ahs.id_sub,
-
               id_ahs : ahs.id_ahs,
               name : ahs.name,
-              
-              id_sub_details : ahs.id_sub,
+              id_sub_details : ahs.id_sub_details,
               id_job : ahs.id_job,
               total_labor : ahs.total_labor,
               total_material : ahs.total_material,
@@ -1996,6 +1871,7 @@ import material from './../service/Material'
             }
             
             let detail = {
+              id_ahs_lokal : ahs.id_ahs_lokal,
               id_structure : ahs.id_structure,
               id_groups : ahs.id_groups,
               id_sub : ahs.id_sub,
@@ -2008,6 +1884,32 @@ import material from './../service/Material'
             }
             this.details.push(ahsN)
             this.detailDetails.push(detail)
+            tempM.push(ahs)
+          }
+          console.log('Temp M')
+          console.log(tempM)
+          this.Material=[]
+          console.log('Material')
+          console.log(this.Material)
+          for(let material of tempM)
+          {
+            for(let detail of material.detail.data)
+            {
+              let each_materials = {
+                id_ahs_lokal_details : detail.id_ahs_lokal_details,
+                id_structure  : detail.id_structure,
+                id_groups     : detail.id_groups,
+                id_sub        : detail.id_sub,
+                id_ahs        : detail.id_ahs,
+                id_job        : detail.id_job,    
+                id_material   : detail.id_material,
+                kode          : detail.kode,
+                coefficient   : detail.coefficient,
+                sub_total     : detail.sub_total,
+                adjustment    : detail.adjustment
+              }
+              this.Material.push(each_materials)
+            }
           }
         }
         console.log('item')
@@ -2028,6 +1930,8 @@ import material from './../service/Material'
         console.log(this.details)
         console.log('This Detailss')
         console.log(this.detailDetails)
+        console.log('This Material')
+        console.log(this.Material)
       },
       itemDelete(item)
       {
@@ -2140,9 +2044,11 @@ import material from './../service/Material'
       {
         let data = this.structure.find(obj=>obj.id_structure == this.structure_data.id_structure)
         let structure = {
+          id_structure_details: null,
           id_structure : this.structure_data.id_structure
         }
         let detail = {
+          id_structure_details: null,
           id_structure : this.structure_data.id_structure,
           structure    : data.name
         }
@@ -2154,6 +2060,137 @@ import material from './../service/Material'
         console.log(this.Structure)
         console.log('Detail Structures')
         console.log(this.detailStructure)
+      },
+      
+      itemstructure(index,detail)
+      {
+        this.editList = true
+        this.filterStructures()
+      },
+      editstructure(index,detail)
+      {
+        let data = this.structure.find(obj=>obj.id_structure == this.structure_data.id_structure)
+        let indexstructure = this.detailStructure.find(obj=>obj.id_structure == detail.id_structure)
+        let Groups = this.Groups.filter(obj=>obj.id_structure == detail.id_structure) 
+        let Task = this.TaskSub.filter(obj=>obj.id_structure == detail.id_structure)
+        let Detail = this.details.filter(obj=>obj.id_structure == detail.id_structure)
+        let DetailGroup = this.detailGroup.filter(obj=>obj.id_structure == detail.id_structure)
+        let DetailTask = this.detailTask.filter(obj=>obj.id_structure == detail.id_structure)
+        let Details = this.detailDetails.filter(obj=>obj.id_structure == detail.id_structure)
+
+        let structure = {
+          id_structure_details : detail.id_structure_details,
+          id_structure : this.structure_data.id_structure        
+        }
+        let detail_structure = {
+          id_structure_details: detail.id_structure_details,
+          id_structure : this.structure_data.id_structure,
+          structure : data.name
+        }
+        this.Structure.splice(index,1,structure)
+        this.detailStructure.splice(this.detailStructure.indexOf(indexstructure),1,detail_structure)
+
+        for(let group of Groups)
+        {
+          let each = {
+            id_group_details: group.id_group_details,
+            id_structure : this.structure_data.id_structure,
+            id_groups : group.id_groups       
+          }
+          this.Groups.splice(this.Groups.indexOf(group),1,each)
+        }
+        for(let task of Task)
+        {
+          let each = {
+            id_sub_details : task.id_sub_details,
+            id_structure : this.structure_data.id_structure,
+            id_groups    : task.id_groups,
+            id_sub       : task.id_sub
+          }
+          this.TaskSub.splice(this.TaskSub.indexOf(task),1,each)
+        }
+        for(let detail of Detail)
+        {
+          let ahs = {
+            id_ahs_lokal : detail.id_ahs_lokal,
+            id_structure : this.structure_data.id_structure,
+            id_groups : detail.id_groups,
+            id_sub : detail.id_sub,
+            id_ahs : detail.id_ahs,
+            name : detail.name,
+            id_sub_details : detail.id_sub,
+            id_job : detail.id_job,
+            total_labor : detail.total_labor,
+            total_material : detail.total_material,
+            HSP : detail.HSP,
+            volume : detail.volume,
+            adjustment : detail.adjustment,
+            HP : detail.HSP * detail.volume,
+            HP_Adjust : detail.HSP * detail.volume * detail.adjustment,
+          }
+          this.details.splice(this.details.indexOf(detail),1,ahs)
+        }
+        for(let group of DetailGroup)
+        {
+          let detail_group = {
+            id_group_details : group.id_group_details,
+            id_structure  : this.structure_data.id_structure,
+            id_groups     : group.id_groups,
+            structure     : data.name,
+            floor         : group.floor
+          }
+          this.detailGroup.splice(this.detailGroup.indexOf(group),1,detail_group)
+        }
+        for(let task of DetailTask)
+        {
+          let detail_task = {
+            id_sub_details : task.id_sub_details,
+            id_structure  : this.structure_data.id_structure,
+            id_groups     : task.id_groups,
+            id_sub        : task.id_sub,
+            structure     : data.name,
+            floor         : task.floor,
+            task          : task.task
+          }
+          this.detailTask.splice(this.detailTask.indexOf(task),1,detail_task)
+        }
+        for(let detail of Details)
+        {
+          let detailAHS = {
+            id_ahs_lokal_details : detail.id_ahs_lokal_details,
+            id_structure : this.structure_data.id_structure,
+            id_groups : detail.id_groups,
+            id_sub : detail.id_sub,
+            structure : data.name,
+            floor : detail.floor,  
+            task : detail.task,
+            id_job : detail.id_job,
+            id_ahs : detail.id_ahs,
+            name : detail.name
+          }
+          this.detailDetails.splice(this.detailDetails.indexOf(detail),1,detailAHS)
+        }
+        console.log('Detail Structure')
+        console.log(structure)
+        console.log('This Structure')
+        console.log(this.Structure)
+        console.log('This Detail Structure')
+        console.log(this.detailStructure)
+        console.log('This Groups')
+        console.log(this.Groups)
+        console.log('This Detail Group')
+        console.log(this.detailGroup)
+        console.log('This Task Sub')
+        console.log(this.TaskSub)
+        console.log('This Detail Task')
+        console.log(this.detailTask)
+        console.log('This Details')
+        console.log(this.details)
+        console.log('This Detailss')
+        console.log(this.detailDetails)
+
+        this.update()
+        this.editList = false
       },
       deletestructure(index){
         let structure = this.detailStructure.find(obj=>obj.id_structure == index.id_structure)
@@ -2222,10 +2259,12 @@ import material from './../service/Material'
         console.log(data)
         console.log('end')
         let group = {
+          id_group_details : null,
           id_structure  : this.structure_unit.id_structure,
           id_groups     : this.group_data.id_groups
         }
         let detail = {
+          id_group_details : null,
           id_structure  : this.structure_unit.id_structure,
           id_groups     : this.group_data.id_groups,
           structure     : dataS.name,
@@ -2239,6 +2278,104 @@ import material from './../service/Material'
         console.log(this.Groups)
         console.log('Detail Groups')
         console.log(this.detailGroup)
+      },
+      itemfloor(index,detail)
+      {
+        this.editList = true
+        this.filterGroups(detail)
+      },
+      editfloor(index,detail)
+      {
+        console.log('detail')
+        console.log(detail)
+        
+        let data        = this.sub.find(obj=>obj.id_group == this.group_data.id_groups)
+        let Task        = this.TaskSub.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups)
+        let Detail     = this.details.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups)
+        let group       = this.detailGroup.find(obj=>obj.id_groups == detail.id_groups && obj.id_structure == detail.id_structure)
+        let DetailTask  = this.detailTask.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups)
+        let Details      = this.detailDetails.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups)
+
+        console.log(Details)
+        console.log(Detail)
+
+        let each = {
+          id_group_details : detail.id_group_details,
+          id_structure : detail.id_structure,
+          id_groups : this.group_data.id_groups       
+        }
+        let detail_group = {
+          id_group_details : group.id_group_details,
+          id_structure  : group.id_structure,
+          id_groups     : this.group_data.id_groups,
+          structure     : group.structure,
+          floor         : data.name
+        }
+        this.Groups.splice(index,1,each)
+        this.detailGroup.splice(this.detailGroup.indexOf(group),1,detail_group)
+
+        for(let task of Task)
+        {
+          let each = {
+            id_sub_details : task.id_sub_details,
+            id_structure : task.id_structure,
+            id_groups    : this.group_data.id_groups,
+            id_sub       : task.id_sub
+          }
+          this.TaskSub.splice(this.TaskSub.indexOf(task),1,each)
+        }
+        for(let detail of Detail)
+        {
+          let ahs = {
+            id_ahs_lokal : detail.id_ahs_lokal,
+            id_structure : detail.id_structure,
+            id_groups : this.group_data.id_groups,
+            id_sub : detail.id_sub,
+            id_ahs : detail.id_ahs,
+            name : detail.name,
+            id_sub_details : detail.id_sub,
+            id_job : detail.id_job,
+            total_labor : detail.total_labor,
+            total_material : detail.total_material,
+            HSP : detail.HSP,
+            volume : detail.volume,
+            adjustment : detail.adjustment,
+            HP : detail.HSP * detail.volume,
+            HP_Adjust : detail.HSP * detail.volume * detail.adjustment,
+          }
+          this.details.splice(this.details.indexOf(detail),1,ahs)
+        }
+        for(let task of DetailTask)
+        {
+          let detail_task = {
+            id_sub_details : task.id_sub_details,
+            id_structure  : task.id_structure,
+            id_groups     : this.group_data.id_groups,
+            id_sub        : task.id_sub,
+            structure     : task.structure,
+            floor         : data.name,
+            task          : task.task
+          }
+          this.detailTask.splice(this.detailTask.indexOf(task),1,detail_task)
+        }
+        for(let detail of Details)
+        {
+          let detailAHS = {
+            id_ahs_lokal : detail.id_ahs_lokal,
+            id_structure : detail.id_structure,
+            id_groups : this.group_data.id_groups,
+            id_sub : detail.id_sub,
+            structure : detail.structure,
+            floor : data.name,  
+            task : detail.task,
+            id_job : detail.id_job,
+            id_ahs : detail.id_ahs,
+            name : detail.name
+          }
+          this.detailDetails.splice(this.detailDetails.indexOf(detail),1,detailAHS)
+        }
+        this.update()
+        this.editList = false
       },
       deletefloor(index){
         let Task        = this.TaskSub.filter(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups)
@@ -2275,11 +2412,13 @@ import material from './../service/Material'
         let dataG = this.sub.find(obj=>obj.id_group == this.group_unit.id_groups)
 
         let task = {
+          id_sub_details : null,
           id_structure : this.group_unit.id_structure,
           id_groups    : this.group_unit.id_groups,
           id_sub       : data.id_sub
         }
         let detail = {
+          id_sub_details : null,
           id_structure  : this.group_unit.id_structure,
           id_groups     : this.group_unit.id_groups,
           id_sub        : data.id_sub,
@@ -2296,6 +2435,171 @@ import material from './../service/Material'
         console.log('Detail Tasks')
         console.log(this.detailTask)
 
+      },
+      itemtasksub(index,detail)
+      {
+        this.editList = true
+        this.filterTaskGroups(detail)
+      },
+      edittasksub(index,detail)
+      {
+        let data = this.type.find(obj=>obj.id_sub == this.tasksub_data.id_sub)
+        let tasks = this.detailTask.find(obj=>obj.id_groups == detail.id_groups && obj.id_structure == detail.id_structure && obj.id_sub == detail.id_sub)
+        let Detail = this.details.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub)
+        let Details = this.detailDetails.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub)
+        
+        let each = {
+          id_sub_details : detail.id_sub_details,
+          id_structure : detail.id_structure,
+          id_groups    : detail.id_groups,
+          id_sub       : this.tasksub_data.id_sub
+        }
+        this.TaskSub.splice(this.TaskSub.indexOf(detail),1,each)
+        
+        let detail_task = {
+          id_sub_details : detail.id_sub_details,
+          id_structure  : tasks.id_structure,
+          id_groups     : tasks.id_groups,
+          id_sub        : this.tasksub_data.id_sub,
+          structure     : tasks.structure,
+          floor         : tasks.floor,
+          task          : data.name
+        }
+        this.detailTask.splice(this.detailTask.indexOf(tasks),1,detail_task)
+        console.log('This Material Before Splice')
+        console.log(this.Material)
+        let temp = []
+
+        for(let detail of Detail)
+        {
+          let filterAHS = this.ahs.filter(obj=>obj.id_sub == this.tasksub_data.id_sub)
+          let ahs = filterAHS.find(obj=>obj.name == detail.name)
+
+          if(ahs != undefined)
+          {
+            let new_ahs = {
+              id_ahs_lokal : detail.id_ahs_lokal,
+              id_structure : detail.id_structure,
+              id_groups : detail.id_groups,
+              id_sub : this.tasksub_data.id_sub,
+              id_ahs : ahs.id_ahs,
+              name : ahs.name,
+              id_sub_details : this.tasksub_data.id_sub,
+              id_job : ahs.id_job,
+              total_labor : ahs.total_labor,
+              total_material : ahs.total_material,
+              HSP : ahs.total,
+              volume : detail.volume,
+              adjustment : detail.adjustment,
+              HP : ahs.total * detail.volume,
+              HP_Adjust : ahs.total * detail.volume * detail.adjustment,
+            }
+            this.details.splice(this.details.indexOf(detail),1,new_ahs)
+          
+            let Temp =[]
+            for(let materials of ahs.ahs_details.data)
+            {
+              let each_materials = {
+                id_ahs_lokal_details : null,
+                id_structure  : new_ahs.id_structure,
+                id_groups     : new_ahs.id_groups,
+                id_sub        : new_ahs.id_sub,
+                id_ahs        : new_ahs.id_ahs,
+                id_job        : new_ahs.id_job,    
+                id_material   : materials.id_material,
+                kode          : materials.kode,
+                coefficient   : materials.coefficient,
+                sub_total     : materials.sub_total,
+                adjustment    : new_ahs.adjustment
+              }
+              Temp.push(each_materials)
+            }
+            let Material = this.Material.filter(obj=>obj.id_ahs == detail.id_ahs)
+            console.log('Material Hendak Dihapus')
+            console.log(Material)
+            console.log('Material Hendak Dipush (new)')
+            console.log(Temp)
+            let j=0
+            for(let material of Material)
+            {
+              console.log('j')
+              console.log(j)
+              if(Temp[j] != undefined)
+              {
+                let data = {
+                  id_ahs_lokal_details : material.id_ahs_lokal_details,
+                  id_structure  : Temp[j].id_structure,
+                  id_groups     : Temp[j].id_groups,
+                  id_sub        : Temp[j].id_sub,
+                  id_ahs        : Temp[j].id_ahs,
+                  id_job        : Temp[j].id_job,    
+                  id_material   : Temp[j].id_material,
+                  kode          : Temp[j].kode,
+                  coefficient   : Temp[j].coefficient,
+                  sub_total     : Temp[j].sub_total,
+                  adjustment    : Temp[j].adjustment
+                }
+                console.log('Data')
+                console.log(data)
+                this.Material.splice(this.Material.indexOf(material),1,data)
+                Temp.splice(j,1)
+                j++
+                console.log('j')
+                console.log(j)
+                console.log('Sisa Temp')
+                console.log(Temp)
+              }else{
+                this.Material.splice(this.Material.indexOf(material),1)
+              }
+            }
+            console.log('This Material After Splice')
+            console.log(this.Material)
+            console.log('Sisa Temp All')
+            console.log(Temp)
+
+            for(let temp_data of Temp)
+            {
+              temp.push(temp_data)
+            }
+          }else{
+            this.details.splice(this.details.indexOf(detail),1)
+          }
+        }
+        console.log('Sisa Temp All in temp')
+        console.log(temp)
+        for(let material of temp)
+        {
+          this.Material.push(material)
+        }
+        for(let detail of Details)
+        {
+          let filterAHS = this.ahs.filter(obj=>obj.id_sub == this.tasksub_data.id_sub)
+          let ahs = filterAHS.find(obj=>obj.name == detail.name)
+          if(ahs!=null)
+          {
+            let detailAHS = {
+                id_ahs_lokal : detail.id_ahs_lokal,
+                id_structure : detail.id_structure,
+                id_groups : detail.id_groups,
+                id_sub : this.tasksub_data.id_sub,
+                structure : detail.structure,
+                floor : detail.floor,  
+                task : data.name,
+                id_job : ahs.id_job,
+                id_ahs : ahs.id_ahs,
+                name : ahs.name
+              }
+              this.detailDetails.splice(this.detailDetails.indexOf(detail),1,detailAHS)
+          }else{
+            this.detailDetails.splice(this.detailDetails.indexOf(detail),1)
+          }
+          console.log('This Detailss')
+          console.log(this.detailDetails)
+          console.log('This Material')
+          console.log(this.Material)
+        }
+        this.update()
+        this.editList = false
       },
       deletetasksub(index){
         console.log('index')
@@ -2327,6 +2631,7 @@ import material from './../service/Material'
         let tasksub = this.type.find(obj=>obj.id_sub == this.tasksub_unit.id_sub)
 
         let ahs = {
+          id_ahs_lokal : null,
           id_structure : this.tasksub_unit.id_structure,
           id_groups : this.tasksub_unit.id_groups,
           id_sub : this.tasksub_unit.id_sub,
@@ -2346,6 +2651,7 @@ import material from './../service/Material'
         }
         
         let detail = {
+          id_ahs_lokal : null,
           id_structure : this.tasksub_unit.id_structure,
           id_groups : this.tasksub_unit.id_groups,
           id_sub : this.tasksub_unit.id_sub,
@@ -2380,6 +2686,7 @@ import material from './../service/Material'
         for(let materials of ahs.ahs_details.data)
         {
           let each_materials = {
+            id_ahs_lokal_details : null,
             id_structure  : this.tasksub_unit.id_structure,
             id_groups     : this.tasksub_unit.id_groups,
             id_sub        : this.tasksub_unit.id_sub,
@@ -2393,94 +2700,179 @@ import material from './../service/Material'
           }
           this.Material.push(each_materials)
         }
-        console.log("AHS Lokal Details")
+        console.log("This Material")
         console.log(this.Material)
       },
-      itemList(data)
+      itemList(index,detail)
       {
-        this.index = data
-        this.list = false
+        this.filterAHS(detail)
         this.editList = true
-        this.AHS = data
-        // this.ahs_lokal = data
+        // this.AHS.id_ahs = detail.id_ahs
+      },
+      editAHS(index,detail)
+      {
+        let data = this.ahs.find(obj=>obj.id_ahs == this.ahs_lokal.id_ahs)
+        let detail_ahs = this.detailDetails.find(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub && obj.id_ahs == detail.id_ahs) 
+        
+        let ahs = {
+          id_ahs_lokal: detail.id_ahs_lokal,
+          id_structure : detail.id_structure,
+          id_groups : detail.id_groups,
+          id_sub : detail.id_sub,
+          id_ahs : this.ahs_lokal.id_ahs,
+          name : data.name,
+          id_sub_details : detail.id_sub,
+          id_job : data.id_job,
+          total_labor : detail.total_labor,
+          total_material : detail.total_material,
+          HSP : data.total,
+          volume : detail.volume,
+          adjustment : detail.adjustment,
+          HP : data.total * detail.volume,
+          HP_Adjust : data.total * detail.volume * detail.adjustment,
+        }
+        
+        let detailAHS = {
+          id_ahs_lokal: detail.id_ahs_lokal,
+          id_structure : detail_ahs.id_structure,
+          id_groups : detail_ahs.id_groups,
+          id_sub : detail_ahs.id_sub,
+          structure : detail_ahs.structure,
+          floor : detail_ahs.floor,  
+          task : detail_ahs.task,
+          id_job : data.id_job,
+          id_ahs : this.ahs_lokal.id_ahs,
+          name : data.name
+        }
+        this.rab.total_rab = parseInt(this.rab.total_rab - detail.HP_Adjust,10)
+        this.details.splice(index,1,ahs)
+        this.detailDetails.splice(this.detailDetails.indexOf(detail_ahs),1,detailAHS)
+        this.rab.total_rab = parseInt(this.rab.total_rab + ahs.HP_Adjust)
+
+        let Temp =[]
+        // let temp =[]
+        for(let materials of data.ahs_details.data)
+        {
+          let each_materials = {
+            id_ahs_lokal_details : null,
+            id_structure  : ahs.id_structure,
+            id_groups     : ahs.id_groups,
+            id_sub        : ahs.id_sub,
+            id_ahs        : ahs.id_ahs,
+            id_job        : ahs.id_job,    
+            id_material   : materials.id_material,
+            kode          : materials.kode,
+            coefficient   : materials.coefficient,
+            sub_total     : materials.sub_total,
+            adjustment    : ahs.adjustment
+          }
+          Temp.push(each_materials)
+        }
+        let Material = this.Material.filter(obj=>obj.id_ahs == detail.id_ahs)
+        console.log('Material Hendak Dihapus')
+        console.log(Material)
+        console.log('Material Hendak Dipush (new)')
+        console.log(Temp)
+        let j=0
+        for(let material of Material)
+        {
+          console.log('j')
+          console.log(j)
+          if(Temp[j] != undefined)
+          {
+            let data = {
+              id_ahs_lokal_details : material.id_ahs_lokal_details,
+              id_structure  : Temp[j].id_structure,
+              id_groups     : Temp[j].id_groups,
+              id_sub        : Temp[j].id_sub,
+              id_ahs        : Temp[j].id_ahs,
+              id_job        : Temp[j].id_job,    
+              id_material   : Temp[j].id_material,
+              kode          : Temp[j].kode,
+              coefficient   : Temp[j].coefficient,
+              sub_total     : Temp[j].sub_total,
+              adjustment    : Temp[j].adjustment
+            }
+            console.log('Data')
+            console.log(data)
+            this.Material.splice(this.Material.indexOf(material),1,data)
+            Temp.splice(j,1)
+            j++
+            console.log('j')
+            console.log(j)
+            console.log('Sisa Temp')
+            console.log(Temp)
+          }else{
+            this.Material.splice(this.Material.indexOf(material),1)
+          }
+        }
+        console.log('This Material After Splice')
+        console.log(this.Material)
+        console.log('Sisa Temp All')
+        console.log(Temp)
+
+        for(let temp_data of Temp)
+        {
+          this.Material.push(temp_data)
+        }
+        this.editList = false
+        this.update()
+        console.log('This Detail')
+        console.log(this.details)
         console.log('This Detailss')
         console.log(this.detailDetails)
-        console.log('thisAHS')
-        console.log(this.AHS)
-        console.log(this.ahs_lokal)
+        console.log('This Material')
+        console.log(this.Material )
       },
-      updateList(detail)
+      editvolumeadjust(index,detail)
       {
-        console.log('HAI ZAYANG')
-        let data = this.filterAHSAll.find(obj=>obj.id_ahs == this.AHS.id_ahs)
-        let structure = this.structure.find(obj=>obj.id_structure == this.tasksub_unit.id_structure)
-        let floor = this.sub.find(obj=>obj.id_group == this.tasksub_unit.id_groups)
-        let tasksub = this.type.find(obj=>obj.id_sub == this.tasksub_unit.id_sub)
         let ahs = {
           id_structure : detail.id_structure,
           id_groups : detail.id_groups,
           id_sub : detail.id_sub,
-          
           id_ahs : detail.id_ahs,
           name : detail.name,
-
           id_sub_details : detail.id_sub,
           id_job : detail.id_job,
           total_labor : detail.total_labor,
           total_material : detail.total_material,
-          HSP : detail.total,
+          HSP : detail.HSP,
           volume : detail.volume,
           adjustment : detail.adjustment,
           HP : detail.HSP * detail.volume,
           HP_Adjust : detail.HSP * detail.volume * detail.adjustment,
         }
-        
-        let detailAHS = {
-          id_structure : detail.id_structure,
-          id_groups : detail.id_groups,
-          id_sub : detail.id_sub,
-          structure : structure.name,
-          floor : floor.name,  
-          task : tasksub.name,
-          id_job : data.id_job,
-          id_ahs : data.id_ahs,
-          name : detail.name
-        }
         this.rab.total_rab = parseInt(this.rab.total_rab - detail.HP_Adjust,10)
-        this.details.splice(this.index,1,ahs)
-        this.detailDetails.splice(this.index,1,detailAHS)
+        console.log(this.rab.total_rab)
+        this.details.splice(index,1,ahs)
         this.rab.total_rab = parseInt(this.rab.total_rab + ahs.HP_Adjust)
-        // this.details.push(ahs)
-        // this.detailDetails.push(detail)
-        this.editList = false
-        this.list = true
+        console.log(this.rab.total_rab)
+        this.update()
         console.log('This Detail')
         console.log(this.details)
         console.log('This Detailss')
         console.log(this.detailDetails)
+        console.log('This Material')
+        console.log(this.Material)
       },
       deleteList(index){
         let data = this.details.find(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub && obj.id_ahs == index.id_ahs)
         console.log(data)
         let detail = this.detailDetails.find(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub && obj.id_ahs == index.id_ahs) 
-        let material = this.Material.find(obj=>obj.id_ahs == index.id_ahs)
+        let material = this.Material.filter(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub && obj.id_ahs == index.id_ahs)
         this.rab.total_rab = parseInt(this.rab.total_rab - index.HP_Adjust,10)
         this.details.splice(this.details.indexOf(data),1)
         this.detailDetails.splice(this.detailDetails.indexOf(detail),1)
 
-        console.log('index')
-        console.log(index)
         console.log('all material in ahs')
         console.log(material)
-        console.log('This Material Before Splice')
-        console.log(this.Material)
 
-        this.Material.splice(this.Material.indexOf(material),1)
+        for(let each of material)
+        {
+          this.Material.splice(this.Material.indexOf(each),1)
+        }
         // this.AHS = Object.assign({},this.AHSDefault)
         // this.ahs_lokal = Object.assign({},this.AHSLokalDefault)
-        
-        console.log('This Material after Splice')
-        console.log(this.Material)
         console.log('Detail Structure')
         console.log(this.Structure)
         console.log('Detail Group')
@@ -2497,6 +2889,8 @@ import material from './../service/Material'
         console.log(this.detailTask)
         console.log('Detail AHSs')
         console.log(this.detailDetails)
+        console.log('This Material')
+        console.log(this.Material)
       },
       async getStructure(){
         try{
@@ -2718,6 +3112,7 @@ import material from './../service/Material'
         this.init()
       },
       init(){
+        this.Material=[]
         this.Structure=[]
         this.Groups=[]
         this.TaskSub=[]
@@ -2765,5 +3160,12 @@ import material from './../service/Material'
 .borderDetail{
  margin-left: 30px;
  border-left: 4px solid #18FFFF
+}
+.dialogEdit{
+  min-width: 36px;
+  top: 401px;
+  left: 392px;
+  transform-origin: right top;
+  z-index: 204;
 }
 </style>

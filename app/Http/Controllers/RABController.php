@@ -10,7 +10,9 @@ use App\TaskSubDetails;
 use App\RABDetails;
 use App\Project;
 use App\AHSLokalDetails;
+use App\AHS;
 use App\Transformers\RABTransformers;
+use App\Transformers\GroupDetailsTransformers;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
@@ -41,7 +43,121 @@ class RABController extends RestController
     {
         try{
             $rab = new RAB;
-            $this->storeAll($rab,$request);
+            if($request->has('detail_structure'))
+            {
+                $Structure = $request->get('detail_structure');
+            }
+            if($request->has('detail_group'))
+            {
+                $Groups = $request->get('detail_group');
+            }
+            if($request->has('detail_task'))
+            {
+                $TaskSub = $request->get('detail_task');
+            }
+            if($request->has('detail'))
+            {
+                $detail = $request->get('detail');
+            }
+            if($request->has('detail_material'))
+            {
+                $Material = $request->get('detail_material');
+            }
+            $rab->id_project    = $request->get('id_project');
+            $rab->kode          = $request->get('kode');
+            $rab->total_rab     = $request->get('total_rab');
+            $rab->desc          = $request->get('desc');
+
+            $rab->save();
+
+            if($request->has('detail_structure'));
+            {
+                $rab = DB::transaction(function () use ($rab,$Structure) {
+                    $rab->structures()->createMany($Structure);   
+                    return $rab;
+                });
+            }
+            $structure_data = StructureDetails::where('id_rab',$rab->id_rab)->get();
+            $group_data = [];
+            $task_sub_data = [];
+            $detail_data = [];
+            $material_data = [];
+
+            foreach($structure_data as $structure)
+            {
+                foreach($Groups as $group)
+                {
+                    if($structure->id_structure == $group['id_structure'])
+                        array_push($group_data,$structure->groups()->create($group));
+                }
+            }
+        
+            foreach($group_data as $group)
+            {
+                foreach($TaskSub as $task)
+                {
+                    // $data = GroupDetails::find($group->id_group_details)->structure;
+                    // $id_structure = $data['id_structure'];
+
+                    $structure = StructureDetails::findOrFail($group->id_structure_details);
+
+                    if($structure->id_structure == $task['id_structure']) 
+                    {
+                        if($group->id_groups == $task['id_groups'])
+                            array_push($task_sub_data,$group->task_subs()->create($task));
+                    }
+                    
+                }
+            }
+
+            foreach($task_sub_data as $task)
+            {
+                foreach($detail as $detail_o)
+                {
+                    // $data = TaskSubDetails::find($task->id_sub_details)->sub;
+                    // $id_group_details = $data['id_group_details'];
+                    // $id_groups = $data['id_groups'];
+                    // $groups = GroupDetails::find($id_group_details)->structure;
+                    // $id_structure = $groups['id_structure'];
+
+                    $group = GroupDetails::findOrFail($task->id_group_details);
+                    $structure = StructureDetails::findOrFail($group->id_structure_details);
+                    
+                    if($structure->id_structure == $detail_o['id_structure'])
+                    {
+                        if($group->id_groups == $detail_o['id_groups']) 
+                        {
+                            if($task->id_sub == $detail_o['id_sub'])
+                                array_push($detail_data,$task->detail_rab()->create($detail_o));
+                        }
+                    }
+                }
+            }
+
+            foreach($detail_data as $detail_o)
+            {
+                foreach($Material as $material)
+                {
+                    $task = TaskSubDetails::findOrFail($detail_o->id_sub_details);
+                    $group = GroupDetails::findOrFail($task->id_group_details);
+                    $structure = StructureDetails::findOrFail($group->id_structure_details);
+                    
+                    if($structure->id_structure == $material['id_structure'])
+                    {
+                        if($group->id_groups == $material['id_groups']) 
+                        {
+                            if($task->id_sub == $material['id_sub'])
+                            {
+                                if($detail_o->id_job == $material['id_job'])
+                                    array_push($material_data,$detail_o->detail_ahs_lokal()->create($material));
+                            }
+                        }
+                    }
+                }
+            }
+            $project = Project::findOrFail($rab->id_project);
+            $project->nominal = $rab->total_rab;
+            $project->save();
             
             $response = $this->generateItem($rab);
             return $this->sendResponse($response,201);
@@ -49,9 +165,21 @@ class RABController extends RestController
             return $this->sendIseResponse($e->getMessage());
         }
     }
-
-    public function storeAll(RAB $rab, Request $request)
+    
+    public function update(Request $request,$id)
     {
+        $rab=RAB::findOrFail($id);
+        $structure_new=[];
+        $structure_temp=[];
+        $group_new=[];
+        $group_temp=[];
+        $tasksub_new=[];
+        $tasksub_temp=[];
+        $detail_new=[];
+        $detail_temp=[];
+        $material_new=[];
+        $material_temp=[];
+        
         if($request->has('detail_structure'))
         {
             $Structure = $request->get('detail_structure');
@@ -72,116 +200,304 @@ class RABController extends RestController
         {
             $Material = $request->get('detail_material');
         }
-        // dd($Material);
-        $rab->id_project    = $request->get('id_project');
-        $rab->kode          = $request->get('kode');
-        $rab->total_rab     = $request->get('total_rab');
-        $rab->desc          = $request->get('desc');
-
-        $rab->save();
-
-        if($request->has('detail_structure'));
+        //Edit Delete Detail Structure
+        foreach($Structure as $structure_data)
         {
-            $rab = DB::transaction(function () use ($rab,$Structure) {
-                $rab->structures()->createMany($Structure);   
-                return $rab;
-            });
-        }
-
-        $structure_data = StructureDetails::where('id_rab',$rab->id_rab)->get();
-        $group_data = [];
-        $task_sub_data = [];
-        $detail_data = [];
-        $material_data = [];
-
-        foreach($structure_data as $structure)
-        {
-            foreach($Groups as $group)
+            if($structure_data['id_structure_details'] != null)
             {
-                if($structure->id_structure == $group['id_structure'])
-                    array_push($group_data,$structure->groups()->create($group));
+                array_push($structure_temp,$structure_data);
             }
         }
-    
-        foreach($group_data as $group)
+        $Detail_Structure = StructureDetails::where('id_rab',$id)->select('id_structure_details','id_structure')->get();
+        $collection = collect($structure_temp);
+        $diff = $Detail_Structure->diffKeys($collection);
+        $diff->all();
+        foreach($diff as $diff_data)
         {
-            foreach($TaskSub as $task)
-            {
-                // $data = GroupDetails::find($group->id_group_details)->structure;
-                // $id_structure = $data['id_structure'];
-
-                $structure = StructureDetails::findOrFail($group->id_structure_details);
-
-                if($structure->id_structure == $task['id_structure']) 
-                {
-                    if($group->id_groups == $task['id_groups'])
-                        array_push($task_sub_data,$group->task_subs()->create($task));
-                }
-                
-            }
+            if($diff->isNotEmpty())
+                $delete = StructureDetails::where('id_structure_details',$diff_data->id_structure_details)->delete();
         }
-
-        foreach($task_sub_data as $task)
+        //Edit Detail Groups
+        foreach($structure_temp as $structure_unit)
         {
-            foreach($detail as $detail_o)
+            foreach($Groups as $group_data)
             {
-                // $data = TaskSubDetails::find($task->id_sub_details)->sub;
-                // $id_group_details = $data['id_group_details'];
-                // $id_groups = $data['id_groups'];
-                // $groups = GroupDetails::find($id_group_details)->structure;
-                // $id_structure = $groups['id_structure'];
-
-                $group = GroupDetails::findOrFail($task->id_group_details);
-                $structure = StructureDetails::findOrFail($group->id_structure_details);
-                
-                if($structure->id_structure == $detail_o['id_structure'])
+                if($group_data['id_group_details'] != null)
                 {
-                    if($group->id_groups == $detail_o['id_groups']) 
-                    {
-                        if($task->id_sub == $detail_o['id_sub'])
-                            array_push($detail_data,$task->detail_rab()->create($detail_o));
-                    }
+                    if($structure_unit['id_structure'] == $group_data['id_structure'])
+                        array_push($group_temp,$group_data);   
                 }
             }
-        }
-
-        foreach($detail_data as $detail_o)
-        {
-            foreach($Material as $material)
+            //Edit Delete Detail Group
+            $Detail_Group = DB::table('group_details')
+                ->select('id_group_details','structure_details.id_structure','id_groups')
+                ->join('structure_details','structure_details.id_structure_details','=','group_details.id_structure_details')
+                ->where('group_details.id_structure_details',$structure_unit['id_structure_details'])
+                ->whereNull('group_details.deleted_at')
+                ->get();
+            $collection = collect($group_temp);
+            $diff = $Detail_Group->diffKeys($collection);
+            $diff->all();
+            foreach($diff as $diff_data)
             {
-                $task = TaskSubDetails::find($detail_o->id_sub_details);
-                $group = GroupDetails::find($task->id_group_details);
-                $structure = StructureDetails::find($group->id_structure_details);
-                
-                if($structure->id_structure == $material['id_structure'])
+                if($diff->isNotEmpty())
+                    $delete = GroupDetails::where('id_group_details',$diff_data->id_group_details)->delete();
+            }
+            //Edit Detail Task
+            foreach($group_temp as $group_unit)
+            {
+                foreach($TaskSub as $task_sub_data)
                 {
-                    if($group->id_groups == $material['id_groups']) 
+                    if($task_sub_data['id_sub_details'] != null)
                     {
-                        if($task->id_sub == $material['id_sub'])
+                        if($group_unit['id_structure'] == $task_sub_data['id_structure'])
                         {
-                            if($detail_o->id_job == $material['id_job'])
-                                array_push($material_data,$detail_o->detail_ahs_lokal()->create($material));
+                            if($group_unit['id_groups'] == $task_sub_data['id_groups'])
+                                array_push($tasksub_temp,$task_sub_data);
                         }
                     }
                 }
+                //Edit Delete Detail Task 
+                $Detail_Task = DB::table('task_sub_details')
+                            ->select('id_sub_details','structure_details.id_structure','group_details.id_groups','id_sub')
+                            ->join('group_details','group_details.id_group_details','=','task_sub_details.id_group_details')
+                            ->join('structure_details','structure_details.id_structure_details','=','group_details.id_structure_details')
+                            ->where('task_sub_details.id_group_details','=',$group_unit['id_group_details'])
+                            ->whereNull('task_sub_details.deleted_at')
+                            ->get();
+                $collection = collect($tasksub_temp);
+                $diff = $Detail_Task->diffKeys($collection);
+                $diff->all();
+                foreach($diff as $diff_data)
+                {
+                    if($diff->isNotEmpty())
+                        $delete = TaskSubDetails::where('id_sub_details',$diff_data->id_sub_details)->delete();
+                }
+                //Edit AHS
+                // foreach($tasksub_temp as $task_sub_unit)
+                // {
+                //     foreach($detail as $detail_data)
+                //     {
+                //         if($detail_data['id_ahs_lokal'] != null)
+                //         {
+                //             if($task_sub_unit['id_structure'] == $detail_data['id_structure'])
+                //             {
+                //                 if($task_sub_unit['id_groups'] == $detail_data['id_groups'])
+                //                 {
+                //                     if($task_sub_unit['id_sub'] == $detail_data['id_sub'])
+                //                         array_push($detail_temp,$detail_data);
+                //                 }
+                //             }
+                //         }
+                //     }
+                //     //Edit Delete Detail AHS
+                //     $Detail_AHS = DB::table('ahs_lokals')
+                //         ->select('id_ahs_lokal', 'structure_details.id_structure','group_details.id_groups',
+                //                 'task_sub_details.id_sub', 'a_h_s_s.id_ahs','jobs.name',
+                //                 'ahs_lokals.id_sub_details','ahs_lokals.id_job',
+                //                 'ahs_lokals.total_labor','ahs_lokals.total_material','HSP',
+                //                 'volume','adjustment','HP','HP_Adjust')
+                //         ->join('task_sub_details','task_sub_details.id_sub_details','=','ahs_lokals.id_sub_details')
+                //         ->join('group_details','task_sub_details.id_group_details','=','group_details.id_group_details')
+                //         ->join('structure_details','group_details.id_structure_details','=','structure_details.id_structure_details')
+                //         ->join('a_h_s_s','a_h_s_s.id_job','=','ahs_lokals.id_job')
+                //         ->join('jobs','jobs.id_job','=','a_h_s_s.id_job')
+                //         ->where([
+                //             'a_h_s_s.id_sub' => $task_sub_unit['id_sub'],
+                //             'ahs_lokals.id_sub_details' => $task_sub_unit['id_sub_details'],
+                //         ])
+                //         ->whereNull('ahs_lokals.deleted_at')
+                //         ->whereNull('a_h_s_s.deleted_at')
+                //         ->get();
+                //     // dd($Detail_AHS);
+                //     $collection = collect($detail_temp);
+                //     $diff = $Detail_AHS->diffKeys($collection);
+                //     $diff->all();
+                //     foreach($diff as $diff_data)
+                //     {
+                //         if($diff->isNotEmpty())
+                //         {
+                //             $delete = RABDetails::where('id_ahs_lokal',$diff_data->id_ahs_lokal)->delete();
+                //             // $rab->total_rab -= $diff_data->HP_Adjust;
+                //             // $rab->save();
+                //         }
+                //     }
+                //     $detail_temp=[];
+                // }
+                $tasksub_temp=[];
+            }
+            $group_temp=[];
+        }
+        //Edit Structure
+        foreach($Structure as $structure_data)
+        {
+            if($structure_data['id_structure_details'] == null)
+            {
+                array_push($structure_new,$rab->structures()->create($structure_data));
+            }
+            else{
+                $structure = StructureDetails::findOrFail($structure_data['id_structure_details']);
+                $structure->id_structure = $structure_data['id_structure'];
+                $structure->save();
             }
         }
-        $project = Project::findOrFail($rab->id_project);
-        $project->nominal = $rab->total_rab;
-        $project->save();
-    }
+        //Edit Groups
+        foreach($Structure as $structure_data)
+        {
+            foreach($Groups as $group_data)
+            {
+                $detail_structure = StructureDetails::where([
+                    'id_rab' => $id,
+                    'id_structure' => $structure_data['id_structure'],
+                ])->get()->first();
 
-    public function update(Request $request,$id)
-    {
-        try{
-            $rab=RAB::findOrFail($id);
-            // $rab->desc = $request->desc;
-            // $rab->save();
-            $this->destroyAllDetail($id);
-            $this->storeAll($rab,$request);
-        }catch(\Exception $e){
-            return $this->sendIseResponse($e->getMessage());
+                if($group_data['id_group_details'] == null)
+                {
+                    if($structure_data['id_structure'] == $group_data['id_structure'])
+                        array_push($group_new,$detail_structure->groups()->create($group_data));
+                }else{
+                    $group = GroupDetails::findOrFail($group_data['id_group_details']);
+                    $group->id_groups = $group_data['id_groups'];
+                    $group->save();             
+                }
+            }
         }
+        //Edit Task Sub
+        foreach($Groups as $group_data)
+        {
+            foreach($TaskSub as $task_sub_data)
+            {
+                $detail_structure = StructureDetails::where([
+                    'id_rab' => $id,
+                    'id_structure' => $group_data['id_structure'],
+                ])->get()->first();
+
+                $detail_group = GroupDetails::where([
+                    'id_structure_details' => $detail_structure->id_structure_details,
+                    'id_groups' => $group_data['id_groups']
+                ])->get()->first();
+
+                if($task_sub_data['id_sub_details'] == null)
+                {
+                    if($group_data['id_structure'] == $task_sub_data['id_structure'])
+                    {
+                        if($group_data['id_groups'] == $task_sub_data['id_groups'])
+                        {
+                            array_push($tasksub_temp,$detail_group->task_subs()->create($task_sub_data));
+                        }
+                    }
+                }else{
+                    $tasksub = TaskSubDetails::findOrFail($task_sub_data['id_sub_details']);
+                    $tasksub->id_sub = $task_sub_data['id_sub'];
+                    $tasksub->save();
+                }
+            }
+        }
+        //Edit AHS
+        foreach($TaskSub as $task_sub_data)
+        {
+            foreach($detail as $detail_data)
+            {
+                if($detail_data['id_ahs_lokal'] == null)
+                {
+                    $detail_structure = StructureDetails::where([
+                        'id_rab' => $id,
+                        'id_structure' => $task_sub_data['id_structure'],
+                    ])->get()->first();
+
+                    $detail_group = GroupDetails::where([
+                        'id_structure_details' => $detail_structure->id_structure_details,
+                        'id_groups' => $task_sub_data['id_groups']
+                    ])->get()->first();
+
+                    $detail_task = TaskSubDetails::where([
+                        'id_group_details' => $detail_group->id_group_details,
+                        'id_sub' => $task_sub_data['id_sub']
+                    ])->get()->first();
+                    
+                    if($detail_structure->id_structure == $detail_data['id_structure'])
+                    {
+                        if($detail_group->id_groups == $detail_data['id_groups'])
+                        {
+                            if($detail_task->id_sub == $detail_data['id_sub'])
+                            {                                
+                                array_push($detail_new,$detail_task->detail_rab()->create($detail_data));
+                            }
+                        }
+                    }
+                }else{
+                    $ahs = RABDetails::findOrFail($detail_data['id_ahs_lokal']);
+                    // dd($ahs);
+                    $ahs->id_job = $detail_data['id_job'];
+                    $ahs->total_labor = $detail_data['total_labor'];
+                    $ahs->total_material = $detail_data['total_material'];
+                    $ahs->HSP = $detail_data['HSP'];
+                    $ahs->volume = $detail_data['volume'];
+                    $ahs->adjustment = $detail_data['adjustment'];
+                    $ahs->HP = $detail_data['HP'];
+                    $ahs->HP_Adjust = $detail_data['HP_Adjust'];
+                    $ahs->save();
+                }
+            }
+        }
+        //Edit AHS Lokal Details (Materials)
+        foreach($detail as $detail_data)
+        {
+            foreach($Material as $material_data)
+            {
+                // dd($detail_data);
+                if($material_data['id_ahs_lokal_details'] == null)
+                {
+                    $detail_structure = StructureDetails::where([
+                        'id_rab' => $id,
+                        'id_structure' => $detail_data['id_structure'],
+                    ])->get()->first();
+
+                    $detail_group = GroupDetails::where([
+                        'id_structure_details' => $detail_structure->id_structure_details,
+                        'id_groups' => $detail_data['id_groups']
+                    ])->get()->first();
+
+                    $detail_task = TaskSubDetails::where([
+                        'id_group_details' => $detail_group->id_group_details,
+                        'id_sub' => $detail_data['id_sub']
+                    ])->get()->first();
+                    // dd($detail_task);
+                    $detail_ahs = RABDetails::where([
+                        'id_sub_details' => $detail_task->id_sub_details,
+                        // 'id_sub' => $detail_data['id_sub'],
+                        'id_job' => $detail_data['id_job']  
+                    ])->get()->first();
+
+                    // dd($detail_data['id_ahs']);
+                    $ahs_unit = AHS::findOrFail($detail_data['id_ahs']);
+                    // dd($ahs_unit);
+                    
+                    if($detail_structure->id_structure == $material_data['id_structure'])
+                    {
+                        if($detail_group->id_groups == $material_data['id_groups'])
+                        {
+                            if($detail_task->id_sub == $material_data['id_sub'])
+                            { 
+                                if($ahs_unit->id_ahs == $material_data['id_ahs'])                               
+                                    array_push($material_new,$detail_ahs->detail_ahs_lokal()->create($material_data));
+                            }
+                        }
+                    }
+                }else{
+                    $ahs_lokal = AHSLokalDetails::findOrFail($material_data['id_ahs_lokal_details']);
+                    $ahs_lokal->id_material = $material_data['id_material'];
+                    $ahs_lokal->kode = $material_data['kode'];
+                    $ahs_lokal->coefficient = $material_data['coefficient'];
+                    $ahs_lokal->sub_total = $material_data['sub_total'];
+                    $ahs_lokal->adjustment = $material_data['adjustment'];
+                    $ahs_lokal->save();
+                }
+            }
+        }   
+        $rab->desc = $request->desc;
+        $rab->total_rab = $request->total_rab;
+        $rab->save();
     }
 
     public function destroyAllDetail($id)
