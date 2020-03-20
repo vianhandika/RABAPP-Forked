@@ -18,9 +18,13 @@ class CreateAHSSTable extends Migration
             $table->unsignedInteger('id_sub');
             $table->unsignedInteger('id_job');
             $table->string('kode');
+            $table->double('overhead');
             $table->double('total_labor');
             $table->double('total_material');
+            $table->double('total_equipment');
+            $table->double('total_before_overhead');
             $table->double('total');
+            
             $table->timestamps();
             $table->softDeletes();
 

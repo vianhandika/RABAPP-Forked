@@ -85,13 +85,25 @@ class MaterialsController extends RestController
         ]);
     }
 
-    public function count_materials()
+    public function code()
     {
-        $materials = Materials::all();
-        $countmaterials = count($materials);
-
-        $result['data'][0]['count']=$countmaterials;
-        
-        return $result;
+        $job = Materials::all()->last();
+        if($job != null)
+            $parts = explode('-',$job->kode);
+        if($job==null){
+            $kode = 'M/L'.'-'.'0001';
+        }
+        else if(($parts[1]+1)<10) {
+            $kode = 'M/L'.'-'.'000'.($parts[1]+1);
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
+            $kode = 'M/L'.'-'.'00'.($parts[1]+1);
+        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+            $kode = 'M/L'.'-'.'0'.($parts[1]+1);
+        }else if(($parts[1]+1)==1000){
+            $kode = 'M/L'.'-'.($parts[1]+1);
+        }else{
+            $kode = 'M/L'.'-'.'001';
+        }
+        return $kode;
     }
 }

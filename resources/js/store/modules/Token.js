@@ -31,13 +31,12 @@ const actions = {
             })
             .then(response => {
                 const token = response.data.access_token
-                
                 localStorage.setItem('access_token', token)
                 resolve(response)
             })
             .catch(error => {
                 console.log(error)
-                alert('Username atau Password salah')
+                // alert('Username atau Password salah')
                 reject(error)
             })
         })

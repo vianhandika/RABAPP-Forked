@@ -82,4 +82,26 @@ class StoreController extends RestController
             'message'=> $status ? 'Deleted' : 'Error Delete'
         ]);
     }
+
+    public function code()
+    {
+        $store = Store::all()->last();
+        if($store != null)
+            $parts = explode('-',$store->kode);
+        if($store==null){
+            $kode = 'St'.'-'.'0001';
+        }
+        else if(($parts[1]+1)<10) {
+            $kode = 'St'.'-'.'000'.($parts[1]+1);
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
+            $kode = 'St'.'-'.'00'.($parts[1]+1);
+        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+            $kode = 'St'.'-'.'0'.($parts[1]+1);
+        }else if(($parts[1]+1)==1000){
+            $kode = 'St'.'-'.($parts[1]+1);
+        }else{
+            $kode = 'St'.'-'.'001';
+        }
+        return $kode;
+    }
 }

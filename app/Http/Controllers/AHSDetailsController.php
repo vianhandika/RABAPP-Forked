@@ -70,10 +70,9 @@ class AHSDetailsController extends RestController
         $ahs->save();
         $status = $detail->delete();
 
-        return response()->json([
-            'status' => $status,
-            'message' => $status ? 'Success' : 'Error Delete'
-        ]);
+        $ahs = AHSDetails::where('id_ahs',$detail->id_ahs)->get();
+        $response = $this->generateCollection($ahs);
+        return $this->sendResponse($response,200);
     }
 
     public function showbyID($id)

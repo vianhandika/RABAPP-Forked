@@ -62,7 +62,7 @@ export default {
         })
     },
     copy(payload) {
-            new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             const successCallback = (res) => {
                 const data = res.data
                 resolve(data)
@@ -83,6 +83,30 @@ export default {
                 reject(err)
             }
             Http.get('/api/ahs?page='+id, successCallback, errorCallback)
+        })
+    },
+    getKode(id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/ahs/code', successCallback, errorCallback)
+        })
+    },
+    getahswodetails(id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/ahs/show?page='+id,successCallback, errorCallback)
         })
     },
 }

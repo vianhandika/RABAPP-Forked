@@ -181,14 +181,11 @@
                                                     <tr>
                                                         <td>{{$i}}</td>
                                                         <td align="left">{{$rab_data->job}}</td>
-                                                        @php
-                                                        if ($rab_data->status == 'volume') {
-                                                            $volume_adjust = $rab_data->volume * $rab_data->adjustment;
-                                                        } else {
-                                                            $volume_adjust = $rab_data->volume;
-                                                        }
-                                                        @endphp
-                                                        <td>{{$volume_adjust}}</td>
+                                                        @if ($rab_data->status == "Volume")
+                                                            <td>{{$rab_data->volume * $rab_data->adjustment}}</td>
+                                                        @else
+                                                            <td>{{$rab_data->volume}}</td>
+                                                        @endif
                                                         <td>{{$rab_data->satuan}}</td>
                                                         <td align="left" style="border-right: 1px solid none">Rp.</td>
                                                         <td align="right" >{{number_format($rab_data->HSP,2,',','.')}}</td>

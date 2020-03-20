@@ -14,7 +14,9 @@ class AHS extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'kode','id_sub', 'id_job','total_labor','total_material','total'
+        'kode','id_sub', 'id_job','overhead','total_labor',
+        'total_material','total_equipment',
+        'total_before_overhead','total'
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'

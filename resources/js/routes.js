@@ -9,9 +9,8 @@ import Transaction from './components/RABComponent'
 import AHS from './components/AHSComponent'
 import Home from './components/HomeComponent'
 import Store from './components/StoreComponent'
-import Report from './components/ReportsComponent'
 import SPA from './components/SPAComponent'
-import Cek from './components/Cek'
+import Calculate from './components/CalculateComponent'
 import AHSLokal from './components/AHSLokalComponent'
 import Reference from './components/ReferenceComponent'
 
@@ -93,14 +92,6 @@ export const routes = [
         ])
       },
       {
-        path: 'reports',
-        name: 'reports',
-        component: Report,
-        beforeEnter: middleware([
-          auth
-        ])
-      },
-      {
         path: '/analisa_lokal',
         name: 'adjust',
         component: AHSLokal,
@@ -109,9 +100,9 @@ export const routes = [
         ])
       },
       {
-        path: '/cek',
-        name: 'cek',
-        component: Cek
+        path: '/calculate',
+        name: 'calculate',
+        component: Calculate
       },
       {
         path: '/reference',

@@ -16,68 +16,55 @@
           >
             <v-card class="elevation-12">
               <v-toolbar
-                color="light-blue accent-4"
+                color="light-blue accent-3"
                 dark
                 flat
               >
                 <v-toolbar-title>Login</v-toolbar-title>
                 <div class="flex-grow-1"></div>
-                <v-tooltip bottom>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-code-tags</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Source</span>
-                </v-tooltip>
-                <v-tooltip right>
-                  <template v-slot:activator="{ on }">
-                    <v-btn
-                      icon
-                      large
-                      target="_blank"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-codepen</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Codepen</span>
-                </v-tooltip>
               </v-toolbar>
               <v-card-text>
                 <v-form>
                   <v-text-field
-                    v-model="email"
+                    v-model="username"
                     label="username"
-                    name="email"
-                    prepend-icon="person"
+                    name="username"
+                    prepend-inner-icon="people"
                     type="text"
+                    color="blue"
+                    :rules="usernameRules"
                   ></v-text-field>
 
                   <v-text-field
                     v-model="password"
                     id="password"
-                    label="Password"
+                    label="password"
                     name="password"
-                    prepend-icon="lock"
+                    prepend-inner-icon="lock"
                     type="password"
+                    color="blue"
+                    :rules="passwordRules"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
               <v-card-actions>
                 <div class="flex-grow-1"></div>
-                <v-btn color="light-blue"
-                @click="login"
-                >Login</v-btn>
+                <v-btn 
+                  color="light-blue accent-2"
+                  @click="login"
+                  rounded
+                  :loading="load"
+                >
+                Login
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
+        <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
+          <v-icon dark>warning</v-icon>
+          {{ snackText }}
+        </v-snackbar>
       </v-container>
     </v-content>
   </v-app>
@@ -90,8 +77,20 @@ import { mapGetters, mapState, mapActions } from 'vuex'
     name: 'LoginComponent',
     data () {
       return{
-        email:'',
-        password: ''
+        username:'',
+        password: '',
+        load: false,
+        snack: false,
+        snackColor: '',
+        snackText: '',
+        y: 'top',
+        //validation
+        usernameRules:[
+          v => !!v || 'Username is required'
+        ],
+        passwordRules:[
+          v => !!v || 'Password is required'
+        ]
       }
     },
     props: {
@@ -109,18 +108,32 @@ import { mapGetters, mapState, mapActions } from 'vuex'
         retrieveToken: 'Token/retrieveToken'
       }),
       async login () {
-        const payload = {
-          email : this.email,
-          password : this.password
+        try{
+          const payload = {
+            email : this.username,
+            password : this.password
+          }
+          this.load = true
+          await this.retrieveToken(payload)
+          .then(response=>{
+            this.load = false
+            this.$router.push({name: 'dashboard'})
+          })
+        }catch(err){
+          this.load = false
+          console.log(err)
+          this.snackbar()
         }
-        await this.retrieveToken(payload)
-        console.log('cek')
-        this.$router.push({name: 'dashboard'})
-      }
+      },
+      snackbar()
+      {
+        this.snack = true
+        this.snackColor = 'red'
+        this.snackText = "Incorrect username or password"
+      },
     },
   }
 </script>
 
 <style>
-
 </style>

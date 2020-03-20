@@ -75,7 +75,7 @@ export default {
             Http.get('/api/rabs?page='+id, successCallback, errorCallback)
         })
     },
-    deleteDetail(id){
+    getKode(){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
                 const data = res.data
@@ -84,58 +84,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.delete('/api/rab_details/delete/'+id, successCallback, errorCallback)
-        })
-    },
-    updateDetail(payload,id){
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-
-            const errorCallback = (err) => {
-                reject(err)
-            }
-
-            Http.patch('/api/rab_details/update/'+id, payload, successCallback, errorCallback)
-        })
-    },
-    getallDetails(){
-        return new Promise((resolve, reject) => {
-            
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/rab_details', successCallback, errorCallback)
-        })
-    },
-    showD(id){
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/rab_details/show/'+id, successCallback, errorCallback)
-        })
-    },
-    get(id){
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/rab_details?page='+id, successCallback, errorCallback)
+            Http.get('/api/rabs/code', successCallback, errorCallback)
         })
     },
 }

@@ -1,6 +1,19 @@
 import Http from '../http'
 
 export default {
+    getKode(){
+        return new Promise((resolve, reject) => {
+            
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/materials/code', successCallback, errorCallback)
+        })
+    },
     getSatuan(){
         return new Promise((resolve, reject) => {
             

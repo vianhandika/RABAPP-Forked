@@ -31,41 +31,41 @@ class RABDetailsController extends RestController
         return $details->toArray();
     }
 
-    public function update(Request $request,$id)
-    {
-        $this->validateWith([
-            'coefficient' => 'required|max:255',
-            'volume'    => 'required|max:255',
-        ]);
+    // public function update(Request $request,$id)
+    // {
+    //     $this->validateWith([
+    //         'coefficient' => 'required|max:255',
+    //         'volume'    => 'required|max:255',
+    //     ]);
 
-        $rab_details = RABDetails::findOrFail($id);
-        $rab = RAB::where('id_rab',$rab_details->id_rab)->first();
-        $ahs = AHS::where('id_ahs',$rab_details->id_ahs)->first();
-        $job = Job::where('id_job',$ahs->id_job)->first();
+    //     $rab_details = RABDetails::findOrFail($id);
+    //     $rab = RAB::where('id_rab',$rab_details->id_rab)->first();
+    //     $ahs = AHS::where('id_ahs',$rab_details->id_ahs)->first();
+    //     $job = Job::where('id_job',$ahs->id_job)->first();
 
-        $rab_details->coefficient = $request->coefficient;
+    //     $rab_details->coefficient = $request->coefficient;
 
-        if($job->status == 'Price')
-        {
-            $rab->total_rab -= $rab_details->sub_total;
-            $rab->save();
+    //     if($job->status == 'Price')
+    //     {
+    //         $rab->total_rab -= $rab_details->HP_Adjust;
+    //         $rab->save();
 
-            $rab_details->sub_total = $ahs->total * $request->coefficient;
-            $rab_details->volume = $request->volume;
+    //         $rab_details->sub_total = $ahs->total * $request->coefficient;
+    //         $rab_details->volume = $request->volume;
             
-            $rab->total_rab += $rab_details->sub_total;
-            $rab->save();
-        }else{
-            $rab_details->volume = $request->coefficient * $request->volume;
-        }
-        $rab_details->save();
+    //         $rab->total_rab += $rab_details->HP_Adjust;
+    //         $rab->save();
+    //     }else{
+    //         $rab_details->volume = $request->coefficient * $request->volume;
+    //     }
+    //     $rab_details->save();
 
-        return response()->json([
-            'status' => (bool) $rab_details,
-            'data' => $rab_details,
-            'message' => $rab_details ? 'Success' : 'Error Detail'
-        ]);
-    }
+    //     return response()->json([
+    //         'status' => (bool) $rab_details,
+    //         'data' => $rab_details,
+    //         'message' => $rab_details ? 'Success' : 'Error Detail'
+    //     ]);
+    // }
 
     public function destroy($id)
     {
@@ -75,7 +75,7 @@ class RABDetailsController extends RestController
         $structure = StructureDetails::where('id_structure_details',$group->id_structure_details)->first();
 
         $rab = RAB::where('id_rab',$structure->id_rab)->first();
-        $rab->total_rab -= $details->HP;
+        $rab->total_rab -= $details->HP_Adjust;
         $rab->save();
 
         $project = Project::where('id_project',$rab->id_project)->first();

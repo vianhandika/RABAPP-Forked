@@ -1,6 +1,19 @@
 import Http from '../http'
 
 export default {
+    getDetails(){
+        return new Promise((resolve, reject) => {
+            
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/ahs_lokal_details', successCallback, errorCallback)
+        })
+    },
     deleteItem(id){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
@@ -31,11 +44,9 @@ export default {
                 const data = res.data
                 resolve(data)
             }
-
             const errorCallback = (err) => {
                 reject(err)
             }
-
             Http.patch('/api/ahs_lokal_details/update/'+id, payload, successCallback, errorCallback)
         })
     },

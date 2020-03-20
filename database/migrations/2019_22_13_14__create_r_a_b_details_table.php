@@ -19,6 +19,9 @@ class CreateRABDetailsTable extends Migration
             $table->unsignedInteger('id_job');
             $table->double('total_labor');
             $table->double('total_material');
+            $table->double('total_equipment');
+            $table->double('HSP_before_overhead');
+            $table->double('overhead');
             $table->double('HSP');
             $table->double('volume');
             $table->double('adjustment',3);

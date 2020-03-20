@@ -1,56 +1,18 @@
 import Http from '../http'
 
 export default {
-    count_ahs(){
+    getKode(){
         return new Promise((resolve, reject) => {
-            
             const successCallback = (res) => {
                 const data = res.data
                 resolve(data)
             }
+
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/count_ahs', successCallback, errorCallback)
-        })
-    },
-    total(){
-        return new Promise((resolve, reject) => {
-            
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/rabs/total', successCallback, errorCallback)
-        })
-    },
-    count_materials(){
-        return new Promise((resolve, reject) => {
-            
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/count_materials', successCallback, errorCallback)
-        })
-    },
-    count(){
-        return new Promise((resolve, reject) => {
-            
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/count', successCallback, errorCallback)
+
+            Http.get('/api/projects/code/', successCallback, errorCallback)
         })
     },
     getItem(){

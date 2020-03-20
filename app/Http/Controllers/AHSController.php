@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use App\AHSDetails;
 use App\AHS;
 use App\Transformers\IlluminatePaginatorAdapter;
-use League\Fractal\Resource\Collection;
 
 class AHSController extends RestController
 {
@@ -16,13 +15,11 @@ class AHSController extends RestController
 
     public function index()
     {
-        $ahsPaginator = AHS::orderBy('id_ahs','DESC')->paginate(3);
-        $ahs = new Collection($ahsPaginator->items(), new AHSTransformers2);
+        $ahsPaginator = AHS::orderBy('id_ahs','DESC')->paginate(5);
+        $ahs = $this->generateCollection($ahsPaginator);
         $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
-        
         $ahs = $this->manager->createData($ahs); 
-        
-        return $ahs->toArray(); 
+        return $ahs->toArray();
     }
 
     public function all()
@@ -44,8 +41,11 @@ class AHSController extends RestController
             $ahs->kode = $request->get('kode');
             $ahs->id_job = $request->get('id_job');
             $ahs->id_sub = $request->get('id_sub');
+            $ahs->overhead = $request->get('overhead');
             $ahs->total_labor = $request->get('total_labor');
             $ahs->total_material = $request->get('total_material');
+            $ahs->total_equipment = $request->get('total_equipment');
+            $ahs->total_before_overhead = $request->get('total_before_overhead');
             $ahs->total = $request->get('total');
             $ahs->save();
             
@@ -66,7 +66,6 @@ class AHSController extends RestController
     public function update(Request $request,$id)
     {
         $ahs=AHS::findOrFail($id);
-        $Detail = AHSDetails::where('id_ahs',$id)->select('id_ahs_details','id_material','coefficient','sub_total')->get();
         $details=[];
         $detailTemp=[];
 
@@ -74,13 +73,39 @@ class AHSController extends RestController
         {
             $detail = $request->get('detail');
         }
-
+        //Edit Delete AHS Details
+        foreach($detail as $detail_ahs)
+        {
+            if($detail_ahs['id_ahs_details'] != null)
+                array_push($detailTemp,$detail_ahs);
+        }
+        $Detail = AHSDetails::where('id_ahs',$id)->select('id_ahs_details','id_material','coefficient','sub_total')->get();
+        $collection = collect($detailTemp);
+        if($collection->isNotEmpty())
+        {
+            foreach($collection as $item)
+            {
+                $filtered = $Detail->filter(function ($value, $key) use ($item){
+                    return $value->id_ahs_details != $item['id_ahs_details'];
+                });
+                $Detail = $filtered;
+            }
+        }else{
+            $filtered = $Detail;
+        }
+        $filtered->all();
+        foreach($filtered as $filtered_data)
+        {
+            if($filtered->isNotEmpty())
+                $delete = AHSDetails::where('id_ahs_details',$filtered_data->id_ahs_details)->delete();
+        }
+        //Edit AHS Details
         foreach($detail as $detail_ahs)
         {
             if($detail_ahs['id_ahs_details'] == null)
             {
-                // dd($detail_ahs);
                 array_push($details,$ahs->detail_ahs()->create($detail_ahs));
+                echo 'zeyeng';
             }
             else
             {
@@ -89,30 +114,15 @@ class AHSController extends RestController
                 $detail_data->coefficient = $detail_ahs['coefficient'];
                 $detail_data->sub_total = $detail_ahs['sub_total'];
                 $detail_data->save();
-
-                // array_push($detailTemp,$detail_ahs);
-
             }
         }
-        foreach($detail as $detail_ahs)
-        {
-            if($detail_ahs['id_ahs_details'] != null)
-            {
-                array_push($detailTemp,$detail_ahs);
-            }
-        }
-        $collection = collect($detailTemp);
-        $diff = $Detail->diffKeys($collection);
-        $diff->all();
-        
-        foreach($diff as $diff_data)
-        {
-            if($diff->isNotEmpty())
-                $delete = AHSDetails::where('id_ahs_details',$diff_data->id_ahs_details)->delete();
-        }
-
+        $ahs->id_sub = $request->id_sub;
+        $ahs->id_job = $request->id_job;
         $ahs->total_labor = $request->total_labor; 
         $ahs->total_material = $request->total_material;
+        $ahs->total_equipment = $request->total_equipment;
+        $ahs->total_before_overhead = $request->total_before_overhead;
+        $ahs->overhead = $request->overhead;
         $ahs->total = $request->total;
         $ahs->save();
     }
@@ -138,16 +148,17 @@ class AHSController extends RestController
     public function showbyID($id)
     {
         $ahs = AHS::findOrFail($id);
-        return response()->json($ahs,200);
+        $response = $this->generateItem($ahs);
+        return $this->sendResponse($response);
     }
 
-    public function count_ahs()
+    public function show_detailsNotNull()
     {
-        $ahs = AHS::all();
-        $count = count($ahs);
-
-        $result['data'][0]['count']=$count;
-        return $result;
+        $ahsPaginator = AHS::has('detail_ahs')->orderBy('id_ahs','DESC')->paginate(5);
+        $ahs = $this->generateCollection($ahsPaginator);
+        $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
+        $ahs = $this->manager->createData($ahs)->toArray();
+        return $ahs;
     }
 
     public function copy_ahs(Request $request)
@@ -160,9 +171,13 @@ class AHSController extends RestController
             $new = new AHS();
             $new->id_sub = $ahs->id_sub;
             $new->id_job = $ahs->id_job;
-            $new->kode = 'CPY'. '-'. $ahs->kode; 
+            $kode = $this->code();
+            $new->kode = $kode; 
             $new->total_labor = $ahs->total_labor;
             $new->total_material = $ahs->total_material;
+            $new->total_equipment = $ahs->total_equipment;
+            $new->total_before_overhead = $ahs->total_before_overhead;
+            $new->overhead = $ahs->overhead;
             $new->total = $ahs->total;
             $new->save();
             
@@ -178,5 +193,33 @@ class AHSController extends RestController
         }catch(\Exception $e){
             return $this->sendIseResponse($e->getMessage());
         }
+    }
+
+    public function code()
+    {
+        $job = AHS::all()->last();
+        if($job != null)
+        {
+            $strlen = strlen($job->kode);
+            if($strlen == "12")
+                $parts = explode('CPY-AHS-',$job->kode);
+            else    
+                $parts = explode('-',$job->kode);
+        }
+        if($job==null){
+            $kode = 'AHS'.'-'.'0001';
+        }
+        else if(($parts[1]+1)<10) {
+            $kode = 'AHS'.'-'.'000'.($parts[1]+1);
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
+            $kode = 'AHS'.'-'.'00'.($parts[1]+1);
+        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+            $kode = 'AHS'.'-'.'0'.($parts[1]+1);
+        }else if(($parts[1]+1)==1000){
+            $kode = 'AHS'.'-'.($parts[1]+1);
+        }else{
+            $kode = 'AHS'.'-'.'001';
+        }
+        return $kode;
     }
 }

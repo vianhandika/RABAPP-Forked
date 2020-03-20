@@ -66,10 +66,11 @@
                     item-value="id_sub"
                     :return-object="false"
                     :rules="groupRules"
+                    @change="filterTask(AHS.id_sub)"
                   ></v-select>
                 </v-layout>
 
-                <v-layout v-if="dialogAdd" @click="filterTask(AHS.id_sub)">
+                <v-layout v-if="dialogAdd">
                   <v-select
                     v-model="AHS.id_job"
                     label="Task"
@@ -114,15 +115,6 @@
                   ></v-select>
                 </v-layout>
 
-                <v-btn
-                  color="blue accent-4"
-                  @click="tambah=true;filterMaterials()"
-                  dark
-                  elevation="8"
-                >
-                Add 
-                </v-btn>
-                
                 <v-layout v-if="detailAHS">
                   <v-flex class="text-md-center" sm12 mt-2>
                     <v-card
@@ -139,23 +131,52 @@
                     >
                     <v-icon>remove_circle</v-icon>
                     </v-btn>
-
-                    <v-flex xs13 sm5 md5>
-                      <v-select
-                        label="Materials/Labor" 
-                        class="pa-1"
-                        v-model="detail.id_material"
-                        item-text="name"
-                        item-value="id_material"
-                        :items="material"
-                        readonly 
-                      ></v-select>
-                    </v-flex>
-
-                    <v-flex xs13 sm5 md5>
+                  
+                    <v-flex xs13 sm8 md8>
                       <template>
                         <v-edit-dialog
-                          @save="editList(detail)"
+                          @save="editMaterial(index,detail)"
+                          @cancel="cancel"
+                          lazy
+                          large
+                        >
+                          <v-select
+                            label="Materials/Labor" 
+                            class="pa-1"
+                            v-model="detail.id_material"
+                            item-text="name"
+                            item-value="id_material"
+                            :items="material"
+                            readonly
+                          ></v-select>
+                          <template v-slot:input>
+                            <v-flex @click="filterMaterials();edit=true">
+                              <v-select
+                                label="Materials/Labor" 
+                                v-model="detail.id_material"
+                                item-text="name"
+                                item-value="id_material"
+                                :items="material"
+                                v-if="!edit"
+                              ></v-select>
+                              <v-select
+                                v-model="edit_id_material"
+                                label="Materials/Labor"
+                                item-text="name"
+                                item-value="id_material"
+                                :items="filterMaterial"
+                                v-if="edit"
+                              ></v-select>
+                            </v-flex>
+                          </template>
+                        </v-edit-dialog>
+                      </template>
+                    </v-flex>
+
+                    <v-flex xs13 sm2 md2>
+                      <template>
+                        <v-edit-dialog
+                          @save="editList(index,detail)"
                           @cancel="cancel" 
                           lazy
                           large
@@ -183,6 +204,16 @@
                   </v-flex>
                 </v-layout>
 
+                <v-btn
+                  color="blue accent-4"
+                  @click="tambah=true;filterMaterials()"
+                  dark
+                  elevation="8"
+                  style="margin-top:10px"
+                >
+                Add 
+                </v-btn>
+                
                 <v-layout v-if="tambah">
                   <v-flex class="text-md-center" sm12 mt-2>
                     <v-card elevation="8"> 
@@ -202,7 +233,7 @@
                           <v-icon>add_circle</v-icon>
                       </v-btn>
                       <!-- buat pertama kali input data untuk addList -->
-                      <v-flex xs13 sm5 md5>
+                      <v-flex xs13 sm8 md8 @click="filterMaterials">
                         <v-select
                           label="Materials/Labor" 
                           class="pa-1"
@@ -211,11 +242,11 @@
                           item-value="id_material"
                           :return-object="false"
                           :items="filterMaterial"
-                          :rules="materialsRules"                          
+                          :rules="materialsRules"
                         ></v-select>
                       </v-flex>
 
-                      <v-flex xs13 sm5 md5>
+                      <v-flex xs13 sm2 md2>
                         <v-text-field
                         label="Coefficient" 
                         class="pa-1"
@@ -229,11 +260,36 @@
                   </v-flex>
                 </v-layout>
                   
-                <v-layout >
+                <v-layout style="margin-top: 10px">
                   <v-flex>
+                    <v-text-field
+                      v-model="AHS.total_equipment"
+                      label="Total Of Equipment"
+                      type="number"
+                      @change="equipment"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex style="margin-left:20px">
+                    <v-text-field 
+                      v-model="AHS.total_before_overhead" 
+                      label="Total"
+                      readonly
+                    >
+                    </v-text-field>
+                  </v-flex>
+                  <v-flex style="margin-left: 20px">
+                    <v-text-field
+                      v-model="AHS.overhead"
+                      label="Overhead (%)"
+                      @change="overhead"
+                      type="number"
+                    >
+                    </v-text-field>
+                  </v-flex>
+                  <v-flex style="margin-left:20px">
                     <v-text-field 
                       v-model="AHS.total" 
-                      label="Total"
+                      label="Total After Overhead"
                       readonly
                     >
                     </v-text-field>
@@ -265,39 +321,54 @@
                   <div class="caption grey--text">Task Group</div>
                   <div style>{{ data.name_sub }}</div>
                 </v-flex>
-                <v-flex xs3>
+                <v-flex xs5>
                   <div class="caption grey--text">Task</div>
                   <div>{{ data.name }}</div>
                 </v-flex>
-                <v-flex xs3>
+                <v-flex xs5>
                   <div class="caption grey--text">Total of Labor</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
-                    <div style="text-align:right;width:90px">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
-                <v-flex xs3>
+                <v-flex xs5>
                   <div class="caption grey--text">Total of Materials</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
-                    <div style="text-align:right;width:90px">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
-                <v-flex xs3>
+                <v-flex xs5>
+                  <div class="caption grey--text">Total of Equipment</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.total_equipment).toLocaleString('id-ID') }}</div>
+                  </v-layout>
+                </v-flex>
+                <!-- <v-flex xs5>
                   <div class="caption grey--text">HSP</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
-                    <div style="text-align:right;width:90px">{{ Number(data.total).toLocaleString('id-ID') }}</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.total_before_overhead).toLocaleString('id-ID') }}</div>
                   </v-layout>
-                </v-flex>
-                <v-flex xs2>
-                  <div class="caption grey--text">Actions</div>
-                  <v-icon color="green" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true;detailTable=false">edit</v-icon>
-                  <v-icon color="red" @click="itemHandler(data);dialogDelete=true;detailTable=false">delete</v-icon>
-                  <v-icon color="blue" @click="itemHandler(data);dialogCopy=true;detailTable=false">file_copy</v-icon>
+                </v-flex> -->
+                <!-- <v-flex xs3>
+                  <div class="caption grey--text">Overhead (%)</div>
+                  <div>{{data.overhead}}</div>
+                </v-flex> -->
+                <v-flex xs5>
+                  <div class="caption grey--text">HSP Overhead</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.total).toLocaleString('id-ID') }}</div>
+                  </v-layout>
                 </v-flex>
               </v-layout>
             </v-list-item-content>
+              <v-icon color="green" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true;detailTable=false">edit</v-icon>
+              <v-icon color="red" @click="itemHandler(data);dialogDelete=true;detailTable=false">delete</v-icon>
+              <v-icon color="blue" @click="itemHandler(data);dialogCopy=true;detailTable=false">file_copy</v-icon>
               <v-icon color="light-blue accent-3" @click="detailTable=true">expand_more</v-icon>
           </template>
 
@@ -375,6 +446,19 @@
             </div>
           </template>
         </v-list-group>
+        <div>
+        <v-pagination
+          v-model="current_page"
+          class="my-4"
+          :length="total_pages"
+          prev-icon="arrow_left"
+          next-icon="arrow_right"
+          circle
+          @input="getPagination"
+          :total-visible="5"
+        >
+        </v-pagination>
+      </div>
       </v-card>
       
       <template>
@@ -418,20 +502,6 @@
           </v-card>
         </v-dialog>
       </template>
-
-      <div>
-        <v-pagination
-          v-model="current_page"
-          class="my-4"
-          :length="total_pages"
-          prev-icon="arrow_left"
-          next-icon="arrow_right"
-          circle
-          @input="getPagination"
-          :total-visible="5"
-        >
-        </v-pagination>
-      </div>
     </v-container>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
       <v-icon dark>done</v-icon>
@@ -444,7 +514,7 @@
 import Controller from './../service/Job'
 import materialController from './../service/Material'
 import ahsController from './../service/AHS'
-import detailController from './../service/Details'
+import detailController from './../service/AHSDetails'
 import task from './../service/TaskSub'
   export default {
     data: () => ({
@@ -456,6 +526,7 @@ import task from './../service/TaskSub'
       y: 'top',
       snackColor: '',
       snackText: '',
+      edit_id_material:'',
       
       dialog: false,
       dialogAdd: false,
@@ -470,7 +541,7 @@ import task from './../service/TaskSub'
       edit: false,
 
       search:'',
-      select: '',
+      select: -1,
       id_ahs: '',
       
       ahs: [],
@@ -494,7 +565,10 @@ import task from './../service/TaskSub'
         id_sub:'', 
         total_labor: 0,
         total_material: 0,
-        total: 0
+        total_before_overhead: 0,
+        overhead: 0,
+        total: 0,
+        total_equipment: 0,
       },
        AHSDefault:{
         kode:'',
@@ -503,7 +577,10 @@ import task from './../service/TaskSub'
         id_sub:'', 
         total_labor: 0,
         total_material: 0,
-        total: 0
+        total_before_overhead: 0,
+        overhead: 0,
+        total: 0,
+        total_equipment: 0,
       },
       ahs_details:{
         id_ahs_details:'',
@@ -522,7 +599,7 @@ import task from './../service/TaskSub'
       },
       headers: [
         {text: 'ID Materials/Labor', align: 'left', sortable: false, value: 'kode',width:'15%'},
-        {text: 'Type', align: 'left', sortable: true, value: 'status',width:'15%'},
+        {text: 'Status', align: 'left', sortable: true, value: 'status',width:'15%'},
         {text: 'Item', align: 'left', sortable: false, value: 'name',width:'15%'},
         {text: 'Price', align: 'left', sortable: false, value: 'price', width:'10%'},
         {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', width:'15%', align: 'center'},
@@ -546,6 +623,7 @@ import task from './../service/TaskSub'
     }),
     mounted(){
       this.getallAHS()
+      this.getAll()
       this.getallItem()
       this.getallItemMaterial()
       this.getTask()
@@ -610,29 +688,60 @@ import task from './../service/TaskSub'
         this.snackColor = 'blue'
         this.snackText = 'Canceled'
       },
+      overhead()
+      {
+        // this.AHS.total = parseFloat(this.AHS.total_before_overhead*this.AHS.overhead/100).toFixed(2)
+        let temp = parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100).toFixed(2)
+        console.log(temp)
+        this.AHS.total = parseFloat(this.AHS.total_before_overhead) + parseFloat(temp)
+        console.log('AHS Total')
+        console.log(this.AHS.total)
+      },
+      // total()
+      // {
+      //   this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead)).toFixed(2)
+      //   console.log(this.AHS.total)
+      // },
+      equipment()
+      {
+        let temp = 0
+        for(let material of this.details)
+        {
+          temp += parseFloat(material.sub_total)
+        }
+        this.AHS.total_before_overhead = parseFloat(temp) + parseFloat(this.AHS.total_equipment)
+        console.log('Total Before Overhead')
+        console.log(this.AHS.total_before_overhead)
+        this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead)).toFixed(2)
+      },
       async filterTask(id)
       {
-        this.getallItem()
-        this.filter = this.job
-        for(let ahs of this.ahsAll)
+        this.ahsAll = (await ahsController.getall()).data
+        this.job = (await Controller.getallItem()).data
+        console.log('Job All')
+        console.log(this.job)
+        console.log('AHS All')
+        console.log(this.ahsAll)
+        let filterAHS = this.ahsAll.filter(obj=>obj.id_sub == id)
+        console.log('Filter AHS')
+        console.log(filterAHS)
+
+        let job = this.job
+        for(let ahs of filterAHS)
         {
-          if(ahs.id_sub == id)
-          {
-            for(let job of this.job)
-            {
-              if(ahs.id_job == job.id_job)
-                this.filter.splice(this.filter.indexOf(job),1)
-            }
-          }
+          job = this.job.filter(obj=>obj.id_job != ahs.id_job)
+          this.job = job
         }
-        this.filter=[...this.filter]
-        this.temp = this.filter
-        console.log('hai')
+        console.log('Filter Job')
+        console.log(job)
+        this.temp = this.job
+        console.log('Result')
         console.log(this.temp)
       },
-      filterMaterials()
+      async filterMaterials()
       {
-        this.filterMaterial = this.material
+        console.log('filter materials')
+        this.filterMaterial = (await materialController.getallItem()).data
         let m = this.material
         for(let detail of this.details)
         {
@@ -640,11 +749,15 @@ import task from './../service/TaskSub'
           m = this.filterMaterial
         }
       },
-      itemHandler(item){
+      async itemHandler(item){
         this.details=[]
         this.tambah=false
 
         this.AHS = item
+        this.AHS.id_sub = item.id_sub
+        // this.AHS.total = parseFloat(this.AHS.total/0.1).toFixed(2)
+        // console.log('Edit AHS Total')
+        // console.log(this.AHS.total)
         for(let detail of item.ahs_details.data)
         {
           let each_detail = {
@@ -655,7 +768,9 @@ import task from './../service/TaskSub'
           }
           this.details.push(each_detail)
         }
-        this.temp = this.job  
+        this.temp = (await Controller.getallItem()).data
+        console.log('This Details Edit')
+        console.log(this.details)
       },
       itemDetail(item){
         this.ahs_details = item
@@ -663,11 +778,13 @@ import task from './../service/TaskSub'
       async addList()
       {
         let data = this.material.find(obj=>obj.id_material == this.Material.id_material)
+        console.log('cek price')
+        console.log(data)
         let detail = {
           id_ahs_details : null,
           id_material : this.Material.id_material,
           coefficient : this.ahs_details.coefficient,
-          sub_total : data.price * this.ahs_details.coefficient
+          sub_total : parseFloat(data.price * this.ahs_details.coefficient).toFixed(2)
         }
         this.details.push(detail)
         this.sumOfTotal(data,detail)
@@ -675,27 +792,54 @@ import task from './../service/TaskSub'
         this.tambah = false
         this.Material.id_material= ''
         this.ahs_details.coefficient=''
+        this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead)).toFixed(2)
         console.log('Detail AHS')
         console.log(this.details)
       },
       sumOfTotal(material,detail)
       {
+        console.log('new detail')
+        console.log(detail)
         if(material.status == "material")
-          this.AHS.total_material += detail.sub_total 
+          this.AHS.total_material = parseFloat(this.AHS.total_material) + parseFloat(detail.sub_total)
         if(material.status == "labor")
-          this.AHS.total_labor += detail.sub_total
-        this.AHS.total= this.AHS.total_labor + this.AHS.total_material
+          this.AHS.total_labor = parseFloat(this.AHS.total_labor) + parseFloat(detail.sub_total)
+        console.log(this.AHS.total_material)
+        console.log(this.AHS.total_labor)
+        this.AHS.total_before_overhead = parseFloat(this.AHS.total_before_overhead) + parseFloat(detail.sub_total)
+        console.log('Total Before Overhead')
+        console.log(this.AHS.total_before_overhead)
+        if(this.AHS.overhead == '0')
+          this.AHS.total = this.AHS.total_before_overhead
+        else
+          this.AHS.total = parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100).toFixed(2)
+        console.log(this.AHS.total)
+        //karena overheadnya = 0
       },
       delOfTotal(material,detail)
       {
+        console.log(material)
+        console.log('del of total')
         if(material.status == "material")
-          this.AHS.total_material -= detail.sub_total
+          this.AHS.total_material = parseFloat(this.AHS.total_material) - parseFloat(detail.sub_total)
         if(material.status == "labor")
-          this.AHS.total_labor -= detail.sub_total
-        this.AHS.total = parseInt(this.AHS.total - detail.sub_total,10)
+          this.AHS.total_labor = parseFloat(this.AHS.total_labor) - parseFloat(detail.sub_total)
+        
+        this.AHS.total_before_overhead = parseFloat(this.AHS.total_before_overhead - detail.sub_total).toFixed(2)
+        
+        if(this.AHS.overhead == '0')
+          this.AHS.total = this.AHS.total_before_overhead
+        else
+          this.AHS.total = parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100).toFixed(2)
+        console.log('Total Material')
+        console.log(this.AHS.total_material)
+        console.log('Total Labor')
+        console.log(this.AHS.total_labor)
       },
-      editList(data)
+      editList(index,data)
       {
+        console.log('Material')
+        console.log(data)
         let material = this.material.find(obj=>obj.id_material == data.id_material)
         this.delOfTotal(material,data)
 
@@ -703,22 +847,43 @@ import task from './../service/TaskSub'
           id_ahs_details: data.id_ahs_details,
           id_material : data.id_material,
           coefficient : data.coefficient,
-          sub_total : data.coefficient * material.price
+          sub_total : parseFloat(data.coefficient * material.price).toFixed(2)
         }
-        this.details.splice(this.index,1,newDetail)
+        this.details.splice(index,1,newDetail)
 
-        let newMaterial = this.material.find(obj=>obj.id_material == newDetail.id_material)
-        this.sumOfTotal(newMaterial,newDetail)
+        // let newMaterial = this.material.find(obj=>obj.id_material == newDetail.id_material)
+        this.sumOfTotal(material,newDetail)
         this.update()
+        // this.edit = false
+      },
+      editMaterial(index,data)
+      {
+        console.log('hai')
+        let material = this.material.find(obj=>obj.id_material == this.edit_id_material)
+        this.delOfTotal(material,data)
+        console.log('halo')
+        let newDetail = {
+          id_ahs_details: data.id_ahs_details,
+          id_material : this.edit_id_material,
+          coefficient : data.coefficient,
+          sub_total : parseFloat(data.coefficient * material.price).toFixed(2)
+        }
+        this.details.splice(index,1,newDetail)
+
+        // let newMaterial = this.material.find(obj=>obj.id_material == newDetail.id_material)
+        this.sumOfTotal(material,newDetail)
+        this.update()
+        this.edit = false
+        console.log(this.details)
       },
       deleteList(data){
         let material = this.material.find(obj=>obj.id_material == data.id_material)
         this.delOfTotal(material,data)
         this.details.splice(this.details.indexOf(data),1)
         this.details=[...this.details]
-
-        console.log('This Details')
+        console.log('This Details Delete')
         console.log(this.details)
+        this.ahs_details.coefficient = ''
         // this.delete()
       },
       async getTask()
@@ -773,11 +938,18 @@ import task from './../service/TaskSub'
           console.log(err)
         }
       },
-      async getKode()
+      async getAll()
       {
         try{
           this.ahsAll = (await ahsController.getall()).data
-          this.AHS.kode = 'AHS-'+(this.ahsAll.length+1)
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getKode()
+      {
+        try{
+          this.AHS.kode = (await ahsController.getKode())
         }catch(err){
           console.log(err)
         }
@@ -797,13 +969,16 @@ import task from './../service/TaskSub'
       async addItem(){
         try{
           const payload = {
-            kode            : this.AHS.kode,
-            id_job          : this.AHS.id_job,
-            id_sub          : this.AHS.id_sub,
-            total_labor     : this.AHS.total_labor,
-            total_material  : this.AHS.total_material,
-            total           : this.AHS.total,
-            detail          : this.details
+            kode                  : this.AHS.kode,
+            id_job                : this.AHS.id_job,
+            id_sub                : this.AHS.id_sub,
+            total_labor           : this.AHS.total_labor,
+            total_material        : this.AHS.total_material,
+            total_equipment : this.AHS.total_equipment,
+            total_before_overhead : this.AHS.total_before_overhead,
+            overhead              : this.AHS.overhead,
+            total                 : this.AHS.total,
+            detail                : this.details
           }
           await ahsController.addItem(payload)
           this.close()
@@ -818,9 +993,12 @@ import task from './../service/TaskSub'
               kode            : this.AHS.kode,
               id_sub          : this.AHS.id_sub,
               id_job          : this.AHS.id_job,
-              total           : this.AHS.total,
               total_labor     : this.AHS.total_labor,
               total_material  : this.AHS.total_material,
+              total_equipment : this.AHS.total_equipment,
+              total_before_overhead : this.AHS.total_before_overhead,
+              overhead        : this.AHS.overhead,
+              total           : this.AHS.total,
               detail          : this.details
             } 
             await ahsController.updateItem(payload,id)
@@ -837,9 +1015,11 @@ import task from './../service/TaskSub'
           id_ahs: this.AHS.id_ahs
         }
         try{
-          await ahsController.copy(payload)
-          this.getallAHS()
-          this.copy()
+            await ahsController.copy(payload).then(response=>{
+            this.current_page = 1 
+            this.getallAHS()
+            this.copy()
+          })
         }catch(err){
           console.log(err)
         }
@@ -850,10 +1030,10 @@ import task from './../service/TaskSub'
               coefficient   : props.item.coefficient,
             } 
             await detailController.updateDetail(payload,props.item.id_ahs_details)
-            this.getItem(props.item.id_ahs)
-            // this.getPagination()
-            this.close()
-            this.update()
+            this.getItem(props.item.id_ahs).then(response=>{
+              this.close()
+              this.update()
+            })
         }catch(err){
           console.log(err);
         }
@@ -869,12 +1049,10 @@ import task from './../service/TaskSub'
       },
       async deleteDetail(id){
         try{
-          console.log(this.detailsData)
-          let ahs = this.detailsData.find(obj=>obj.id_ahs_details == id)
           await detailController.deleteItem(id).data
-          this.getItem(ahs.id_ahs)
-          this.getallAHS()
-          this.delete()
+          this.getPagination().then(response=>{
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }
@@ -888,7 +1066,8 @@ import task from './../service/TaskSub'
       },
       reset () {
         this.getKode()
-        this.$refs.form.reset()
+        this.ahs_details.coefficient = ''
+        this.AHS = Object.assign({},this.AHSDefault)
         this.$refs.form.resetValidation()
         this.details=[]
         this.tambah = false
@@ -896,8 +1075,8 @@ import task from './../service/TaskSub'
       close () {
         this.dialog = false
         this.details=[]
-        this.getPagination()
         this.AHS = Object.assign({},this.AHSDefault)
+        this.getPagination()
       },
     }
   }

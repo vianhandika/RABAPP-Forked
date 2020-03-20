@@ -1,8 +1,8 @@
 <template>
   <v-app class="grey lighten-4">
-    <v-row>
-      <v-col cols="12" md="6">
-        <v-container>
+    <v-container>
+      <v-row>
+        <v-col cols="12" md="6">
           <v-data-table
             :headers="headersStructure"
             :items="structure"
@@ -53,7 +53,6 @@
               <v-edit-dialog
                 :return-value.sync="props.item.name"
                 @save="updateStructure(props)"
-                @cancel="cancel"
                 lazy
                 large
                 persistent
@@ -68,7 +67,7 @@
                   ></v-text-field>
                 </template>
               </v-edit-dialog>
-            </template>
+            </template> 
 
             <template v-slot:item.action="{ item }">
               <v-dialog v-model="dialogDelete" max-width="290px">
@@ -94,10 +93,8 @@
               </v-dialog>
             </template>
           </v-data-table>
-        </v-container>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-container>
+        </v-col>
+        <v-col cols="12" md="6">
           <v-data-table
             :headers="headersFloor"
             :items="floor"
@@ -148,12 +145,11 @@
               <v-edit-dialog
                 :return-value.sync="props.item.name"
                 @save="updateFloor(props)"
-                @cancel="cancel"
                 lazy
                 large
                 persistent
                 dark
-              > {{ props.item.name }}
+              >Lantai {{ props.item.name }}
                 <template v-slot:input>
                   <v-text-field
                     v-model="props.item.name"
@@ -189,19 +185,18 @@
               </v-dialog>
             </template>
           </v-data-table>
-        </v-container>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
 
-    <v-row>
-      <v-col cols="12" md="6">
-        <v-container>
+      <v-row>
+        <v-col cols="12" md="6">
           <v-data-table
             :headers="headersTask"
             :items="task_group"
             class="elevation-8"
             :search="searchtask"
           >
+        
             <template v-slot:top>
               <v-toolbar dark color="light-blue accent-3">
                 <v-toolbar-title>Task Group</v-toolbar-title>
@@ -246,12 +241,11 @@
               <v-edit-dialog
                 :return-value.sync="props.item.name"
                 @save="updateTaskSub(props)"
-                @cancel="cancel"
                 lazy
                 large
                 persistent
                 dark
-              > {{ props.item.name }}
+              > Pekerjaan {{ props.item.name }}
                 <template v-slot:input>
                   <v-text-field
                     v-model="props.item.name"
@@ -287,11 +281,9 @@
               </v-dialog>
             </template>
           </v-data-table>
-        </v-container>
-      </v-col>
+        </v-col>
 
-      <v-col cols="12" md="6"> 
-        <v-container>
+        <v-col cols="12" md="6"> 
           <v-data-table
             :headers="headersSatuan"
             :items="satuan"
@@ -342,7 +334,6 @@
               <v-edit-dialog
                 :return-value.sync="props.item.name"
                 @save="updateSatuan(props)"
-                @cancel="cancel"
                 lazy
                 large
                 persistent
@@ -383,9 +374,13 @@
               </v-dialog>
             </template>
           </v-data-table>
-        </v-container>
-      </v-col>
-    </v-row>
+        </v-col>
+      </v-row>
+      <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
+        <v-icon dark>done</v-icon>
+        {{ snackText }}
+      </v-snackbar>
+    </v-container>
   </v-app>
 </template>
 
@@ -397,10 +392,17 @@ import satuan from './../service/Satuan'
 
   export default {
     data: () => ({
+      snack: '',
+      snackText:'',
+      snackColor:'',
+      y: 'top',
+
       valid: true,
       dialogStructure: false,
       dialogDelete: false,
       dialogDeleteFloor: false,
+      dialogDeleteTask: false,
+      dialogDeleteSatuan: false,
       
       searchstructure:'',
       searchfloor:'',
@@ -463,10 +465,21 @@ import satuan from './../service/Satuan'
       
     },
     methods: {
-      save (props) {
+      save () {
         this.snack = true
         this.snackColor = 'green'
-        this.snackText = 'Data saved'
+        this.snackText = 'Data Save Successfully'
+      },
+      update()
+      {
+        this.snack = true
+        this.snackColor = 'teal darken-1'
+        this.snackText = 'Data Update Successfully'
+      },
+      delete(){
+        this.snack = true
+        this.snackColor = 'red'
+        this.snackText = 'Data Deleted Sucessfully'
       },
       itemHandler(item)
       {
@@ -500,6 +513,7 @@ import satuan from './../service/Satuan'
           await structure.add(payload)
           this.getStructure()
           this.building = ''
+          this.save()
         }catch(err){
           console.log(err)
         }
@@ -511,8 +525,7 @@ import satuan from './../service/Satuan'
           }
           await structure.update(payload,props.item.id_structure)
           this.getStructure()
-          this.close()
-          this.save();
+          this.update();
         }catch(err){
           console.log(err)
         }
@@ -521,6 +534,7 @@ import satuan from './../service/Satuan'
         try{
           await structure.delete(id).data
           this.getStructure()
+          this.delete()
         }catch(err){
           console.log(err)
         }
@@ -536,11 +550,12 @@ import satuan from './../service/Satuan'
       {
         try{
           const payload = {
-            name : 'Lantai' + ' ' + this.floor_data,
+            name : this.floor_data,
           }
           await floor.add(payload)
           this.getFloor()
           this.floor_data = ''
+          this.save()
         }catch(err){
           console.log(err);
         }
@@ -550,9 +565,9 @@ import satuan from './../service/Satuan'
           const payload = {
             name        : props.item.name
           }
-          await groups.update(payload,props.item.id_group)
+          await floor.update(payload,props.item.id_group)
           this.getFloor()
-          this.close()
+          this.update()
         }catch(err){
           console.log(err)
         }
@@ -561,6 +576,7 @@ import satuan from './../service/Satuan'
         try{
           await floor.delete(id).data
           this.getFloor()
+          this.delete()
         }catch(err){
           console.log(err)
         }
@@ -576,11 +592,12 @@ import satuan from './../service/Satuan'
       {
         try{
           const payload = {
-            name :  'Pekerjaan' + ' ' + this.task,
+            name :  this.task,
           }
           await task.add(payload)
           this.getTaskSub()
           this.task = ''
+          this.add()
         }catch(err){
           console.log(err)
         }
@@ -592,7 +609,7 @@ import satuan from './../service/Satuan'
           }
           await task.update(payload,props.item.id_sub)
           this.getTaskSub()
-          this.close()
+          this.update()
         }catch(err){
           console.log(err)
         }
@@ -601,6 +618,7 @@ import satuan from './../service/Satuan'
         try{
           await task.delete(id).data
           this.getTaskSub()
+          this.delete()
         }catch(err){
           console.log(err)
         }
@@ -614,6 +632,7 @@ import satuan from './../service/Satuan'
           await satuan.add(payload)
           this.getSatuan()
           this.satuan_data = ''
+          this.save()
         }catch(err){
           console.log(err)
         }
@@ -625,7 +644,7 @@ import satuan from './../service/Satuan'
           }
           await satuan.update(payload,props.item.id_satuan)
           this.getSatuan()
-          this.close()
+          this.update()
         }catch(err){
           console.log(err)
         }
@@ -634,6 +653,7 @@ import satuan from './../service/Satuan'
         try{
           await satuan.delete(id).data
           this.getSatuan()
+          this.delete()
         }catch(err){
           console.log(err)
         }
@@ -646,14 +666,6 @@ import satuan from './../service/Satuan'
           console.log(err)
         }
       },
-      close()
-      {
-        this.dialog = false
-        this.dialogDelete = false
-        this.dialogDeleteFloor = false
-        this.dialogDeleteTask = false
-        this.dialogDeleteSatuan = false
-      }
     }
   }
 </script>

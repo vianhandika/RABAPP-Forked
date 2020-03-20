@@ -33,7 +33,7 @@ class TaskSubDetailsController extends RestController
         {   
             if(RABDetails::where('id_sub_details',$detail->id_sub_details)->get() != null)
             {
-                $total += $detail->HP;
+                $total += $detail->HP_Adjust;
                 $delete = RABDetails::where('id_sub_details',$detail->id_sub_details)->delete();
             }
             

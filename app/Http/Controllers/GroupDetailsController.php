@@ -39,7 +39,7 @@ class GroupDetailsController extends RestController
             {   
                 if(RABDetails::where('id_sub_details',$detail->id_sub_details)->get() != null)
                 {
-                    $total += $detail->HP;
+                    $total += $detail->HP_Adjust;
                     $delete = RABDetails::where('id_sub_details',$detail->id_sub_details)->delete();
                 }
 
@@ -53,7 +53,7 @@ class GroupDetailsController extends RestController
         }
         $structure = StructureDetails::where('id_structure_details',$group->id_structure_details)->first();
         $rab=RAB::findOrFail($structure->id_rab);
-        $rab->total_rab = $rab->total_rab - $total;
+        $rab->total_rab -= $total;
         $rab->save();
 
         $project = Project::where('id_project',$rab->id_project)->first();

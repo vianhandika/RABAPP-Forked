@@ -25,22 +25,6 @@
             <v-list-item-title>{{link.title}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-        <!-- <v-list-group sub-group active-class="border">
-          <template v-slot:activator>
-            <v-list-item-content>
-              <v-list-item-title>More</v-list-item-title>
-            </v-list-item-content>
-          </template>
-          <v-list-item v-for="list in rab" :key="list.title">
-            <v-btn icon>
-              <v-icon>{{list.icon}}</v-icon>
-            </v-btn>
-            <v-list-item-content>
-              <v-list-item-title>{{list.title}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-list-group> -->
       </v-list>
     </v-navigation-drawer>
     
@@ -54,16 +38,16 @@
       </v-app-bar-nav-icon>
       <v-toolbar-title>Dashboard</v-toolbar-title>
 
-      <v-flex class="padding">
+      <!-- <v-flex class="padding">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-icon dark v-on="on">account_circle</v-icon>
           </template>
           <span>Profile</span>
         </v-tooltip>
-      </v-flex>
+      </v-flex> -->
       
-      <v-flex>
+      <v-flex class="padding">
         <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-icon dark v-on="on" @click="logout">power_settings_new</v-icon>
@@ -72,7 +56,6 @@
       </v-tooltip>
       </v-flex>
     </v-app-bar>
-
     <v-content>
       <router-view></router-view>
     </v-content>
@@ -96,10 +79,11 @@ import Structure from '../service/Structure'
         {icon: 'store', title: 'Store', route: '/store'},
         {icon: 'work', title: 'Task', route: '/task'},
         {icon: 'waves', title: 'Materials/Labor', route: '/materials'},
+        {icon: 'post_add', title: 'Reference Detail', route: '/reference'},
         {icon: 'money', title: 'AHS Master', route: '/analisa'},
         {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
         {icon: 'payment', title: 'RAB', route: '/rab'},
-        {icon: 'post_add', title: 'Detail', route: '/reference'},
+        {icon: 'account_balance_wallet', title: 'Calculate', route: '/calculate'},
       ],
       rab : [
         {icon: 'home',title: 'Building', route:''},
@@ -136,6 +120,6 @@ import Structure from '../service/Structure'
   border-left: 4px solid rgb(4, 110, 180);
 }
 .padding{
-  padding-left: 77%
+  padding-left: 82%
 }
 </style>

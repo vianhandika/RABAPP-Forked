@@ -41,7 +41,7 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset()" v-on="on">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">New</v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -128,6 +128,7 @@
                           v-model="Project.no_telp" 
                           label="Telp Number"
                           :rules="noRules"
+                          type="number"
                         ></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -138,6 +139,7 @@
                           v-model="Project.phone" 
                           label="Phone Number"
                           :rules="phoneRules"
+                          type="number"
                         >
                           </v-text-field>
                       </v-flex>
@@ -158,7 +160,6 @@
                         <v-text-field
                           v-model="Project.nominal"
                           label="Nominal"
-                          readonly
                         ></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -256,6 +257,7 @@ import { parseISO } from 'date-fns'
           align: 'left',
           sortable: false,
           value: 'kode',
+          width: '8%'
         },
         {
           text: 'Project',
@@ -340,6 +342,7 @@ import { parseISO } from 'date-fns'
     }),
     mounted(){
       this.getallItem()
+      this.getKode()
     },
     computed: {
       dateFormat(){
@@ -368,10 +371,18 @@ import { parseISO } from 'date-fns'
         let date = parseISO(item)
         return item ? format(date,'dd MMM yyyy') : ''
       },
+      async getKode()
+      {
+        try{
+          this.Project.kode = await Controller.getKode()
+          console.log(this.Project.kode) 
+        }catch(err){
+          console.log(err)
+        }
+      },
       async getallItem(){
         try{
           this.project = (await Controller.getallItem()).data
-          this.Project.kode = 'Pr-'+(this.project.length+1)
         }catch(err){
           console.log(err)
         }

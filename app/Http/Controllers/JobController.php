@@ -75,4 +75,26 @@ class JobController extends RestController
         $job = Job::findOrFail($id);
         return response()->json($job,200);
     }
+
+    public function code()
+    {
+        $job = Job::all()->last();
+        if($job != null)
+            $parts = explode('-',$job->kode);
+        if($job==null){
+            $kode = 'Tk'.'-'.'0001';
+        }
+        else if(($parts[1]+1)<10) {
+            $kode = 'Tk'.'-'.'000'.($parts[1]+1);
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
+            $kode = 'Tk'.'-'.'00'.($parts[1]+1);
+        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+            $kode = 'Tk'.'-'.'0'.($parts[1]+1);
+        }else if(($parts[1]+1)==1000){
+            $kode = 'Tk'.'-'.($parts[1]+1);
+        }else{
+            $kode = 'Tk'.'-'.'001';
+        }
+        return $kode;
+    }
 }

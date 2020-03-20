@@ -37,54 +37,57 @@
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
-                <v-flex xs2>
+                <v-flex xs3>
                   <div class="caption grey--text">ID RAB</div>
                   <div>{{ data.id_rab }}</div>
                 </v-flex>
-                <v-flex xs2>
+                <!-- <v-flex xs5>
                   <div class="caption grey--text">Project</div>
                   <div>{{ data.project }}</div>
-                </v-flex>
-                <v-flex xs2>
+                </v-flex> -->
+                <v-flex xs3>
                   <div class="caption grey--text">Task Group</div>
                   <div>{{ data.name_sub }}</div>
                 </v-flex>
-                <v-flex xs2>
+                <v-flex xs5>
                   <div class="caption grey--text">Task</div>
                   <div>{{ data.name }}</div>
+                </v-flex>
+                <v-flex xs5>
+                  <div class="caption grey--text">Total of Labor</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
+                  </v-layout>
+                </v-flex>
+                <v-flex xs5>
+                  <div class="caption grey--text">Total of Materials</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
+                  </v-layout>
+                </v-flex>
+                <v-flex xs5>
+                  <div class="caption grey--text">Total of Equipment</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.total_equipment).toLocaleString('id-ID') }}</div>
+                  </v-layout>
+                </v-flex>
+                <v-flex xs5>
+                  <div class="caption grey--text">HSP Overhead</div>
+                  <v-layout>
+                    <div style="text-align:left;width:25px">Rp.</div>
+                    <div style="text-align:right;width:100px">{{ Number(data.HSP).toLocaleString('id-ID') }}</div>
+                  </v-layout>
                 </v-flex>
                 <v-flex xs2>
                   <div class="caption grey--text">Adjust</div>
                   <div>{{ data.adjustment }}</div>
                 </v-flex>
-                <v-flex xs2>
-                  <div class="caption grey--text">Total of Labor</div>
-                  <v-layout>
-                    <div style="text-align:left;width:50px">Rp.</div>
-                    <div style="text-align:right;width:50px">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs2>
-                  <div class="caption grey--text">Total of Materials</div>
-                  <v-layout>
-                    <div style="text-align:left;width:50px">Rp.</div>
-                    <div style="text-align:right;width:50px">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs2>
-                  <div class="caption grey--text">HSP</div>
-                  <v-layout>
-                    <div style="text-align:left;width:50px">Rp.</div>
-                    <div style="text-align:right;width:50px">{{ Number(data.HSP).toLocaleString('id-ID') }}</div>
-                  </v-layout>
-                </v-flex>
-                <v-flex>
-                  <div class="caption grey--text">Actions</div>
-                  <!-- <v-icon color="green" @click="itemHandler(data);dialog5=true">edit</v-icon> -->
-                  <v-icon color="red" @click="itemHandler(data);dialog6=true;detailTable=false">delete</v-icon>
-                </v-flex>
               </v-layout>
             </v-list-item-content>
+            <v-icon color="red" @click="itemHandler(data);dialog6=true;detailTable=false">delete</v-icon>
             <v-icon color="light-blue accent-3" @click="detailTable=true">expand_more</v-icon>
           </template>
 
@@ -169,19 +172,15 @@
                       </v-card>
                 </v-dialog>
               </template>
-
               </v-data-table>
-
               <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
                 <v-icon dark>done</v-icon>
                 {{ snackText }}
               </v-snackbar>
-              
             </div>
           </template>
         </v-list-group>
-      </v-card>
-      <div>
+        <div>
         <v-pagination
           v-model="current_page"
           class="my-4"
@@ -194,6 +193,7 @@
         >
         </v-pagination>
       </div>
+      </v-card>
     </v-container>
   </v-app>
 </template>
@@ -201,12 +201,11 @@
 <script>
 import Controller from './../service/Job'
 import materialController from './../service/Material'
-import ahsController from './../service/AHSAdjust'
 import ahs from './../service/AHS'
 import detailController from './../service/AHSLokalDetails'
 import task from './../service/TaskSub'
 import project from './../service/Project'
-import rabdetails from './../service/RAB'
+import rabDetails from './../service/AHSLokal'
 
   export default {
     data: () => ({
@@ -228,7 +227,7 @@ import rabdetails from './../service/RAB'
       detailTable: false,
 
       search:'',
-      select:'',
+      select:-1,
       
       ahs: [],
       ahsDefault:[],
@@ -352,7 +351,7 @@ import rabdetails from './../service/RAB'
       async getPagination()
       {
         try{
-          await rabdetails.get(this.current_page).then(response=>{
+          await rabDetails.pagination(this.current_page).then(response=>{
             this.ahs = response.data
             this.current_page = response.meta.pagination.current_page
             this.total_pages = response.meta.pagination.total_pages
@@ -429,7 +428,7 @@ import rabdetails from './../service/RAB'
       },
       async getall(){
         try{
-          this.detailsData = (await ahsController.getDetails()).data
+          this.detailsData = (await detailController.getDetails()).data
         }catch(err){
           console.log(err)
         }
@@ -451,7 +450,7 @@ import rabdetails from './../service/RAB'
       async getallAHS()
       {
         try{
-          this.ahs = (await ahsController.get()).data
+          this.ahs = (await rabDetails.get()).data
         }catch(err){
           console.log(err)
         }
@@ -470,17 +469,18 @@ import rabdetails from './../service/RAB'
               adjustment   : props.item.adjustment,
             } 
             await detailController.updateDetail(payload,props.item.id_ahs_lokal_details)
-            this.getItem(props.item.id_ahs_lokal_details)
-            this.close()
-            this.update()
+            this.getItem(props.item.id_ahs_lokal_details).then(response=>{
+              this.getPagination()
+              this.update()
+            })
         }catch(err){
           console.log(err);
         }
       }, 
       async deleteItem(id){
         try{
-          await rabdetails.deleteDetail(id).data
-          this.getallAHS()
+          await rabDetails.delete(id).data
+          this.getPagination()
           this.delete()
         }catch(err){
           console.log(err)
@@ -490,10 +490,10 @@ import rabdetails from './../service/RAB'
         try{
           let ahs = this.details.find(obj=>obj.id_ahs_lokal_details == id)
           await detailController.deleteItem(id).data
-          this.getItem(ahs.id_ahs_lokal)
-          this.getallAHS()
-          this.close()
-          this.delete()
+          this.getItem(ahs.id_ahs_lokal).then(response=>{
+            this.getPagination()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }

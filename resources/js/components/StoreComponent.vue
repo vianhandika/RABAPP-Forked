@@ -268,6 +268,7 @@ import Controller from './../service/Store'
     }),
     mounted(){
       this.getallItem()
+      this.getKode()
     },
     computed: {
 
@@ -291,7 +292,15 @@ import Controller from './../service/Store'
       async getallItem(){
         try{
           this.store = (await Controller.getallItem()).data
-          this.Store.kode = 'St-'+(this.store.length+1)
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async getKode()
+      {
+        try{
+          this.Store.kode = await Controller.getKode()
+          console.log(this.Store.kode) 
         }catch(err){
           console.log(err)
         }

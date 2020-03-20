@@ -37,6 +37,7 @@ class AHSLokalDetailsController extends RestController
         $detail = AHSLokalDetails::findOrfail($id);
         $ahs = RABDetails::findOrFail($detail->id_ahs_lokal);
         $material = Materials::findOrFail($detail->id_material);
+        
         if($material->status == "labor")
             $ahs->total_labor -= $detail->sub_total;
         else
@@ -48,11 +49,11 @@ class AHSLokalDetailsController extends RestController
         $group = GroupDetails::findOrFail($task->id_group_details);
         $structure = StructureDetails::findOrFail($group->id_structure_details);
         $rab = RAB::findOrFail($structure->id_rab);
-        $rab->total_rab -= $ahs->HP;
+        $rab->total_rab -= $ahs->HP_Adjust;
         $rab->save();
 
         $project = Project::findOrFail($rab->id_project);
-        $project->nominal -= $rab->total_rab;
+        $project->nominal = $rab->total_rab;
         $project->save();
 
         $status = $detail->delete();
@@ -96,44 +97,4 @@ class AHSLokalDetailsController extends RestController
         $project->nominal = $rab->total_rab;
         $project->save();
     }
-
-    // public function updateCoefficient(Request $request, $id)
-    // {
-    //     $detail = AHSLokalDetails::findOrFail($id);
-    //     $material = Materials::findOrFail($detail->id_material);        
-    //     $ahs = RABDetails::findOrFail($detail->id_ahs_lokal);
-    //     $job = Job::findOrFail($ahs->id_job);
-    //     $task = TaskSubDetails::findOrFail($ahs->id_sub_details);
-    //     $group = GroupDetails::findOrFail($task->id_group_details);
-    //     $structure = StructureDetails::findOrFail($group->id_structure_details);
-    //     $rab = RAB::findOrFail($structure->id_rab);
-
-    //     $detail->coefficient = $request->coefficient;
-
-    //     if($job->status == "labor")
-    //         $ahs->total_labor -= $detail->sub_total;
-    //     else    
-    //         $ahs->total_material -= $detail->sub_total;
-    //     $ahs->HSP = $detail->sub_total;
-    //     $rab->total_rab -= $ahs->HP;
-    //     $detail->sub_total = $request->coefficient * $material->price;
-
-    //     $ahs->save();
-    //     $rab->save();
-    //     $detail->save();
-
-    //     if($task->status == "labor")
-    //         $ahs->total_labor += $detail->sub_total;
-    //     else
-    //         $ahs->total_material += $detail->sub_total;
-    //     $ahs->HP = $detail->sub_total * $rab->volume * $rab->adjustment;
-    //     $ahs->save();
-
-    //     $rab->total_rab += $ahs->HP;
-    //     $rab->save();
-
-    //     $project = Project::findOrFail($rab->id_project);
-    //     $project->nominal = $rab->total_rab;
-    //     $project->save();
-    // }
 }
