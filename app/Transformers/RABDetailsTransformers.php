@@ -55,6 +55,7 @@ class RABDetailsTransformers extends TransformerAbstract
             if($task->id_sub == $ahs_data->id_sub && $data['id_job'] == $ahs_data->id_job)
             {
                 $data['id_ahs'] = $ahs_data->id_ahs;
+                $data['kode'] = $ahs_data->kode;
             }
         }
         return $data;

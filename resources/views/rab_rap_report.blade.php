@@ -68,7 +68,7 @@
         <img src="{{public_path('images/logo.png')}}" width="400px">
         <div class="title">
             <h3>Rencana Anggaran Biaya</h3>
-            <h3>(RAB-BQ)</h3>
+            <h3>(RAB-RAP)</h3>
         </div>
         <div class="footer" style="margin-top:350px">
             <h3>Proyek</h3>
@@ -196,22 +196,33 @@
                                                                 <td>{{$i}}</td>
                                                                 <td align="left">{{$rab_data->job}}</td>
                                                                 @if ($rab_data->status == "Volume")
-                                                                    <td>{{$rab_data->volume * $rab_data->adjustment}}</td>
+                                                                    <td>{{$rab_data->volume * $rab_data->adjustment * $rap}}</td>
                                                                 @else
                                                                     <td>{{$rab_data->volume}}</td>
                                                                 @endif
                                                                 <td>{{$rab_data->satuan}}</td>
                                                                 <td align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
                                                                 @if ($rab_data->status == 'Price')
-                                                                    <td align="right" style="padding-right:5px"></td>
+                                                                    <td align="right" style="padding-right:5px">{{number_format($rab_data->HSP * $rab_data->adjustment * $rap,2,',','.')}}</td>
                                                                 @else
-                                                                    <td align="right" style="padding-right:5px"></td>
+                                                                    <td align="right" style="padding-right:5px">{{number_format($rab_data->HSP * $rap,2,',','.')}}</td>
                                                                 @endif
                                                                 <td align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
-                                                                <td align="right" style="padding-right:5px"></td>
+                                                                <td align="right" style="padding-right:5px">{{number_format($rab_data->HP_Adjust * $rap,2,',','.')}}</td>
                                                                 <td colspan="2"></td>
-                                                                <td align="right" style="padding-right:2px;font-style:bold"></td>
+                                                                @foreach ($totalSt as $item)
+                                                                    @if ($item->id_structure == $structure_data->id_structure)
+                                                                        @php
+                                                                            $proc = ($rab_data->HP_Adjust * $rap/$item->Total)*100;
+                                                                        @endphp
+                                                                    @endif
+                                                                @endforeach
+                                                                <td align="right" style="padding-right:2px;font-style:bold">{{number_format($proc,2,',','.')}}%</td>
                                                                 <td></td>
+                                                                @php
+                                                                    $total += $rab_data->HP_Adjust * $rap;
+                                                                    $proc_pek += $proc;
+                                                                @endphp
                                                             </tr>
                                                             @php
                                                                 $i++
@@ -228,10 +239,14 @@
                                                 <td colspan="2"></td>
                                                 <td colspan="2"></td>
                                                 <td align="left" style="border-right: 1px solid none;padding-left:5px;border-bottom:3px solid black;border-size:1px;font-style:bold">Rp.</td>
-                                                <td align="right" style="padding-right:5px;padding-left:5px;border-bottom:3px solid black;font-style:bold"></td>
+                                                <td align="right" style="padding-right:5px;padding-left:5px;border-bottom:3px solid black;font-style:bold">{{number_format($total,2,',','.')}}</td>
                                                 <td></td>
-                                                <td align="right" style="padding-right:2px;font-style:bold"></td>
+                                                <td align="right" style="padding-right:2px;font-style:bold">{{number_format($proc_pek,2,',','.')}}%</td>
                                             </tr>
+                                            @php
+                                                $nominal += $total;
+                                                $total_proc += $proc_pek;
+                                            @endphp
                                         @endif
                                     @endif
                                 @endforeach
@@ -254,14 +269,14 @@
                         <tr>
                             <td colspan="8" align="left" style="font-style:bold;padding-left:10px">TOTAL</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
-                            <td align="right" style="padding-right:5px;font-style:bold"></td>
-                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold"></td>}}
-                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold"></td>}}
+                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($nominal,2,',','.')}}</td>
+                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>}}
+                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>}}
                         </tr>
                         <tr>
                             <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PEMBULATAN</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
-                            <td align="right" style="padding-right:5px;font-style:bold"></td>
+                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($nominal,0,',','.')}}</td>
                         </tr>
                     </tbody>
                 </table>

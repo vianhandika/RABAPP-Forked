@@ -30,7 +30,13 @@
                 border-top:3px solid black;
                 /* padding: 10px; */
             }
-            .table-section table tbody tr td {
+            /* .table-section table tbody tr td {
+                border-bottom: 1px solid black;
+                border-right: 1px solid black;
+                font-family: Calibri, sans-serif;
+                margin: 10px;
+            } */
+            .bottomRight {
                 border-bottom: 1px solid black;
                 border-right: 1px solid black;
                 font-family: Calibri, sans-serif;
@@ -68,7 +74,7 @@
         <img src="{{public_path('images/logo.png')}}" width="400px">
         <div class="title">
             <h3>Rencana Anggaran Biaya</h3>
-            <h3>(RAB-BQ)</h3>
+            <h3>(RAB-Kebutuhan-Bahan)</h3>
         </div>
         <div class="footer" style="margin-top:350px">
             <h3>Proyek</h3>
@@ -129,41 +135,33 @@
                     <thead>
                         <tr>
                             <th rowspan="2">No.</th>
+                            <th rowspan="2" width="50px">ID. B&T</th>
+                            <th rowspan="2" width="100px">Item</th>
                             <th rowspan="2" width="160px">Uraian Pekerjaan</th>
                             <th>Vol.</th>
                             <th>Sat.</th>
-                            <th colspan="2">Harga Sat</th>
+                            <th colspan="2">Harga</th>
                             <th colspan="2">Harga Terhitung</th>
-                            <th colspan="2">Jumlah</th>
-                            <th colspan="2">Proc</th>
+                            <th>Total</th>
                         </tr>
                         <tr>
                             <th>Pek.</th>
                             <th>Pek.</th>
-                            <th colspan="2">Pekerjaan</th>
-                            <th colspan="2">Upah&Bahan</th>
-                            <th colspan="2">Terhitung</th>
-                            <th colspan="2">Pek</th>
+                            <th colspan="2">Bahan</th>
+                            <th colspan="2">Bahan</th>
+                            <th>Volume</th>
                         </tr>
                     </thead>
                     <tbody>
                         @php
                             $k=0;
                             $nominal = 0;
-                            $total_proc=0;
                         @endphp
                         @foreach ($group as $group_data)
                             @if ($structure_data->id_structure == $group_data->id_structure)
                                 <tr>
-                                    <td style="font-style:bold">{{$roman[$k]}}</td>
-                                    <td align="left" style="font-style:bold">LANTAI {{strtoupper($group_data->name)}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td colspan="2"></td>
-                                    <td colspan="2"></td>
-                                    <td colspan="2"></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="bottomRight" style="font-style:bold">{{$roman[$k]}}</td>
+                                    <td class="bottomRight" align="left" style="font-style:bold" colspan="10">LANTAI {{strtoupper($group_data->name)}}</td>
                                 </tr>
                                 @php
                                     $j=0;
@@ -172,66 +170,79 @@
                                     @if ($structure_data->id_structure == $tasksub_data->id_structure)
                                         @if ($group_data->id_groups == $tasksub_data->id_groups)
                                             <tr>
-                                                <td style="font-style:bold">{{$alphabet[$j]}}</td>
-                                                <td align="left" style="font-style:bold">PEKERJAAN {{strtoupper($tasksub_data->name)}}</td>
-                                                <td></td>
-                                                <td></td>
-                                                <td colspan="2"></td>
-                                                <td colspan="2"></td>
-                                                <td colspan="2"></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td class="bottomRight" style="font-style:bold">{{$alphabet[$j]}}</td>
+                                                <td class="bottomRight" align="left" style="font-style:bold" colspan="10">PEKERJAAN {{strtoupper($tasksub_data->name)}}</td>
                                             </tr>
                                             @php
                                                 $i=1;
                                                 $j++;
                                                 $total=0;
-                                                $proc_pek=0
+                                                $a=0;
+                                                $count = count($rab);
+                                                $volume = 0;
                                             @endphp
                                             @foreach ($rab as $rab_data)
                                                 @if ($structure_data->id_structure == $rab_data->id_structure)
                                                     @if ($group_data->id_groups == $rab_data->id_groups)
                                                         @if ($tasksub_data->id_sub == $rab_data->id_sub)
                                                             <tr>
-                                                                <td>{{$i}}</td>
-                                                                <td align="left">{{$rab_data->job}}</td>
+                                                                <td class="bottomRight">{{$i}}</td>
+                                                                <td class="bottomRight">{{$rab_data->kode}}</td>
+                                                                <td class="bottomRight" align="left">{{$rab_data->materials}}</td>
+                                                                <td class="bottomRight" align="left">{{$rab_data->job}}</td>
                                                                 @if ($rab_data->status == "Volume")
-                                                                    <td>{{$rab_data->volume * $rab_data->adjustment}}</td>
+                                                                    <td class="bottomRight">{{$rab_data->volume * $rab_data->adjustment}}</td>
                                                                 @else
-                                                                    <td>{{$rab_data->volume}}</td>
+                                                                    <td class="bottomRight">{{$rab_data->volume}}</td>
                                                                 @endif
-                                                                <td>{{$rab_data->satuan}}</td>
-                                                                <td align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
-                                                                @if ($rab_data->status == 'Price')
-                                                                    <td align="right" style="padding-right:5px"></td>
+                                                                <td class="bottomRight">{{$rab_data->satuan}}</td>
+                                                                <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                                                <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->price,2,',','.')}}</td>
+                                                                <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                                                <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->HSP,2,',','.')}}</td>
+                                                                <td class="bottomRight"></td>
+                                                            </tr>
+                                                            <tr>
+                                                                @if ($a != $count-1)
+                                                                    @php
+                                                                        $volume += $rab_data->volume;        
+                                                                    @endphp
+                                                                    @if ($rab[$a]->materials != $rab[$a+1]->materials)
+                                                                        <td class="bottomRight"></td>
+                                                                        <td class="bottomRight"></td>
+                                                                        <td class="bottomRight"></td>
+                                                                        <td class="bottomRight"></td>
+                                                                        <td class="bottomRight"></td>
+                                                                        <td class="bottomRight"></td>
+                                                                        <td class="bottomRight" colspan="2"></td>
+                                                                        <td class="bottomRight" colspan="2"></td>
+                                                                        <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$volume}}</td>
+                                                                        @php
+                                                                            $volume=0;
+                                                                        @endphp
+                                                                    @else
+                                                                        <td colspan="11"></td>
+                                                                    @endif
                                                                 @else
-                                                                    <td align="right" style="padding-right:5px"></td>
+                                                                    <td class="bottomRight"></td>
+                                                                    <td class="bottomRight"></td>
+                                                                    <td class="bottomRight"></td>
+                                                                    <td class="bottomRight"></td>
+                                                                    <td class="bottomRight"></td>
+                                                                    <td class="bottomRight"></td>
+                                                                    <td class="bottomRight" colspan="2"></td>
+                                                                    <td class="bottomRight" colspan="2"></td>
+                                                                    <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$volume + $rab_data->volume}}</td>
                                                                 @endif
-                                                                <td align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
-                                                                <td align="right" style="padding-right:5px"></td>
-                                                                <td colspan="2"></td>
-                                                                <td align="right" style="padding-right:2px;font-style:bold"></td>
-                                                                <td></td>
                                                             </tr>
                                                             @php
-                                                                $i++
+                                                                $i++;
+                                                                $a++;
                                                             @endphp 
                                                         @endif
                                                     @endif 
                                                 @endif
                                             @endforeach
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td colspan="2"></td>
-                                                <td colspan="2"></td>
-                                                <td align="left" style="border-right: 1px solid none;padding-left:5px;border-bottom:3px solid black;border-size:1px;font-style:bold">Rp.</td>
-                                                <td align="right" style="padding-right:5px;padding-left:5px;border-bottom:3px solid black;font-style:bold"></td>
-                                                <td></td>
-                                                <td align="right" style="padding-right:2px;font-style:bold"></td>
-                                            </tr>
                                         @endif
                                     @endif
                                 @endforeach
@@ -241,27 +252,8 @@
                             @endif
                         @endforeach
                         <tr>
-                            <td>-</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td colspan="2"></td>
-                            <td colspan="2"></td>
-                            <td colspan="2" style="border-bottom: 3px solid black"></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">TOTAL</td>
-                            <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
-                            <td align="right" style="padding-right:5px;font-style:bold"></td>
-                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold"></td>}}
-                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold"></td>}}
-                        </tr>
-                        <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PEMBULATAN</td>
-                            <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
-                            <td align="right" style="padding-right:5px;font-style:bold"></td>
+                            <td class="bottomRight">-</td>
+                            <td class="bottomRight" colspan="10"></td>
                         </tr>
                     </tbody>
                 </table>

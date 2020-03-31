@@ -19,11 +19,9 @@ export default {
                 const data = res.data
                 resolve(data)
             }
-
             const errorCallback = (err) => {
                 reject(err)
             }
-
             Http.patch('/api/rabs/update/'+id, payload, successCallback, errorCallback)
         })
     },
@@ -85,6 +83,18 @@ export default {
                 reject(err)
             }
             Http.get('/api/rabs/code', successCallback, errorCallback)
+        })
+    },
+    copy(payload) {
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.post('/api/rabs/copy', payload, successCallback, errorCallback)
         })
     },
 }

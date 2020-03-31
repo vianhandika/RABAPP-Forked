@@ -4,11 +4,9 @@
         <style>
             .border{
                 border: 0.2px solid black;
-                /* height: 1000px; */
             }
             .title{
                 border-top: 1px solid black;
-                /* border-bottom: 1px solid black; */
                 font-size: 15px;
                 text-align: center;
                 font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
@@ -23,13 +21,9 @@
                 border-bottom: 0.2px solid black;
                 border-right: 0.2px solid black;
             }
-            /* .table-section table tbody tr td {
-                border-right: 0.2px solid black;
-            } */
             .top{
                 border-top: 0.2px solid black;
                 padding-top: -2px;
-                /* border-collapse: collapse; */
             }
             .bottom{
                 border-bottom: 0.2px solid black;
@@ -94,10 +88,10 @@
                         <td class="right">{{$data->kode_material}}</td>
                         <td class="right" align="left">{{$data->material}}</td>
                         <td class="right">{{$data->satuan_material}}</td>
-                        <td class="left" align="right">Rp.</td>
-                        <td class="right" align="right" style="padding-right: 2px">{{number_format($data->price,0,',','.')}}</td>
-                        <td class="left" align="right">Rp.</td>
-                        <td class="right" align="right" style="padding-right: 5px">{{number_format($data->price_satuan,0,',','.')}}</td>
+                        <td class="left" align="right" style="padding-right:5px;padding-left:5px">Rp.</td>
+                        <td class="right" align="right" style="padding-right: 2px">{{number_format($data->price,2,',','.')}}</td>
+                        <td class="left" align="right" style="padding-right:5px;padding-left:5px">Rp.</td>
+                        <td class="right" align="right" style="padding-right: 5px">{{number_format($data->price_satuan,2,',','.')}}</td>
                     </tr>
 
                     <tr>
@@ -110,9 +104,9 @@
                         @if ($j == $i+1)
                         {
                             <td colspan="5" class="bottomLeft" class="left" style="padding-right:10px" align="left">Subtotal Material</td>
-                            <td class="bottom">:</td>
-                            <td class="bottom" align="right">Rp. </td>
-                            <td class="bottom" align="right" style="padding-right: 5px">{{ number_format($data->total_material,0,',','.') }}</td>
+                            <td class="bottom" align="right">:</td>
+                            <td class="bottom" align="right" style="padding-right:5px;padding-left:5px">Rp. </td>
+                            <td class="bottom" align="right" style="padding-right: 5px">{{ number_format($data->total_material,2,',','.') }}</td>
                         }
                         @else
                         @endif
@@ -125,17 +119,41 @@
                     <tr>
                         <td colspan="2"></td>
                         <td colspan="5" class="bottomLeft" style="padding-right:10px" align="left">Subtotal Tenaga</td>
-                        <td class="bottom">:</td>
-                        <td class="bottom" align="right">Rp.</td>
-                        <td class="bottom" align="right" style="padding-right: 5px">{{ number_format($data->total_labor,0,',','.') }}</td>
+                        <td class="bottom" align="right">:</td>
+                        <td class="bottom" align="right" style="padding-right:5px;padding-left:5px">Rp.</td>
+                        <td class="bottom" align="right" style="padding-right: 5px">{{ number_format($data->total_labor,2,',','.') }}</td>
                     </tr>
 
                     <tr>
                         <td colspan="2"></td>
-                        <td colspan="5" class="left" style="padding-right:10px" align="left">Biaya Total</td>
-                        <td class="bottom">:</td>
-                        <td align="right">Rp.</td>
-                        <td align="right" style="padding-right: 5px">{{number_format($data->total,0,',','.')}}</td>
+                        <td colspan="5" class="bottomLeft" style="padding-right:10px" align="left">Subtotal Peralatan</td>
+                        <td class="bottom" align="right">:</td>
+                        <td class="bottom" align="right" style="padding-right:5px;padding-left:5px">Rp.</td>
+                        <td class="bottom" align="right" style="padding-right: 5px">{{ number_format($data->total_equipment,2,',','.') }}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="5" class="bottom" style="padding-right:10px" align="left">Biaya Total</td>
+                        <td class="bottom" align="right">:</td>
+                        <td class="bottom" align="right" style="padding-right:5px;padding-left:5px">Rp.</td>
+                        <td class="bottom" align="right" style="padding-right: 5px">{{number_format($data->total_before_overhead,2,',','.')}}</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="5" class="bottomLeft" style="padding-right:10px" align="left">Overhead</td>
+                        <td class="bottom" align="right">:</td>
+                        <td class="bottom"></td>
+                        <td class="bottom" align="right" style="padding-right:5px">{{$data->overhead}}%</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="5" class="left" style="padding-right:10px" align="left">Biaya Total (Overhead)</td>
+                        <td class="bottom" align="right">:</td>
+                        <td align="right" style="padding-right:5px;padding-left:5px" style="padding-right:5px;padding-left:5px">Rp.</td>
+                        <td align="right" style="padding-right: 5px">{{number_format($data->total,2,',','.')}}</td>
                     </tr>
                 </tbody>
             </table>

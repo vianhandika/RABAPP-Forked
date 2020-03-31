@@ -33,7 +33,8 @@ class AHSDetailsController extends RestController
             $ahs->total_material -= $detail->sub_total;
         else
             $ahs->total_labor -= $detail->sub_total;
-        $ahs->total = $ahs->total - $detail->sub_total;
+        $ahs->total_before_overhead -= $detail->sub_total;
+        $ahs->total = $ahs->total_before_overhead + ($ahs->total_before_overhead*$ahs->overhead/100);
         $ahs->save();
 
         $detail->coefficient = $request->coefficient;
@@ -44,7 +45,8 @@ class AHSDetailsController extends RestController
             $ahs->total_material += $detail->sub_total;
         else
             $ahs->total_labor += $detail->sub_total;
-        $ahs->total = $ahs->total + $detail->sub_total;
+        $ahs->total_before_overhead += $detail->sub_total;
+        $ahs->total = $ahs->total_before_overhead + ($ahs->total_before_overhead*$ahs->overhead/100);
         $ahs->save();
 
         return response()->json([
@@ -64,9 +66,8 @@ class AHSDetailsController extends RestController
             $ahs->total_material -= $detail->sub_total;
         else
             $ahs->total_labor -= $detail->sub_total;
-
-        $ahs->total -= $detail->sub_total;
-      
+        $ahs->total_before_overhead -= $detail->sub_total;
+        $ahs->total = $ahs->total_before_overhead + ($ahs->total_before_overhead * $ahs->overhead/100);
         $ahs->save();
         $status = $detail->delete();
 

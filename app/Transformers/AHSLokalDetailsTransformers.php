@@ -23,6 +23,8 @@ class AHSLokalDetailsTransformers extends TransformerAbstract
             'type'                  => $ahs_lokal_details->materials->type,
             'price'                 => $ahs_lokal_details->materials->price,
             'status'                => $ahs_lokal_details->materials->status,
+            'satuan'                => $ahs_lokal_details->materials->satuan,
+            'volume'                => $ahs_lokal_details->ahs_lokals->volume,        
 
             'id_structure'  => $ahs_lokal_details->ahs_lokals->task_group->sub->structure->structure->id_structure,
             'id_groups'     => $ahs_lokal_details->ahs_lokals->task_group->sub->group->id_groups,

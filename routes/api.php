@@ -74,11 +74,13 @@ Route::post('/rabs/storeN','RABController@storeN');
 Route::patch('/rabs/update/{id}','RABController@update');
 Route::delete('/rabs/delete/{id}','RABController@destroy');
 Route::get('/rabs/code/','RABController@code');
+Route::post('/rabs/copy/','RABController@copy');
 //RAB Details
 Route::get('/rab_details','RABDetailsController@index');
 Route::patch('/rab_details/update/{id}','RABDetailsController@update');
 Route::delete('/rab_details/delete/{id}','RABDetailsController@destroy');
-Route::get('rab_details/show/{id}','RABDetailsController@show');
+Route::get('/rab_details/show', 'RABDetailsController@show_detailsNotNull');
+Route::get('/rab_details/showByID/{id}', 'RABDetailsController@showByID');
 //Store
 Route::get('/stores','StoreController@index');
 Route::post('/stores/store', 'StoreController@store');
@@ -128,4 +130,6 @@ Route::get('/ahs_master_report/{id}','ReportsController@analisa_task');
 Route::get('/ahs_lokal_report/{id}','ReportsController@analisa_lokal');
 Route::get('/rab_report/{id}','ReportsController@rab');
 Route::get('/rab_bq_report/{id}','ReportsController@rab_bq');
+Route::get('/rab_mr_report/{id}','ReportsController@rab_mr');
+Route::get('/rab_rap_report/{id}/{rap}','ReportsController@rab_rap');
 Route::get('/analisa_task_all','ReportsController@analisa_task_all');

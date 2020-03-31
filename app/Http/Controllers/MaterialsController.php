@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Materials;
+use App\AHSDetails;
+use App\AHS;
 use App\Transformers\MaterialsTransformers;
 
 class MaterialsController extends RestController
@@ -46,20 +48,78 @@ class MaterialsController extends RestController
             'type' => 'required|max:255',
             'price' => 'required|max:255',
             'spesification' => 'required|max:255',
-            //'status' => 'required|max:255',
+            'status' => 'required|max:255',
             'satuan' => 'required|max:255',
         ]);
 
         $material = Materials::findOrFail($id);
+        $details = AHSDetails::where('id_material',$material->id_material)->get();
+
+        foreach($details as $detail)
+        {
+            if($details->isNotEmpty())
+            {
+                $ahs = AHS::where('id_ahs',$detail->id_ahs)->get();
+
+                if($material->status != $request->status)
+                {
+                    foreach($ahs as $ahs_data)
+                    {
+                        if($request->status == "labor"){
+                            $ahs_data->total_material -= $detail->sub_total;
+                            $ahs_data->total_labor += $detail->sub_total;
+                        }else{
+                            $ahs_data->total_labor -= $detail->sub_total;
+                            $ahs_data->total_material += $detail->sub_total;
+                        }
+                        $ahs_data->save();
+                    }
+                }
+            }
+        }
+        $material->status = $request->status;
+        $material->save();
+        
+        foreach($details as $detail)
+        {
+            if($details->isNotEmpty())
+            {
+                $ahs = AHS::where('id_ahs',$detail->id_ahs)->get();
+
+                if($material->price != $request->price)
+                {
+                    foreach($ahs as $ahs_data)
+                    {
+                        if($request->status == "labor"){
+                            $ahs_data->total_labor -= $detail->sub_total;
+                        }else{
+                            $ahs_data->total_material -= $detail->sub_total;
+                        }
+                        $ahs_data->total_before_overhead -= $detail->sub_total;
+                        $ahs_data->total = $ahs_data->total_before_overhead + ($ahs_data->overhead * $ahs_data->total_before_overhead/100);
+                        $ahs_data->save();
+
+                        $detail->sub_total = $detail->coefficient * $request->price;
+                        $detail->save();
+                        
+                        if($material->status == "labor")
+                            $ahs_data->total_labor += $detail->sub_total;
+                        else
+                            $ahs_data->total_material += $detail->sub_total;
+                        $ahs_data->total_before_overhead += $detail->sub_total;
+                        $ahs_data->total = $ahs_data->total_before_overhead + ($ahs_data->overhead * $ahs_data->total_before_overhead/100);
+                        $ahs_data->save();
+                    }
+                }
+            }
+        }
         $material->kode = $request->kode;
         $material->id_store = $request->id_store;
         $material->name = $request->name;
         $material->type = $request->type;
-        $material->price = $request->price;
         $material->spesification = $request->spesification;
-        $material->status = $request->status;
         $material->satuan = $request->satuan;
-        
+        $material->price = $request->price;
         $material->save();
 
         return response()->json([
@@ -78,7 +138,28 @@ class MaterialsController extends RestController
     public function destroy($id)
     {
         $material = Materials::findOrFail($id);
+        $details = AHSDetails::where('id_material',$id)->get();
+        foreach($details as $detail)
+        {
+            if($details->isNotEmpty())
+            {
+                $ahs = AHS::where('id_ahs',$detail->id_ahs)->get();
+                foreach($ahs as $ahs_data)
+                {
+                    if($material->status == "labor")
+                        $ahs_data->total_labor -= $detail->sub_total;
+                    else    
+                        $ahs_data->total_material -= $detail->sub_total;
+                    $ahs_data->total_before_overhead -= $detail->sub_total;
+                    $ahs_data->total = $ahs_data->total_before_overhead+($ahs_data->overhead * ($ahs_data->total_before_overhead/100));
+                    $ahs_data->save();
+
+                    $status_detail = $detail->delete();
+                }
+            }
+        }
         $status = $material->delete();
+        
         return response()->json([
             'status' => $material,
             'message' => $material ? 'Deleted' : 'Error Delete'

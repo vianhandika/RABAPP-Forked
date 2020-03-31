@@ -19,7 +19,8 @@
                 border-collapse: collapse;
                 font-size: 10px;
                 font-family: Calibri, sans-serif;
-                width: 700px
+                width: 700px;
+                margin-top: 10px;
             }
             .table-section table thead tr th {
                 border-bottom: 1px solid black;
@@ -69,7 +70,7 @@
             <h3>Rencana Anggaran Biaya</h3>
             <h3>(RAB-OE)</h3>
         </div>
-        <div class="footer" style="margin-top:400px">
+        <div class="footer" style="margin-top:350px">
             <h3>Proyek</h3>
             <h3>{{ strtoupper($rab[0]->name)}}</h3>
             <h3>{{$rab[0]->address}}</h3>
@@ -85,7 +86,8 @@
                 <h3 style="font-size: 25px">PEKERJAAN</h3>
                 <p style="font-size: 20px">{{strtoupper($structure_data->name)}}
             </div>
-            <div class="footer" style="margin-top:580px">
+
+            <div class="footer" style="margin-top: 500px;">
                 <h3>Proyek</h3>
                 <h3>{{ strtoupper($rab[0]->name)}}</h3>
                 <h3>{{$rab[0]->address}}</h3>
@@ -103,12 +105,22 @@
             <table>
                 <thead>
                     <tr>
-                        <td>Pemilik : {{$rab[0]->owner}}</td>
-                        <td style="padding-left: 200px">Alamat : {{$rab[0]->address}}</td>
+                        <td style="font-size:15px">Pemilik</td>
+                        <td style="font-size:15px">:</td>
+                        <td align="left" colspan="2" style="font-size:15px">{{$rab[0]->owner}}</td>
+                        <td style="padding-right:20px"></td>
+                        <td style="font-size:15px">Alamat</td>
+                        <td style="font-size:15px">:</td>
+                        <td colspan="2" style="font-size:15px">{{$rab[0]->address}}</td>
                     </tr>
                     <tr>
-                        <td>No. HP : {{$rab[0]->phone}}</th>
-                        <td style="padding-left: 200px">Tanggal : {{date('d M Y'),strtotime($rab[0]->date)}}</th>
+                        <td style="font-size:15px">Tipologi</td>
+                        <td style="font-size:15px">:</td>
+                        <td colspan="2" style="font-size:15px">{{$rab[0]->type}}</td>
+                        <td style="padding-right:20px"></td>
+                        <td style="font-size:15px">Tanggal</td>
+                        <td style="font-size:15px">:</td>
+                        <td colspan="2" style="font-size:15px">{{date('d M Y'),strtotime($rab[0]->date)}}</td>
                     </tr>
                 </thead>
             </table>
@@ -144,7 +156,7 @@
                             @if ($structure_data->id_structure == $group_data->id_structure)
                                 <tr>
                                     <td style="font-style:bold">{{$roman[$k]}}</td>
-                                    <td align="left" style="font-style:bold">{{strtoupper($group_data->name)}}</td>
+                                    <td align="left" style="font-style:bold">LANTAI {{strtoupper($group_data->name)}}</td>
                                     <td></td>
                                     <td></td>
                                     <td colspan="2"></td>
@@ -157,77 +169,85 @@
                                     $j=0;
                                 @endphp
                                 @foreach ($tasksub as $tasksub_data)
-                                    @if ($group_data->id_groups == $tasksub_data->id_groups)
-                                        <tr>
-                                            <td style="font-style:bold">{{$alphabet[$j]}}</td>
-                                            <td align="left" style="font-style:bold">{{strtoupper($tasksub_data->name)}}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td colspan="2"></td>
-                                            <td colspan="2"></td>
-                                            <td colspan="2"></td>
-                                            <td></td>
-                                            <td></td>
-                                        </tr>
-                                        @php
-                                            $i=1;
-                                            $j++;
-                                            $total=0;
-                                            $proc_pek=0
-                                        @endphp
-                                        @foreach ($rab as $rab_data)
-                                            @if ($group_data->id_groups == $rab_data->id_groups)
-                                                @if ($tasksub_data->id_sub == $rab_data->id_sub)
-                                                    <tr>
-                                                        <td>{{$i}}</td>
-                                                        <td align="left">{{$rab_data->job}}</td>
-                                                        @if ($rab_data->status == "Volume")
-                                                            <td>{{$rab_data->volume * $rab_data->adjustment}}</td>
-                                                        @else
-                                                            <td>{{$rab_data->volume}}</td>
-                                                        @endif
-                                                        <td>{{$rab_data->satuan}}</td>
-                                                        <td align="left" style="border-right: 1px solid none">Rp.</td>
-                                                        <td align="right" >{{number_format($rab_data->HSP,2,',','.')}}</td>
-                                                        <td align="left" style="border-right: 1px solid none">Rp.</td>
-                                                        <td align="right">{{number_format($rab_data->HP_Adjust,2,',','.')}}</td>
-                                                        <td colspan="2"></td>
-                                                        @foreach ($totalSt as $item)
-                                                            @if ($item->id_structure == $structure_data->id_structure)
+                                    @if ($structure_data->id_structure == $tasksub_data->id_structure)
+                                        @if ($group_data->id_groups == $tasksub_data->id_groups)
+                                            <tr>
+                                                <td style="font-style:bold">{{$alphabet[$j]}}</td>
+                                                <td align="left" style="font-style:bold">PEKERJAAN {{strtoupper($tasksub_data->name)}}</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td colspan="2"></td>
+                                                <td colspan="2"></td>
+                                                <td colspan="2"></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            @php
+                                                $i=1;
+                                                $j++;
+                                                $total=0;
+                                                $proc_pek=0
+                                            @endphp
+                                            @foreach ($rab as $rab_data)
+                                                @if ($structure_data->id_structure == $rab_data->id_structure)
+                                                    @if ($group_data->id_groups == $rab_data->id_groups)
+                                                        @if ($tasksub_data->id_sub == $rab_data->id_sub)
+                                                            <tr>
+                                                                <td>{{$i}}</td>
+                                                                <td align="left">{{$rab_data->job}}</td>
+                                                                @if ($rab_data->status == "Volume")
+                                                                    <td>{{$rab_data->volume * $rab_data->adjustment}}</td>
+                                                                @else
+                                                                    <td>{{$rab_data->volume}}</td>
+                                                                @endif
+                                                                <td>{{$rab_data->satuan}}</td>
+                                                                <td align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                                                @if ($rab_data->status == 'Price')
+                                                                    <td align="right" style="padding-right:5px">{{number_format($rab_data->HSP * $rab_data->adjustment,2,',','.')}}</td>
+                                                                @else
+                                                                    <td align="right" style="padding-right:5px">{{number_format($rab_data->HSP,2,',','.')}}</td>
+                                                                @endif
+                                                                <td align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                                                <td align="right" style="padding-right:5px">{{number_format($rab_data->HP_Adjust,2,',','.')}}</td>
+                                                                <td colspan="2"></td>
+                                                                @foreach ($totalSt as $item)
+                                                                    @if ($item->id_structure == $structure_data->id_structure)
+                                                                        @php
+                                                                            $proc = ($rab_data->HP_Adjust/$item->Total)*100;
+                                                                        @endphp
+                                                                    @endif
+                                                                @endforeach
+                                                                <td align="right" style="padding-right:2px;font-style:bold">{{number_format($proc,2,',','.')}}%</td>
+                                                                <td></td>
                                                                 @php
-                                                                    $proc = ($rab_data->HP_Adjust/$item->Total)*100;
+                                                                    $total += $rab_data->HP_Adjust;
+                                                                    $proc_pek += $proc;
                                                                 @endphp
-                                                            @endif
-                                                        @endforeach
-                                                        <td align="right" style="padding-right:2px;font-style:bold">{{number_format($proc,2,',','.')}}%</td>
-                                                        <td></td>
-                                                        @php
-                                                            $total += $rab_data->HP_Adjust;
-                                                            $proc_pek += $proc;
-                                                        @endphp
-                                                    </tr>
-                                                    @php
-                                                        $i++
-                                                    @endphp 
+                                                            </tr>
+                                                            @php
+                                                                $i++
+                                                            @endphp 
+                                                        @endif
+                                                    @endif 
                                                 @endif
-                                            @endif
-                                        @endforeach
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td colspan="2"></td>
-                                            <td colspan="2"></td>
-                                            <td align="left" style="border-right: 1px solid none;padding-left:5px;border-bottom:3px solid black;border-size:1px;font-style:bold">Rp.</td>
-                                            <td align="right" style="padding-right:5px;padding-left:5px;border-bottom:3px solid black;font-style:bold">{{number_format($total,2,',','.')}}</td>
-                                            <td></td>
-                                            <td align="right" style="padding-right:2px;font-style:bold">{{number_format($proc_pek,2,',','.')}}%</td>
-                                        </tr>
-                                        @php
-                                            $nominal += $total;
-                                            $total_proc += $proc_pek;
-                                        @endphp
+                                            @endforeach
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td colspan="2"></td>
+                                                <td colspan="2"></td>
+                                                <td align="left" style="border-right: 1px solid none;padding-left:5px;border-bottom:3px solid black;border-size:1px;font-style:bold">Rp.</td>
+                                                <td align="right" style="padding-right:5px;padding-left:5px;border-bottom:3px solid black;font-style:bold">{{number_format($total,2,',','.')}}</td>
+                                                <td></td>
+                                                <td align="right" style="padding-right:2px;font-style:bold">{{number_format($proc_pek,2,',','.')}}%</td>
+                                            </tr>
+                                            @php
+                                                $nominal += $total;
+                                                $total_proc += $proc_pek;
+                                            @endphp
+                                        @endif
                                     @endif
                                 @endforeach
                                 @php

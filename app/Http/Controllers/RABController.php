@@ -43,122 +43,14 @@ class RABController extends RestController
     {
         try{
             $rab = new RAB;
-            if($request->has('detail_structure'))
-            {
-                $Structure = $request->get('detail_structure');
-            }
-            if($request->has('detail_group'))
-            {
-                $Groups = $request->get('detail_group');
-            }
-            if($request->has('detail_task'))
-            {
-                $TaskSub = $request->get('detail_task');
-            }
-            if($request->has('detail'))
-            {
-                $detail = $request->get('detail');
-            }
-            if($request->has('detail_material'))
-            {
-                $Material = $request->get('detail_material');
-            }
             $rab->id_project    = $request->get('id_project');
             $rab->kode          = $request->get('kode');
             $rab->total_rab     = $request->get('total_rab');
             $rab->desc          = $request->get('desc');
             $rab->save();
 
-            if($request->has('detail_structure'));
-            {
-                $rab = DB::transaction(function () use ($rab,$Structure) {
-                    $rab->structures()->createMany($Structure);   
-                    return $rab;
-                });
-            }
-            $structure_data = StructureDetails::where('id_rab',$rab->id_rab)->get();
-            $group_data = [];
-            $task_sub_data = [];
-            $detail_data = [];
-            $material_data = [];
+            $this->storeAll($rab,$request);
 
-            foreach($structure_data as $structure)
-            {
-                foreach($Groups as $group)
-                {
-                    if($structure->id_structure == $group['id_structure'])
-                        array_push($group_data,$structure->groups()->create($group));
-                }
-            }
-        
-            foreach($group_data as $group)
-            {
-                foreach($TaskSub as $task)
-                {
-                    // $data = GroupDetails::find($group->id_group_details)->structure;
-                    // $id_structure = $data['id_structure'];
-
-                    $structure = StructureDetails::findOrFail($group->id_structure_details);
-
-                    if($structure->id_structure == $task['id_structure']) 
-                    {
-                        if($group->id_groups == $task['id_groups'])
-                            array_push($task_sub_data,$group->task_subs()->create($task));
-                    }
-                    
-                }
-            }
-
-            foreach($task_sub_data as $task)
-            {
-                foreach($detail as $detail_o)
-                {
-                    // $data = TaskSubDetails::find($task->id_sub_details)->sub;
-                    // $id_group_details = $data['id_group_details'];
-                    // $id_groups = $data['id_groups'];
-                    // $groups = GroupDetails::find($id_group_details)->structure;
-                    // $id_structure = $groups['id_structure'];
-
-                    $group = GroupDetails::findOrFail($task->id_group_details);
-                    $structure = StructureDetails::findOrFail($group->id_structure_details);
-                    
-                    if($structure->id_structure == $detail_o['id_structure'])
-                    {
-                        if($group->id_groups == $detail_o['id_groups']) 
-                        {
-                            if($task->id_sub == $detail_o['id_sub'])
-                                array_push($detail_data,$task->detail_rab()->create($detail_o));
-                        }
-                    }
-                }
-            }
-
-            foreach($detail_data as $detail_o)
-            {
-                foreach($Material as $material)
-                {
-                    $task = TaskSubDetails::findOrFail($detail_o->id_sub_details);
-                    $group = GroupDetails::findOrFail($task->id_group_details);
-                    $structure = StructureDetails::findOrFail($group->id_structure_details);
-                    
-                    $ahs = AHS::where([
-                        'id_job' => $detail_o->id_job,
-                        'id_sub' => $task->id_sub,
-                    ])->get()->first();
-
-                    if($structure->id_structure == $material['id_structure'])
-                    {
-                        if($group->id_groups == $material['id_groups']) 
-                        {
-                            if($task->id_sub == $material['id_sub'])
-                            {
-                                if($ahs->id_ahs == $material['id_ahs'])
-                                    array_push($material_data,$detail_o->detail_ahs_lokal()->create($material));
-                            }
-                        }
-                    }
-                }
-            }
             $project = Project::findOrFail($rab->id_project);
             $project->nominal = $rab->total_rab;
             $project->save();
@@ -169,7 +61,124 @@ class RABController extends RestController
             return $this->sendIseResponse($e->getMessage());
         }
     }
+
+    public function copy(Request $request)
+    {
+        $new = new RAB;
+        $rab = RAB::findOrFail($request->get('id_rab'));
+        $new->id_project    = $rab->id_project;
+        $new->kode          = $this->code();
+        $new->total_rab     = $rab->total_rab;
+        $new->desc          = $rab->desc;
+        $new->save();
+
+        $this->storeAll($new,$request);
+    }
     
+    public function storeAll($rab,$request)
+    {
+        if($request->has('detail_structure'))
+        {
+            $Structure = $request->get('detail_structure');
+        }
+        if($request->has('detail_group'))
+        {
+            $Groups = $request->get('detail_group');
+        }
+        if($request->has('detail_task'))
+        {
+            $TaskSub = $request->get('detail_task');
+        }
+        if($request->has('detail'))
+        {
+            $detail = $request->get('detail');
+        }
+        if($request->has('detail_material'))
+        {
+            $Material = $request->get('detail_material');
+        }
+        if($request->has('detail_structure'));
+        {
+            $rab = DB::transaction(function () use ($rab,$Structure) {
+                $rab->structures()->createMany($Structure);   
+                return $rab;
+            });
+        }
+        $structure_data = StructureDetails::where('id_rab',$rab->id_rab)->get();
+        $group_data = [];
+        $task_sub_data = [];
+        $detail_data = [];
+        $material_data = [];
+
+        foreach($structure_data as $structure)
+        {
+            foreach($Groups as $group)
+            {
+                if($structure->id_structure == $group['id_structure'])
+                    array_push($group_data,$structure->groups()->create($group));
+            }
+        }
+    
+        foreach($group_data as $group)
+        {
+            foreach($TaskSub as $task)
+            {
+                $structure = StructureDetails::findOrFail($group->id_structure_details);
+
+                if($structure->id_structure == $task['id_structure']) 
+                {
+                    if($group->id_groups == $task['id_groups'])
+                        array_push($task_sub_data,$group->task_subs()->create($task));
+                }
+                
+            }
+        }
+
+        foreach($task_sub_data as $task)
+        {
+            foreach($detail as $detail_o)
+            {
+                $group = GroupDetails::findOrFail($task->id_group_details);
+                $structure = StructureDetails::findOrFail($group->id_structure_details);
+                
+                if($structure->id_structure == $detail_o['id_structure'])
+                {
+                    if($group->id_groups == $detail_o['id_groups']) 
+                    {
+                        if($task->id_sub == $detail_o['id_sub'])
+                            array_push($detail_data,$task->detail_rab()->create($detail_o));
+                    }
+                }
+            }
+        }
+
+        foreach($detail_data as $detail_o)
+        {
+            foreach($Material as $material)
+            {
+                $task = TaskSubDetails::findOrFail($detail_o->id_sub_details);
+                $group = GroupDetails::findOrFail($task->id_group_details);
+                $structure = StructureDetails::findOrFail($group->id_structure_details);
+                
+                $ahs = AHS::where([
+                    'id_job' => $detail_o->id_job,
+                    'id_sub' => $task->id_sub,
+                ])->get()->first();
+
+                if($structure->id_structure == $material['id_structure'])
+                {
+                    if($group->id_groups == $material['id_groups']) 
+                    {
+                        if($task->id_sub == $material['id_sub'])
+                        {
+                            if($ahs->id_ahs == $material['id_ahs'])
+                                array_push($material_data,$detail_o->detail_ahs_lokal()->create($material));
+                        }
+                    }
+                }
+            }
+        }
+    }
     public function update(Request $request,$id)
     {
         $rab=RAB::findOrFail($id);
@@ -595,7 +604,8 @@ class RABController extends RestController
                     $ahs_lokal->save();
                 }
             }
-        }   
+        } 
+        $rab->id_project = $request->id_project;  
         $rab->desc = $request->desc;
         $rab->total_rab = $request->total_rab;
         $rab->save();

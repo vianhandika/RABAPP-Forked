@@ -5,7 +5,7 @@
       <v-app style="background-color: grey lighten-2" class="elevation-8">
         <v-container>
           <v-layout row wrap>
-            <v-flex sm6 xs12 md6 lg3>
+            <v-flex sm3>
               <v-card class="ma-3">
                 <v-list-item>
                   <v-list-item-avatar
@@ -30,7 +30,7 @@
                 </v-card-actions>
               </v-card>
             </v-flex>
-            <v-flex sm6 xs12 md6 lg3>
+            <v-flex sm3>
               <v-card class="ma-3">
                 <v-list-item>
                   <v-list-item-avatar
@@ -55,7 +55,7 @@
                 </v-card-actions>
               </v-card>
             </v-flex>
-            <v-flex sm6 xs12 md6 lg3>
+            <v-flex sm3>
               <v-card class="ma-3">
                 <v-list-item>
                   <v-list-item-avatar
@@ -80,7 +80,7 @@
                 </v-card-actions>
               </v-card>
             </v-flex>
-            <v-flex sm6 xs12 md6 lg3>
+            <v-flex sm3>
               <v-card class="ma-3">
                 <v-list-item>
                   <v-list-item-avatar
@@ -109,17 +109,25 @@
         </v-container>
         <v-col class="body-2 grey--text"><h1>Reports</h1></v-col>
         <v-row>
-          <v-col cols="12" md="6">
+          <v-col cols="12" sm="6" md="6">
             <v-container>
               <v-card>
                 <v-row>
-                  <v-col cols="4" align-center v-if="select==null">
-                    <v-card-title class="headline green darken-1--text">RAB</v-card-title>
+                  <v-col cols="5" align-center v-if="select==null">
+                    <v-card-title class="headline light-green accent-2--text">RAB</v-card-title>
                   </v-col>
-                  <v-col cols="4" align-center v-if="select=='1'">
-                    <v-card-title class="headline light-green accent-4--text">BQ RAB</v-card-title>
+                  <v-col cols="5" align-center v-if="select=='1'">
+                    <v-card-title class="headline light-green accent-2--text">BQ RAB</v-card-title>
                   </v-col>
-                  <v-col cols="4">
+                  <v-col cols="5" align-center v-if="select=='2'">
+                    <v-card-title class="headline light-green accent-2--text">MR RAB</v-card-title>
+                  </v-col>
+                  <v-col cols="5" align-center v-if="select=='3'">
+                    <v-card-title class="headline light-green accent-2--text">RAP RAB</v-card-title>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="5" style="margin-left:10px">
                     <v-select
                       label="Select"
                       v-model="select"
@@ -132,8 +140,7 @@
                       color="green darken-3"
                     ></v-select>
                   </v-col>
-
-                  <v-col cols="3">
+                  <v-col cols="4">
                     <v-text-field
                       v-model="search"
                       append-icon="search"
@@ -144,8 +151,18 @@
                     >
                     </v-text-field>
                   </v-col>
+                  <v-col cols="2">
+                    <v-text-field
+                      v-model="rap"
+                      label="RAP (%)"
+                      color="green darken-3"
+                      v-if="select==3"
+                      type="number"
+                    >
+                    </v-text-field>
+                  </v-col>
                 </v-row>
-              <!-- RAB Report -->
+                <!-- RAB Report -->
                 <v-list v-if="select==null">
                   <v-list-item v-for="data in filtered" :key="data.id_rab">
                     <v-list-item-avatar color="green darken-3">
@@ -154,7 +171,12 @@
                     <v-list-item-content>
                       <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
                       <v-layout>
-                        <v-list-item-title>{{data.project}}</v-list-item-title>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on">{{data.project}}</v-list-item-title>
+                          </template>
+                          <span>{{data.project}}</span>
+                        </v-tooltip>
                       </v-layout>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
@@ -187,7 +209,7 @@
                   >
                   </v-pagination>
                 </div>
-              <!-- BQ Report -->
+                <!-- BQ Report -->
                 <v-list v-if="select=='1'">
                   <v-list-item v-for="data in filtered" :key="data.id_rab">
                     <v-list-item-avatar color="green">
@@ -196,7 +218,12 @@
                     <v-list-item-content>
                       <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
                       <v-layout>
-                        <v-list-item-title>{{data.project}}</v-list-item-title>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on">{{data.project}}</v-list-item-title>
+                          </template>
+                          <span>{{data.project}}</span>
+                        </v-tooltip>
                       </v-layout>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
@@ -229,6 +256,100 @@
                   >
                   </v-pagination>
                 </div>
+                <!-- Materials Requirements Report -->
+                <v-list v-if="select=='2'">
+                  <v-list-item v-for="data in filtered" :key="data.id_rab">
+                    <v-list-item-avatar color="green accent-4">
+                      <v-icon dark @click="generaterabMR(data.id_rab)">picture_as_pdf</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
+                      <v-layout>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on">{{data.project}}</v-list-item-title>
+                          </template>
+                          <span>{{data.project}}</span>
+                        </v-tooltip>
+                      </v-layout>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content>
+                      <v-list-item-subtitle style="text-color:white">.</v-list-item-subtitle>
+                      <v-list-item-title align="right">Rp.</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content>
+                      <v-list-item-subtitle align="right">Nominal</v-list-item-subtitle>
+                      <v-layout>
+                        <v-list-item-title align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                      </v-layout>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+                <div>
+                  <v-pagination
+                    v-model="current_page_rab"
+                    class="my-4"
+                    :length="total_pages_rab"
+                    prev-icon="arrow_left"
+                    next-icon="arrow_right"
+                    circle
+                    @input="getPagination"
+                    :total-visible="5"
+                    color="green accent-4"
+                    v-if="select=='2'"
+                  >
+                  </v-pagination>
+                </div>
+                <!-- RAP Report -->
+                <v-list v-if="select=='3'">
+                  <v-list-item v-for="data in filtered" :key="data.id_rab">
+                    <v-list-item-avatar color="green darken-2">
+                      <v-icon dark @click="generaterabRAP(data.id_rab)">picture_as_pdf</v-icon>
+                    </v-list-item-avatar>
+                    <v-list-item-content>
+                      <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
+                      <v-layout>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on">{{data.project}}</v-list-item-title>
+                          </template>
+                          <span>{{data.project}}</span>
+                        </v-tooltip>
+                      </v-layout>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content>
+                      <v-list-item-subtitle style="text-color:white">.</v-list-item-subtitle>
+                      <v-list-item-title align="right">Rp.</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content>
+                      <v-list-item-subtitle align="right">Nominal</v-list-item-subtitle>
+                      <v-layout>
+                        <v-list-item-title align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                      </v-layout>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+                <div>
+                  <v-pagination
+                    v-model="current_page_rab"
+                    class="my-4"
+                    :length="total_pages_rab"
+                    prev-icon="arrow_left"
+                    next-icon="arrow_right"
+                    circle
+                    @input="getPagination"
+                    :total-visible="5"
+                    color="green darken-2"
+                    v-if="select=='3'"
+                  >
+                  </v-pagination>
+                </div>
               </v-card>
             </v-container>
           </v-col>
@@ -236,14 +357,15 @@
             <v-container>
               <v-card>
                 <v-row>
-                  <v-col cols="4" align-center v-if="selectahs==null">
+                  <v-col cols="5" align-center v-if="selectahs==null">
                     <v-card-title class="headline blue darken-3--text">AHS</v-card-title>
                   </v-col>
-                  <v-col cols="4" align-center v-if="selectahs=='1'">
+                  <v-col cols="5" align-center v-if="selectahs=='1'">
                     <v-card-title class="headline light-blue accent-4--text">AHS Lokal</v-card-title>
                   </v-col>
-
-                  <v-col cols="4">
+                </v-row>
+                <v-row>
+                  <v-col cols="5" style="margin-left:10px">
                     <v-select
                       label="Select"
                       v-model="selectahs"
@@ -257,7 +379,7 @@
                     ></v-select>
                   </v-col>
 
-                  <v-col cols="3">
+                  <v-col cols="4">
                     <v-text-field
                       v-model="searchAHS"
                       append-icon="search"
@@ -347,7 +469,6 @@
               </div>
               </v-card>
             </v-container>
-            
           </v-col>
           <v-overlay :value="overlay">
             <v-progress-circular indeterminate size="64"></v-progress-circular>
@@ -393,6 +514,7 @@ import materials from './../service/Material'
       search:'',
       searchAHS:'',
       searchAHSLokal:'',
+      rap:0,
       select : null,
       selectahs:null,
 
@@ -407,19 +529,19 @@ import materials from './../service/Material'
       ahs_lokal:[],
       project:[],
 
-      // panels:[
-      //   {icon: 'home_work',title:'Project',count:'countP',color:'green',footer:'house',text:'Vastu Cipta Persada'},
-      //   {icon: 'waves',title:'Materials/Labor',count:'materials',color:'#0091EA',footer:'house',text:'Vastu Cipta Persada'},
-      //   {icon: 'money',title:'AHS',count:'ahs',footer:'house',color:'#00B8D4',text:'Vastu Cipta Persada'},
-      //   {icon: 'payment',title:'Total RAB',count:'rab',footer:'house',color:'#00BFA5',text:'Vastu Cipta Persada'},
-      // ],
       items:[
         {name:'RAB Report',value:null},
+        {name:'RAP Report',value:'3'},
         {name:'BQ Report',value:'1'},
+        {name:'Materials Requirements Report',value:'2'},
       ],
       itemsahs:[
         {name:'AHS',value:null},
         {name:'AHS Lokal',value:'1'}
+      ],
+      //validaton
+      rapRules:[
+        v => !!v.rap || 'RAP is required'
       ]
     }),
     mounted() {
@@ -439,17 +561,17 @@ import materials from './../service/Material'
         }),
       filtered:function(){
         return this.RAB.filter((data)=>{
-          return data.project.match(this.search);
+          return data.project.toLowerCase().match(this.search);
         });
       },
       filteredAHS:function(){
         return this.ahs.filter((data)=>{
-          return data.name.match(this.searchAHS)
+          return data.name.toLowerCase().match(this.searchAHS)
         })
       },
       filteredAHSLokal:function(){
         return this.ahs_lokal.filter((data)=>{
-          return data.name.match(this.searchAHSLokal)
+          return data.name.toLowerCase().match(this.searchAHSLokal)
         })
       }
     },
@@ -532,7 +654,7 @@ import materials from './../service/Material'
       async getPaginationAHSLokal()
       {
         try{
-            await ahsLokal.pagination(this.current_page_ahs_lokal).then(response =>{
+            await ahsLokal.getnotnull(this.current_page_ahs_lokal).then(response =>{
             this.current_page_ahs_lokal = response.meta.pagination.current_page
             this.ahs_lokal = response.data
             this.total_pages_ahs_lokal = response.meta.pagination.total_pages
@@ -586,6 +708,31 @@ import materials from './../service/Material'
         try{
           this.overlay = true
           Http.download('/api/rab_bq_report/'+id).then(()=>{
+            this.overlay = false
+          })
+        }catch(err){
+          this.overlay = false
+          console.log(err)
+        }
+      },
+      async generaterabMR(id)
+      {
+        try{
+          this.overlay = true
+          Http.download('/api/rab_mr_report/'+id).then(()=>{
+            this.overlay = false
+          })
+        }catch(err){
+          this.overlay = false
+          console.log(err)
+        }
+      },
+      async generaterabRAP(id)
+      {
+        try{
+          this.overlay = true
+          const rap = this.rap
+          Http.download('/api/rab_rap_report/'+id+'/'+rap+'').then(()=>{
             this.overlay = false
           })
         }catch(err){

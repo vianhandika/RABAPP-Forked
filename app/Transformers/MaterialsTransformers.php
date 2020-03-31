@@ -20,6 +20,7 @@ class MaterialsTransformers extends TransformerAbstract
             'spesification'     => $material->spesification,
             'id_store'          => $material->stores->id_store,
             'store'             => $material->stores->name,
+            'coefficient'       => 0,
         ];
     }
 }

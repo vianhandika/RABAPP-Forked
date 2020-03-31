@@ -22,7 +22,7 @@ class RABDetailsController extends RestController
 
     public function index()
     {
-        $detailsPaginator = RABDetails::orderBy('id_ahs_lokal','DESC')->paginate(3);
+        $detailsPaginator = RABDetails::orderBy('id_ahs_lokal','DESC')->paginate(5);
         $details = new Collection($detailsPaginator->items(),new RABDetailsTransformers);
         $details->setPaginator(new IlluminatePaginatorAdapter($detailsPaginator));
 
@@ -30,42 +30,6 @@ class RABDetailsController extends RestController
 
         return $details->toArray();
     }
-
-    // public function update(Request $request,$id)
-    // {
-    //     $this->validateWith([
-    //         'coefficient' => 'required|max:255',
-    //         'volume'    => 'required|max:255',
-    //     ]);
-
-    //     $rab_details = RABDetails::findOrFail($id);
-    //     $rab = RAB::where('id_rab',$rab_details->id_rab)->first();
-    //     $ahs = AHS::where('id_ahs',$rab_details->id_ahs)->first();
-    //     $job = Job::where('id_job',$ahs->id_job)->first();
-
-    //     $rab_details->coefficient = $request->coefficient;
-
-    //     if($job->status == 'Price')
-    //     {
-    //         $rab->total_rab -= $rab_details->HP_Adjust;
-    //         $rab->save();
-
-    //         $rab_details->sub_total = $ahs->total * $request->coefficient;
-    //         $rab_details->volume = $request->volume;
-            
-    //         $rab->total_rab += $rab_details->HP_Adjust;
-    //         $rab->save();
-    //     }else{
-    //         $rab_details->volume = $request->coefficient * $request->volume;
-    //     }
-    //     $rab_details->save();
-
-    //     return response()->json([
-    //         'status' => (bool) $rab_details,
-    //         'data' => $rab_details,
-    //         'message' => $rab_details ? 'Success' : 'Error Detail'
-    //     ]);
-    // }
 
     public function destroy($id)
     {
@@ -101,6 +65,22 @@ class RABDetailsController extends RestController
     {
         $rab_details = RABDetails::where('id_sub_details',$id)->get();
         $response = $this->generateCollection($rab_details);
+        return $this->sendResponse($response,200);
+    }
+
+    public function show_detailsNotNull()
+    {
+        $ahsPaginator = RABDetails::has('detail_ahs_lokal')->orderBy('id_ahs_lokal','DESC')->paginate(5);
+        $ahs = $this->generateCollection($ahsPaginator);
+        $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
+        $ahs = $this->manager->createData($ahs)->toArray();
+        return $ahs;
+    }
+
+    public function showByID($id)
+    {
+        $ahs = RABDetails::where('id_sub_details',$id)->get();
+        $response = $this->generateCollection($ahs);
         return $this->sendResponse($response,200);
     }
 }

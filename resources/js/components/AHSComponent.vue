@@ -30,20 +30,31 @@
           single-line
           hide-details
           style="width:150px"
+          v-on:keyup.enter="filterAll"
         >
         </v-text-field>
       
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" max-width="550px">
+        <v-dialog v-model="dialog" width="850px">
           <template v-slot:activator="{ on }">
             <v-btn color="green darken-1" elevation="8" rounded class="mb-2" @click="dialogAdd=true;dialogEdit=false;reset()" v-on="on">New</v-btn>
           </template>
+          <v-toolbar dark color="light-blue accent-4">
+            <v-btn icon dark @click="dialog = false; dialogAdd=false;dialogEdit=false">
+              <v-icon @click="getPagination">close</v-icon>
+            </v-btn>
+            <v-toolbar-title v-if="dialogAdd">New AHS</v-toolbar-title>
+            <v-toolbar-title v-if="!dialogAdd">Edit AHS</v-toolbar-title>
+            <v-spacer></v-spacer>
+            <v-toolbar-items v-if="dialogAdd">
+              <v-btn dark text @click="addItem" :loading="loading">Save</v-btn>
+            </v-toolbar-items>
+            <v-toolbar-items v-if="!dialogAdd">
+              <v-btn dark text @click="updateItem(AHS.id_ahs)" :loading="loading">Save</v-btn>
+            </v-toolbar-items>
+          </v-toolbar>
+
           <v-card>
-            <v-card-title>
-              <span class="headline" v-if="dialogAdd">New AHS</span>
-              <span class="headline" v-if="dialogEdit">Edit AHS</span>
-            </v-card-title>
-            
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-card-text>
                 <v-layout v-if="dialogAdd">
@@ -114,151 +125,6 @@
                     :return-object="false"
                   ></v-select>
                 </v-layout>
-
-                <v-layout v-if="detailAHS">
-                  <v-flex class="text-md-center" sm12 mt-2>
-                    <v-card
-                      v-for="(detail,index) in details"
-                      :key="index"
-                      elevation="5"
-                      style="margin-top:4px"
-                    > 
-                    <v-card-title>
-                    <v-btn 
-                      icon
-                      color="red"
-                      dark @click="itemDetail(detail);dialogdeletedetail=true"
-                    >
-                    <v-icon>remove_circle</v-icon>
-                    </v-btn>
-                  
-                    <v-flex xs13 sm8 md8>
-                      <template>
-                        <v-edit-dialog
-                          @save="editMaterial(index,detail)"
-                          @cancel="cancel"
-                          lazy
-                          large
-                        >
-                          <v-select
-                            label="Materials/Labor" 
-                            class="pa-1"
-                            v-model="detail.id_material"
-                            item-text="name"
-                            item-value="id_material"
-                            :items="material"
-                            readonly
-                          ></v-select>
-                          <template v-slot:input>
-                            <v-flex @click="filterMaterials();edit=true">
-                              <v-select
-                                label="Materials/Labor" 
-                                v-model="detail.id_material"
-                                item-text="name"
-                                item-value="id_material"
-                                :items="material"
-                                v-if="!edit"
-                              ></v-select>
-                              <v-select
-                                v-model="edit_id_material"
-                                label="Materials/Labor"
-                                item-text="name"
-                                item-value="id_material"
-                                :items="filterMaterial"
-                                v-if="edit"
-                              ></v-select>
-                            </v-flex>
-                          </template>
-                        </v-edit-dialog>
-                      </template>
-                    </v-flex>
-
-                    <v-flex xs13 sm2 md2>
-                      <template>
-                        <v-edit-dialog
-                          @save="editList(index,detail)"
-                          @cancel="cancel" 
-                          lazy
-                          large
-                        >
-                        <v-text-field
-                          label="Coefficient*" 
-                          class="pa-1"
-                          v-model="detail.coefficient"
-                          readonly
-                        ></v-text-field>
-
-                          <template v-slot:input>
-                            <v-text-field
-                              v-model="detail.coefficient"
-                              label="Edit"
-                              single-line
-                              counter
-                            ></v-text-field>
-                          </template>
-                        </v-edit-dialog>
-                      </template>
-                    </v-flex>
-                    </v-card-title>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
-
-                <v-btn
-                  color="blue accent-4"
-                  @click="tambah=true;filterMaterials()"
-                  dark
-                  elevation="8"
-                  style="margin-top:10px"
-                >
-                Add 
-                </v-btn>
-                
-                <v-layout v-if="tambah">
-                  <v-flex class="text-md-center" sm12 mt-2>
-                    <v-card elevation="8"> 
-                      <v-card-title>
-                      <v-btn 
-                          icon
-                          color="red"
-                          dark @click="tambah=false"
-                          >
-                          <v-icon>remove_circle</v-icon>
-                      </v-btn>
-                      <v-btn 
-                          icon
-                          color="green"
-                          dark @click="addList(); detailAHS=true"
-                          >
-                          <v-icon>add_circle</v-icon>
-                      </v-btn>
-                      <!-- buat pertama kali input data untuk addList -->
-                      <v-flex xs13 sm8 md8 @click="filterMaterials">
-                        <v-select
-                          label="Materials/Labor" 
-                          class="pa-1"
-                          v-model="Material.id_material"
-                          item-text="name"
-                          item-value="id_material"
-                          :return-object="false"
-                          :items="filterMaterial"
-                          :rules="materialsRules"
-                        ></v-select>
-                      </v-flex>
-
-                      <v-flex xs13 sm2 md2>
-                        <v-text-field
-                        label="Coefficient" 
-                        class="pa-1"
-                        v-model="ahs_details.coefficient"
-                        :rules="coefficientRules"
-                        type="number"
-                        ></v-text-field>
-                      </v-flex>
-                      </v-card-title>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
                   
                 <v-layout style="margin-top: 10px">
                   <v-flex>
@@ -295,6 +161,162 @@
                     </v-text-field>
                   </v-flex>
                 </v-layout>
+
+                <v-col cols="12">
+                  <v-data-table
+                    :headers="headers_material"
+                    :items="filterMaterial"
+                    class="elevation-5"
+                    :search="searchMaterials"
+                  >
+                    <template v-slot:top>
+                      <v-toolbar color="light-blue accent-2" dark>
+                        <v-toolbar-title>Materials/Labor</v-toolbar-title>
+                        <v-divider
+                          inset
+                          vertical
+                          class="mx-4"
+                        ></v-divider>
+                      </v-toolbar>
+                      <v-col cols="12" sm="8">
+                        <v-text-field
+                          v-model="searchMaterials"
+                          append-icon="search"
+                          label="Search"
+                          single-line
+                          hide-details
+                          color="blue"
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </template>
+
+                    <template v-slot:item.action="{ item }">
+                      <v-btn
+                        icon
+                        color="green"
+                        @click="addList(item)"
+                      >
+                      <v-icon>add_box</v-icon>
+                      </v-btn>
+                    </template>
+
+                    <template v-slot:item.coefficient="props">
+                      <v-edit-dialog
+                        :return-value.sync="props.item.coefficient"
+                        lazy
+                        large
+                        persistent
+                        dark
+                      > {{ props.item.coefficient }}
+                        <template v-slot:input>
+                          <v-text-field
+                            v-model="props.item.coefficient"
+                            label="Edit"
+                            single-line
+                            counter
+                          ></v-text-field>
+                        </template>
+                      </v-edit-dialog>
+                    </template>
+
+                    <template v-slot:item.price="{ item }">
+                      <v-layout>
+                        <div style="text-align:left;width:30px">Rp.</div>
+                        <div style="text-align:right;width:90px">{{ Number(item.price).toLocaleString('id-ID') }}</div>  
+                      </v-layout>
+                    </template>
+                  </v-data-table>
+                </v-col>
+                  
+                <v-col cols="12">
+                  <v-data-table
+                    :headers="headers_details"
+                    :items="detailsAHS"
+                    class="elevation-5"
+                    :search="searchAHS"
+                  >
+                    <template v-slot:top>
+                      <v-toolbar color="light-blue accent-2" dark>
+                        <v-toolbar-title>AHS Details</v-toolbar-title>
+                        <v-divider
+                          inset
+                          vertical
+                          class="mx-4"
+                        ></v-divider>
+                      </v-toolbar>
+                      <v-col cols="12" sm="8">
+                        <v-text-field
+                          v-model="searchAHS"
+                          append-icon="search"
+                          label="Search"
+                          single-line
+                          hide-details
+                          color="blue"
+                        >
+                        </v-text-field>
+                      </v-col>
+                    </template>
+
+                    <template v-slot:item.action="{ item }">
+                      <v-dialog v-model="dialogdeletedetail" max-width="290px">
+                        <template v-slot:activator="{on}">
+                          <v-btn
+                            icon
+                            color="red"
+                            dark @click="itemDetail(item);dialogdeletedetail=true"
+                            v-on="on"
+                          >
+                          <v-icon>delete</v-icon>
+                          </v-btn>
+                        </template>
+                        <v-card>
+                          <v-card-title class="headline">Confirmation</v-card-title>
+                            <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="green darken-1" text @click="dialogdeletedetail = false; deleteList(ahs_details)">Yes</v-btn>
+                            <v-btn color="red darken-1" text @click="dialogdeletedetail = false">No</v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </template>
+
+                    <template v-slot:item.coefficient="props">
+                      <v-edit-dialog
+                        :return-value.sync="props.item.coefficient"
+                        @save="editList(props.item)"
+                        lazy
+                        large
+                        persistent
+                        dark
+                      > {{ props.item.coefficient }}
+                        <template v-slot:input>
+                          <v-text-field
+                            v-model="props.item.coefficient"
+                            label="Edit"
+                            single-line
+                            counter
+                          ></v-text-field>
+                        </template>
+                      </v-edit-dialog>
+                    </template>
+
+                    <template v-slot:item.price="{item}">
+                      <v-layout>
+                        <div style="text-align:left;width:30px">Rp.</div>
+                        <div style="text-align:right;width:90px">{{ Number(item.price).toLocaleString('id-ID') }}</div>  
+                      </v-layout>
+                    </template>
+                    
+                    <template v-slot:item.sub_total="{item}">
+                      <v-layout>
+                        <div style="text-align:left;width:30px">Rp.</div>
+                        <div style="text-align:right;width:90px">{{ Number(item.sub_total).toLocaleString('id-ID') }}</div>  
+                      </v-layout>
+                    </template>
+                  </v-data-table>
+                </v-col>
               </v-card-text>
             </v-form>
 
@@ -309,7 +331,7 @@
       </v-toolbar>
 
       <v-card elevation="10">
-        <v-list-group v-for="data in filtered" :key="data.id_ahs" >
+        <v-list-group v-for="data in filtered" :key="data.id_ahs">
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
@@ -431,15 +453,15 @@
                       delete
                     </v-icon>
                   </template>
-                      <v-card>
-                        <v-card-title class="headline">Confirmation</v-card-title>
-                          <v-card-text>Are you sure want to delete this detail?</v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn color="green darken-1" text @click="dialogDetail = false; deleteDetail(ahs_details.id_ahs_details)">Yes</v-btn>
-                          <v-btn color="red darken-1" text @click="dialogDetail = false">No</v-btn>
-                        </v-card-actions>
-                      </v-card>
+                  <v-card>
+                    <v-card-title class="headline">Confirmation</v-card-title>
+                      <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="green darken-1" text @click="dialogDetail = false; deleteDetail(ahs_details.id_ahs_details)">Yes</v-btn>
+                      <v-btn color="red darken-1" text @click="dialogDetail = false">No</v-btn>
+                    </v-card-actions>
+                  </v-card>
                 </v-dialog>
               </template>
               </v-data-table>
@@ -488,20 +510,6 @@
           </v-card>
         </v-dialog>
       </template>
-
-      <template>
-        <v-dialog v-model="dialogdeletedetail" max-width="290px">
-          <v-card>
-            <v-card-title class="headline">Confirmation</v-card-title>
-              <v-card-text>Are you sure want to delete this detail?</v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="dialogdeletedetail = false; deleteList(ahs_details)">Yes</v-btn>
-              <v-btn color="red darken-1" text @click="dialogdeletedetail = false">No</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </template>
     </v-container>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
       <v-icon dark>done</v-icon>
@@ -539,8 +547,11 @@ import task from './../service/TaskSub'
       detailAHS: false,
       detailTable: false,
       edit: false,
+      loading:false,
 
       search:'',
+      searchAHS: '',
+      searchMaterials: '',
       select: -1,
       id_ahs: '',
       
@@ -549,6 +560,7 @@ import task from './../service/TaskSub'
       job: [],
       material:[],
       details:[],
+      detailsAHS:[],
       detailsData:[],
       detailsTemp:[],
       task : [],
@@ -606,6 +618,20 @@ import task from './../service/TaskSub'
         {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total', width:'10%'},
         {text: 'Actions', align: 'left', sortable: false, value: 'action', width:'15%'},
       ],
+      headers_material:[
+        {text: 'ID', value:'id_material'},
+        {text: 'Item', value: 'name'},
+        {text: 'Price',value: 'price'},
+        {text: 'Actions',value: 'action'},
+      ],
+      headers_details: [
+        {text: 'Status', align: 'left', sortable: true, value: 'status',},
+        {text: 'Item', align: 'left', sortable: false, value: 'name',},
+        {text: 'Price', align: 'left', sortable: false, value: 'price'},
+        {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', align: 'center'},
+        {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total'},
+        {text: 'Actions', align: 'left', sortable: false, value: 'action',},
+      ],
       //validation
       groupRules: [
         v => !!v || 'Task Group is required'
@@ -634,6 +660,7 @@ import task from './../service/TaskSub'
     },
     computed: {
       filtered:function(){
+        console.log('masuk sini gaes')
         return this.ahs.filter((data)=>{
             if(this.select != '')
             {
@@ -642,8 +669,8 @@ import task from './../service/TaskSub'
                 if(this.search == '')
                   return data
                 else{
-                  return (data.name.match(this.search) ||
-                    data.kode.match(this.search))
+                  return (data.name.toLowerCase().match(this.search) ||
+                    data.kode.toLowerCase().match(this.search))
                 }
               }
               else if(this.select == data.id_sub)
@@ -651,18 +678,51 @@ import task from './../service/TaskSub'
                 if(this.search == '')
                   return data
                 else{
-                  return (data.name.match(this.search) ||
-                    data.kode.match(this.search))
+                  return (data.name.toLowerCase().match(this.search) ||
+                    data.kode.match.toLowerCase().match(this.search))
                 }
               }
             }else{
-              return (data.name.match(this.search) ||
-                data.kode.match(this.search))
+              return (data.name.toLowerCase().match(this.search) ||
+                data.kode.toLowerCase().match(this.search))
             }
         });
       },
     },
     methods: {
+      filterAll()
+      {
+        console.log('masuk sini')
+        for(let data of this.ahsAll)
+        {
+          if(this.select != '')
+          {
+            if(this.select == '-1')
+            {
+              if(this.search == '')
+                return data
+              else{
+                 (data.name.match(this.search) ||
+                  data.kode.match(this.search))
+                  console.log('data',data)
+              }
+            }
+            else if(this.select == data.id_sub)
+            {
+              if(this.search == '')
+                return data
+              else{
+                return (data.name.match(this.search) ||
+                  data.kode.match.match(this.search))
+              }
+            }
+          }else{
+            return (data.name.match(this.search) ||
+              data.kode.match(this.search))
+          }
+        }
+        console.log('filter data',data)
+      },
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
@@ -690,18 +750,12 @@ import task from './../service/TaskSub'
       },
       overhead()
       {
-        // this.AHS.total = parseFloat(this.AHS.total_before_overhead*this.AHS.overhead/100).toFixed(2)
         let temp = parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100).toFixed(2)
         console.log(temp)
         this.AHS.total = parseFloat(this.AHS.total_before_overhead) + parseFloat(temp)
         console.log('AHS Total')
         console.log(this.AHS.total)
       },
-      // total()
-      // {
-      //   this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead)).toFixed(2)
-      //   console.log(this.AHS.total)
-      // },
       equipment()
       {
         let temp = 0
@@ -748,16 +802,16 @@ import task from './../service/TaskSub'
           this.filterMaterial = m.filter(obj=>obj.id_material != detail.id_material)
           m = this.filterMaterial
         }
+        console.log(this.filterMaterial)
       },
       async itemHandler(item){
         this.details=[]
+        this.detailsAHS=[]
         this.tambah=false
 
         this.AHS = item
         this.AHS.id_sub = item.id_sub
-        // this.AHS.total = parseFloat(this.AHS.total/0.1).toFixed(2)
-        // console.log('Edit AHS Total')
-        // console.log(this.AHS.total)
+        console.log('item',item)
         for(let detail of item.ahs_details.data)
         {
           let each_detail = {
@@ -768,33 +822,60 @@ import task from './../service/TaskSub'
           }
           this.details.push(each_detail)
         }
+  
+        for(let detail_ahs of item.ahs_details.data)
+        {
+          let data = this.material.find(obj=>obj.id_material == detail_ahs.id_material)
+          console.log('data',data)
+          let each_detail = {
+            id_ahs_details: detail_ahs.id_ahs_details,
+            id_material : detail_ahs.id_material,
+            status : data.status,
+            name : data.name,
+            price : data.price,
+            coefficient : detail_ahs.coefficient,
+            sub_total : parseFloat(data.price * detail_ahs.coefficient).toFixed(2),
+          }
+          this.detailsAHS.push(each_detail)
+        }
         this.temp = (await Controller.getallItem()).data
-        console.log('This Details Edit')
-        console.log(this.details)
+        console.log('This Details Edit',this.details)
+        console.log('This Details',this.detailsAHS)
+        this.filterMaterials()
       },
       itemDetail(item){
         this.ahs_details = item
       },
-      async addList()
+      async addList(item)
       {
-        let data = this.material.find(obj=>obj.id_material == this.Material.id_material)
+        console.log('Item')
+        console.log(item)
+
+        let data = this.material.find(obj=>obj.id_material == item.id_material)
         console.log('cek price')
         console.log(data)
         let detail = {
           id_ahs_details : null,
-          id_material : this.Material.id_material,
-          coefficient : this.ahs_details.coefficient,
-          sub_total : parseFloat(data.price * this.ahs_details.coefficient).toFixed(2)
+          id_material : item.id_material,
+          coefficient : item.coefficient,
+          sub_total : parseFloat(data.price * item.coefficient).toFixed(2)
+        }
+        let detail_ahs = {
+          id_ahs_details: null,
+          id_material : item.id_material,
+          status : data.status,
+          name : data.name,
+          price : data.price,
+          coefficient : item.coefficient,
+          sub_total : parseFloat(data.price * item.coefficient).toFixed(2),
         }
         this.details.push(detail)
+        this.detailsAHS.push(detail_ahs)
         this.sumOfTotal(data,detail)
-       
-        this.tambah = false
-        this.Material.id_material= ''
-        this.ahs_details.coefficient=''
-        this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead)).toFixed(2)
+        this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead/100)).toFixed(2)
         console.log('Detail AHS')
         console.log(this.details)
+        this.filterMaterials()
       },
       sumOfTotal(material,detail)
       {
@@ -812,9 +893,8 @@ import task from './../service/TaskSub'
         if(this.AHS.overhead == '0')
           this.AHS.total = this.AHS.total_before_overhead
         else
-          this.AHS.total = parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100).toFixed(2)
+          this.AHS.total = parseFloat(this.AHS.total_before_overhead) + parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100) 
         console.log(this.AHS.total)
-        //karena overheadnya = 0
       },
       delOfTotal(material,detail)
       {
@@ -826,21 +906,22 @@ import task from './../service/TaskSub'
           this.AHS.total_labor = parseFloat(this.AHS.total_labor) - parseFloat(detail.sub_total)
         
         this.AHS.total_before_overhead = parseFloat(this.AHS.total_before_overhead - detail.sub_total).toFixed(2)
-        
+        console.log('Total',this.AHS.total_before_overhead)
         if(this.AHS.overhead == '0')
           this.AHS.total = this.AHS.total_before_overhead
         else
-          this.AHS.total = parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100).toFixed(2)
-        console.log('Total Material')
-        console.log(this.AHS.total_material)
-        console.log('Total Labor')
-        console.log(this.AHS.total_labor)
+          this.AHS.total = parseFloat(this.AHS.total_before_overhead) + parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100) 
+        console.log('Total Material',this.AHS.total_material)
+        console.log('Total Labor',this.AHS.total_labor)
+        console.log('Total Overhead',this.AHS.total)
       },
-      editList(index,data)
+      editList(data)
       {
         console.log('Material')
         console.log(data)
+
         let material = this.material.find(obj=>obj.id_material == data.id_material)
+        let detail = this.details.find(obj=>obj.id_material == data.id_material)
         this.delOfTotal(material,data)
 
         let newDetail = {
@@ -849,42 +930,33 @@ import task from './../service/TaskSub'
           coefficient : data.coefficient,
           sub_total : parseFloat(data.coefficient * material.price).toFixed(2)
         }
-        this.details.splice(index,1,newDetail)
-
-        // let newMaterial = this.material.find(obj=>obj.id_material == newDetail.id_material)
-        this.sumOfTotal(material,newDetail)
-        this.update()
-        // this.edit = false
-      },
-      editMaterial(index,data)
-      {
-        console.log('hai')
-        let material = this.material.find(obj=>obj.id_material == this.edit_id_material)
-        this.delOfTotal(material,data)
-        console.log('halo')
-        let newDetail = {
+        let newDetailAHS = {
           id_ahs_details: data.id_ahs_details,
-          id_material : this.edit_id_material,
+          id_material : data.id_material,
+          status : data.status,
+          name : data.name,
+          price : data.price,
           coefficient : data.coefficient,
-          sub_total : parseFloat(data.coefficient * material.price).toFixed(2)
+          sub_total : parseFloat(material.price * data.coefficient).toFixed(2),
         }
-        this.details.splice(index,1,newDetail)
-
-        // let newMaterial = this.material.find(obj=>obj.id_material == newDetail.id_material)
+        this.details.splice(this.details.indexOf(detail),1,newDetail)
+        this.detailsAHS.splice(this.detailsAHS.indexOf(data),1,newDetailAHS)
         this.sumOfTotal(material,newDetail)
         this.update()
-        this.edit = false
-        console.log(this.details)
+        console.log('Details',this.details)
+        console.log('Detail AHS',this.detailsAHS)
       },
       deleteList(data){
         let material = this.material.find(obj=>obj.id_material == data.id_material)
+        let detail = this.details.find(obj=>obj.id_material == data.id_material)
         this.delOfTotal(material,data)
-        this.details.splice(this.details.indexOf(data),1)
-        this.details=[...this.details]
+        this.details.splice(this.details.indexOf(detail),1)
+        this.detailsAHS.splice(this.detailsAHS.indexOf(data),1)
+
         console.log('This Details Delete')
         console.log(this.details)
-        this.ahs_details.coefficient = ''
-        // this.delete()
+        console.log('This Details',this.detailsAHS)
+        this.filterMaterials()
       },
       async getTask()
       {
@@ -968,6 +1040,7 @@ import task from './../service/TaskSub'
       },
       async addItem(){
         try{
+          this.loading=true
           const payload = {
             kode                  : this.AHS.kode,
             id_job                : this.AHS.id_job,
@@ -980,15 +1053,19 @@ import task from './../service/TaskSub'
             total                 : this.AHS.total,
             detail                : this.details
           }
-          await ahsController.addItem(payload)
-          this.close()
-          this.save()
+          await ahsController.addItem(payload).then(()=>{
+            this.close()
+            this.save()
+            this.loading = false
+          })
         }catch(err){
           console.log(err)
+          this.loading = false
         }
       },
       async updateItem(id){
         try{
+            this.loading = true
             const payload = {
               kode            : this.AHS.kode,
               id_sub          : this.AHS.id_sub,
@@ -1001,11 +1078,13 @@ import task from './../service/TaskSub'
               total           : this.AHS.total,
               detail          : this.details
             } 
-            await ahsController.updateItem(payload,id)
-            this.close()
-            // this.getPagination()
-            this.update()
+            await ahsController.updateItem(payload,id).then(()=>{
+              this.close()
+              this.update()
+              this.loading = false
+            })
         }catch(err){
+          this.loading = false
           console.log(err);
         }
       },
@@ -1066,10 +1145,12 @@ import task from './../service/TaskSub'
       },
       reset () {
         this.getKode()
+        this.filterMaterials()
         this.ahs_details.coefficient = ''
         this.AHS = Object.assign({},this.AHSDefault)
         this.$refs.form.resetValidation()
         this.details=[]
+        this.detailsAHS=[]
         this.tambah = false
       },
       close () {

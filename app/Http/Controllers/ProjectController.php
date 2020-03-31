@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transformers\ProjectTransformers;
 use App\Project;
+use App\RAB;
+use App\StructureDetails;
+use App\GroupDetails;
+use App\TaskSubDetails;
+use App\RABDetails;
+use App\AHSLokalDetails;
+// use App\Http\Controllers\RABController;
 
 class ProjectController extends RestController
 {
@@ -82,6 +89,49 @@ class ProjectController extends RestController
     public function destroy($id)
     {
         $project = Project::find($id);
+        $rab = RAB::where('id_project',$project->id_project)->get()->first();
+        // dd($rab);
+        if($rab != null)
+        {   
+            $Structure = StructureDetails::where('id_rab',$rab->id_rab)->get();
+            if(StructureDetails::where('id_rab',$rab->id_rab)->get() != null)
+            {
+                foreach($Structure as $structure)
+                {
+                    if(StructureDetails::where('id_rab',$id)->get() != null)
+                        $delete = StructureDetails::where('id_rab',$id)->delete();
+
+                    $Groups = GroupDetails::where('id_structure_details',$structure->id_structure_details)->get();
+                    foreach($Groups as $group)
+                    {
+                        if(GroupDetails::where('id_structure_details',$structure->id_structure_details)->get() != null)
+                            $delete = GroupDetails::where('id_structure_details',$structure->id_structure_details)->delete();
+                        
+                        $TaskSub = TaskSubDetails::where('id_group_details',$group->id_group_details)->get();
+                        foreach($TaskSub as $tasksub)
+                        {
+                            if(TaskSubDetails::where('id_group_details',$tasksub->id_group_details)->get()!= null)
+                                $delete = TaskSubDetails::where('id_group_details',$tasksub->id_group_details)->delete();
+                            
+                            $details = RABDetails::where('id_sub_details',$tasksub->id_sub_details)->get();
+                            foreach($details as $detail)
+                            {   
+                                if(RABDetails::where('id_sub_details',$detail->id_sub_details)->get() != null)
+                                    $delete = RABDetails::where('id_sub_details',$detail->id_sub_details)->delete();
+                                
+                                $materials = AHSLokalDetails::where('id_ahs_lokal',$detail->id_ahs_lokal)->get();
+                                foreach($materials as $material)
+                                {   
+                                    if(AHSLokalDetails::where('id_ahs_lokal',$material->id_ahs_lokal)->get() != null)
+                                        $delete = AHSLokalDetails::where('id_ahs_lokal',$material->id_ahs_lokal)->delete();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            $delete = $rab->delete();
+        }
         $status = $project->delete();
 
         return response()->json([

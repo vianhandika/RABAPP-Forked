@@ -318,9 +318,11 @@ import { parseISO } from 'date-fns'
       ],
       addressRules: [
         v => !!v || 'Address is required',
+        v => v && v.length < 45 || 'Address must be at most 44 characters long'
       ],
       ownerRules:[
-        v => !!v || 'Owner is required'
+        v => !!v || 'Owner is required',
+        v => v && v.length <= 35 || 'Owner must be at most 35 characters long'
       ],
       contactRules: [
         v => !!v || 'Contact is required'

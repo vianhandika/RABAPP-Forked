@@ -38,4 +38,29 @@ export default {
             Http.get('/api/rab_details?page='+id, successCallback, errorCallback)
         })
     },
+    getnotnull(){
+        return new Promise((resolve, reject) => {
+            
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rab_details/show', successCallback, errorCallback)
+        })
+    },
+    show(id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rab_details/showByID/'+id, successCallback, errorCallback)
+        })
+    },
 }

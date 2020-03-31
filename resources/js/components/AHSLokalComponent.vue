@@ -356,7 +356,7 @@ import rabDetails from './../service/AHSLokal'
             this.current_page = response.meta.pagination.current_page
             this.total_pages = response.meta.pagination.total_pages
           })
-        }catch{
+        }catch(err){
           console.log(err)
         }
       },

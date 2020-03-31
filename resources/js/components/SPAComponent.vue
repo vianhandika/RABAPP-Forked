@@ -6,14 +6,6 @@
       dark
       color="blue darken-2"
     >
-    <!-- <v-layout column align-center>
-      <v-flex class="mt-8 mb-6">
-        <v-avatar dark width="100px">
-          <v-icon>home_work</v-icon>
-          <v-text>Vastu Cipta Persada</v-text>
-        </v-avatar>
-      </v-flex>
-    </v-layout> -->
       <v-list dense>
         <v-list-item v-for="link in links" :key="link.title" router :to="link.route" active-class="border">
           <v-list-item-action>
@@ -81,8 +73,8 @@ import Structure from '../service/Structure'
         {icon: 'waves', title: 'Materials/Labor', route: '/materials'},
         {icon: 'post_add', title: 'Reference Detail', route: '/reference'},
         {icon: 'money', title: 'AHS Master', route: '/analisa'},
-        {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
         {icon: 'payment', title: 'RAB', route: '/rab'},
+        {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
         {icon: 'account_balance_wallet', title: 'Calculate', route: '/calculate'},
       ],
       rab : [
