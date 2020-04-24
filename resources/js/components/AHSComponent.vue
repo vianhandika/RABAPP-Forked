@@ -1,15 +1,16 @@
 <template>
   <v-app class="grey lighten-4">
     <v-container>
-      <v-toolbar dark color="light-blue accent-3">
-        <v-toolbar-title>AHS</v-toolbar-title>
+      <v-toolbar color="light-blue accent-3">
+        <v-toolbar-title class="white--text">AHS Master</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
           vertical
+          dark
         ></v-divider>
 
-        <v-select
+        <!-- <v-select
           hide-details
           label="Choose Task Group"
           class="hidden-sm-and-down"
@@ -20,31 +21,46 @@
           prepend-inner-icon="expand_more"
           single-line
           style="width:150px"
+          solo
+          dense
+          background-color="white"
         >
-        </v-select>
-        <v-spacer></v-spacer>
-        <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Search"
-          single-line
-          hide-details
-          style="width:150px"
-          v-on:keyup.enter="filterAll"
-        >
-        </v-text-field>
-      
+        </v-select> 
+        <v-spacer></v-spacer> -->
+        <v-col cols="6">
+          <v-row>
+            <v-text-field
+              v-model="search"
+              v-on:keyup.enter="filterAHS"
+              hide-details
+              background-color="white"
+              solo
+              dense
+              style="width:300px"
+              label="Search"
+            >
+            </v-text-field>  
+            <v-btn 
+              style="height:38px"
+              color="blue"  
+              dark
+              @click="searchAll"
+            >
+            <v-icon>search</v-icon> 
+            </v-btn>
+          </v-row>
+        </v-col>
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" width="850px">
           <template v-slot:activator="{ on }">
-            <v-btn color="green darken-1" elevation="8" rounded class="mb-2" @click="dialogAdd=true;dialogEdit=false;reset()" v-on="on">New</v-btn>
+            <v-btn color="green darken-1" dark elevation="8" rounded class="mb-2" @click="dialogAdd=true;dialogEdit=false;reset()" v-on="on">New</v-btn>
           </template>
           <v-toolbar dark color="light-blue accent-4">
             <v-btn icon dark @click="dialog = false; dialogAdd=false;dialogEdit=false">
               <v-icon @click="getPagination">close</v-icon>
             </v-btn>
-            <v-toolbar-title v-if="dialogAdd">New AHS</v-toolbar-title>
-            <v-toolbar-title v-if="!dialogAdd">Edit AHS</v-toolbar-title>
+            <v-toolbar-title v-if="dialogAdd">New AHS Master</v-toolbar-title>
+            <v-toolbar-title v-if="!dialogAdd">Edit AHS Master</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items v-if="dialogAdd">
               <v-btn dark text @click="addItem" :loading="loading">Save</v-btn>
@@ -69,28 +85,30 @@
                 </v-layout>
 
                 <v-layout v-if="dialogAdd">
-                  <v-select
-                    v-model="AHS.id_sub"
-                    label="Task Group"
-                    :items="task"
-                    item-text="name"
-                    item-value="id_sub"
-                    :return-object="false"
-                    :rules="groupRules"
-                    @change="filterTask(AHS.id_sub)"
-                  ></v-select>
-                </v-layout>
-
-                <v-layout v-if="dialogAdd">
-                  <v-select
-                    v-model="AHS.id_job"
-                    label="Task"
-                    :items="temp"
-                    item-text="name"
-                    item-value="id_job"
-                    :return-object="false"
-                    :rules="taskRules"
-                  ></v-select>
+                  <v-flex sm6 md6 xs6>
+                    <v-select
+                      v-model="AHS.id_sub"
+                      label="Task Group"
+                      :items="task"
+                      item-text="name"
+                      item-value="id_sub"
+                      :return-object="false"
+                      :rules="groupRules"
+                      append-icon="expand_more"
+                      @change="filterTask(AHS.id_sub)"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex sm6 md6 xs6 style="margin-left:10px">
+                    <v-select
+                      v-model="AHS.id_job"
+                      label="Task"
+                      :items="temp"
+                      item-text="name"
+                      item-value="id_job"
+                      :return-object="false"
+                      :rules="taskRules"
+                    ></v-select>
+                    </v-flex>
                 </v-layout>
 
                 <v-layout v-if="dialogEdit">
@@ -105,25 +123,29 @@
                 </v-layout>
 
                 <v-layout v-if="dialogEdit">
-                  <v-select
-                    v-model="AHS.id_sub"
-                    label="Task Group"
-                    :items="task"
-                    item-text="name"
-                    item-value="id_sub"
-                    :return-object="false" 
-                  ></v-select>
-                </v-layout>
-
-                <v-layout v-if="dialogEdit" @click="filterTask(AHS.id_sub)">
-                  <v-select
-                    v-model="AHS.id_job"
-                    label="Task"
-                    :items="temp"
-                    item-text="name"
-                    item-value="id_job"
-                    :return-object="false"
-                  ></v-select>
+                  <v-flex sm6 md6 xs6>
+                    <v-select
+                      v-model="AHS.id_sub"
+                      label="Task Group"
+                      :items="task"
+                      item-text="name"
+                      item-value="id_sub"
+                      :return-object="false" 
+                      @change="filterTask(AHS.id_sub)"
+                      append-icon="expand_more"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex sm6 md6 xs6 @click="filterTask(AHS.id_sub)" style="margin-left:10px">
+                    <v-select
+                      v-model="AHS.id_job"
+                      label="Task"
+                      :items="temp"
+                      item-text="name"
+                      item-value="id_job"
+                      :return-object="false"
+                      append-icon="expand_more"
+                    ></v-select>
+                  </v-flex>
                 </v-layout>
                   
                 <v-layout style="margin-top: 10px">
@@ -138,7 +160,7 @@
                   <v-flex style="margin-left:20px">
                     <v-text-field 
                       v-model="AHS.total_before_overhead" 
-                      label="Total"
+                      label="HSP (MBO)"
                       readonly
                     >
                     </v-text-field>
@@ -155,7 +177,7 @@
                   <v-flex style="margin-left:20px">
                     <v-text-field 
                       v-model="AHS.total" 
-                      label="Total After Overhead"
+                      label="HSP (MAO)"
                       readonly
                     >
                     </v-text-field>
@@ -168,6 +190,7 @@
                     :items="filterMaterial"
                     class="elevation-5"
                     :search="searchMaterials"
+                    height="200px"
                   >
                     <template v-slot:top>
                       <v-toolbar color="light-blue accent-2" dark>
@@ -319,156 +342,151 @@
                 </v-col>
               </v-card-text>
             </v-form>
-
-            <v-card-actions>
-              <div class="flex-grow-1"></div>
-              <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-              <v-btn class="ma-2" v-if="dialogAdd" rounded color="orange" :disabled="!valid" dark @click="addItem()">Save</v-btn>
-              <v-btn class="ma-2" v-if="dialogEdit" rounded color="orange" :disabled="!valid" dark @click="updateItem(AHS.id_ahs)">Save</v-btn>
-            </v-card-actions>
           </v-card>
         </v-dialog>
       </v-toolbar>
 
       <v-card elevation="10">
-        <v-list-group v-for="data in filtered" :key="data.id_ahs">
+        <v-list-group v-for="data in ahs" :key="data.id_ahs">
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
-                <v-flex xs3>
+                <v-flex sm3 md3 xs3>
                   <div class="caption grey--text">ID AHS</div>
                   <div>{{ data.kode }}</div>
                 </v-flex>
-                <v-flex xs3>
+                <!-- <v-flex sm3 md3 xs3>
                   <div class="caption grey--text">Task Group</div>
-                  <div style>{{ data.name_sub }}</div>
-                </v-flex>
-                <v-flex xs5>
-                  <div class="caption grey--text">Task</div>
+                  <div>{{ data.name_sub }}</div>
+                </v-flex> -->
+                <v-flex sm5 md5 xs5 style="padding-right:20px">
+                  <div class="caption grey--text">{{data.name_sub}}</div>
                   <div>{{ data.name }}</div>
                 </v-flex>
-                <v-flex xs5>
-                  <div class="caption grey--text">Total of Labor</div>
-                  <v-layout>
-                    <div style="text-align:left;width:25px">Rp.</div>
-                    <div style="text-align:right;width:100px">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs5>
-                  <div class="caption grey--text">Total of Materials</div>
-                  <v-layout>
-                    <div style="text-align:left;width:25px">Rp.</div>
-                    <div style="text-align:right;width:100px">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
-                  </v-layout>
-                </v-flex>
-                <v-flex xs5>
-                  <div class="caption grey--text">Total of Equipment</div>
-                  <v-layout>
-                    <div style="text-align:left;width:25px">Rp.</div>
-                    <div style="text-align:right;width:100px">{{ Number(data.total_equipment).toLocaleString('id-ID') }}</div>
-                  </v-layout>
-                </v-flex>
-                <!-- <v-flex xs5>
-                  <div class="caption grey--text">HSP</div>
+                <v-flex sm5 md5 xs5>
+                  <div class="caption grey--text">HSP (MBO)</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
                     <div style="text-align:right;width:100px">{{ Number(data.total_before_overhead).toLocaleString('id-ID') }}</div>
                   </v-layout>
-                </v-flex> -->
-                <!-- <v-flex xs3>
+                </v-flex>
+                <v-flex sm3 md3 xs3 style="padding-right:20px">
                   <div class="caption grey--text">Overhead (%)</div>
-                  <div>{{data.overhead}}</div>
-                </v-flex> -->
-                <v-flex xs5>
-                  <div class="caption grey--text">HSP Overhead</div>
+                  <div>{{ data.overhead }}</div>
+                </v-flex>
+                <v-flex sm5 md5 xs5>
+                  <div class="caption grey--text">HSP (MAO)</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
                     <div style="text-align:right;width:100px">{{ Number(data.total).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
+                <v-flex>
+                  <div class="caption grey--text">Actions</div>
+                  <v-layout>
+                    <v-icon color="green" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true;detailTable=false">edit</v-icon>
+                    <v-icon color="red" @click="itemHandler(data);dialogDelete=true;detailTable=false">delete</v-icon>
+                    <v-icon color="blue" @click="itemHandler(data);dialogCopy=true;detailTable=false">file_copy</v-icon>
+                    <v-icon color="light-blue accent-3" @click="detailTable=true">expand_more</v-icon>
+                  </v-layout>
+                </v-flex>
               </v-layout>
             </v-list-item-content>
-              <v-icon color="green" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true;detailTable=false">edit</v-icon>
-              <v-icon color="red" @click="itemHandler(data);dialogDelete=true;detailTable=false">delete</v-icon>
-              <v-icon color="blue" @click="itemHandler(data);dialogCopy=true;detailTable=false">file_copy</v-icon>
-              <v-icon color="light-blue accent-3" @click="detailTable=true">expand_more</v-icon>
           </template>
+            
+          <v-data-table
+            :headers="headers"
+            sortBy="status"
+            update: sort-desc
+            class="elevation-10"
+            :items="data.ahs_details.data"
+            v-if="detailTable"
+          >
+            <template v-slot:top>
+              <v-layout style="padding:10px">
+                <v-flex>
+                  <v-layout>
+                    <div class="body-2 black--text font-weight-bold">Total of Labor : Rp.</div>
+                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
+                  </v-layout>
+                </v-flex>
+                <v-flex>
+                  <v-layout>
+                    <div class="body-2 black--text font-weight-bold">Total of Materials : Rp.</div>
+                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
+                  </v-layout>
+                </v-flex>
+                <v-flex>
+                  <v-layout>
+                    <div class="body-2 black--text font-weight-bold">Total of Equipment : Rp.</div>
+                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_equipment).toLocaleString('id-ID') }}</div>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+              <v-divider></v-divider>
+            </template>
+            <template v-slot:item.sub_total="{ item }">
+              <v-layout>
+                <div style="text-align:left;width:25px">Rp.</div>
+                <div style="text-align:right;width:100px">{{ Number(item.sub_total).toLocaleString('id-ID') }}</div>
+              </v-layout>
+            </template>
 
-          <template>
-            <div>
-              <v-data-table
-                :headers="headers"
-                sortBy="status"
-                update: sort-desc
-                class="elevation-10"
-                :items="data.ahs_details.data"
-                v-if="detailTable"
-              >
-              <template v-slot:item.sub_total="{ item }">
-                <v-layout>
-                  {{ 'Rp. '}}
-                  <v-spacer></v-spacer>
-                  {{ Number(item.sub_total).toLocaleString('id-ID') }}
-                </v-layout>
-              </template>
+            <template v-slot:item.price="{ item }">
+              <v-layout>
+                <div style="text-align:left;width:25px">Rp.</div>
+                <div style="text-align:right;width:100px">{{ Number(item.price).toLocaleString('id-ID') }}</div>
+              </v-layout>
+            </template>
 
-              <template v-slot:item.price="{ item }">
-                <v-layout>
-                  {{ 'Rp. '}}
-                  <v-spacer></v-spacer>
-                  {{ Number(item.price).toLocaleString('id-ID') }}
-                </v-layout>
-              </template>
+            <template v-slot:item.coefficient="props">
+              <v-edit-dialog
+                :return-value.sync="props.item.coefficient"
+                @save="updateDetail(props)"
+                @cancel="cancel"
+                lazy
+                large
+                persistent
+                dark
+              > {{ props.item.coefficient.toString().replace('.',',') }}
+                <template v-slot:input>
+                  <v-text-field
+                    v-model="props.item.coefficient"
+                    label="Edit"
+                    single-line
+                    counter
+                  ></v-text-field>
+                </template>
+              </v-edit-dialog>
+            </template>
 
-              <template v-slot:item.coefficient="props">
-                <v-edit-dialog
-                  :return-value.sync="props.item.coefficient"
-                  @save="updateDetail(props)"
-                  @cancel="cancel"
-                  lazy
-                  large
-                  persistent
-                  dark
-                > {{ props.item.coefficient }}
-                  <template v-slot:input>
-                    <v-text-field
-                      v-model="props.item.coefficient"
-                      label="Edit"
-                      single-line
-                      counter
-                    ></v-text-field>
-                  </template>
-                </v-edit-dialog>
-              </template>
-
-              <template v-slot:item.action="{ item }">
-                <v-dialog v-model="dialogDetail" max-width="290px">
-                  <template v-slot:activator="{ on }">
-                    <v-icon
-                      small
-                      color="red"
-                      v-on="on"
-                      @click="itemDetail(item)"
-                    >
-                      delete
-                    </v-icon>
-                  </template>
-                  <v-card>
-                    <v-card-title class="headline">Confirmation</v-card-title>
-                      <v-card-text>Are you sure want to delete this detail?</v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn color="green darken-1" text @click="dialogDetail = false; deleteDetail(ahs_details.id_ahs_details)">Yes</v-btn>
-                      <v-btn color="red darken-1" text @click="dialogDetail = false">No</v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </template>
-              </v-data-table>
-            </div>
-          </template>
+            <template v-slot:item.action="{ item }">
+              <v-dialog v-model="dialogDetail" max-width="290px">
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    icon
+                    color="red"
+                    v-on="on"
+                    @click="itemDetail(item)"
+                  >
+                    delete
+                  </v-icon>
+                </template>
+                <v-card>
+                  <v-card-title class="headline">Confirmation</v-card-title>
+                    <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" text @click="dialogDetail = false; deleteDetail(ahs_details.id_ahs_details)">Yes</v-btn>
+                    <v-btn color="red darken-1" text @click="dialogDetail = false">No</v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </template>
+          </v-data-table>
         </v-list-group>
-        <div>
+
         <v-pagination
           v-model="current_page"
           class="my-4"
@@ -478,9 +496,7 @@
           circle
           @input="getPagination"
           :total-visible="5"
-        >
-        </v-pagination>
-      </div>
+        ></v-pagination>
       </v-card>
       
       <template>
@@ -578,7 +594,7 @@ import task from './../service/TaskSub'
         total_labor: 0,
         total_material: 0,
         total_before_overhead: 0,
-        overhead: 0,
+        overhead: 10,
         total: 0,
         total_equipment: 0,
       },
@@ -590,7 +606,7 @@ import task from './../service/TaskSub'
         total_labor: 0,
         total_material: 0,
         total_before_overhead: 0,
-        overhead: 0,
+        overhead: 10,
         total: 0,
         total_equipment: 0,
       },
@@ -610,13 +626,13 @@ import task from './../service/TaskSub'
         id_material:'',
       },
       headers: [
-        {text: 'ID Materials/Labor', align: 'left', sortable: false, value: 'kode',width:'15%'},
-        {text: 'Status', align: 'left', sortable: true, value: 'status',width:'15%'},
-        {text: 'Item', align: 'left', sortable: false, value: 'name',width:'15%'},
-        {text: 'Price', align: 'left', sortable: false, value: 'price', width:'10%'},
-        {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', width:'15%', align: 'center'},
-        {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total', width:'10%'},
-        {text: 'Actions', align: 'left', sortable: false, value: 'action', width:'15%'},
+        {text: 'ID', align: 'left', sortable: false, value: 'kode',},
+        {text: 'Type', align: 'left', sortable: true, value: 'status',},
+        {text: 'Item', align: 'left', sortable: false, value: 'name',},
+        {text: 'Price', align: 'left', sortable: false, value: 'price',},
+        {text: 'Coefficient', align: 'center', sortable: false, value: 'coefficient'},
+        {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total', },
+        {text: 'Actions', align: 'center', sortable: false, value: 'action', },
       ],
       headers_material:[
         {text: 'ID', value:'id_material'},
@@ -625,7 +641,7 @@ import task from './../service/TaskSub'
         {text: 'Actions',value: 'action'},
       ],
       headers_details: [
-        {text: 'Status', align: 'left', sortable: true, value: 'status',},
+        {text: 'Type', align: 'left', sortable: true, value: 'status',},
         {text: 'Item', align: 'left', sortable: false, value: 'name',},
         {text: 'Price', align: 'left', sortable: false, value: 'price'},
         {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient', align: 'center'},
@@ -648,7 +664,6 @@ import task from './../service/TaskSub'
       ]
     }),
     mounted(){
-      this.getallAHS()
       this.getAll()
       this.getallItem()
       this.getallItemMaterial()
@@ -659,70 +674,9 @@ import task from './../service/TaskSub'
       this.getKode()
     },
     computed: {
-      filtered:function(){
-        console.log('masuk sini gaes')
-        return this.ahs.filter((data)=>{
-            if(this.select != '')
-            {
-              if(this.select == '-1')
-              {
-                if(this.search == '')
-                  return data
-                else{
-                  return (data.name.toLowerCase().match(this.search) ||
-                    data.kode.toLowerCase().match(this.search))
-                }
-              }
-              else if(this.select == data.id_sub)
-              {
-                if(this.search == '')
-                  return data
-                else{
-                  return (data.name.toLowerCase().match(this.search) ||
-                    data.kode.match.toLowerCase().match(this.search))
-                }
-              }
-            }else{
-              return (data.name.toLowerCase().match(this.search) ||
-                data.kode.toLowerCase().match(this.search))
-            }
-        });
-      },
+      
     },
     methods: {
-      filterAll()
-      {
-        console.log('masuk sini')
-        for(let data of this.ahsAll)
-        {
-          if(this.select != '')
-          {
-            if(this.select == '-1')
-            {
-              if(this.search == '')
-                return data
-              else{
-                 (data.name.match(this.search) ||
-                  data.kode.match(this.search))
-                  console.log('data',data)
-              }
-            }
-            else if(this.select == data.id_sub)
-            {
-              if(this.search == '')
-                return data
-              else{
-                return (data.name.match(this.search) ||
-                  data.kode.match.match(this.search))
-              }
-            }
-          }else{
-            return (data.name.match(this.search) ||
-              data.kode.match(this.search))
-          }
-        }
-        console.log('filter data',data)
-      },
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
@@ -766,7 +720,19 @@ import task from './../service/TaskSub'
         this.AHS.total_before_overhead = parseFloat(temp) + parseFloat(this.AHS.total_equipment)
         console.log('Total Before Overhead')
         console.log(this.AHS.total_before_overhead)
-        this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead)).toFixed(2)
+        this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead/100)).toFixed(2)
+      },
+      async searchAll()
+      {
+        try{
+          if(this.search=='')
+            this.getallAHS()
+          else 
+            this.ahs = (await ahsController.search(this.search)).data
+          console.log('search ahs',this.ahs) 
+        }catch(err){
+          console.log(err)
+        }
       },
       async filterTask(id)
       {
@@ -1029,11 +995,20 @@ import task from './../service/TaskSub'
       async getPagination()
       {
         try{
+          if(this.search == "")
+          {
             await ahsController.get(this.current_page).then(response =>{
-            this.current_page = response.meta.pagination.current_page
-            this.ahs = response.data
-            this.total_pages = response.meta.pagination.total_pages
-          })
+              this.current_page = response.meta.pagination.current_page
+              this.ahs = response.data
+              this.total_pages = response.meta.pagination.total_pages
+            })
+          }else{
+            await ahsController.search(this.search,this.current_page).then(response =>{
+              this.current_page = response.meta.pagination.current_page
+              this.ahs = response.data
+              this.total_pages = response.meta.pagination.total_pages
+            })
+          }
         }catch(err){
           console.log(err)
         }
@@ -1047,7 +1022,7 @@ import task from './../service/TaskSub'
             id_sub                : this.AHS.id_sub,
             total_labor           : this.AHS.total_labor,
             total_material        : this.AHS.total_material,
-            total_equipment : this.AHS.total_equipment,
+            total_equipment       : this.AHS.total_equipment,
             total_before_overhead : this.AHS.total_before_overhead,
             overhead              : this.AHS.overhead,
             total                 : this.AHS.total,
@@ -1094,7 +1069,7 @@ import task from './../service/TaskSub'
           id_ahs: this.AHS.id_ahs
         }
         try{
-            await ahsController.copy(payload).then(response=>{
+            await ahsController.copy(payload).then(()=>{
             this.current_page = 1 
             this.getallAHS()
             this.copy()
@@ -1109,7 +1084,7 @@ import task from './../service/TaskSub'
               coefficient   : props.item.coefficient,
             } 
             await detailController.updateDetail(payload,props.item.id_ahs_details)
-            this.getItem(props.item.id_ahs).then(response=>{
+            this.getItem(props.item.id_ahs).then(()=>{
               this.close()
               this.update()
             })
@@ -1129,7 +1104,7 @@ import task from './../service/TaskSub'
       async deleteDetail(id){
         try{
           await detailController.deleteItem(id).data
-          this.getPagination().then(response=>{
+          this.getPagination().then(()=>{
             this.delete()
           })
         }catch(err){

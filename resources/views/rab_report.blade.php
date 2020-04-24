@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Rencana Anggaran Biaya</title>
+        <title>Rencana Anggaran Biaya {{$rab[0]->name}}</title>
         <style>
             /* .border{
                 border: 1px solid black;
@@ -17,7 +17,7 @@
                 border: 3px solid black;
                 text-align: center;
                 border-collapse: collapse;
-                font-size: 10px;
+                font-size: 12px;
                 font-family: Calibri, sans-serif;
                 width: 700px;
                 margin-top: 10px;
@@ -60,7 +60,7 @@
             .headerTable{
                 margin-top: 20px;
                 font-family: Calibri, sans-serif;
-                font-size: 11px;
+                font-size: 13px;
             }
         </style>
     </head>
@@ -68,7 +68,7 @@
         <img src="{{public_path('images/logo.png')}}" width="400px">
         <div class="title">
             <h3>Rencana Anggaran Biaya</h3>
-            <h3>(RAB-OE)</h3>
+            <h3>(RAB)</h3>
         </div>
         <div class="footer" style="margin-top:350px">
             <h3>Proyek</h3>
@@ -256,27 +256,47 @@
                             @endif
                         @endforeach
                         <tr>
-                            <td>-</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td colspan="2"></td>
-                            <td colspan="2"></td>
-                            <td colspan="2" style="border-bottom: 3px solid black"></td>
-                            <td></td>
-                            <td></td>
+                            <td style="border-bottom: 3px solid black">-</td>
+                            <td style="border-bottom: 3px solid black"></td>
+                            <td style="border-bottom: 3px solid black"></td>
+                            <td style="border-bottom: 3px solid black"></td>
+                            <td style="border-bottom: 3px solid black" colspan="2"></td>
+                            <td style="border-bottom: 3px solid black" colspan="2"></td>
+                            <td style="border-bottom: 3px solid black" colspan="2" style="border-bottom: 3px solid black"></td>
+                            <td style="border-bottom: 3px solid black"></td>
+                            <td style="border-bottom: 3px solid black"></td>
                         </tr>
                         <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">TOTAL</td>
+                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">SUB TOTAL</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
                             <td align="right" style="padding-right:5px;font-style:bold">{{number_format($nominal,2,',','.')}}</td>
-                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>}}
-                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>}}
+                            <td rowspan=5 align="center" style="padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>
+                            <td rowspan="5" align="center" style="padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>
+                        </tr>
+                        @php
+                            $Pajak = $nominal * $ppn /100;
+                            $Jasa = $nominal * $jasa /100;
+                            $Total_Nominal = $nominal + $Pajak + $Jasa;
+                        @endphp
+                        <tr>
+                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PAJAK</td>
+                            <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
+                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($Pajak,2,',','.')}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">JASA</td>
+                            <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
+                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($Jasa,2,',','.')}}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px;border-top: 3px solid black">TOTAL</td>
+                            <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold;border-top: 3px solid black">Rp.</td>
+                            <td align="right" style="padding-right:5px;font-style:bold;border-top: 3px solid black">{{number_format($Total_Nominal,2,',','.')}}</td>
                         </tr>
                         <tr>
                             <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PEMBULATAN</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
-                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($nominal,0,',','.')}}</td>
+                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($Total_Nominal,0,',','.')}}</td>
                         </tr>
                     </tbody>
                 </table>

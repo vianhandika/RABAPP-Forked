@@ -141,17 +141,20 @@
                           :rules="phoneRules"
                           type="number"
                         >
-                          </v-text-field>
+                        </v-text-field>
                       </v-flex>
                     </v-layout>
 
                     <v-layout>
                       <v-flex>
-                        <v-text-field
+                        <v-select
                           v-model="Project.type"
                           label="Type"
                           :rules="typeRules"
-                          ></v-text-field>
+                          :items="typeProject"
+                          append-icon="expand_more"
+                        >
+                        </v-select>
                       </v-flex>
                     </v-layout>
 
@@ -160,6 +163,7 @@
                         <v-text-field
                           v-model="Project.nominal"
                           label="Nominal"
+                          readonly
                         ></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -237,7 +241,16 @@ import { parseISO } from 'date-fns'
       menu: false,
       edit: false,
       search:'',
-      
+      typeProject:[
+        'Rumah Tinggal',
+        'Rumah Sakit',
+        'Sekolah',
+        'Kantor',
+        'Hotel',
+        'Mall',
+        'Landscape',
+        'Lain-lain'
+      ],
       project: [],
       Project: {
         id_project: '',
@@ -251,70 +264,34 @@ import { parseISO } from 'date-fns'
         type: '',
         nominal: 0
       },
+      ProjectDefault: {
+        id_project: '',
+        kode: '',
+        project:'',
+        address: '',
+        owner: '',
+        date: new Date().toISOString().substr(0, 10),
+        no_telp: '',
+        phone: '',
+        type: '',
+        nominal: 0
+      },
       headers: [
-        {
-          text: 'ID',
-          align: 'left',
-          sortable: false,
-          value: 'kode',
-          width: '8%'
-        },
-        {
-          text: 'Project',
-          align: 'left',
-          sortable: false,
-          value: 'project',
-        },
-        { 
-          sortable: false,
-          text: 'Address', 
-          value: 'address'
-        },
-        { 
-          sortable: false,
-          text: 'Owner', 
-          value: 'owner'
-        },
-        { 
-          sortable: false,
-          text: 'Date', 
-          value: 'date',
-          width: '12%'
-        },
-        { 
-          sortable: false,
-          text: 'Telp Number', 
-          value: 'no_telp',
-          align: 'left'
-        },
-        { 
-          sortable: false,
-          text: 'Phone Number', 
-          value: 'phone',
-          align: 'left'
-        },
-        { 
-          sortable: false,
-          text: 'Type', 
-          value: 'type',
-          align: 'center'
-        },
-        { 
-          sortable: false,
-          text: 'Nominal', 
-          value: 'nominal',
-          width: '15%'
-        },
-        { 
-          text: 'Actions', 
-          value: 'action', 
-          sortable: false,
-          width: '8%' 
-        },
+        {text: 'ID',align: 'left',sortable: false,value: 'kode',width: '8%'},
+        {text: 'Project',align: 'left',sortable: false,value: 'project'},
+        {text: 'Address',sortable: false,value: 'address'},
+        {text: 'Owner',sortable: false,value: 'owner'},
+        {text: 'Date', sortable: false,value: 'date',width: '12%'},
+        {text: 'Telp Number', sortable: false,value: 'no_telp',align: 'left'},
+        {sortable: false,text: 'Phone Number',value: 'phone',align: 'left'},
+        {sortable: false,text: 'Type',value: 'type',align: 'center'},
+        {sortable: false,text: 'Nominal',value: 'nominal',width: '15%'},
+        {text: 'Actions',value: 'action',sortable: false,width: '8%' },
       ],
       //validation
       nameRules: [
         v => !!v || 'Name is required',
+        v => v && v.length < 30 || 'Name must be at most 30 characters long'
       ],
       addressRules: [
         v => !!v || 'Address is required',
@@ -324,22 +301,20 @@ import { parseISO } from 'date-fns'
         v => !!v || 'Owner is required',
         v => v && v.length <= 35 || 'Owner must be at most 35 characters long'
       ],
-      contactRules: [
-        v => !!v || 'Contact is required'
-      ],
       phoneRules: [
         v => !!v || 'Phone is required',
-        v => (v && !v.numeric) || 'Phone number must be numeric'
+        v => v && v.length <= 15 || 'Phone must be at most 15 characters long',
       ],
       dateRules: [
         v => !!v || 'Date is required'
       ],
       noRules: [
         v => !!v || 'Telephone number is required',
-        v => (v && !v.numeric) || 'Telp number must be numeric'
+        v => v && v.length <= 15 || 'Telephone number must be at most 15 characters long',
+        // v => (v && !v.numeric) || 'Telp number must be numeric'
       ],
       typeRules: [
-        v => !!v || 'Type is required'
+        v => !!v || 'Type is required',
       ],
     }),
     mounted(){
@@ -402,38 +377,41 @@ import { parseISO } from 'date-fns'
             type        : this.Project.type,
             nominal     : this.Project.nominal
           }
-          await Controller.addItem(payload)
-          this.close()
-          this.save()
+          await Controller.addItem(payload).then(()=>{
+            this.close()
+            this.save()
+          })
         }catch(err){
           console.log(err);
         }
       },
       async updateItem(id){
         try{
-            const payload = {
-              name        : this.Project.project,
-              address     : this.Project.address,
-              owner       : this.Project.owner,
-              date        : this.Project.date,
-              no_telp     : this.Project.no_telp,
-              phone       : this.Project.phone,
-              type        : this.Project.type,
-              nominal     : this.Project.nominal,
-              kode        : this.Project.kode
-            } 
-            await Controller.updateItem(payload,id)
+          const payload = {
+            name        : this.Project.project,
+            address     : this.Project.address,
+            owner       : this.Project.owner,
+            date        : this.Project.date,
+            no_telp     : this.Project.no_telp,
+            phone       : this.Project.phone,
+            type        : this.Project.type,
+            nominal     : this.Project.nominal,
+            kode        : this.Project.kode
+          } 
+          await Controller.updateItem(payload,id).then(()=>{
             this.close()
             this.update()
+          })
         }catch(err){
           console.log(err);
         }
       },
       async deleteItem(id){
         try{
-          await Controller.deleteItem(id).data
-          this.getallItem()
-          this.delete()
+          (await Controller.deleteItem(id).data).then(()=>{
+            this.getallItem()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }
@@ -443,14 +421,8 @@ import { parseISO } from 'date-fns'
       },
       reset(){
         this.getallItem()
-        this.resetForm()
-        this.resetValidation()
-      },
-      resetForm(){
-        this.$refs.form.reset()
-      },
-      resetValidation(){
         this.$refs.form.resetValidation()
+        this.Project = Object.assign({},this.ProjectDefault)
       },
       close () {
         this.getallItem()
@@ -462,5 +434,4 @@ import { parseISO } from 'date-fns'
 </script>
 
 <style>
-
 </style>

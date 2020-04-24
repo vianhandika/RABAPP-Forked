@@ -292,7 +292,7 @@
           >
             <template v-slot:top>
               <v-toolbar dark color="light-blue accent-3">
-                <v-toolbar-title>Satuan</v-toolbar-title>
+                <v-toolbar-title>Unit</v-toolbar-title>
                 <v-divider
                   class="mx-4"
                   inset
@@ -311,7 +311,7 @@
                 <v-spacer></v-spacer>
                 <v-text-field
                   v-model="satuan_data"
-                  label="Satuan"
+                  label="Unit"
                   single-line
                   hide-details
                   style="width: 40px"
@@ -510,10 +510,11 @@ import satuan from './../service/Satuan'
           const payload = {
             name : this.building,
           }
-          await structure.add(payload)
-          this.getStructure()
-          this.building = ''
-          this.save()
+          await structure.add(payload).then(()=>{
+            this.getStructure()
+            this.building = ''
+            this.save()  
+          })
         }catch(err){
           console.log(err)
         }
@@ -523,18 +524,20 @@ import satuan from './../service/Satuan'
           const payload = {
             name        : props.item.name,
           }
-          await structure.update(payload,props.item.id_structure)
-          this.getStructure()
-          this.update();
+          await structure.update(payload,props.item.id_structure).then(()=>{
+            this.getStructure()
+            this.update();
+          })
         }catch(err){
           console.log(err)
         }
       },
       async deleteStructure(id){
         try{
-          await structure.delete(id).data
-          this.getStructure()
-          this.delete()
+          (await structure.delete(id).data).then(()=>{
+            this.getStructure()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }
@@ -552,10 +555,11 @@ import satuan from './../service/Satuan'
           const payload = {
             name : this.floor_data,
           }
-          await floor.add(payload)
-          this.getFloor()
-          this.floor_data = ''
-          this.save()
+          await floor.add(payload).then(()=>{
+            this.getFloor()
+            this.floor_data = ''
+            this.save()
+          })
         }catch(err){
           console.log(err);
         }
@@ -565,18 +569,20 @@ import satuan from './../service/Satuan'
           const payload = {
             name        : props.item.name
           }
-          await floor.update(payload,props.item.id_group)
-          this.getFloor()
-          this.update()
+          await floor.update(payload,props.item.id_group).then(()=>{
+            this.getFloor()
+            this.update()
+          })
         }catch(err){
           console.log(err)
         }
       },
       async deleteFloor(id){
         try{
-          await floor.delete(id).data
-          this.getFloor()
-          this.delete()
+          (await floor.delete(id).data).then(()=>{
+            this.getFloor()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }
@@ -594,10 +600,11 @@ import satuan from './../service/Satuan'
           const payload = {
             name :  this.task,
           }
-          await task.add(payload)
-          this.getTaskSub()
-          this.task = ''
-          this.add()
+          await task.add(payload).then(()=>{
+            this.getTaskSub()
+            this.task = ''
+            this.save()
+          })
         }catch(err){
           console.log(err)
         }
@@ -607,18 +614,20 @@ import satuan from './../service/Satuan'
           const payload = {
             name        : props.item.name
           }
-          await task.update(payload,props.item.id_sub)
-          this.getTaskSub()
-          this.update()
+          await task.update(payload,props.item.id_sub).then(()=>{
+            this.getTaskSub()
+            this.update()
+          })
         }catch(err){
           console.log(err)
         }
       },
       async deleteTaskSub(id){
         try{
-          await task.delete(id).data
-          this.getTaskSub()
-          this.delete()
+          (await task.delete(id).data).then(()=>{
+            this.getTaskSub()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }
@@ -629,10 +638,11 @@ import satuan from './../service/Satuan'
           const payload = {
             name :  this.satuan_data,
           }
-          await satuan.add(payload)
-          this.getSatuan()
-          this.satuan_data = ''
-          this.save()
+          await satuan.add(payload).then(()=>{
+            this.getSatuan()
+            this.satuan_data = ''
+            this.save()
+          })
         }catch(err){
           console.log(err)
         }
@@ -642,18 +652,20 @@ import satuan from './../service/Satuan'
           const payload = {
             name        : props.item.name
           }
-          await satuan.update(payload,props.item.id_satuan)
-          this.getSatuan()
-          this.update()
+          await satuan.update(payload,props.item.id_satuan).then(()=>{
+            this.getSatuan()
+            this.update()
+          })
         }catch(err){
           console.log(err)
         }
       },
       async deleteSatuan(id){
         try{
-          await satuan.delete(id).data
-          this.getSatuan()
-          this.delete()
+          (await satuan.delete(id).data).then(()=>{
+            this.getSatuan()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }

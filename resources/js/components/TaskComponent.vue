@@ -172,6 +172,14 @@ import Controller from './../service/Job'
         id_job: '',
         status: ''
       },
+      JobDefault: {
+        kode:'',
+        name:'',
+        satuan: '',
+        details: '',
+        id_job: '',
+        status: ''
+      },
       headers: [
         {
           text : 'ID',
@@ -276,34 +284,37 @@ import Controller from './../service/Job'
             status      : this.Job.status,
             details     : this.Job.details,
           }
-          await Controller.addItem(payload)
-          this.close()
-          this.save()
+          await Controller.addItem(payload).then(()=>{
+            this.close()
+            this.save()
+          })
         }catch(err){
           console.log(err);
         }
       },
       async updateItem(id){
         try{
-            const payload = {
-              kode        : this.Job.kode,
-              name        : this.Job.name,
-              satuan      : this.Job.satuan,
-              status      : this.Job.status,
-              details     : this.Job.details,
-            } 
-            await Controller.updateItem(payload,id)
+          const payload = {
+            kode        : this.Job.kode,
+            name        : this.Job.name,
+            satuan      : this.Job.satuan,
+            status      : this.Job.status,
+            details     : this.Job.details,
+          } 
+          await Controller.updateItem(payload,id).then(()=>{
             this.close()
             this.update()
+          })
         }catch(err){
           console.log(err);
         }
       },
       async deleteItem(id){
         try{
-          await Controller.deleteItem(id).data
-          this.getallItem()
-          this.delete()
+          (await Controller.deleteItem(id).data).then(()=>{
+            this.getallItem()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }
@@ -313,14 +324,8 @@ import Controller from './../service/Job'
       },
       reset(){
         this.getallItem()
-        this.resetForm()
-        this.resetValidation()
-      },
-      resetForm(){
-        this.$refs.form.reset()
-      },
-      resetValidation(){
         this.$refs.form.resetValidation()
+        this.Job = Object.assign({},this.JobDefault)
       },
       close () {
         this.getallItem()

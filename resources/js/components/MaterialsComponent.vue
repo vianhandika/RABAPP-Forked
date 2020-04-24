@@ -171,15 +171,15 @@
                 delete
               </v-icon>
             </template>
-                <v-card>
-                  <v-card-title class="headline">Confirmation</v-card-title>
-                    <v-card-text>Are you sure want to delete this material/labor?</v-card-text>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Material.id_material)">Yes</v-btn>
-                    <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
-                  </v-card-actions>
-                </v-card>
+              <v-card>
+                <v-card-title class="headline">Confirmation</v-card-title>
+                  <v-card-text>Are you sure want to delete this material/labor?</v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Material.id_material)">Yes</v-btn>
+                  <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                </v-card-actions>
+              </v-card>
           </v-dialog>
         </template>
       </v-data-table>
@@ -216,6 +216,16 @@ import storeController from './../service/Store'
       store:[],
       
       Material: {
+        id_store:'',
+        kode: '',
+        name:'',
+        type: '',
+        price: 0,
+        spesification: '',
+        satuan: '',
+        status: '',
+      },
+      MaterialDefault: {
         id_store:'',
         kode: '',
         name:'',
@@ -371,37 +381,40 @@ import storeController from './../service/Store'
             status          : this.Material.status,
             spesification   : this.Material.spesification
           }
-          await Controller.addItem(payload)
-          this.close()
-          this.save()
+          await Controller.addItem(payload).then(()=>{
+            this.close()
+            this.save()
+          })
         }catch(err){
           console.log(err);
         }
       },
       async updateItem(id){
         try{
-            const payload = {
-              id_store        : this.Material.id_store,
-              kode            : this.Material.kode,
-              name            : this.Material.name,
-              price           : this.Material.price,
-              type            : this.Material.type,
-              satuan          : this.Material.satuan,
-              status          : this.Material.status,
-              spesification   : this.Material.spesification
-            } 
-            await Controller.updateItem(payload,id)
+          const payload = {
+            id_store        : this.Material.id_store,
+            kode            : this.Material.kode,
+            name            : this.Material.name,
+            price           : this.Material.price,
+            type            : this.Material.type,
+            satuan          : this.Material.satuan,
+            status          : this.Material.status,
+            spesification   : this.Material.spesification
+          } 
+          await Controller.updateItem(payload,id).then(()=>{
             this.close()
-            this.update()
+            this.update()  
+          })
         }catch(err){
           console.log(err);
         }
       },
       async deleteItem(id){
         try{
-          await Controller.deleteItem(id).data
-          this.getallItem()
-          this.delete()
+          (await Controller.deleteItem(id).data).then(()=>{
+            this.getallItem()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }
@@ -411,14 +424,9 @@ import storeController from './../service/Store'
         console.log(this.Material)
       },
       reset(){
-        this.resetForm()
-        this.resetValidation()
-      },
-      resetForm(){
-        this.$refs.form.reset()
-      },
-      resetValidation(){
         this.$refs.form.resetValidation()
+        this.getallItem()
+        this.Material = Object.assign({},this.MaterialDefault)
       },
       close () {
         this.getallItem()

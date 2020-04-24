@@ -127,7 +127,7 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col cols="5" style="margin-left:10px">
+                  <v-col cols="4" style="margin-left:10px">
                     <v-select
                       label="Select"
                       v-model="select"
@@ -140,7 +140,7 @@
                       color="green darken-3"
                     ></v-select>
                   </v-col>
-                  <v-col cols="4">
+                  <v-col cols="3">
                     <v-text-field
                       v-model="search"
                       append-icon="search"
@@ -153,10 +153,36 @@
                   </v-col>
                   <v-col cols="2">
                     <v-text-field
+                      v-model="ppn"
+                      label="PPN (%)"
+                      color="green darken-3"
+                      v-if="select==null"
+                      type="number"
+                    >
+                    </v-text-field>
+                    <v-text-field
                       v-model="rap"
                       label="RAP (%)"
                       color="green darken-3"
                       v-if="select==3"
+                      type="number"
+                    >
+                    </v-text-field>
+                    <v-text-field
+                      v-model="adjustment"
+                      label="Adjust (%)"
+                      color="green darken-3"
+                      v-if="select==2"
+                      type="number"
+                    >
+                    </v-text-field>
+                  </v-col>
+                  <v-col cols="2">
+                    <v-text-field
+                      v-model="jasa"
+                      label="Jasa (%)"
+                      color="green darken-3"
+                      v-if="select==null"
                       type="number"
                     >
                     </v-text-field>
@@ -515,6 +541,9 @@ import materials from './../service/Material'
       searchAHS:'',
       searchAHSLokal:'',
       rap:0,
+      ppn:0,
+      jasa:0,
+      adjustment:0,
       select : null,
       selectahs:null,
 
@@ -654,7 +683,7 @@ import materials from './../service/Material'
       async getPaginationAHSLokal()
       {
         try{
-            await ahsLokal.getnotnull(this.current_page_ahs_lokal).then(response =>{
+            await ahsLokal.paginationnotnull(this.current_page_ahs_lokal).then(response =>{
             this.current_page_ahs_lokal = response.meta.pagination.current_page
             this.ahs_lokal = response.data
             this.total_pages_ahs_lokal = response.meta.pagination.total_pages
@@ -695,7 +724,7 @@ import materials from './../service/Material'
       {
         try{
           this.overlay = true
-          Http.download('/api/rab_report/'+id).then(() => {
+          Http.download('/api/rab_report/'+id+'/'+ppn+'/'+jasa).then(() => {
             this.overlay = false
           })
         }catch(err){
@@ -719,7 +748,7 @@ import materials from './../service/Material'
       {
         try{
           this.overlay = true
-          Http.download('/api/rab_mr_report/'+id).then(()=>{
+          Http.download('/api/rab_mr_report/'+id+'/'+adjustment).then(()=>{
             this.overlay = false
           })
         }catch(err){

@@ -1,15 +1,16 @@
 <template>
   <v-app class="grey lighten-4">
     <v-container>
-      <v-toolbar dark color="light-blue accent-3">
-        <v-toolbar-title>RAB</v-toolbar-title>
+      <v-toolbar color="light-blue accent-3">
+        <v-toolbar-title class="white--text">RAB</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
           vertical
+          dark
         ></v-divider>
 
-        <v-text-field
+        <!-- <v-text-field
           v-model="search"
           append-icon="search"
           label="Search"
@@ -17,15 +18,38 @@
           hide-details
           style="width: 5px"
         >
-        </v-text-field>
+        </v-text-field> -->
+        <v-col cols="6">
+          <v-layout>
+            <v-text-field
+              v-model="search"
+              v-on:keyup.enter="filterAHS"
+              hide-details
+              background-color="white"
+              solo
+              dense
+              style="width:300px"
+              label="Search"
+            >
+            </v-text-field>  
+            <v-btn 
+              style="height:38px"
+              color="blue"  
+              dark
+              @click="searchAll"
+              @v-on:keyup.enter="searchAll"
+            >
+            <v-icon>search</v-icon> 
+            </v-btn>
+          </v-layout>
+        </v-col>
       
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" width="850px">  
           <template v-slot:activator="{ on }">
             <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="dialog8=true;reset()">New</v-btn>
           </template>
-          <v-card color="">
-
+          <v-card>
             <v-toolbar dark color="light-blue accent-4">
               <v-btn icon dark @click="dialog = false; dialog7=false;dialog8=false">
                 <v-icon>close</v-icon>
@@ -758,7 +782,8 @@
                       <v-data-table
                         :headers="headers_ahs_details"
                         :items="detailDetails"
-                        class="elevation-5"                    
+                        class="elevation-5"    
+                        :search="searchDetails"
                       >
                         <template v-slot:top>
                           <v-toolbar color="light-blue accent-2">
@@ -770,7 +795,7 @@
                             ></v-divider>
                           </v-toolbar>
                           <v-layout>
-                            <v-col cols="12" sm="3" md="3">
+                            <!-- <v-col cols="12" sm="3" md="3">
                               <v-select
                                 :items="detailDetails"
                                 item-text="structure"
@@ -799,13 +824,13 @@
                                 append-icon="expand_more"
                               >
                               </v-select>
-                            </v-col>
-                            <v-col cols="12" sm="3" md="3">
+                            </v-col> -->
+                            <v-col cols="12" sm="6" md="6">
                               <v-text-field
+                                v-model="searchDetails"
                                 append-icon="search"
                                 label="Search"
                                 hide-details
-                                :search="searchDetails"
                               ></v-text-field>
                             </v-col>
                           </v-layout>
@@ -951,22 +976,22 @@
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
-                <v-flex xs3>
+                <v-flex xs2>
                   <div class="caption grey--text">ID RAB</div>
                   <div>{{ data.kode }}</div>
                 </v-flex>
-                <v-flex xs5>
+                <v-flex xs8 style="padding-left:10px">
                   <div class="caption grey--text">Project</div>
                   <div>{{ data.project }}</div>
                 </v-flex>
-                <v-flex xs5>
+                <v-flex xs5 style="padding-left:10px">
                   <div class="caption grey--text">Nominal</div>
                   <v-layout>
                     <div style="text-align:left;width:30px">Rp.</div>
                     <div style="text-align:right;width:140px">{{ Number(data.total).toLocaleString('id-ID') }}</div>  
                   </v-layout>
                 </v-flex>
-                <v-flex xs4>
+                <v-flex xs4 style="padding-left:10px">
                   <div class="caption grey--text">Description</div>
                   <div>{{ data.desc }}</div>
                 </v-flex>
@@ -1060,42 +1085,39 @@
                               <div class="caption grey--text">Task</div>
                               <div>{{ detail_ahs.name }}</div>
                             </v-flex>
+                            <v-flex xs2 style="padding-left:10px">
+                              <div class="caption grey--text">Status</div>
+                              <div>{{ detail_ahs.status }}</div>
+                            </v-flex>
                             <v-flex xs2>
                               <div class="caption grey--text">Volume</div>
-                              <div>{{ detail_ahs.volume }}</div>
+                              <div>{{ detail_ahs.volume_adj.toFixed(2).toString().replace(".", ",") }}</div>
                             </v-flex>
                             <v-flex xs2>
                               <div class="caption grey--text">Satuan</div>
                               <div>{{ detail_ahs.satuan }}</div>
-                            </v-flex>
-                            <v-flex xs4>
-                              <div class="caption grey--text">HSP</div>
-                              <v-layout>
-                              <div style="text-align:left;width:25px">Rp.</div>
-                              <div style="text-align:right;width:120px">{{ Number(detail_ahs.HSP).toLocaleString('id-ID') }}</div>
-                              </v-layout>
                             </v-flex>
                             <v-flex xs2>
                               <div class="caption grey--text">Adjust</div>
                               <div >{{ detail_ahs.adjustment }}</div>
                             </v-flex>
                             <v-flex xs4>
+                              <div class="caption grey--text">HSP (LAO)</div>
+                              <v-layout>
+                                <div style="text-align:left;width:25px">Rp.</div>
+                                <div style="text-align:right;width:120px">{{ Number(detail_ahs.HSP_adj).toLocaleString('id-ID') }}</div>
+                              </v-layout>
+                            </v-flex>
+                            <v-flex xs4 style="padding-left:15px">
                               <div class="caption grey--text">HP</div>
                               <v-layout>
                                 <div style="text-align:left;width:25px">Rp.</div>
-                                <div style="text-align:right;width:120px">{{ Number(detail_ahs.HP).toLocaleString('id-ID') }}</div>
-                              </v-layout>
-                            </v-flex>
-                            <v-flex xs4>
-                              <div class="caption grey--text">HP Adjust</div>
-                              <v-layout>
-                              <div style="text-align:left;width:25px">Rp.</div>
-                              <div style="text-align:right;width:120px">{{ Number(detail_ahs.HP_Adjust).toLocaleString('id-ID') }}</div>
+                                <div style="text-align:right;width:120px">{{ Number(detail_ahs.HP_Adjust).toLocaleString('id-ID') }}</div>
                               </v-layout>
                             </v-flex>
                           </v-layout>
                         </v-list-item-content>
-                        <v-icon color="cyan accent-2" @click="dialog6=true;itemDetail(detail_ahs)">delete</v-icon>
+                        <v-icon style="padding-left:15px" color="cyan accent-2" @click="dialog6=true;itemDetail(detail_ahs)">delete</v-icon>
                       </template>
                       <!-- dialog delete detail -->
                         <v-dialog v-model="dialog6" max-width="290px">
@@ -1375,10 +1397,10 @@ import material from './../service/Material'
           {text: 'Actions',value:'action'}
         ],
         headers_ahs_details:[
-          // {text: 'ID',value:'id_ahs_lokal'},
-          // {text: 'Builiding',value:'structure'},
-          // {text: 'Floor',value:'floor'},
-          // {text: 'Task Group',value:'task'},
+          {text: 'ID',value:'id_ahs_lokal'},
+          {text: 'Builiding',value:'structure'},
+          {text: 'Floor',value:'floor'},
+          {text: 'Task Group',value:'task'},
           {text: 'AHS',value:'name', width:'25%'},
           {text: 'HSP', value: 'HSP'},
           {text: 'Volume',value:'volume',align: 'center'},
@@ -1408,7 +1430,7 @@ import material from './../service/Material'
     computed: {
       filtered:function(){
         return this.RAB.filter((data)=>{    
-          return data.project.match(this.search);
+          return data.project.toLowerCase().match(this.search);
         });
       },
     },
@@ -1454,14 +1476,35 @@ import material from './../service/Material'
           this.ahs_lokal.HP_Adjust = parseFloat(this.ahs_lokal.adjustment * data.total * this.ahs_lokal.volume).toFixed(2)
         }
       },
+      async searchAll()
+      {
+        try{
+          if(this.search=='')
+            this.getallAHS()
+          else 
+            this.ahs = (await ahsController.search(this.search)).data
+          console.log('search ahs',this.ahs) 
+        }catch(err){
+          console.log(err)
+        }
+      },
       async getPagination()
       {
         try{
+          if(this.search == "")
+          {
             await rabController.pagination(this.current_page).then(response => {
-            this.current_page = response.meta.pagination.current_page
-            this.RAB = response.data
-            this.total_pages = response.meta.pagination.total_pages
-          })
+              this.current_page = response.meta.pagination.current_page
+              this.RAB = response.data
+              this.total_pages = response.meta.pagination.total_pages
+            })
+          }else{
+            await rabController.search(this.search,this.current_page).then(response =>{
+              this.current_page = response.meta.pagination.current_page
+              this.ahs = response.data
+              this.total_pages = response.meta.pagination.total_pages
+            })
+          }
         }catch(err){
           console.log(err)
         }

@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>Rencana Anggaran Biaya</title>
+    <title>Kebutuhan Bahan {{$rab[0]->name}}</title>
         <style>
             /* .border{
                 border: 1px solid black;
@@ -28,14 +28,7 @@
                 font-family: Calibri, sans-serif;
                 margin: 10px;
                 border-top:3px solid black;
-                /* padding: 10px; */
             }
-            /* .table-section table tbody tr td {
-                border-bottom: 1px solid black;
-                border-right: 1px solid black;
-                font-family: Calibri, sans-serif;
-                margin: 10px;
-            } */
             .bottomRight {
                 border-bottom: 1px solid black;
                 border-right: 1px solid black;
@@ -128,6 +121,15 @@
                         <td style="font-size:15px">:</td>
                         <td colspan="2" style="font-size:15px">{{date('d M Y'),strtotime($rab[0]->date)}}</td>
                     </tr>
+                    <tr>
+                        <td style="font-size:15px">Adjustment</td>
+                        <td style="font-size:15px">:</td>
+                        <td colspan="2" style="font-size:15px">{{$adjust}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </thead>
             </table>
             <div class="table-section">
@@ -137,11 +139,14 @@
                             <th rowspan="2">No.</th>
                             <th rowspan="2" width="50px">ID. B&T</th>
                             <th rowspan="2" width="100px">Item</th>
+                            <th rowspan="2">Status</th>
                             <th rowspan="2" width="160px">Uraian Pekerjaan</th>
+                            <th rowspan="2">Koef.</th>
                             <th>Vol.</th>
                             <th>Sat.</th>
                             <th colspan="2">Harga</th>
                             <th colspan="2">Harga Terhitung</th>
+                            <th>Kebutuhan</th>
                             <th>Total</th>
                         </tr>
                         <tr>
@@ -149,6 +154,7 @@
                             <th>Pek.</th>
                             <th colspan="2">Bahan</th>
                             <th colspan="2">Bahan</th>
+                            <th>Bahan</th>
                             <th>Volume</th>
                         </tr>
                     </thead>
@@ -161,7 +167,7 @@
                             @if ($structure_data->id_structure == $group_data->id_structure)
                                 <tr>
                                     <td class="bottomRight" style="font-style:bold">{{$roman[$k]}}</td>
-                                    <td class="bottomRight" align="left" style="font-style:bold" colspan="10">LANTAI {{strtoupper($group_data->name)}}</td>
+                                    <td class="bottomRight" align="left" style="font-style:bold" colspan="13">LANTAI {{strtoupper($group_data->name)}}</td>
                                 </tr>
                                 @php
                                     $j=0;
@@ -171,7 +177,7 @@
                                         @if ($group_data->id_groups == $tasksub_data->id_groups)
                                             <tr>
                                                 <td class="bottomRight" style="font-style:bold">{{$alphabet[$j]}}</td>
-                                                <td class="bottomRight" align="left" style="font-style:bold" colspan="10">PEKERJAAN {{strtoupper($tasksub_data->name)}}</td>
+                                                <td class="bottomRight" align="left" style="font-style:bold" colspan="13">PEKERJAAN {{strtoupper($tasksub_data->name)}}</td>
                                             </tr>
                                             @php
                                                 $i=1;
@@ -179,7 +185,7 @@
                                                 $total=0;
                                                 $a=0;
                                                 $count = count($rab);
-                                                $volume = 0;
+                                                $total_rab_mr = 0;
                                             @endphp
                                             @foreach ($rab as $rab_data)
                                                 @if ($structure_data->id_structure == $rab_data->id_structure)
@@ -189,23 +195,25 @@
                                                                 <td class="bottomRight">{{$i}}</td>
                                                                 <td class="bottomRight">{{$rab_data->kode}}</td>
                                                                 <td class="bottomRight" align="left">{{$rab_data->materials}}</td>
+                                                                <td class="bottomRight" align="left">{{$rab_data->status}}</td>
                                                                 <td class="bottomRight" align="left">{{$rab_data->job}}</td>
-                                                                @if ($rab_data->status == "Volume")
-                                                                    <td class="bottomRight">{{$rab_data->volume * $rab_data->adjustment}}</td>
-                                                                @else
-                                                                    <td class="bottomRight">{{$rab_data->volume}}</td>
-                                                                @endif
+                                                                <td class="bottomRight">{{$rab_data->coefficient}}</td>
+                                                                <td class="bottomRight">{{$rab_data->volume}}</td>
                                                                 <td class="bottomRight">{{$rab_data->satuan}}</td>
                                                                 <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
                                                                 <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->price,2,',','.')}}</td>
                                                                 <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
                                                                 <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->HSP,2,',','.')}}</td>
+                                                                @php
+                                                                    $rab_mr = $rab_data->volume * $rab_data->coefficient * $rab_data->adjustment;
+                                                                @endphp
+                                                                <td class="bottomRight">{{number_format($rab_mr,2,',','.')}}</td>
                                                                 <td class="bottomRight"></td>
                                                             </tr>
                                                             <tr>
                                                                 @if ($a != $count-1)
                                                                     @php
-                                                                        $volume += $rab_data->volume;        
+                                                                        $total_rab_mr += $rab_mr;        
                                                                     @endphp
                                                                     @if ($rab[$a]->materials != $rab[$a+1]->materials)
                                                                         <td class="bottomRight"></td>
@@ -216,12 +224,14 @@
                                                                         <td class="bottomRight"></td>
                                                                         <td class="bottomRight" colspan="2"></td>
                                                                         <td class="bottomRight" colspan="2"></td>
-                                                                        <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$volume}}</td>
+                                                                        <td class="bottomRight" colspan="2"></td>
+                                                                        <td class="bottomRight"></td>
+                                                                        <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$total_rab_mr}}</td>
                                                                         @php
-                                                                            $volume=0;
+                                                                            $total_rab_mr=0;
                                                                         @endphp
                                                                     @else
-                                                                        <td colspan="11"></td>
+                                                                        <td colspan="14"></td>
                                                                     @endif
                                                                 @else
                                                                     <td class="bottomRight"></td>
@@ -232,7 +242,9 @@
                                                                     <td class="bottomRight"></td>
                                                                     <td class="bottomRight" colspan="2"></td>
                                                                     <td class="bottomRight" colspan="2"></td>
-                                                                    <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$volume + $rab_data->volume}}</td>
+                                                                    <td class="bottomRight" colspan="2"></td>
+                                                                    <td class="bottomRight"></td>
+                                                                    <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$total_rab_mr + $rab_mr}}</td>
                                                                 @endif
                                                             </tr>
                                                             @php
@@ -253,7 +265,7 @@
                         @endforeach
                         <tr>
                             <td class="bottomRight">-</td>
-                            <td class="bottomRight" colspan="10"></td>
+                            <td class="bottomRight" colspan="13"></td>
                         </tr>
                     </tbody>
                 </table>

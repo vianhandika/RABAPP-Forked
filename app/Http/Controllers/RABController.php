@@ -15,7 +15,9 @@ use App\Transformers\RABTransformers;
 use App\Transformers\GroupDetailsTransformers;
 use Illuminate\Support\Facades\DB;
 use App\Transformers\IlluminatePaginatorAdapter;
-use League\Fractal\Resource\Collection;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RABController extends RestController
 {
@@ -24,11 +26,9 @@ class RABController extends RestController
     public function index()
     {
         $rabPaginator = RAB::orderBy('id_rab','DESC')->paginate(3);
-        $rab = new Collection($rabPaginator->items(), new RABTransformers);
+        $rab = $this->generateCollection($rabPaginator);
         $rab->setPaginator(new IlluminatePaginatorAdapter($rabPaginator));
-        
         $rab = $this->manager->createData($rab); 
-        
         return $rab->toArray(); 
     }
 
@@ -37,6 +37,27 @@ class RABController extends RestController
         $rab = RAB::all();
         $response = $this->generateCollection($rab);
         return $this->sendResponse($response);
+    }
+
+    public function search($search)
+    {
+        // $search = $request->get('search');
+        $project = Project::where('name','LIKE',"%{$search}%")->get();
+        $array=[];
+        foreach($project as $item)
+        {
+            $rab = RAB::where('id_project',$item->id_project)->get();
+            array_push($array,$rab);
+        }
+        $data = $this->paginate($array);
+        return $data;
+    }
+
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = $items instanceof Collection ? $items : Collection::make($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     public function store(Request $request)
@@ -414,7 +435,7 @@ class RABController extends RestController
                             ->whereNull('a_h_s_s.deleted_at')
                             ->get();
                         // dd($Detail_Material);
-                        $collection = collect($material_temp);
+                        $collection = collect($material_temp); 
                         if($collection->isNotEmpty())
                         {
                             foreach($collection as $item)

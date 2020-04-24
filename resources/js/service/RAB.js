@@ -97,4 +97,16 @@ export default {
             Http.post('/api/rabs/copy', payload, successCallback, errorCallback)
         })
     },
+    search(search,id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rabs/search/'+search+'/?page='+id, successCallback, errorCallback)
+        })
+    }
 }

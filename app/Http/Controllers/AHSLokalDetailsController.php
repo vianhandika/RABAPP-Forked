@@ -42,7 +42,8 @@ class AHSLokalDetailsController extends RestController
             $ahs->total_labor -= $detail->sub_total;
         else
             $ahs->total_material -= $detail->sub_total;
-        $ahs->HSP -= $detail->sub_total;
+        $ahs->HSP_before_overhead -= $detail->sub_total;
+        $ahs->HSP = $ahs->HSP_before_overhead + ($ahs->HSP_before_overhead * $ahs->overhead/100);
         $ahs->save();
 
         $task = TaskSubDetails::findOrFail($ahs->id_sub_details);

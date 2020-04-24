@@ -7,7 +7,12 @@ use App\Transformers\AHSTransformers2;
 use Illuminate\Support\Facades\DB;
 use App\AHSDetails;
 use App\AHS;
+use App\Job;
+use App\TaskSub;
 use App\Transformers\IlluminatePaginatorAdapter;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class AHSController extends RestController
 {
@@ -20,6 +25,50 @@ class AHSController extends RestController
         $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
         $ahs = $this->manager->createData($ahs); 
         return $ahs->toArray();
+    }
+    
+    public function filter(Request $request)
+    {
+        $ahsPaginator = AHS::where('id_job',$id)->paginate(5);
+        $ahs = $this->generateCollection($ahsPaginator);
+        $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
+        $ahs = $this->manager->createData($ahs);
+        return $ahs->toArray();
+    }
+
+    public function search($search)
+    {
+        $job = Job::where('name','LIKE',"%{$search}%")->get();
+        $array=[];
+        foreach($job as $item)
+        {
+            $ahs = AHS::where('id_job',$item->id_job)->get();
+            foreach($ahs as $item)
+            {
+                array_push($array,$item);
+            }
+        }
+        $sub = TaskSub::where('name','LIKE',"%{$search}%")->get();
+        foreach($sub as $item)
+        {
+            $ahs = AHS::where('id_sub',$item->id_sub)->get();
+            foreach($ahs as $item)
+            {
+                array_push($array,$item);
+            }
+        }
+        $ahsPaginator = $this->paginate($array);
+        $ahs = $this->generateCollection($ahsPaginator);
+        $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
+        $ahs = $this->manager->createData($ahs); 
+        return $ahs->toArray();
+    }
+
+    public function paginate($items, $perPage = 5, $page = null, $options = [])
+    {
+        $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
+        $items = new Collection($items);
+        return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 
     public function all()
@@ -94,6 +143,7 @@ class AHSController extends RestController
             $filtered = $Detail;
         }
         $filtered->all();
+        // dd($filtered); 
         foreach($filtered as $filtered_data)
         {
             if($filtered->isNotEmpty())
@@ -105,7 +155,6 @@ class AHSController extends RestController
             if($detail_ahs['id_ahs_details'] == null)
             {
                 array_push($details,$ahs->detail_ahs()->create($detail_ahs));
-                echo 'zeyeng';
             }
             else
             {

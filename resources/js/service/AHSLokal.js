@@ -38,7 +38,7 @@ export default {
             Http.get('/api/rab_details?page='+id, successCallback, errorCallback)
         })
     },
-    getnotnull(){
+    paginationnotnull(id){
         return new Promise((resolve, reject) => {
             
             const successCallback = (res) => {
@@ -48,10 +48,10 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/rab_details/show', successCallback, errorCallback)
+            Http.get('/api/rab_details/show_not_null?page='+id, successCallback, errorCallback)
         })
     },
-    show(id){
+    showByID(id){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
                 const data = res.data
@@ -61,6 +61,30 @@ export default {
                 reject(err)
             }
             Http.get('/api/rab_details/showByID/'+id, successCallback, errorCallback)
+        })
+    },
+    search(search,id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rab_details/search/'+search+'/?page='+id, successCallback, errorCallback)
+        })
+    },
+    updateItem(payload,id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.patch('/api/rab_details/update/'+id, payload, successCallback, errorCallback)
         })
     },
 }

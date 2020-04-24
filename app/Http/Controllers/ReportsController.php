@@ -62,8 +62,9 @@ class ReportsController extends Controller
                 ->select('projects.name as project','jobs.kode as kode_task','jobs.name as task','jobs.satuan as satuan_task',
                         'ahs_lokal_details.coefficient as coefficient','ahs_lokal_details.sub_total as price_satuan',
                         'materials.kode as kode_material','materials.name as material',
-                        'materials.satuan as satuan_material','materials.price','materials.status',
-                        'ahs_lokals.total_labor','ahs_lokals.total_material','ahs_lokals.total_equipment','ahs_lokals.HSP as total',
+                        'materials.satuan as satuan_material','materials.price','materials.status','jobs.status as status_job',
+                        'ahs_lokals.total_labor','ahs_lokals.total_material','ahs_lokals.total_equipment',
+                        'ahs_lokals.HSP as total', 'ahs_lokals.adjustment', 'ahs_lokals.volume',
                         'ahs_lokals.overhead','ahs_lokals.HSP_before_overhead as total_before_overhead')
                 ->join('jobs','jobs.id_job','=','ahs_lokals.id_job')
                 ->join('ahs_lokal_details','ahs_lokal_details.id_ahs_lokal','=','ahs_lokals.id_ahs_lokal')
@@ -77,6 +78,7 @@ class ReportsController extends Controller
                 ->whereNull('ahs_lokal_details.deleted_at')
                 ->orderBy('materials.status','DESC')
                 ->get();
+        // dd($datas);
         $j=0;
         $index = count($datas);
         for($i=0;$i<$index;$i++)
@@ -111,7 +113,7 @@ class ReportsController extends Controller
         return $result;
     }
 
-    public function rab($id)
+    public function rab($id,$ppn,$jasa)
     {
         $rab = DB::table('rabs')
             ->select('projects.name','projects.owner','projects.date','projects.address', 'projects.type','rabs.total_rab',
@@ -131,6 +133,10 @@ class ReportsController extends Controller
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
             ->where('rabs.id_rab','=',$id)
             ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
+            ->whereNull('group_details.deleted_at')
+            ->whereNull('task_sub_details.deleted_at')
+            ->whereNull('ahs_lokals.deleted_at')
             ->get();
         // dd($rab);
         $totalSt = DB::table('rabs')
@@ -153,6 +159,7 @@ class ReportsController extends Controller
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
             ->join('structures','structure_details.id_structure','=','structures.id_structure')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
             ->whereNull('structure_details.deleted_at')
             ->get();
         // dd($structure);
@@ -162,6 +169,8 @@ class ReportsController extends Controller
             ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
             ->whereNull('group_details.deleted_at')
             ->get();
         // dd($group);
@@ -173,6 +182,9 @@ class ReportsController extends Controller
             ->join('task_sub_details','task_sub_details.id_group_details','=','group_details.id_group_details')
             ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
+            ->whereNull('group_details.deleted_at')
             ->whereNull('task_sub_details.deleted_at')
             ->get();
         // dd($tasksub);
@@ -191,7 +203,8 @@ class ReportsController extends Controller
         }
         // dd($roman);
         $pdf = PDF::loadView('rab_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
-                            'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,'totalSt'=>$totalSt]);
+                            'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,'totalSt'=>$totalSt,
+                            'ppn'=>$ppn, 'jasa'=>$jasa]);
         $pdf->setPaper('A4','potrait');
         return $pdf->stream();
     }
@@ -214,6 +227,10 @@ class ReportsController extends Controller
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
             ->where('rabs.id_rab','=',$id)
             ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
+            ->whereNull('group_details.deleted_at')
+            ->whereNull('task_sub_details.deleted_at')
+            ->whereNull('ahs_lokals.deleted_at')
             ->get();
         // dd($rab);
         $structure = DB::table('rabs')
@@ -221,6 +238,7 @@ class ReportsController extends Controller
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
             ->join('structures','structure_details.id_structure','=','structures.id_structure')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
             ->whereNull('structure_details.deleted_at')
             ->get();
         // dd($structure);
@@ -230,6 +248,8 @@ class ReportsController extends Controller
             ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
             ->whereNull('group_details.deleted_at')
             ->get();
         // dd($group);
@@ -241,6 +261,9 @@ class ReportsController extends Controller
             ->join('task_sub_details','task_sub_details.id_group_details','=','group_details.id_group_details')
             ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
+            ->whereNull('group_details.deleted_at')
             ->whereNull('task_sub_details.deleted_at')
             ->get();
         // dd($tasksub);
@@ -264,15 +287,16 @@ class ReportsController extends Controller
         return $pdf->stream();
     }
 
-    public function rab_mr($id)
+    public function rab_mr($id,$adjust)
     {
         $rab = DB::table('rabs')
             ->select('projects.name','projects.owner','projects.date','projects.address', 'projects.type',
-                        'task_subs.id_sub','groups.id_groups','structures.id_structure','ahs_lokals.id_ahs_lokal',
-                        'ahs_lokals.adjustment','ahs_lokals.volume','ahs_lokals.HSP',
-                        'ahs_lokals.HP_Adjust','jobs.name as job', 'jobs.satuan','jobs.status',
-                        'ahs_lokal_details.id_material','materials.kode','materials.name as materials','materials.status',
-                        'materials.price','ahs_lokal_details.sub_total',)
+                    'task_subs.id_sub','groups.id_groups','structures.id_structure','ahs_lokals.id_ahs_lokal',
+                    'ahs_lokals.adjustment','ahs_lokals.volume','ahs_lokals.HSP',
+                    'ahs_lokals.HP_Adjust','jobs.name as job', 'jobs.satuan','jobs.status',
+                    'ahs_lokal_details.id_material','materials.kode','materials.name as materials',
+                    'materials.price', 'ahs_lokal_details.coefficient',
+                    'ahs_lokals.adjustment','ahs_lokal_details.sub_total',)
             ->join('projects','projects.id_project','=','rabs.id_project')
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
             ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
@@ -287,6 +311,11 @@ class ReportsController extends Controller
             ->where('rabs.id_rab','=',$id)
             ->where('materials.status','=','material')
             ->orderBy('materials.name')
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
+            ->whereNull('group_details.deleted_at')
+            ->whereNull('task_sub_details.deleted_at')
+            ->whereNull('ahs_lokals.deleted_at')
             ->get();
         // dd($rab);
         $structure = DB::table('rabs')
@@ -294,6 +323,7 @@ class ReportsController extends Controller
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
             ->join('structures','structure_details.id_structure','=','structures.id_structure')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
             ->whereNull('structure_details.deleted_at')
             ->get();
         // dd($structure);
@@ -303,6 +333,8 @@ class ReportsController extends Controller
             ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
             ->whereNull('group_details.deleted_at')
             ->get();
         // dd($group);
@@ -313,6 +345,9 @@ class ReportsController extends Controller
             ->join('task_sub_details','task_sub_details.id_group_details','=','group_details.id_group_details')
             ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
+            ->whereNull('group_details.deleted_at')
             ->whereNull('task_sub_details.deleted_at')
             ->get();
         // dd($tasksub);
@@ -331,7 +366,7 @@ class ReportsController extends Controller
         }
         // dd($roman);
         $pdf = PDF::loadView('rab_mr_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
-                            'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman]);
+                            'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,'adjust'=>$adjust]);
         $pdf->setPaper('A4','potrait');
         return $pdf->stream();
     }
@@ -361,6 +396,10 @@ class ReportsController extends Controller
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
             ->where('rabs.id_rab','=',$id)
             ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
+            ->whereNull('group_details.deleted_at')
+            ->whereNull('task_sub_details.deleted_at')
+            ->whereNull('ahs_lokals.deleted_at')
             ->get();
         // dd($rab);
         $totalSt = DB::table('rabs')
@@ -388,6 +427,7 @@ class ReportsController extends Controller
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
             ->join('structures','structure_details.id_structure','=','structures.id_structure')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
             ->whereNull('structure_details.deleted_at')
             ->get();
         // dd($structure);
@@ -397,6 +437,8 @@ class ReportsController extends Controller
             ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
             ->whereNull('group_details.deleted_at')
             ->get();
         // dd($group);
@@ -407,6 +449,9 @@ class ReportsController extends Controller
             ->join('task_sub_details','task_sub_details.id_group_details','=','group_details.id_group_details')
             ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
             ->where('rabs.id_rab','=',$id)
+            ->whereNull('rabs.deleted_at')
+            ->whereNull('structure_details.deleted_at')
+            ->whereNull('group_details.deleted_at')
             ->whereNull('task_sub_details.deleted_at')
             ->get();
         // dd($tasksub);

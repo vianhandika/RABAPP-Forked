@@ -201,6 +201,16 @@ import Controller from './../service/Store'
         phone: '',
         owner: '',
       },
+      StoreDefault: {
+        id_store: '',
+        kode:'',
+        name:'',
+        address: '',
+        type: '',
+        no_telp: '',
+        phone: '',
+        owner: '',
+      },
       headers: [
         {
           text : 'ID',
@@ -247,23 +257,29 @@ import Controller from './../service/Store'
       //validation
       nameRules: [
         v => !!v || 'Name is required',
+        v => v && v.length <= 30 || 'Name must be at most 30 characters long'
       ],
       addressRules: [
         v => !!v || 'Address is required',
+        v => v && v.length <= 50 || 'Address must be at most 50 characters long'
       ],
       typeRules: [
-        v => !!v || 'Type is required'
+        v => !!v || 'Type is required',
+        v => v && v.length <= 30 || 'Type must be at most 30 characters long'
       ],
       phoneRules: [
         v => !!v || 'Phone is required',
-        v => (v && !v.numeric) || 'Phone number must be numeric'
+        // v => (v && !v.numeric) || 'Phone number must be numeric',
+        v => v && v.length <= 15 || 'Phone number must be at most 15 characters long'
       ],
       noRules: [
         v => !!v || 'Telephone number is required',
-        v => (v && !v.numeric) || 'Telephone number must be numeric'
+        v => v && v.length <= 15 || 'Telephone number must be at most 15 characters long'
+        // v => (v && !v.numeric) || 'Telephone number must be numeric'
       ],
       ownerRules:[
-        v => !!v || 'Owner is required'
+        v => !!v || 'Owner is required',
+        v => v && v.length <= 40 || 'Owner must be at most 40 characters long'
       ]
     }),
     mounted(){
@@ -316,36 +332,39 @@ import Controller from './../service/Store'
             type        : this.Store.type,
             owner       : this.Store.owner
           }
-          await Controller.addItem(payload)
-          this.reset()
-          this.save()
+          await Controller.addItem(payload).then(() =>{
+            this.getallItem()
+            this.save()
+          })
         }catch(err){
           console.log(err);
         }
       },
       async updateItem(id){
         try{
-            const payload = {
-              kode        : this.Store.kode,
-              name        : this.Store.name,
-              address     : this.Store.address,
-              no_telp     : this.Store.no_telp,
-              phone       : this.Store.phone,
-              type        : this.Store.type,
-              owner       : this.Store.owner
-            } 
-            await Controller.updateItem(payload,id)
-            this.reset()
+          const payload = {
+            kode        : this.Store.kode,
+            name        : this.Store.name,
+            address     : this.Store.address,
+            no_telp     : this.Store.no_telp,
+            phone       : this.Store.phone,
+            type        : this.Store.type,
+            owner       : this.Store.owner
+          } 
+          await Controller.updateItem(payload,id).then(()=>{
+            this.getallItem()
             this.update()
+          })
         }catch(err){
           console.log(err);
         }
       },
       async deleteItem(id){
         try{
-          await Controller.deleteItem(id).data
-          this.getallItem()
-          this.delete()
+          (await Controller.deleteItem(id).data).then(()=>{
+            this.getallItem()
+            this.delete()
+          })
         }catch(err){
           console.log(err)
         }
@@ -354,17 +373,11 @@ import Controller from './../service/Store'
         this.Store = item
         console.log(this.Store)
       },
-      resetForm(){
-        this.$refs.form.reset()
-      },
-      resetValidation(){
-        this.$refs.form.resetValidation()
-      },
       reset()
       {
         this.getallItem()
-        this.resetForm()
-        this.resetValidation()
+        this.$refs.form.resetValidation()
+        this.Store = Object.assign({},this.StoreDefault)
       },
     },
   }
