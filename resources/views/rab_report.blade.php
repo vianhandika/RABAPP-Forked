@@ -279,12 +279,12 @@
                             $Total_Nominal = $nominal + $Pajak + $Jasa;
                         @endphp
                         <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PAJAK</td>
+                        <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PAJAK ({{$ppn}}%)</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
                             <td align="right" style="padding-right:5px;font-style:bold">{{number_format($Pajak,2,',','.')}}</td>
                         </tr>
                         <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">JASA</td>
+                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">JASA ({{$jasa}}%)</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
                             <td align="right" style="padding-right:5px;font-style:bold">{{number_format($Jasa,2,',','.')}}</td>
                         </tr>

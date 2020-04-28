@@ -10,15 +10,6 @@
           dark
         ></v-divider>
 
-        <!-- <v-text-field
-          v-model="search"
-          append-icon="search"
-          label="Search"
-          single-line
-          hide-details
-          style="width: 5px"
-        >
-        </v-text-field> -->
         <v-col cols="6">
           <v-layout>
             <v-text-field
@@ -793,47 +784,16 @@
                               inset
                               vertical
                             ></v-divider>
-                          </v-toolbar>
-                          <v-layout>
-                            <!-- <v-col cols="12" sm="3" md="3">
-                              <v-select
-                                :items="detailDetails"
-                                item-text="structure"
-                                item-value="id_structure"
-                                label="Building"
-                                append-icon="expand_more"
-                              >
-                              </v-select>
-                            </v-col>
-                            <v-col cols="12" sm="3" md="3">
-                              <v-select
-                                :items="detailDetails"
-                                item-text="floor"
-                                label="Floor"
-                                item-value="id_groups"
-                                append-icon="expand_more"
-                              >
-                              </v-select>
-                            </v-col>
-                            <v-col cols="12" sm="3" md="3">
-                              <v-select
-                                :items="detailDetails"
-                                item-text="task"
-                                item-value="id_sub"
-                                label="Task Group"
-                                append-icon="expand_more"
-                              >
-                              </v-select>
-                            </v-col> -->
                             <v-col cols="12" sm="6" md="6">
                               <v-text-field
                                 v-model="searchDetails"
                                 append-icon="search"
                                 label="Search"
+                                single-line
                                 hide-details
                               ></v-text-field>
                             </v-col>
-                          </v-layout>
+                          </v-toolbar>
                         </template>
 
                         <template v-slot:item.action="{ item }">
@@ -1091,7 +1051,7 @@
                             </v-flex>
                             <v-flex xs2>
                               <div class="caption grey--text">Volume</div>
-                              <div>{{ detail_ahs.volume_adj.toFixed(2).toString().replace(".", ",") }}</div>
+                              <div>{{ detail_ahs.volume.toFixed(2).toString().replace(".", ",") }}</div>
                             </v-flex>
                             <v-flex xs2>
                               <div class="caption grey--text">Satuan</div>
@@ -1099,13 +1059,13 @@
                             </v-flex>
                             <v-flex xs2>
                               <div class="caption grey--text">Adjust</div>
-                              <div >{{ detail_ahs.adjustment }}</div>
+                              <div >{{ detail_ahs.adjustment.toFixed(2).toString().replace(".", ",")}}</div>
                             </v-flex>
                             <v-flex xs4>
                               <div class="caption grey--text">HSP (LAO)</div>
                               <v-layout>
                                 <div style="text-align:left;width:25px">Rp.</div>
-                                <div style="text-align:right;width:120px">{{ Number(detail_ahs.HSP_adj).toLocaleString('id-ID') }}</div>
+                                <div style="text-align:right;width:120px">{{ Number(detail_ahs.HSP).toLocaleString('id-ID') }}</div>
                               </v-layout>
                             </v-flex>
                             <v-flex xs4 style="padding-left:15px">
@@ -2490,7 +2450,6 @@ import material from './../service/Material'
         this.details.push(ahs)
         this.detailDetails.push(detail)
 
-        // let temp = parseFloat(data.total * this.ahs_lokal.volume * this.ahs_lokal.adjustment).toFixed(2)
         this.rab.total_rab = parseFloat(this.rab.total_rab) + parseFloat(ahs.HP_Adjust)
         console.log('total rab')
         console.log(this.rab.total_rab)
@@ -2523,7 +2482,7 @@ import material from './../service/Material'
             kode          : materials.kode,
             coefficient   : materials.coefficient,
             sub_total     : materials.sub_total,
-            adjustment    : this.ahs_lokal.adjustment
+            adjustment    : 1
           }
           this.Material.push(each_materials)
         }
@@ -2547,7 +2506,6 @@ import material from './../service/Material'
         let detail_ahs = this.details.find(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub && obj.id_ahs == detail.id_ahs) 
         let detail_AHS = this.detailDetails.find(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub && obj.id_ahs == detail.id_ahs) 
         console.log('Index')
-        // let index = this.detailDetails.indexOf(detail)
         console.log(this.detailDetails.indexOf(detail))
         console.log(this.details.indexOf(detail_ahs))
 

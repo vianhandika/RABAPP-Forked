@@ -42,7 +42,7 @@
       <v-flex class="padding">
         <v-tooltip bottom>
         <template v-slot:activator="{ on }">
-          <v-icon dark v-on="on" @click="logout">power_settings_new</v-icon>
+          <v-icon dark v-on="on" @click="dialog=true">power_settings_new</v-icon>
         </template>
         <span>Log Out</span>
       </v-tooltip>
@@ -51,6 +51,23 @@
     <v-content>
       <router-view></router-view>
     </v-content>
+
+    <template>
+      <v-dialog v-model="dialog" max-width="290px">
+        <v-card>
+          <v-card-title class="headline">Confirmation</v-card-title>
+            <v-card-text>Are you sure want to log out?</v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialog = false; logout()">Yes</v-btn>
+            <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </template>
+    <v-overlay :value="overlay">
+      <v-progress-circular indeterminate size="64"></v-progress-circular>
+    </v-overlay>
   </v-app>
 </template>
 
@@ -65,6 +82,8 @@ import Structure from '../service/Structure'
     data: () => ({
       drawer: null,
       expand: false,
+      dialog:false,
+      overlay:false,
       links : [
         {icon: 'dashboard', title: 'Dashboard', route: '/dashboard'},
         {icon: 'home_work', title: 'Project', route: '/project'},
@@ -99,10 +118,10 @@ import Structure from '../service/Structure'
         loggedIn: 'Token/loggedIn',
       }),
       async logout() {
-          await this.destroyToken()
-          this.$router.push({ name : 'login' })
+        this.overlay = true
+        await this.destroyToken()
+        this.$router.push({ name : 'login' })
       },
-      
     }
   }
 </script>

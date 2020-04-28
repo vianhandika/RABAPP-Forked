@@ -25,7 +25,7 @@ class RABController extends RestController
 
     public function index()
     {
-        $rabPaginator = RAB::orderBy('id_rab','DESC')->paginate(3);
+        $rabPaginator = RAB::orderBy('id_rab','DESC')->paginate(5);
         $rab = $this->generateCollection($rabPaginator);
         $rab->setPaginator(new IlluminatePaginatorAdapter($rabPaginator));
         $rab = $this->manager->createData($rab); 

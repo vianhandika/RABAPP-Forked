@@ -113,6 +113,25 @@ class ReportsController extends Controller
         return $result;
     }
 
+    function tanggal_ind($tanggal){
+        $bulan = array (
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+        );
+        
+        $pecahkan = explode('-', $tanggal);
+        return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+    }
     public function rab($id,$ppn,$jasa)
     {
         $rab = DB::table('rabs')
@@ -287,7 +306,7 @@ class ReportsController extends Controller
         return $pdf->stream();
     }
 
-    public function rab_mr($id,$adjust)
+    public function rab_mr($id,$type)
     {
         $rab = DB::table('rabs')
             ->select('projects.name','projects.owner','projects.date','projects.address', 'projects.type',
@@ -295,8 +314,8 @@ class ReportsController extends Controller
                     'ahs_lokals.adjustment','ahs_lokals.volume','ahs_lokals.HSP',
                     'ahs_lokals.HP_Adjust','jobs.name as job', 'jobs.satuan','jobs.status',
                     'ahs_lokal_details.id_material','materials.kode','materials.name as materials',
-                    'materials.price', 'ahs_lokal_details.coefficient',
-                    'ahs_lokals.adjustment','ahs_lokal_details.sub_total',)
+                    'materials.price', 'ahs_lokals.id_sub_details','ahs_lokal_details.coefficient',
+                    'ahs_lokals.adjustment','ahs_lokal_details.sub_total','ahs_lokal_details.adjustment')
             ->join('projects','projects.id_project','=','rabs.id_project')
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
             ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
@@ -310,14 +329,17 @@ class ReportsController extends Controller
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
             ->where('rabs.id_rab','=',$id)
             ->where('materials.status','=','material')
+            // ->orderBy('structure_details.id_structure')
             ->orderBy('materials.name')
             ->whereNull('rabs.deleted_at')
             ->whereNull('structure_details.deleted_at')
             ->whereNull('group_details.deleted_at')
             ->whereNull('task_sub_details.deleted_at')
             ->whereNull('ahs_lokals.deleted_at')
+            ->whereNull('ahs_lokal_details.deleted_at')
             ->get();
         // dd($rab);
+        $newDate = $this->tanggal_ind($rab[0]->date);
         $structure = DB::table('rabs')
             ->select('structures.id_structure','structures.name')
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
@@ -364,11 +386,95 @@ class ReportsController extends Controller
             $data = $this->integerToRoman($i);
             array_push($roman,$data);
         }
-        // dd($roman);
-        $pdf = PDF::loadView('rab_mr_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
-                            'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,'adjust'=>$adjust]);
-        $pdf->setPaper('A4','potrait');
-        return $pdf->stream();
+        if($type==1)
+        {
+            $temp=[];
+            foreach($structure as $structure_data)
+            {
+                foreach($group as $group_data)
+                {
+                    if($structure_data->id_structure == $group_data->id_structure)
+                    {
+                        foreach($tasksub as $tasksub_data)
+                        {
+                            if($structure_data->id_structure == $tasksub_data->id_structure)
+                            {
+                                if($group_data->id_groups == $tasksub_data->id_groups)
+                                {
+                                    foreach($rab as $rab_data)
+                                    {
+                                        if($structure_data->id_structure == $rab_data->id_structure)
+                                        {
+                                            if($group_data->id_groups == $rab_data->id_groups) 
+                                            {
+                                                if($tasksub_data->id_sub == $rab_data->id_sub)
+                                                    array_push($temp,$rab_data);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                    }
+                }
+            }
+            // dd($temp);
+            $pdf = PDF::loadView('rab_mr_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
+                        'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,
+                        'temp'=>$temp,'newDate'=>$newDate]);
+            $pdf->setPaper('A4','potrait');
+            return $pdf->stream();
+        }
+        else if($type==2)
+        {
+            $temp=[];
+            foreach($structure as $structure_data)
+            {
+                foreach($rab as $rab_data)
+                {
+                    if($structure_data->id_structure == $rab_data->id_structure)
+                    {
+                        array_push($temp,$rab_data);
+                    }
+                }
+            }
+            // dd($temp);
+            $pdf = PDF::loadView('rab_mr_building_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
+                        'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,
+                        'temp'=>$temp,'newDate'=>$newDate]);
+            $pdf->setPaper('A4','potrait');
+            return $pdf->stream();
+        }
+        else 
+        {
+            $temp=[];
+            foreach($structure as $structure_data)
+            {
+                foreach($group as $group_data)
+                {
+                    if($structure_data->id_structure == $group_data->id_structure)
+                    {
+                        foreach($rab as $rab_data)
+                        {
+                            if($structure_data->id_structure == $rab_data->id_structure)
+                            {
+                                if($group_data->id_groups == $rab_data->id_groups) 
+                                {
+                                        array_push($temp,$rab_data);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // dd($temp);
+            $pdf = PDF::loadView('rab_mr_floor_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
+                        'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,
+                        'temp'=>$temp,'newDate'=>$newDate]);
+            $pdf->setPaper('A4','potrait');
+            return $pdf->stream();
+        }
     }
 
     public function rab_rap($id,$rap)

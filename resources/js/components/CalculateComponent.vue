@@ -122,42 +122,30 @@
                         <div class="caption grey--text">Status</div>
                         <div>{{ ahs.status }}</div>
                       </v-flex>
-                      <v-flex xs3 v-if="ahs.status=='Price'">
+                      <v-flex xs3>
                         <div class="caption grey--text">Volume</div>
-                        <div>{{ ahs.volume.toString().replace(".", ",") }}</div>
-                      </v-flex>
-                      <v-flex xs3 v-if="ahs.status=='Volume'">
-                        <div class="caption grey--text">Volume</div>
-                        <div>{{ (ahs.volume * ahs.adjustment).toFixed(2).toString().replace(".", ",") }}</div>
+                        <div>{{ (ahs.volume).toString().replace(".", ",") }}</div>
                       </v-flex>
                       <v-flex xs3>
                         <div class="caption grey--text">Satuan</div>
                         <div>{{ ahs.satuan }}</div>
                       </v-flex>
                       <v-flex xs2>
-                        <div class="caption grey--text">Adjust</div>
+                        <div class="caption grey--text">Adj</div>
                         <div style>{{ ahs.adjustment }}</div>
                       </v-flex>
                       <v-flex xs7>
-                        <div class="caption grey--text">HSP (LBO)</div>
-                        <v-layout v-if="ahs.status=='Volume'">
-                          <div style="text-align:left;width:25px">Rp.</div>
-                          <div style="text-align:right;width:120px">{{ Number(ahs.HSP_before_overhead).toLocaleString('id-ID') }}</div>
-                        </v-layout>
-                        <v-layout v-if="ahs.status=='Price'">
-                          <div style="text-align:left;width:25px">Rp.</div>
-                          <div style="text-align:right;width:120px">{{ Number(ahs.HSP_before_overhead * ahs.adjustment).toLocaleString('id-ID') }}</div>
-                        </v-layout>
-                      </v-flex>
-                      <v-flex xs7>
                         <div class="caption grey--text">HSP (LAO)</div>
-                        <v-layout v-if="ahs.status=='Volume'">
+                        <v-layout>
                           <div style="text-align:left;width:25px">Rp.</div>
                           <div style="text-align:right;width:120px">{{ Number(ahs.HSP).toLocaleString('id-ID') }}</div>
                         </v-layout>
-                        <v-layout v-if="ahs.status=='Price'">
+                      </v-flex>
+                      <v-flex xs7>
+                        <div class="caption grey--text">HP</div>
+                        <v-layout>
                           <div style="text-align:left;width:25px">Rp.</div>
-                          <div style="text-align:right;width:120px">{{ Number(ahs.HSP * ahs.adjustment).toLocaleString('id-ID') }}</div>
+                          <div style="text-align:right;width:120px">{{ Number(ahs.HP_Adjust).toLocaleString('id-ID') }}</div>
                         </v-layout>
                       </v-flex>
                     </v-layout>
@@ -183,65 +171,46 @@
                         <v-form ref="form" v-model="valid" lazy-validation>
                           <v-card-text>
                             <v-layout>
-                              <v-flex>      
-                                <v-text-field
+                              <v-flex sm6 md6 xs6>      
+                                <v-text-field 
                                   v-model="AHS.project"
                                   label="Project"
                                   readonly
                                 ></v-text-field>
-                              </v-flex >
-                            </v-layout>
-
-                            <v-layout>
-                              <v-flex sm4 md4 xs4>
-                                <v-select
-                                  v-model="AHS.id_structure"
+                              </v-flex>
+                              <v-flex sm3 md3 xs3 style="margin-left:10px">
+                                <v-text-field
+                                  v-model="AHS.structure"
                                   label="Structure"
-                                  :items="detailStructure"
-                                  item-text="structure"
-                                  item-value="id_structure"
                                   :return-object="false" 
                                   readonly
-                                  append-icon="expand_more"
-                                ></v-select>
+                                ></v-text-field>
                               </v-flex>
-                              <v-flex sm4 md4 xs4 style="margin-left:10px">
-                                <v-select
-                                  v-model="AHS.id_groups"
+                              <v-flex sm3 md3 xs3 style="margin-left:10px">
+                                <v-text-field
+                                  v-model="AHS.floor"
                                   label="Floor"
-                                  :items="detailGroup"
-                                  item-text="floor"
-                                  item-value="id_groups"
                                   :return-object="false" 
-                                  append-icon="expand_more"
                                   readonly
-                                ></v-select>
+                                ></v-text-field>
                               </v-flex>
-                              <v-flex sm4 md4 xs4 style="margin-left:10px">
-                                <v-select
-                                  v-model="AHS.id_sub"
+                              <v-flex sm3 md3 xs3 style="margin-left:10px">
+                                <v-text-field
+                                  v-model="AHS.task"
                                   label="Task Group"
-                                  :items="detailTask"
-                                  item-text="task"
-                                  item-value="id_sub"
-                                  :return-object="false" 
-                                  append-icon="expand_more"
                                   readonly
-                                ></v-select>
+                                ></v-text-field>
                               </v-flex>
                             </v-layout>
 
                             <v-layout>
-                              <v-flex sm3 md3 xs3>
-                                <v-select
-                                  v-model="AHS.id_ahs"
+                              <v-flex sm6 md6 xs6>
+                                <v-text-field
+                                  v-model="AHS.name"
                                   label="Task"
-                                  :items="detailDetails"
-                                  item-text="name"
-                                  item-value="id_ahs"
                                   :return-object="false"
                                   readonly
-                                ></v-select>
+                                ></v-text-field>
                               </v-flex>
                               <v-flex sm3 md3 xs3 style="margin-left:10px">
                                 <v-text-field 
@@ -275,7 +244,7 @@
                                   v-model="AHS.total_equipment"
                                   label="Total Of Equipment"
                                   type="number"
-                                  readonly
+                                  @change="equipment"
                                 ></v-text-field>
                               </v-flex>
                               <v-flex sm3 md3 xs3 style="margin-left:20px">
@@ -324,17 +293,6 @@
                                 ></v-divider>
                               </v-toolbar>
                             </template>
-
-                            <template v-slot:item.sub_total_lokal="{item}">
-                              <v-layout>
-                                <div style="text-align:left;width:30px">Rp.</div>
-                                <div style="text-align:right;width:90px">{{ Number(item.sub_total_lokal).toLocaleString('id-ID') }}</div>  
-                              </v-layout>
-                              <!-- <v-layout v-if="AHS.status =='Volume'">
-                                <div style="text-align:left;width:30px">Rp.</div>
-                                <div style="text-align:right;width:90px">{{ Number(item.sub_total).toLocaleString('id-ID') }}</div>  
-                              </v-layout> -->
-                            </template>
                             
                             <template v-slot:item.price="{item}">
                               <v-layout>
@@ -349,6 +307,7 @@
                                 <div style="text-align:right;width:90px">{{ Number(item.sub_total).toLocaleString('id-ID') }}</div>  
                               </v-layout>
                             </template>
+
                             <template v-slot:item.action="{ item }">
                               <v-dialog v-model="dialog8" max-width="290px">
                                 <template v-slot:activator="{ on }">
@@ -372,6 +331,33 @@
                                   </v-card>
                               </v-dialog>
                             </template>
+
+                            <template v-slot:item.adjustment="{item}">
+                              <v-edit-dialog
+                                :return-value.sync="item.adjustment"
+                                @save="updateAdjustmentLokal(item)"
+                                @cancel="cancel"
+                                lazy
+                                persistent
+                                dark
+                                large
+                              > {{ item.adjustment }}
+                                <template v-slot:input>
+                                  <v-text-field
+                                    v-model="item.adjustment"
+                                    label="Edit"
+                                    single-line
+                                    counter
+                                  ></v-text-field>
+                                </template>
+                              </v-edit-dialog>
+                            </template>
+
+                            <template v-slot:item.requirements_ml="{ item }">
+                              <v-layout>
+                                <div style="text-align:right;width:90px">{{ Number(item.coefficient * item.adjustment * ahs.volume).toLocaleString('id-ID') }}</div>  
+                              </v-layout>
+                            </template>
                           </v-data-table>
                         </v-container>
                       </v-card>
@@ -393,33 +379,21 @@
                   <template v-slot:top>
                     <v-layout style="padding:10px">
                       <v-flex>
-                        <v-layout v-if="ahs.status=='Volume'">
+                        <v-layout>
                           <div class="body-2 black--text font-weight-bold">Total of Labor : Rp.</div>
                           <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_labor).toLocaleString('id-ID') }}</div>
                         </v-layout>
-                        <v-layout v-if="ahs.status=='Price'">
-                          <div class="body-2 black--text font-weight-bold">Total of Labor : Rp.</div>
-                          <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_labor * ahs.adjustment).toLocaleString('id-ID') }}</div>
-                        </v-layout>
                       </v-flex>
                       <v-flex>
-                        <v-layout v-if="ahs.status=='Volume'">
+                        <v-layout>
                           <div class="body-2 black--text font-weight-bold">Total of Materials : Rp.</div>
                           <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_material).toLocaleString('id-ID') }}</div>
                         </v-layout>
-                        <v-layout v-if="ahs.status=='Price'">
-                          <div class="body-2 black--text font-weight-bold">Total of Materials : Rp.</div>
-                          <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_material * ahs.adjustment).toLocaleString('id-ID') }}</div>
-                        </v-layout>
                       </v-flex>
                       <v-flex>
-                        <v-layout v-if="ahs.status=='Volume'">
+                        <v-layout>
                           <div class="body-2 black--text font-weight-bold">Total of Equipment : Rp.</div>
                           <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_equipment).toLocaleString('id-ID') }}</div>
-                        </v-layout>
-                        <v-layout v-if="ahs.status=='Price'">
-                          <div class="body-2 black--text font-weight-bold">Total of Equipment : Rp.</div>
-                          <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_equipment * ahs.adjustment).toLocaleString('id-ID') }}</div>
                         </v-layout>
                       </v-flex>
                     </v-layout>
@@ -433,14 +407,9 @@
                     </v-layout>
                   </template>
 
-                  <template v-slot:item.sub_total_lokal="{ item }">
-                    <v-layout v-if="item.status_job == 'Volume'">
-                      <div style="text-align:left;width:30px">Rp.</div>
-                      <div style="text-align:right;width:90px">{{ Number(item.sub_total_lokal).toLocaleString('id-ID') }}</div>  
-                    </v-layout>
-                    <v-layout v-if="item.status_job == 'Price'">
-                      <div style="text-align:left;width:30px">Rp.</div>
-                      <div style="text-align:right;width:90px">{{ Number(item.sub_total_lokal * AHS.adjustment).toLocaleString('id-ID') }}</div>  
+                  <template v-slot:item.requirements_ml="{ item }">
+                    <v-layout>
+                      <div style="text-align:right;width:90px">{{ Number(item.coefficient * item.adjustment * ahs.volume).toLocaleString('id-ID') }}</div>  
                     </v-layout>
                   </template>
 
@@ -449,6 +418,27 @@
                       <div style="text-align:left;width:30px">Rp.</div>
                       <div style="text-align:right;width:90px">{{ Number(item.price).toLocaleString('id-ID') }}</div>  
                     </v-layout>
+                  </template>
+
+                  <template v-slot:item.adjustment="{item}">
+                    <v-edit-dialog
+                      :return-value.sync="item.adjustment"
+                      @save="updateAdjustmentLokalM(item)"
+                      @cancel="cancel"
+                      lazy
+                      persistent
+                      dark
+                      large
+                    > {{ item.adjustment }}
+                      <template v-slot:input>
+                        <v-text-field
+                          v-model="item.adjustment"
+                          label="Edit"
+                          single-line
+                          counter
+                        ></v-text-field>
+                      </template>
+                    </v-edit-dialog>
                   </template>
                   </v-data-table>
                 </template>
@@ -468,6 +458,7 @@ import details from './../service/Details'
 import ahsLokalDetails from './../service/AHSLokalDetails'
 import ahs from './../service/AHS'
 import detailController from './../service/AHSLokalDetails'
+import materialController from './../service/Material'
 
   export default {
     data: () => ({
@@ -494,6 +485,7 @@ import detailController from './../service/AHSLokalDetails'
       detailMaterial:[],
       detailDetails:[],
       Material:[],
+      material:[],
 
       Structure:[],
       Groups:[],
@@ -510,8 +502,9 @@ import detailController from './../service/AHSLokalDetails'
         {text: 'Item', align: 'left', sortable: false, value: 'name'},
         {text: 'Price', align: 'left', sortable: false, value: 'price'},
         {text: 'Coefficient', align: 'center', sortable: false, value: 'coefficient'},
-        {text: 'Sub Total (M)', align: 'left', sortable: false, value: 'sub_total', },
-        {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total_lokal'},
+        {text: 'Adj BT', align: 'center', sortable: false, value: 'adjustment'},
+        {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total', },
+        // {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total_lokal'},
         {text: 'Requirements M/L', align: 'center', sortable: false, value: 'requirements_ml'},
         {text: 'Unit', align: 'center', sortable: false, value: 'satuan'},
       ],
@@ -520,6 +513,7 @@ import detailController from './../service/AHSLokalDetails'
       this.getallAHS()
       this.getJob()
       this.getRAB()
+      this.getMaterial()
     },
     computed: {
       filtered:function(){
@@ -534,6 +528,14 @@ import detailController from './../service/AHSLokalDetails'
       }
     },
     methods: {
+      async getMaterial()
+      {
+        try{
+          this.material = (await materialController.getallItem()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
       async getRAB()
       {
         try{
@@ -550,78 +552,15 @@ import detailController from './../service/AHSLokalDetails'
       async itemEdit(item)
       {
         console.log('Item Edit',item)
-        this.detailStructure=[]
-        this.detailGroup=[]
-        this.detailTask=[]
-        this.detailDetails=[]
         this.Material = []
         let ahsLokal = this.AHSData.find(obj=>obj.id_ahs_lokal == item.id_ahs_lokal)
         console.log('ahs lokal',ahsLokal)
         this.AHS = ahsLokal
         console.log('AHS Lokal',this.AHS)
-
-        this.ahsAll = (await ahs.getall()).data
-        this.detailDetails = this.ahsAll.filter(obj=>obj.id_sub == item.id_sub)
-        console.log('detail ahs',this.detailDetails)
         
-        let RAB = this.rab.find(obj=>obj.id_rab == this.AHS.id_rab)
-        console.log('RAB',RAB)
-        for(let detailS of RAB.structure.data)
-        {
-          let detail = {
-            id_structure_details  : detailS.id_structure_details,
-            id_structure          : detailS.id_structure,
-            structure             : detailS.structure
-          }
-          this.detailStructure.push(detail)
-        }
-        console.log('Structure',this.Structure)
-        console.log('Detail Structure',this.detailStructure)
-        console.log('RAB Structure Data',RAB.structure.data)
-        for(let detailG of RAB.structure.data)
-        {
-          for(let detailgroup of detailG.group.data)
-          {
-            let detail = {
-              id_group_details : detailgroup.id_group_details,
-              id_structure  : detailgroup.id_structure,
-              id_groups     : detailgroup.id_groups,
-              structure     : detailgroup.structure,
-              floor         : detailgroup.floor
-            }
-            this.detailGroup.push(detail)
-
-            for(let detailtask of detailgroup.task_sub.data)
-            {
-              let detail = {
-                id_sub_details : detailtask.id_sub_details,
-                id_structure  : detailtask.id_structure,
-                id_groups     : detailtask.id_groups,
-                id_sub        : detailtask.id_sub,
-                structure     : detailtask.structure,
-                floor         : detailtask.floor,
-                task          : detailtask.task
-              }
-              this.detailTask.push(detail)
-            }
-          }
-        }
-        this.Material = (await detailController.getItem(this.AHS.id_ahs_lokal)).data
-        for(let material of ahsLokal.detail.data)
-          {
-            let each_detail = {
-              id_ahs_lokal_details : material.id_ahs_lokal_details,
-              id_ahs_lokal : material.id_ahs_lokal,
-              id_material : material.id_material,
-              kode: material.kode,
-              coefficient : material.coefficient,
-              sub_total : material.sub_total,
-              adjustment: material.adjustment
-            }
-            this.detailMaterial.push(each_detail)
-          }
+        this.Material = this.AHS.detail.data
+        // (await detailController.getItem(this.AHS.id_ahs_lokal)).data
         console.log('Material',this.Material)
-        console.log('Detail Material',this.detailMaterial)
       },
       deletecalculate(ahs)
       {
@@ -630,10 +569,14 @@ import detailController from './../service/AHSLokalDetails'
       },
       editcalculate(id)
       {
+        this.loading = true
         let data = this.AHSData.find(obj=>obj.id_ahs_lokal == id)
         console.log('Edit AHS Data',data)
+        this.AHS.HP = this.AHS.HSP * this.AHS.volume
+        this.AHS.HP_Adjust = this.AHS.HP * this.AHS.adjustment
         this.AHSData.splice(this.AHSData.indexOf(data),1,this.AHS)
         console.log('After Edit',this.AHSData)
+        this.AHS.detail.data = this.Material
         this.dialogedit = false
       },
       addcalculate()
@@ -661,14 +604,14 @@ import detailController from './../service/AHSLokalDetails'
           floor: ahs_lokal.floor,
           task: ahs_lokal.task,
           id_rab: ahs_lokal.id_rab,
-          HP: ahs_lokal.HP,
-          HP_Adjust: ahs_lokal.HP_Adjust,
+          HP: ahs_lokal.HSP * this.volume_new,
+          HP_Adjust: ahs_lokal.HSP * this.volume_new * ahs_lokal.adjustment,
           volume: parseFloat(this.volume_new),
-          total_labor: parseFloat(ahs_lokal.total_labor * this.volume_new).toFixed(2),
-          total_material: parseFloat(ahs_lokal.total_material * this.volume_new).toFixed(2),
-          total_equipment: parseFloat(ahs_lokal.total_equipment * this.volume_new).toFixed(2),
-          HSP_before_overhead: parseFloat(ahs_lokal.HSP_before_overhead * this.volume_new).toFixed(2),
-          HSP: parseFloat(ahs_lokal.HSP * this.volume_new).toFixed(2),
+          total_labor: ahs_lokal.total_labor,
+          total_material: ahs_lokal.total_material,
+          total_equipment: ahs_lokal.total_equipment,
+          HSP_before_overhead: ahs_lokal.HSP_before_overhead,
+          HSP: ahs_lokal.HSP,
           id_ahs: ahs_lokal.id_ahs,
           kode: ahs_lokal.kode,
           detail: ahs_lokal.detail,
@@ -676,6 +619,124 @@ import detailController from './../service/AHSLokalDetails'
         this.AHSData.push(newData)   
         console.log('ahs lokal',newData)
         console.log('calculte Temp',this.AHSData)
+      },
+      updateAdjustmentLokal(item)
+      {
+        console.log('Material Before Edit',this.Material)
+        console.log('Item',item)
+        let materialData = this.material.find(obj=>obj.id_material == item.id_material)
+        item.sub_total = item.adjustment * materialData.price * item.coefficient
+        console.log('Material After Edit', this.Material)
+        this.AHS.HSP_before_overhead=0
+        this.AHS.total_material=0
+        this.AHS.total_labor=0
+
+        for(let data of this.Material)
+        {
+          let materialData = this.material.find(obj=>obj.id_material == data.id_material)
+          if(materialData.status == 'labor')
+            this.AHS.total_labor += data.sub_total
+          else
+            this.AHS.total_material += data.sub_total
+          this.AHS.HSP_before_overhead += data.sub_total
+        }
+        console.log('Total Material',this.AHS.total_material)
+        console.log('Total Labor',this.AHS.total_labor)
+        this.AHS.HSP_before_overhead = parseFloat(this.AHS.HSP_before_overhead) + parseFloat(this.AHS.total_equipment)
+        this.AHS.HSP = this.AHS.HSP_before_overhead + (this.AHS.HSP_before_overhead * this.AHS.overhead/100)
+        console.log('HSP Before Overhead',this.AHS.HSP_before_overhead)
+        console.log('HSP',this.AHS.HSP)
+        this.AHS.HP = this.AHS.HSP * this.AHS.volume
+        this.AHS.HP_Adjust = this.AHS.HP * this.AHS.adjustment
+        console.log('HP',this.AHS.HP)
+        console.log('HP_Adjust',this.AHS.HP_Adjust)
+        this.update()
+      },
+      updateAdjustmentLokalM(item)
+      {
+        console.log('Item',item)
+        console.log('ahs',ahs)
+        let ahs_lokal = this.AHSData.find(obj=>obj.id_ahs_lokal == item.id_ahs_lokal)
+        console.log('AHS Lokal Before Edit',ahs_lokal)
+        console.log('AHS Detail',ahs_lokal.detail.data)
+        
+        let materialData = this.material.find(obj=>obj.id_material == item.id_material)
+        item.sub_total = item.adjustment * materialData.price * item.coefficient
+        console.log('Material After Edit', ahs_lokal.detail.data)
+        let HSP_before_overhead=0
+        let total_material=0
+        let total_labor=0
+
+        for(let data of ahs_lokal.detail.data)
+        {
+          let materialData = this.material.find(obj=>obj.id_material == data.id_material)
+          if(materialData.status == 'labor')
+            total_labor += data.sub_total
+          else
+            total_material += data.sub_total
+          HSP_before_overhead += data.sub_total
+        }
+        
+        HSP_before_overhead = parseFloat(HSP_before_overhead) + parseFloat(ahs_lokal.total_equipment)
+        let HSP = HSP_before_overhead + (HSP_before_overhead * ahs_lokal.overhead/100)
+        let HP = HSP * ahs_lokal.volume
+        let HP_Adjust = HP * ahs_lokal.adjustment
+
+        console.log('Total Material',total_material)
+        console.log('Total Labor',total_labor)
+        console.log('HSP Before Overhead',HSP_before_overhead)
+        console.log('HSP',HSP)
+        console.log('HP',HP)
+        console.log('HP_Adjust',HP_Adjust)
+
+        let newEdit = {
+          id_ahs_lokal: ahs_lokal.id_ahs_lokal,
+          id_sub_details: ahs_lokal.id_sub_details,
+          overhead: ahs_lokal.overhead,
+          adjustment: ahs_lokal.adjustment,
+          id_job: ahs_lokal.id_job,
+          name: ahs_lokal.name,
+          satuan: ahs_lokal.satuan,
+          status: ahs_lokal.status,
+          id_project: ahs_lokal.id_project,
+          project: ahs_lokal.project,
+          name_sub: ahs_lokal.name_sub,
+          id_structure: ahs_lokal.id_structure,
+          id_groups: ahs_lokal.id_groups,
+          id_sub: ahs_lokal.id_sub,
+          structure: ahs_lokal.structure,
+          floor: ahs_lokal.floor,
+          task: ahs_lokal.task,
+          id_rab: ahs_lokal.id_rab,
+          HP: HP,
+          HP_Adjust: HP_Adjust,
+          volume: ahs_lokal.volume,
+          total_labor: total_labor,
+          total_material: total_material,
+          total_equipment: ahs_lokal.total_equipment,
+          HSP_before_overhead: HSP_before_overhead,
+          HSP: HSP,
+          id_ahs: ahs_lokal.id_ahs,
+          kode: ahs_lokal.kode,
+          detail: ahs_lokal.detail,
+        }
+        this.AHSData.splice(this.AHSData.indexOf(ahs_lokal),1,newEdit)
+        console.log('AHS Data After Edit',this.AHSData)
+        this.update()
+      },
+      equipment()
+      {
+        let temp = 0
+        for(let material of this.Material)
+        {
+          temp += parseFloat(material.sub_total)
+        }
+        console.log('Total Material',temp)
+        this.AHS.HSP_before_overhead = parseFloat(temp) + parseFloat(this.AHS.total_equipment)
+        console.log('Total Before Overhead',this.AHS.HSP_before_overhead)
+        this.AHS.HSP = parseFloat(this.AHS.HSP_before_overhead+(this.AHS.HSP_before_overhead * this.AHS.overhead/100)).toFixed(2)
+        this.AHS.HP = this.HSP * this.AHS.volume
+        this.AHS.HP_Adjust = this.HP * this.AHS.adjustment
       },
       async filterStructures()
       {
@@ -685,15 +746,10 @@ import detailController from './../service/AHSLokalDetails'
         this.detailDetails=[]
         // this.AHS = Object.assign({},this.AHSDefault)
         console.log('id project',this.id_project)
-        this.temprab={}
-        this.Structure=[]
-        this.Groups=[]
-        this.TaskSub=[]
-        this.AHSData=[]
 
-        this.temprab = this.rab.find(obj=>obj.id_project == this.id_project)
-        console.log('item',this.temprab)
-        this.detailStructure = (await details.show(this.temprab.id_rab)).data
+        let rab = this.rab.find(obj=>obj.id_project == this.id_project)
+        console.log('item',rab)
+        this.detailStructure = (await details.show(rab.id_rab)).data
         console.log('detail structure',this.detailStructure)
       },
       async filterGroups()
@@ -747,18 +803,6 @@ import detailController from './../service/AHSLokalDetails'
           console.log(err)
         }
       },
-      // async filterMaterials()
-      // {
-      //   try{
-      //       this.AHS = this.detailDetails.find(obj=>obj.id_structure == this.id_structure && 
-      //               obj.id_groups == this.id_groups && obj.id_sub == this.id_sub && obj.id_ahs == this.id_ahs)
-      //     console.log('detail ahs',this.AHS)
-      //     this.Material = (await ahsLokalDetails.getItem(this.AHS.id_ahs_lokal)).data
-      //     console.log('materials of ahs',this.Material)
-      //   }catch(err){
-      //     console.log(err)
-      //   }
-      // },
       update(){
         this.snack = true
         this.snackColor = 'teal darken-1'

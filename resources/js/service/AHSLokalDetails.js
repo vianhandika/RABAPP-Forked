@@ -50,4 +50,16 @@ export default {
             Http.patch('/api/ahs_lokal_details/update/'+id, payload, successCallback, errorCallback)
         })
     },
+    updateAdj(payload,id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.patch('/api/ahs_lokal_details/updateAdjAll/'+id, payload, successCallback, errorCallback)
+        })
+    },
 }

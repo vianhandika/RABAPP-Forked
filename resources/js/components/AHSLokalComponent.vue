@@ -9,24 +9,6 @@
             vertical
             dark
           ></v-divider>
-         
-          <!-- <v-col cols="3">
-          <v-select
-            hide-details
-            label="Choose Task Group"
-            class="hidden-sm-and-down"
-            v-model="select"
-            :items="project"
-            item-text="project"
-            item-value="id_project"
-            prepend-inner-icon="expand_more"
-            single-line
-            solo
-            dense
-            background-color="white"
-          >
-          </v-select> 
-          </v-col> -->
       
           <v-col cols="6">
             <v-layout>
@@ -52,6 +34,130 @@
               </v-btn>
             </v-layout>
           </v-col>
+          <div class="flex-grow-1"></div>
+          <v-dialog v-model="dialog" width="850px">  
+            <template v-slot:activator="{ on }">
+              <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="itemadjhandler();">Edit</v-btn>
+            </template>
+            <template>
+              <v-toolbar dark color="light-blue accent-4">
+                <v-btn icon dark @click="dialog = false">
+                  <v-icon>close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Edit Adjustment</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                  <v-btn dark text @click="updateItemAdj(AHSAdj.id_rab)" :loading="loading">Save</v-btn>
+                </v-toolbar-items>
+              </v-toolbar>
+              <v-card>
+                <v-form ref="form" v-model="valid" lazy-validation>
+                  <v-card-text>
+                    <v-layout>
+                      <v-flex sm6 md6 xs6>      
+                        <v-select
+                          v-model="AHSAdj.id_project"
+                          label="Project"
+                          :items="project"
+                          item-value="id_project"
+                          item-text="project"
+                          append-icon="expand_more"
+                          @change="filterStructures(AHSAdj.id_project)"
+                        ></v-select>
+                      </v-flex>
+                      <v-flex sm2 md2 xs2 style="margin-left:10px">
+                        <v-select
+                          v-model="AHSAdj.id_structure"
+                          label="Structure"
+                          item-text="structure"
+                          item-value="id_structure"
+                          :items="detailStructure"
+                          append-icon="expand_more"
+                          @change="filterAllMaterials(AHSAdj.id_structure)"
+                        ></v-select>
+                      </v-flex>
+                    </v-layout>
+                  </v-card-text>
+                </v-form>
+                <v-container>
+                  <v-data-table
+                    :headers="headersEdit"
+                    sortBy="name"
+                    update: sort-asc
+                    class="elevation-5"
+                    :items="detailM"
+                    :search="searchDetails"
+                  >
+                    <template v-slot:top>
+                      <v-toolbar dark color="light-blue accent-2">
+                        <v-toolbar-title>Detail Materials/Labor</v-toolbar-title>
+                        <v-divider
+                          class="mx-4"
+                          inset
+                          vertical
+                        ></v-divider>
+                        <v-col cols="6">
+                          <v-text-field
+                            v-model="searchDetails"
+                            append-icon="search"
+                            label="Search"
+                            single-line
+                            hide-details
+                          ></v-text-field>
+                        </v-col>
+                      </v-toolbar>
+                    </template>
+                    
+                    <template v-slot:item.price="{item}">
+                      <v-layout>
+                        <div style="text-align:left;width:30px">Rp.</div>
+                        <div style="text-align:right;width:90px">{{ Number(item.price).toLocaleString('id-ID') }}</div>  
+                      </v-layout>
+                    </template>
+
+                    <template v-slot:item.sub_total="{item}">
+                      <v-layout>
+                        <div style="text-align:left;width:30px">Rp.</div>
+                        <div style="text-align:right;width:90px">{{ Number(item.sub_total).toLocaleString('id-ID') }}</div>  
+                      </v-layout>
+                    </template>
+
+                    <template v-slot:item.adjustment="{item}">
+                      <v-edit-dialog
+                        :return-value.sync="item.adjustment"
+                        @save="updateAdjustAll(item)"
+                        @cancel="cancel"
+                        lazy
+                        persistent
+                        dark
+                        large
+                      > {{ item.adjustment }}
+                        <template v-slot:input>
+                          <v-text-field
+                            v-model="item.adjustment"
+                            label="Edit"
+                            single-line
+                            counter
+                          ></v-text-field>
+                        </template>
+                      </v-edit-dialog>
+                    </template>
+                  </v-data-table>
+                  <v-dialog v-model="updatedialog" max-width="290px">
+                      <v-card>
+                        <v-card-title class="headline">Confirmation</v-card-title>
+                          <v-card-text>Are you sure want to update all of?</v-card-text>
+                        <v-card-actions>
+                          <v-spacer></v-spacer>
+                          <v-btn color="green darken-1" text @click="updatedialog = false; deleteItem(AHS.id_ahs_lokal)">Yes</v-btn>
+                          <v-btn color="red darken-1" text @click="updatedialog = false">No</v-btn>
+                        </v-card-actions>
+                      </v-card>
+                    </v-dialog>
+                </v-container>
+              </v-card>
+            </template>
+          </v-dialog>
         </v-toolbar>
 
       <v-card elevation="10">
@@ -59,19 +165,10 @@
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
-                <!-- <v-flex xs3>
-                  <div class="caption grey--text">ID RAB</div>
-                  <div>{{ data.id_rab }}</div>
-                </v-flex> -->
                 <v-flex xs5>
                   <div class="caption grey--text">{{data.structure}}-{{data.floor}}</div>
                   <div align="justify">{{ data.project }} </div>
                 </v-flex>
-                <!--  -->
-                <!-- <v-flex xs3 style="padding-left:15px">
-                  <div class="caption grey--text">Task Group</div>
-                  <div>{{ data.name_sub }}</div>
-                </v-flex> -->
                 <v-flex xs4 style="padding-left:15px">
                   <div class="caption grey--text">{{data.task}}</div>
                   <div>{{ data.name }}</div>
@@ -80,34 +177,26 @@
                   <div class="caption grey--text">Status</div>
                   <div>{{ data.status }}</div>
                 </v-flex>
-                <v-flex xs2 style="padding-left:10px">
-                  <div class="caption grey--text">Volume</div>
-                  <div>{{ data.volume_adj }}</div>
-                </v-flex>
-                <!-- <v-flex xs2 style="padding-left:10px">
-                  <div class="caption grey--text">Satuan</div>
-                  <div>{{ data.satuan }}</div>
-                </v-flex> -->
-                <v-flex xs2 style="padding-left:15px">
-                  <div class="caption grey--text">Adjust</div>
-                  <div>{{ data.adjustment }}</div>
-                </v-flex>
                 <v-flex xs5 style="padding-left:10px">
                   <div class="caption grey--text">HSP (LBO)</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
-                    <div style="text-align:right;width:120px">{{ Number(data.HSP_before_overhead_adj).toLocaleString('id-ID') }}</div>
+                    <div style="text-align:right;width:120px">{{ Number(data.HSP_before_overhead).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
                 <v-flex xs3 style="padding-left:10px">
                   <div class="caption grey--text">Overhead (%)</div>
                   <div>{{ data.overhead }}</div>
                 </v-flex>
+                <v-flex xs3 style="padding-left:10px">
+                  <div class="caption grey--text">Adjustment</div>
+                  <div>{{ data.adjustment }}</div>
+                </v-flex>
                 <v-flex xs5 style="padding-left:10px">
                   <div class="caption grey--text">HSP (LAO)</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
-                    <div style="text-align:right;width:120px">{{ Number(data.HSP_adj).toLocaleString('id-ID') }}</div>
+                    <div style="text-align:right;width:120px">{{ Number(data.HSP).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
                 <v-flex style="padding-left:10px">
@@ -144,86 +233,38 @@
                             </v-layout>
 
                             <v-layout>
-                              <v-flex sm4 md4 xs4>
-                                <v-select
-                                  v-model="AHS.id_structure"
+                              <v-flex sm2 md2 xs2>
+                                <v-text-field
+                                  v-model="AHS.structure"
                                   label="Structure"
-                                  :items="detailStructure"
-                                  item-text="structure"
-                                  item-value="id_structure"
-                                  :return-object="false" 
-                                  append-icon="expand_more"
-                                ></v-select>
+                                  readonly
+                                ></v-text-field>
                               </v-flex>
-                              <v-flex sm4 md4 xs4 style="margin-left:10px">
-                                <v-select
-                                  v-model="AHS.id_groups"
+                              <v-flex sm2 md2 xs2 style="margin-left:10px">
+                                <v-text-field
+                                  v-model="AHS.floor"
                                   label="Floor"
-                                  :items="detailGroup"
-                                  item-text="floor"
-                                  item-value="id_groups"
-                                  :return-object="false" 
-                                  append-icon="expand_more"
-                                ></v-select>
+                                  readonly
+                                ></v-text-field>
                               </v-flex>
-                              <v-flex sm4 md4 xs4 style="margin-left:10px">
-                                <v-select
-                                  v-model="AHS.id_sub"
+                              <v-flex sm2 md2 xs2 style="margin-left:10px">
+                                <v-text-field
+                                  v-model="AHS.task"
                                   label="Task Group"
-                                  :items="detailTask"
-                                  item-text="task"
-                                  item-value="id_sub"
-                                  :return-object="false" 
-                                  append-icon="expand_more"
-                                  @change="filterTask(AHS.id_sub)"
-                                ></v-select>
+                                  readonly
+                                ></v-text-field>
+                              </v-flex>
+                              <v-flex sm6 md6 xs6 style="margin-left:10px">
+                                <v-text-field
+                                  v-model="AHS.name"
+                                  label="Task"
+                                  :return-object="false"
+                                  readonly
+                                ></v-text-field>
                               </v-flex>
                             </v-layout>
 
                             <v-layout>
-                              <v-flex sm3 md3 xs3>
-                                <v-select
-                                  v-model="AHS.id_ahs"
-                                  label="Task"
-                                  :items="detailAHS"
-                                  item-text="name"
-                                  item-value="id_ahs"
-                                  :return-object="false"
-                                  append-icon="expand_more"
-                                  @change="getMaterials(AHS.id_ahs)"
-                                ></v-select>
-                              </v-flex>
-                              <v-flex sm3 md3 xs3 style="margin-left:10px">
-                                <v-select
-                                  v-model="AHS.id_ahs"
-                                  label="HSP (MAO)"
-                                  :items="detailAHS"
-                                  item-text="total"
-                                  item-value="id_ahs"
-                                  :return-object="false"
-                                  append-icon="expand_more"
-                                  readonly
-                                ></v-select>
-                              </v-flex>
-                              <v-flex sm3 md3 xs3 style="margin-left:10px">
-                                <v-text-field 
-                                  v-model="AHS.volume" 
-                                  label="Volume"
-                                  type="number"
-                                >
-                                </v-text-field>
-                              </v-flex>
-                              <v-flex sm3 md3 xs3 style="margin-left:10px">
-                                <v-text-field 
-                                  v-model="AHS.adjustment" 
-                                  label="Adjustment"
-                                  type="number"
-                                >
-                                </v-text-field>
-                              </v-flex>
-                            </v-layout>
-
-                            <v-layout style="margin-top: 10px">
                               <v-flex sm3 md3 xs3>
                                 <v-text-field
                                   v-model="AHS.total_equipment"
@@ -267,6 +308,7 @@
                             update: sort-desc
                             class="elevation-5"
                             :items="Material"
+                            :search="searchDetails"
                           >
                             <template v-slot:top>
                               <v-toolbar dark color="light-blue accent-2">
@@ -276,18 +318,16 @@
                                   inset
                                   vertical
                                 ></v-divider>
+                                <v-col cols="12" sm="6" md="6">
+                                  <v-text-field
+                                    v-model="searchDetails"
+                                    append-icon="search"
+                                    label="Search"
+                                    single-line
+                                    hide-details
+                                  ></v-text-field>
+                                </v-col>
                               </v-toolbar>
-                            </template>
-
-                            <template v-slot:item.sub_total_lokal="{item}">
-                              <v-layout v-if="AHS.status == 'Price'">
-                                <div style="text-align:left;width:30px">Rp.</div>
-                                <div style="text-align:right;width:90px">{{ Number(item.sub_total_lokal * item.adjustment).toLocaleString('id-ID') }}</div>  
-                              </v-layout>
-                              <v-layout v-if="AHS.status =='Volume'">
-                                <div style="text-align:left;width:30px">Rp.</div>
-                                <div style="text-align:right;width:90px">{{ Number(item.sub_total).toLocaleString('id-ID') }}</div>  
-                              </v-layout>
                             </template>
                             
                             <template v-slot:item.price="{item}">
@@ -303,6 +343,7 @@
                                 <div style="text-align:right;width:90px">{{ Number(item.sub_total).toLocaleString('id-ID') }}</div>  
                               </v-layout>
                             </template>
+
                             <template v-slot:item.action="{ item }">
                               <v-dialog v-model="dialog8" max-width="290px">
                                 <template v-slot:activator="{ on }">
@@ -325,6 +366,27 @@
                                     </v-card-actions>
                                   </v-card>
                               </v-dialog>
+                            </template>
+
+                            <template v-slot:item.adjustment="{item}">
+                              <v-edit-dialog
+                                :return-value.sync="item.adjustment"
+                                @save="updateAdjustmentLokal(item)"
+                                @cancel="cancel"
+                                lazy
+                                persistent
+                                dark
+                                large
+                              > {{ item.adjustment }}
+                                <template v-slot:input>
+                                  <v-text-field
+                                    v-model="item.adjustment"
+                                    label="Edit"
+                                    single-line
+                                    counter
+                                  ></v-text-field>
+                                </template>
+                              </v-edit-dialog>
                             </template>
                           </v-data-table>
                         </v-container>
@@ -366,19 +428,19 @@
                 <v-flex>
                   <v-layout>
                     <div class="body-2 black--text font-weight-bold">Total of Labor : Rp.</div>
-                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_labor_adj).toLocaleString('id-ID') }}</div>
+                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
                 <v-flex>
                   <v-layout>
                     <div class="body-2 black--text font-weight-bold">Total of Materials : Rp.</div>
-                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_material_adj).toLocaleString('id-ID') }}</div>
+                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
                 <v-flex>
                   <v-layout>
                     <div class="body-2 black--text font-weight-bold">Total of Equipment : Rp.</div>
-                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_equipment_adj).toLocaleString('id-ID') }}</div>
+                    <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_equipment).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
               </v-layout>
@@ -418,13 +480,6 @@
                   ></v-text-field>
                 </template>
               </v-edit-dialog>
-            </template>
-
-            <template v-slot:item.sub_total_lokal="{ item }">
-              <v-layout>
-                <div style="text-align:left;width:25px">Rp.</div>
-                <div style="text-align:right;width:100px">{{ Number(item.sub_total_lokal).toLocaleString('id-ID') }}</div>
-              </v-layout>
             </template>
             
             <template v-slot:item.action="{ item }">
@@ -483,6 +538,7 @@ import jobController from './../service/Job'
 import task from './../service/TaskSub'
 import detailsRab from './../service/Details'
 import rabController from './../service/RAB'
+import materialController from './../service/Material'
 
   export default {
     data: () => ({
@@ -495,18 +551,25 @@ import rabController from './../service/RAB'
       snackColor: '',
       snackText: '',
       searchDetails:'',
-      
+
+      dialog:false,
       dialog6: false,
       dialog8: false,
       detailTable: false,
       dialogedit:false,
       loading:false,
+      updatedialog:false,
 
       search:'',
       select:-1,
       searchAHS:'',
       id_ahs:'',
       
+      // id_project:'',
+      // id_structure:'',
+      // id_rab:'',
+      id_structure_details:'',
+
       ahs: [],
       job: [],
       details:[],
@@ -516,25 +579,24 @@ import rabController from './../service/RAB'
       task:[],
       temp:[],
       Material:[],
+      material:[],
 
       project:[],
       temp:[],
       filter:[],
 
       rab:[],
-      // Structure:[],
-      // Groups:[],
-      // TaskSub:[],
       detailStructure:[],
       detailGroup:[],
       detailTask:[],
       detailAHS:[],
       detailMaterial:[],
-
-      detail: {
-        id_material:'',
-        coefficient:'',
-        sub_total:''
+      detailM:[],
+      
+      AHSAdj:{
+        id_project:'',
+        id_rab:'',
+        id_structure:'',
       },
       AHS:{
         kode:'',
@@ -556,54 +618,21 @@ import rabController from './../service/RAB'
         sub_total : 0,
       },
       headers: [
-        // {text: 'ID', align: 'left', sortable: false, value: 'kode',},
         {text: 'Type', align: 'left', sortable: false, value: 'status',},
-        {text: 'Item', align: 'left', sortable: false, value: 'name',},
+        {text: 'Item', align: 'left', sortable: true, value: 'name'},
         {text: 'Price', align: 'left', sortable: false, value: 'price',},
         {text: 'Coefficient', align: 'center', sortable: false, value: 'coefficient'},
-        {text: 'Sub Total (M)', align: 'left', sortable: false, value: 'sub_total'},
-        // {text: 'Adjustment', align: 'left', sortable: false, value: 'adjustment', align: 'center'},
-        {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total_lokal'},
-        // {text: 'Materials/Labor', align: 'left', sortable: false, value: 'requirements_ml'},
+        {text: 'Adj BT', align: 'left', sortable: false, value: 'adjustment', align: 'center'},
+        {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total'},
         {text: 'Actions', align: 'center', sortable: false, value: 'action'},
       ],
-      headersAHS: [
-        {text: 'ID', align: 'left', sortable: false, value: 'kode'},
-        {text: 'Type', align: 'left', sortable: true, value: 'status'},
-        {text: 'Item', align: 'left', sortable: false, value: 'name'},
+      headersEdit: [
+        {text: 'Type', align: 'left', sortable: false, value: 'status',},
+        {text: 'Item', align: 'left', sortable: true, value: 'name'},
         {text: 'Price', align: 'left', sortable: false, value: 'price',},
-        {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient'},
-        {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total'},
-        {text: 'Adjustment', align: 'left', sortable: false, value: 'sub_adjustment'},
-      ],
-      headers_detail_task: [
-        {text: 'ID', align: 'left', sortable: false, value: 'id_sub'},
-        {text: 'Building', align: 'left', sortable: false, value: 'structure'},
-        {text: 'Floor', align: 'left', sortable: false, value: 'floor'},
-        {text: 'Task Group', align: 'left', sortable: false, value: 'task'},
-        {text: 'Detail', align: 'left', sortable: false, value: 'action'}
-      ],
-      headers_filter_materials: [
-        {text: 'ID', align: 'left', sortable: false, value: 'kode'},
-        {text: 'Type', align: 'left', sortable: true, value: 'status'},
-        {text: 'Item', align: 'left', sortable: false, value: 'name'},
-        {text: 'Price', align: 'left', sortable: false, value: 'price'},
-        {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient'},
-        {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total'},
-        {text: 'Adjustment', align: 'left', sortable: false, value: 'adjustment'}
-      ],
-      headers_ahs_details:[
-        {text: 'ID',value:'id_ahs_lokal'},
-        {text: 'Builiding',value:'structure'},
-        {text: 'Floor',value:'floor'},
-        {text: 'Task Group',value:'task'},
-        {text: 'AHS',value:'name', width:'25%'},
-        {text: 'HSP', value: 'HSP'},
-        {text: 'Volume',value:'volume',align: 'center'},
-        {text: 'Adjustment',value:'adjustment',align: 'center'},
-        {text: 'HP',value:'HP',width:'15%'},
-        {text: 'HP Adjustment',value:'HP_Adjust'},
-        {text: 'Actions',value:'action'},
+        {text: 'Coefficient', align: 'center', sortable: false, value: 'coefficient'},
+        {text: 'Adj BT', align: 'left', sortable: false, value: 'adjustment', align: 'center'},
+        {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total'},
       ],
     }),
     mounted(){
@@ -613,10 +642,39 @@ import rabController from './../service/RAB'
       this.getPagination()
       this.getTask()
       this.getRAB()
+      this.getMaterial()
     },
     computed: {
     },
     methods: {
+      itemadjhandler()
+      {
+        console.log('cek')
+        this.detailM=[]
+        this.AHSAdj.id_project=''
+        this.AHSAdj.id_structure=''
+        this.dialog=true
+      },
+      updateAdjustAll(item)
+      {
+        console.log('item',item)
+        let material = this.detailM.filter(obj=>obj.id_material == item.id_material)
+        console.log('material',material)
+        for(let data of material)
+        {
+          data.adjustment = item.adjustment
+          data.sub_total = item.adjustment * item.coefficient * item.price
+        }
+        console.log('detail material',this.detailM)
+      },
+      async getMaterial()
+      {
+        try{
+          this.material = (await materialController.getallItem()).data
+        }catch(err){
+          console.log(err)
+        }
+      },
       deletematerials(item)
       {
         console.log('item',item)
@@ -668,6 +726,23 @@ import rabController from './../service/RAB'
           console.log(err);
         }
       },
+      async updateItemAdj(id){
+        try{
+          this.loading = true
+          console.log('ID Project',id)
+          const payload = {
+            detail                : this.detailM
+          } 
+          await detailController.updateAdj(payload,id).then(()=>{
+            this.close()
+            this.update()
+            this.loading = false
+          })
+        }catch(err){
+          this.loading = false
+          console.log(err);
+        }
+      },
       overhead()
       {
         let temp = parseFloat(this.AHS.HSP_before_overhead * this.AHS.overhead/100).toFixed(2)
@@ -683,12 +758,12 @@ import rabController from './../service/RAB'
         {
           temp += parseFloat(material.sub_total)
         }
-        // let total = parseFloat(temp) + parseFloat(temp*this.AHS.overhead/100)
         console.log('Total Material',temp)
         this.AHS.HSP_before_overhead = parseFloat(temp) + parseFloat(this.AHS.total_equipment)
-        // total + parseFloat(this.AHS.total_equipment)
         console.log('Total Before Overhead',this.AHS.HSP_before_overhead)
         this.AHS.HSP = parseFloat(this.AHS.HSP_before_overhead+(this.AHS.HSP_before_overhead * this.AHS.overhead/100)).toFixed(2)
+        this.AHS.HP = this.HSP * this.AHS.volume
+        this.AHS.HP_Adjust = this.HP * this.AHS.adjustment
       },
       async getTask()
       {
@@ -697,6 +772,40 @@ import rabController from './../service/RAB'
         }catch(err){
           console.log(err)
         }
+      },
+      async filterStructures(id)
+      {
+        console.log('Id Project',id)
+        let rab = this.rab.find(obj=>obj.id_project == id)
+        console.log('RAB',rab)
+        this.AHSAdj.id_rab = rab.id_rab
+        console.log('id rab',this.AHSAdj.id_rab)
+        console.log('item',rab)
+        this.detailStructure = (await detailsRab.show(rab.id_rab)).data
+        console.log('detail structure',this.detailStructure)
+      },
+      async filterAllMaterials(id)
+      {
+        this.detailM=[]
+        let structure = this.detailStructure.find(obj=>obj.id_structure == this.AHSAdj.id_structure)
+        console.log('detail structure',structure)
+        let detail = (await detailsRab.showG(structure.id_structure_details)).data
+        console.log('detail group',detail)
+        for(let group of detail)
+        {
+            for(let task of group.task_sub.data)
+            {
+              for(let rab_details of task.rab_details.data)
+              {
+                for(let material of rab_details.detail.data)
+                {
+                  if(material.status == "material")
+                    this.detailM.push(material)
+                }
+              }
+            }
+        }
+        console.log('material All',this.detailM)
       },
       async filterTask(id)
       {
@@ -708,11 +817,6 @@ import rabController from './../service/RAB'
         let task_sub = this.detailTask.find(obj=>obj.id_structure == this.AHS.id_structure && obj.id_groups == this.AHS.id_groups && obj.id_sub == this.AHS.id_sub)
         console.log('task_sub',task_sub)
         this.AHS.id_sub_details = task_sub.id_sub_details
-        // let ahsLokal = this.ahs.find(obj=>obj.id_ahs_lokal == item.id_ahs_lokal)
-        // console.log('ahs lokal',ahsLokal)
-        // this.AHS = ahsLokal
-        // console.log('AHS Lokal',this.AHS)
-
       },
       async searchAll()
       {
@@ -771,202 +875,17 @@ import rabController from './../service/RAB'
       itemDetail(item){
         this.ahs_details = item
       },
-      async getMaterials(id)
-      {
-        try{
-          let AHS = (await ahs.showbyID(id)).data
-          console.log('AHS Master',AHS)
-          let Temp=[]
-          let TempAll=[]
-          for(let material of AHS.ahs_details.data)
-          {
-            let each = {
-              id_ahs_lokal_details : material.id_ahs_lokal_details,
-              id_ahs_lokal : this.AHS.id_ahs_lokal,
-              id_material : material.id_material,
-              kode: material.kode,
-              name: material.name,
-              status: material.status,
-              price: material.price, 
-              coefficient : material.coefficient,
-              sub_total : material.sub_total,
-              adjustment: this.AHS.adjustment
-            }
-            Temp.push(each)
-            TempAll.push(each)
-          }
-          console.log('ID AHS Lokal',this.AHS.id_ahs_lokal)
-          let MaterialTemp = (await detailController.getItem(this.AHS.id_ahs_lokal)).data
-          let Material=[]
-          for(let material of MaterialTemp)
-          {
-            let data = {
-              id_ahs_lokal_details : material.id_ahs_lokal_details,
-              id_ahs_lokal : material.id_ahs_lokal,
-              id_material : material.id_material,
-              kode: material.kode,
-              name: material.name,
-              status: material.status,
-              price: material.price, 
-              coefficient : material.coefficient,
-              sub_total : material.sub_total,
-              adjustment: material.adjustment 
-            }
-            Material.push(data)
-          }
-          console.log('Material Hendak Dihapus',Material)
-          console.log('Material Hendak Dipush (new)',Temp)
-          let j=0
-          console.log('Temp All',TempAll)
-          for(let material of Material)
-          {
-            console.log('Perulangan ke-',j)
-            console.log('Temp',Temp[j])
-            if(Temp[j] != undefined)
-            {
-              let data = {
-                id_ahs_lokal_details : material.id_ahs_lokal_details,
-                id_ahs_lokal : this.AHS.id_ahs_lokal,
-                id_material : Temp[j].id_material,
-                kode: Temp[j].kode,
-                name: Temp[j].name,
-                status: Temp[j].status,
-                price: Temp[j].price, 
-                coefficient : Temp[j].coefficient,
-                sub_total : Temp[j].sub_total,
-                adjustment: this.AHS.adjustment 
-              }
-              console.log('New Material',data)
-              Material.splice(Material.indexOf(material),1,data)
-              TempAll.splice(TempAll.indexOf(material))
-              j++
-              console.log('Material For',Material)
-              console.log('Sisa Temp',TempAll)
-              console.log('j selanjutnya',j)
-            }
-            else{
-              Material.splice(Material.indexOf(material))
-              console.log('ELSE',Material)
-            }
-          }
-          console.log('This Material After Splice',Material)
-          console.log('Sisa Temp All',TempAll)
-          for(let temp of TempAll)
-          {
-            temp.id_ahs_lokal_details = null
-            Material.push(temp)
-          }
-          console.log('Result Material Temp',Material)
-          this.Material = Material 
-          console.log('Result Material',this.Material)
-          this.detailMaterial=[]
-          for(let material of Material)
-          {
-            let each_detail = {
-              id_ahs_lokal_details : material.id_ahs_lokal_details,
-              id_ahs_lokal : this.AHS.id_ahs_lokal,
-              id_material : material.id_material,
-              kode: material.kode,
-              coefficient : material.coefficient,
-              sub_total : material.sub_total,
-              adjustment: this.AHS.adjustment
-            }
-            this.detailMaterial.push(each_detail)
-          }
-          console.log('Result Detail Material',this.detailMaterial)
-          // this.AHS.HSP_before_overhead = parseFloat(AHS.total_before_overhead) + parseFloat(this.AHS.total_equipment)
-          // console.log('HSP Before Overhead',this.AHS.HSP_before_overhead)
-          // this.AHS.HSP = parseFloat(this.AHS.HSP_before_overhead+(this.AHS.HSP_before_overhead*this.AHS.overhead/100))
-          this.AHS.id_job = AHS.id_job
-          this.AHS.total_labor = AHS.total_labor
-          this.AHS.total_material = AHS.total_material
-          this.AHS.total_equipment = AHS.total_equipment
-          this.AHS.HSP_before_overhead = AHS.total_before_overhead
-          this.AHS.HSP = AHS.total
-          this.AHS.overhead = AHS.overhead
-        }catch(err){
-          console.log(err)
-        }
-      },
       async itemEdit(item)
       {
         console.log('Item Edit',item)
-        this.detailStructure=[]
-        this.detailGroup=[]
-        this.detailTask=[]
-        this.detailAHS=[]
         this.Material = []
-        let ahsLokal = this.ahs.find(obj=>obj.id_ahs_lokal == item.id_ahs_lokal)
-        console.log('ahs lokal',ahsLokal)
-        this.AHS = ahsLokal
-        console.log('AHS Lokal',this.AHS)
-
-        this.ahsAll = (await ahs.getall()).data
-        this.detailAHS = this.ahsAll.filter(obj=>obj.id_sub == item.id_sub)
-        console.log('detail ahs',this.detailAHS)
         
-        let RAB = this.rab.find(obj=>obj.id_rab == this.AHS.id_rab)
-        console.log('RAB',RAB)
-        for(let detailS of RAB.structure.data)
-        {
-          // let structure = {
-          //   id_structure_details: detailS.id_structure_details,
-          //   id_structure : detailS.id_structure
-          // }
-          let detail = {
-            id_structure_details  : detailS.id_structure_details,
-            id_structure          : detailS.id_structure,
-            structure             : detailS.structure
-          }
-          // this.Structure.push(structure)
-          this.detailStructure.push(detail)
-        }
-        console.log('Structure',this.Structure)
-        console.log('Detail Structure',this.detailStructure)
-        console.log('RAB Structure Data',RAB.structure.data)
-        for(let detailG of RAB.structure.data)
-        {
-          for(let detailgroup of detailG.group.data)
-          {
-            // let group = {
-            //   id_group_details  : detailgroup.id_group_details,
-            //   id_structure      : detailgroup.id_structure,
-            //   id_groups         : detailgroup.id_groups
-            // }
-            let detail = {
-              id_group_details : detailgroup.id_group_details,
-              id_structure  : detailgroup.id_structure,
-              id_groups     : detailgroup.id_groups,
-              structure     : detailgroup.structure,
-              floor         : detailgroup.floor
-            }
-            // this.Groups.push(group)
-            this.detailGroup.push(detail)
-
-            for(let detailtask of detailgroup.task_sub.data)
-            {
-              // let task = {
-              //   id_sub_details : detailtask.id_sub_details,
-              //   id_structure : detailtask.id_structure,
-              //   id_groups    : detailtask.id_groups,
-              //   id_sub       : detailtask.id_sub
-              // }
-              let detail = {
-                id_sub_details : detailtask.id_sub_details,
-                id_structure  : detailtask.id_structure,
-                id_groups     : detailtask.id_groups,
-                id_sub        : detailtask.id_sub,
-                structure     : detailtask.structure,
-                floor         : detailtask.floor,
-                task          : detailtask.task
-              }
-              // this.TaskSub.push(task)
-              this.detailTask.push(detail)
-            }
-          }
-        }
+        let ahs = (await rabDetails.getItem(item.id_ahs_lokal)).data
+        this.AHS = ahs[0]
+        console.log('AHS Lokal',this.AHS)
+        
         this.Material = (await detailController.getItem(this.AHS.id_ahs_lokal)).data
-        for(let material of ahsLokal.detail.data)
+        for(let material of this.Material)
           {
             let each_detail = {
               id_ahs_lokal_details : material.id_ahs_lokal_details,
@@ -975,7 +894,6 @@ import rabController from './../service/RAB'
               kode: material.kode,
               coefficient : material.coefficient,
               sub_total : material.sub_total,
-              sub_total_lokal : material.sub_total,
               adjustment: material.adjustment
             }
             this.detailMaterial.push(each_detail)
@@ -1012,6 +930,54 @@ import rabController from './../service/RAB'
           console.log(err);
         }
       }, 
+      updateAdjustmentLokal(item)
+      {
+        console.log('Detail Material',this.detailMaterial)
+        console.log('Material Before Edit',this.Material)
+        console.log('Item',item)
+        let materialData = this.material.find(obj=>obj.id_material == item.id_material)
+        item.sub_total = item.adjustment * materialData.price * item.coefficient
+        console.log('Material After Edit', this.Material)
+        this.detailMaterial=[]
+        console.log('After Empty Detail',this.detailMaterial)
+        for(let material of this.Material)
+        {
+          let each = {
+            id_ahs_lokal_details : material.id_ahs_lokal_details,
+            id_ahs_lokal : material.id_ahs_lokal,
+            id_material : material.id_material,
+            kode: material.kode,
+            coefficient : material.coefficient,
+            sub_total : material.sub_total,
+            adjustment: material.adjustment
+          }
+          this.detailMaterial.push(each)
+        }
+        console.log('After Edit Detail',this.detailMaterial)
+        this.AHS.HSP_before_overhead=0
+        this.AHS.total_material=0
+        this.AHS.total_labor=0
+        for(let data of this.Material)
+        {
+          let materialData = this.material.find(obj=>obj.id_material == data.id_material)
+          if(materialData.status == 'labor')
+            this.AHS.total_labor += data.sub_total
+          else
+            this.AHS.total_material += data.sub_total
+          this.AHS.HSP_before_overhead += data.sub_total
+        }
+        console.log('Total Material',this.AHS.total_material)
+        console.log('Total Labor',this.AHS.total_labor)
+        this.AHS.HSP_before_overhead = parseFloat(this.AHS.HSP_before_overhead) + parseFloat(this.AHS.total_equipment)
+        this.AHS.HSP = this.AHS.HSP_before_overhead + (this.AHS.HSP_before_overhead * this.AHS.overhead/100)
+        console.log('HSP Before Overhead',this.AHS.HSP_before_overhead)
+        console.log('HSP',this.AHS.HSP)
+        this.AHS.HP = this.AHS.HSP * this.AHS.volume
+        this.AHS.HP_Adjust = this.AHS.HP * this.AHS.adjustment
+        console.log('HP',this.AHS.HP)
+        console.log('HP_Adjust',this.AHS.HP_Adjust)
+        this.update()
+      },
       async deleteItem(id){
         try{
           await rabDetails.delete(id).data
@@ -1044,16 +1010,12 @@ import rabController from './../service/RAB'
       {
         try{
           this.project = (await project.getallItem()).data
-          let each = {
-            id_project: -1,
-            project: 'All'
-          }
-          this.project.push(each)
         }catch(err){
           console.log(err)
         }
       },
       close () {
+        this.dialog = false
         this.dialog6 = false
         this.dialog8 = false
         this.details=[]

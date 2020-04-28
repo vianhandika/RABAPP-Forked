@@ -87,4 +87,16 @@ export default {
             Http.patch('/api/rab_details/update/'+id, payload, successCallback, errorCallback)
         })
     },
+    getItem(id){
+        return new Promise((resolve, reject) => {
+            const successCallback = (res) => {
+                const data = res.data
+                resolve(data)
+            }
+            const errorCallback = (err) => {
+                reject(err)
+            }
+            Http.get('/api/rab_details/show/'+id, successCallback, errorCallback)
+        })
+    },
 }

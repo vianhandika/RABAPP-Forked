@@ -128,6 +128,7 @@ Route::get('tasksub_details/show/{id}','TaskSubDetailsController@show');
 //AHS Lokal Details
 Route::get('/ahs_lokal_details','AHSLokalDetailsController@index');
 Route::patch('/ahs_lokal_details/update/{id}','AHSLokalDetailsController@update');
+Route::patch('/ahs_lokal_details/updateAdjAll/{id}','AHSLokalDetailsController@updateadjAll');
 Route::delete('/ahs_lokal_details/delete/{id}', 'AHSLokalDetailsController@destroy');
 Route::get('/ahs_lokal_details/show/{id}', 'AHSLokalDetailsController@showByID');
 //Reports
@@ -135,6 +136,6 @@ Route::get('/ahs_master_report/{id}','ReportsController@analisa_task');
 Route::get('/ahs_lokal_report/{id}','ReportsController@analisa_lokal');
 Route::get('/rab_report/{id}/{ppn}/{jasa}','ReportsController@rab');
 Route::get('/rab_bq_report/{id}','ReportsController@rab_bq');
-Route::get('/rab_mr_report/{id}/{adjust}','ReportsController@rab_mr');
+Route::get('/rab_mr_report/{id}/{type}','ReportsController@rab_mr');
 Route::get('/rab_rap_report/{id}/{rap}','ReportsController@rab_rap');
 Route::get('/analisa_task_all','ReportsController@analisa_task_all');

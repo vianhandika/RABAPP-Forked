@@ -127,7 +127,7 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                  <v-col cols="4" style="margin-left:10px">
+                  <v-col cols="5" style="margin-left:10px">
                     <v-select
                       label="Select"
                       v-model="select"
@@ -151,41 +151,47 @@
                     >
                     </v-text-field>
                   </v-col>
-                  <v-col cols="2">
-                    <v-text-field
-                      v-model="ppn"
-                      label="PPN (%)"
-                      color="green darken-3"
-                      v-if="select==null"
-                      type="number"
-                    >
-                    </v-text-field>
+                  <v-col cols="3">
+                    <v-layout>
+                      <v-text-field
+                        v-model="ppn"
+                        label="PPN (%)"
+                        color="green darken-3"
+                        v-if="select==null"
+                        type="number"
+                      >
+                      </v-text-field>
+
+                      <v-text-field
+                        v-model="jasa"
+                        label="Jasa (%)"
+                        color="green darken-3"
+                        v-if="select==null"
+                        type="number"
+                        style="margin-left:10px"
+                      >
+                      </v-text-field>  
+                    </v-layout>
+
                     <v-text-field
                       v-model="rap"
                       label="RAP (%)"
                       color="green darken-3"
                       v-if="select==3"
                       type="number"
+                      style="width:50px"
                     >
                     </v-text-field>
-                    <v-text-field
-                      v-model="adjustment"
-                      label="Adjust (%)"
+                    <v-select
+                      label="Select"
+                      v-model="selectMR"
+                      :items="itemsMR"
+                      item-text="name"
+                      item-value="value"
+                      append-icon="expand_more"
                       color="green darken-3"
                       v-if="select==2"
-                      type="number"
-                    >
-                    </v-text-field>
-                  </v-col>
-                  <v-col cols="2">
-                    <v-text-field
-                      v-model="jasa"
-                      label="Jasa (%)"
-                      color="green darken-3"
-                      v-if="select==null"
-                      type="number"
-                    >
-                    </v-text-field>
+                    ></v-select>
                   </v-col>
                 </v-row>
                 <!-- RAB Report -->
@@ -512,7 +518,7 @@ import Controller from './../service/Project'
 import RAB from './../service/RAB'
 import ahs from './../service/AHS'
 import ahsLokal from './../service/AHSLokal'
-import report from './../service/Reports'
+// import report from './../service/Reports'
 import Http from '../service/Http'
 import project from './../service/Project'
 import materials from './../service/Material'
@@ -546,6 +552,7 @@ import materials from './../service/Material'
       adjustment:0,
       select : null,
       selectahs:null,
+      selectMR:1,
 
       countP:0,
       countM:0,
@@ -567,6 +574,11 @@ import materials from './../service/Material'
       itemsahs:[
         {name:'AHS',value:null},
         {name:'AHS Lokal',value:'1'}
+      ],
+      itemsMR:[
+        {name:'By All',value:1},
+        {name:'By Building',value:2},
+        {name:'By Floor',value:3},
       ],
       //validaton
       rapRules:[
@@ -748,7 +760,7 @@ import materials from './../service/Material'
       {
         try{
           this.overlay = true
-          Http.download('/api/rab_mr_report/'+id+'/'+adjustment).then(()=>{
+          Http.download('/api/rab_mr_report/'+id+'/'+this.selectMR).then(()=>{
             this.overlay = false
           })
         }catch(err){

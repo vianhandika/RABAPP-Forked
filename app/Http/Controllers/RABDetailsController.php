@@ -154,69 +154,27 @@ class RABDetailsController extends RestController
 
     public function update(Request $request,$id)
     {
-        // dd($request);
-        $ahs=RABDetails::findOrFail($id);
-        $details=[];
-        $detailTemp=[];
-
         if($request->has('detail'))
         {
             $detail = $request->get('detail');
         }
-        //Edit Delete AHS Lokal Details
-        foreach($detail as $detail_ahs)
-        {
-            if($detail_ahs['id_ahs_lokal_details'] != null)
-                array_push($detailTemp,$detail_ahs);
-        }
-        $Detail = AHSLokalDetails::where('id_ahs_lokal',$id)
-                ->select('id_ahs_lokal_details','id_material','coefficient','sub_total','adjustment')->get();
-        $collection = collect($detailTemp);
-        if($collection->isNotEmpty())
-        {
-            foreach($collection as $item)
-            {
-                $filtered = $Detail->filter(function ($value, $key) use ($item){
-                    return $value->id_ahs_lokal_details != $item['id_ahs_lokal_details'];
-                });
-                $Detail = $filtered;
-            }
-        }else{
-            $filtered = $Detail;
-        }
-        $filtered->all();
-        // dd($filtered); 
-        foreach($filtered as $filtered_data)
-        {
-            if($filtered->isNotEmpty())
-                $delete = AHSLokalDetails::where('id_ahs_lokal_details',$filtered_data->id_ahs_lokal_details)->delete();
-        }
         //Edit AHS Lokal Details
         foreach($detail as $detail_ahs)
         {
-            if($detail_ahs['id_ahs_lokal_details'] == null)
-            {
-                array_push($details,$ahs->detail_ahs_lokal()->create($detail_ahs));
-            }else{
-                $detail_data = AHSLokalDetails::find($detail_ahs['id_ahs_lokal_details']);
-                $detail_data->id_material = $detail_ahs['id_material'];
-                $detail_data->coefficient = $detail_ahs['coefficient'];
-                $detail_data->sub_total = $detail_ahs['sub_total'];
-                $detail_data->adjustment = $detail_ahs['adjustment'];
-                $detail_data->save();
-            }
+            $detail_data = AHSLokalDetails::find($detail_ahs['id_ahs_lokal_details']);
+            $detail_data->id_material = $detail_ahs['id_material'];
+            $detail_data->coefficient = $detail_ahs['coefficient'];
+            $detail_data->sub_total = $detail_ahs['sub_total'];
+            $detail_data->adjustment = $detail_ahs['adjustment'];
+            $detail_data->save();
         }
-
-        $ahs->id_sub_details = $request->id_sub_details;
-        $ahs->id_job = $request->id_job;
+        $ahs = RABDetails::findOrFail($id);
         $ahs->total_labor = $request->total_labor; 
         $ahs->total_material = $request->total_material;
         $ahs->total_equipment = $request->total_equipment;
         $ahs->HSP_before_overhead = $request->HSP_before_overhead;
         $ahs->overhead = $request->overhead;
         $ahs->HSP = $request->HSP;
-        $ahs->volume = $request->volume;
-        $ahs->adjustment = $request->adjustment;
         $ahs->HP = $request->HP;
         $ahs->HP_Adjust = $request->HP_Adjust;
         $ahs->save();
