@@ -68,7 +68,7 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <div class="overline text-right">AHS</div>
+                    <div class="overline text-right">AHS Master</div>
                     <v-list-item-title class="headline mb-1 text-right" v-model="countahs">{{countahs}}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
@@ -117,13 +117,13 @@
                     <v-card-title class="headline light-green accent-2--text">RAB</v-card-title>
                   </v-col>
                   <v-col cols="5" align-center v-if="select=='1'">
-                    <v-card-title class="headline light-green accent-2--text">BQ RAB</v-card-title>
+                    <v-card-title class="headline light-green accent-2--text">BQ</v-card-title>
                   </v-col>
                   <v-col cols="5" align-center v-if="select=='2'">
-                    <v-card-title class="headline light-green accent-2--text">MR RAB</v-card-title>
+                    <v-card-title class="headline light-green accent-2--text">MR</v-card-title>
                   </v-col>
                   <v-col cols="5" align-center v-if="select=='3'">
-                    <v-card-title class="headline light-green accent-2--text">RAP RAB</v-card-title>
+                    <v-card-title class="headline light-green accent-2--text">RAP</v-card-title>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -390,7 +390,7 @@
               <v-card>
                 <v-row>
                   <v-col cols="5" align-center v-if="selectahs==null">
-                    <v-card-title class="headline blue darken-3--text">AHS</v-card-title>
+                    <v-card-title class="headline blue darken-3--text">AHS Master</v-card-title>
                   </v-col>
                   <v-col cols="5" align-center v-if="selectahs=='1'">
                     <v-card-title class="headline light-blue accent-4--text">AHS Lokal</v-card-title>
@@ -572,7 +572,7 @@ import materials from './../service/Material'
         {name:'Materials Requirements Report',value:'2'},
       ],
       itemsahs:[
-        {name:'AHS',value:null},
+        {name:'AHS Master',value:null},
         {name:'AHS Lokal',value:'1'}
       ],
       itemsMR:[

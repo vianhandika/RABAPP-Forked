@@ -405,7 +405,7 @@
           <v-dialog v-model="dialog6" max-width="290px">
             <v-card>
               <v-card-title class="headline">Confirmation</v-card-title>
-                <v-card-text>Are you sure want to delete this ahs?</v-card-text>
+                <v-card-text>Are you sure want to delete this AHS LOkal?</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <v-btn color="green darken-1" text @click="dialog6 = false; deleteItem(AHS.id_ahs_lokal)">Yes</v-btn>
