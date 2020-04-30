@@ -19,7 +19,6 @@ export default {
             url,
             data,
             method: 'post',
-            
         })
         .then(successCallback)
         .catch(errorCallback)

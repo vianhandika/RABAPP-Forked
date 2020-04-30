@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title></title>
+        <title>RAB VCP</title>
         <link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet">
     </head>
     <body>

@@ -61,6 +61,7 @@ class AHSController extends RestController
         $ahs = $this->generateCollection($ahsPaginator);
         $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
         $ahs = $this->manager->createData($ahs); 
+        // dd($ahs);
         return $ahs->toArray();
     }
 

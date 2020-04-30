@@ -26,7 +26,7 @@ const actions = {
     async retrieveToken(context, credentials){
         return new Promise((resolve, reject) => {
             axios.post('/api/auth/login',{
-                email       : credentials.email,
+                name       : credentials.name,
                 password    : credentials.password,
             })
             .then(response => {

@@ -10,34 +10,17 @@
           dark
         ></v-divider>
 
-        <!-- <v-select
-          hide-details
-          label="Choose Task Group"
-          class="hidden-sm-and-down"
-          v-model="select"
-          :items="taskTemp"
-          item-text="name"
-          item-value="id_sub"
-          prepend-inner-icon="expand_more"
-          single-line
-          style="width:150px"
-          solo
-          dense
-          background-color="white"
-        >
-        </v-select> 
-        <v-spacer></v-spacer> -->
         <v-col cols="6">
           <v-row>
             <v-text-field
               v-model="search"
-              v-on:keyup.enter="filterAHS"
               hide-details
               background-color="white"
               solo
               dense
               style="width:300px"
-              label="Search"
+              label="search..."
+              @keyup.enter="searchAll"
             >
             </v-text-field>  
             <v-btn 
@@ -98,6 +81,7 @@
                       @change="filterTask(AHS.id_sub)"
                     ></v-select>
                   </v-flex>
+
                   <v-flex sm6 md6 xs6 style="margin-left:10px">
                     <v-select
                       v-model="AHS.id_job"
@@ -578,13 +562,11 @@ import task from './../service/TaskSub'
       details:[],
       detailsAHS:[],
       detailsData:[],
-      detailsTemp:[],
       task : [],
       taskTemp:[],
       filter:[],
       temp:[],
       filterMaterial:[],
-      pagination: [],
 
       AHS:{
         kode:'',
@@ -668,7 +650,6 @@ import task from './../service/TaskSub'
       this.getallItem()
       this.getallItemMaterial()
       this.getTask()
-      this.getTaskTemp()
       this.getallDetails()
       this.getPagination()
       this.getKode()
@@ -705,10 +686,7 @@ import task from './../service/TaskSub'
       overhead()
       {
         let temp = parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100).toFixed(2)
-        console.log(temp)
         this.AHS.total = parseFloat(this.AHS.total_before_overhead) + parseFloat(temp)
-        console.log('AHS Total')
-        console.log(this.AHS.total)
       },
       equipment()
       {
@@ -718,8 +696,6 @@ import task from './../service/TaskSub'
           temp += parseFloat(material.sub_total)
         }
         this.AHS.total_before_overhead = parseFloat(temp) + parseFloat(this.AHS.total_equipment)
-        console.log('Total Before Overhead')
-        console.log(this.AHS.total_before_overhead)
         this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead/100)).toFixed(2)
       },
       async searchAll()
@@ -727,9 +703,14 @@ import task from './../service/TaskSub'
         try{
           if(this.search=='')
             this.getallAHS()
-          else 
-            this.ahs = (await ahsController.search(this.search)).data
-          console.log('search ahs',this.ahs) 
+          else
+          {
+            await ahsController.search(this.search).then(response=>{
+              this.current_page = response.meta.pagination.current_page
+              this.ahs = response.data
+              this.total_pages = response.meta.pagination.total_pages
+            })
+          } 
         }catch(err){
           console.log(err)
         }
@@ -738,13 +719,7 @@ import task from './../service/TaskSub'
       {
         this.ahsAll = (await ahsController.getall()).data
         this.job = (await Controller.getallItem()).data
-        console.log('Job All')
-        console.log(this.job)
-        console.log('AHS All')
-        console.log(this.ahsAll)
         let filterAHS = this.ahsAll.filter(obj=>obj.id_sub == id)
-        console.log('Filter AHS')
-        console.log(filterAHS)
 
         let job = this.job
         for(let ahs of filterAHS)
@@ -752,15 +727,11 @@ import task from './../service/TaskSub'
           job = this.job.filter(obj=>obj.id_job != ahs.id_job)
           this.job = job
         }
-        console.log('Filter Job')
-        console.log(job)
         this.temp = this.job
-        console.log('Result')
-        console.log(this.temp)
+        console.log('Result',this.temp)
       },
       async filterMaterials()
       {
-        console.log('filter materials')
         this.filterMaterial = (await materialController.getallItem()).data
         let m = this.material
         for(let detail of this.details)
@@ -768,7 +739,7 @@ import task from './../service/TaskSub'
           this.filterMaterial = m.filter(obj=>obj.id_material != detail.id_material)
           m = this.filterMaterial
         }
-        console.log(this.filterMaterial)
+        console.log('Filter Materials',this.filterMaterial)
       },
       async itemHandler(item){
         this.details=[]
@@ -777,7 +748,6 @@ import task from './../service/TaskSub'
 
         this.AHS = item
         this.AHS.id_sub = item.id_sub
-        console.log('item',item)
         for(let detail of item.ahs_details.data)
         {
           let each_detail = {
@@ -792,7 +762,6 @@ import task from './../service/TaskSub'
         for(let detail_ahs of item.ahs_details.data)
         {
           let data = this.material.find(obj=>obj.id_material == detail_ahs.id_material)
-          console.log('data',data)
           let each_detail = {
             id_ahs_details: detail_ahs.id_ahs_details,
             id_material : detail_ahs.id_material,
@@ -814,12 +783,7 @@ import task from './../service/TaskSub'
       },
       async addList(item)
       {
-        console.log('Item')
-        console.log(item)
-
         let data = this.material.find(obj=>obj.id_material == item.id_material)
-        console.log('cek price')
-        console.log(data)
         let detail = {
           id_ahs_details : null,
           id_material : item.id_material,
@@ -839,53 +803,46 @@ import task from './../service/TaskSub'
         this.detailsAHS.push(detail_ahs)
         this.sumOfTotal(data,detail)
         this.AHS.total = parseFloat(this.AHS.total_before_overhead+(this.AHS.total_before_overhead * this.AHS.overhead/100)).toFixed(2)
-        console.log('Detail AHS')
-        console.log(this.details)
         this.filterMaterials()
+        console.log('Detail AHS',this.details)
       },
       sumOfTotal(material,detail)
       {
-        console.log('new detail')
-        console.log(detail)
         if(material.status == "material")
           this.AHS.total_material = parseFloat(this.AHS.total_material) + parseFloat(detail.sub_total)
         if(material.status == "labor")
           this.AHS.total_labor = parseFloat(this.AHS.total_labor) + parseFloat(detail.sub_total)
-        console.log(this.AHS.total_material)
-        console.log(this.AHS.total_labor)
+        
         this.AHS.total_before_overhead = parseFloat(this.AHS.total_before_overhead) + parseFloat(detail.sub_total)
-        console.log('Total Before Overhead')
-        console.log(this.AHS.total_before_overhead)
         if(this.AHS.overhead == '0')
           this.AHS.total = this.AHS.total_before_overhead
         else
           this.AHS.total = parseFloat(this.AHS.total_before_overhead) + parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100) 
-        console.log(this.AHS.total)
+        
+        console.log('Total Material',this.AHS.total_material)
+        console.log('Total Labor',this.AHS.total_labor)
+        console.log('Total Before Overhead',this.AHS.total_before_overhead)
+        console.log('Total',this.AHS.total)
       },
       delOfTotal(material,detail)
       {
-        console.log(material)
-        console.log('del of total')
         if(material.status == "material")
           this.AHS.total_material = parseFloat(this.AHS.total_material) - parseFloat(detail.sub_total)
         if(material.status == "labor")
           this.AHS.total_labor = parseFloat(this.AHS.total_labor) - parseFloat(detail.sub_total)
         
         this.AHS.total_before_overhead = parseFloat(this.AHS.total_before_overhead - detail.sub_total).toFixed(2)
-        console.log('Total',this.AHS.total_before_overhead)
         if(this.AHS.overhead == '0')
           this.AHS.total = this.AHS.total_before_overhead
         else
           this.AHS.total = parseFloat(this.AHS.total_before_overhead) + parseFloat(this.AHS.total_before_overhead * this.AHS.overhead/100) 
         console.log('Total Material',this.AHS.total_material)
         console.log('Total Labor',this.AHS.total_labor)
-        console.log('Total Overhead',this.AHS.total)
+        console.log('Total Before Overhead',this.AHS.total_before_overhead)
+        console.log('Total',this.AHS.total)
       },
       editList(data)
       {
-        console.log('Material')
-        console.log(data)
-
         let material = this.material.find(obj=>obj.id_material == data.id_material)
         let detail = this.details.find(obj=>obj.id_material == data.id_material)
         this.delOfTotal(material,data)
@@ -909,6 +866,7 @@ import task from './../service/TaskSub'
         this.detailsAHS.splice(this.detailsAHS.indexOf(data),1,newDetailAHS)
         this.sumOfTotal(material,newDetail)
         this.update()
+
         console.log('Details',this.details)
         console.log('Detail AHS',this.detailsAHS)
       },
@@ -919,8 +877,7 @@ import task from './../service/TaskSub'
         this.details.splice(this.details.indexOf(detail),1)
         this.detailsAHS.splice(this.detailsAHS.indexOf(data),1)
 
-        console.log('This Details Delete')
-        console.log(this.details)
+        console.log('This Details Delete',this.details)
         console.log('This Details',this.detailsAHS)
         this.filterMaterials()
       },
@@ -928,21 +885,6 @@ import task from './../service/TaskSub'
       {
         try{
           this.task = (await task.get()).data
-        }catch(err){
-          console.log(err)
-        }
-      },
-      async getTaskTemp()
-      {
-        try{
-          this.taskTemp = (await task.get()).data
-          let each = {
-            id_sub: -1,
-            name: 'All'
-          }
-          this.taskTemp.push(each)
-          console.log("task")
-          console.log(this.taskTemp)
         }catch(err){
           console.log(err)
         }
@@ -1040,24 +982,24 @@ import task from './../service/TaskSub'
       },
       async updateItem(id){
         try{
-            this.loading = true
-            const payload = {
-              kode            : this.AHS.kode,
-              id_sub          : this.AHS.id_sub,
-              id_job          : this.AHS.id_job,
-              total_labor     : this.AHS.total_labor,
-              total_material  : this.AHS.total_material,
-              total_equipment : this.AHS.total_equipment,
-              total_before_overhead : this.AHS.total_before_overhead,
-              overhead        : this.AHS.overhead,
-              total           : this.AHS.total,
-              detail          : this.details
-            } 
-            await ahsController.updateItem(payload,id).then(()=>{
-              this.close()
-              this.update()
-              this.loading = false
-            })
+          this.loading = true
+          const payload = {
+            kode            : this.AHS.kode,
+            id_sub          : this.AHS.id_sub,
+            id_job          : this.AHS.id_job,
+            total_labor     : this.AHS.total_labor,
+            total_material  : this.AHS.total_material,
+            total_equipment : this.AHS.total_equipment,
+            total_before_overhead : this.AHS.total_before_overhead,
+            overhead        : this.AHS.overhead,
+            total           : this.AHS.total,
+            detail          : this.details
+          } 
+          await ahsController.updateItem(payload,id).then(()=>{
+            this.close()
+            this.update()
+            this.loading = false
+          })
         }catch(err){
           this.loading = false
           console.log(err);
@@ -1080,14 +1022,14 @@ import task from './../service/TaskSub'
       },
       async updateDetail(props){
         try{
-            const payload = {
-              coefficient   : props.item.coefficient,
-            } 
-            await detailController.updateDetail(payload,props.item.id_ahs_details)
+          const payload = {
+            coefficient   : props.item.coefficient,
+          } 
+          await detailController.updateDetail(payload,props.item.id_ahs_details)
             this.getItem(props.item.id_ahs).then(()=>{
-              this.close()
-              this.update()
-            })
+            this.close()
+            this.update()
+          })
         }catch(err){
           console.log(err);
         }

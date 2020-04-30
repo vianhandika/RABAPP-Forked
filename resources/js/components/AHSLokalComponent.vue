@@ -14,13 +14,13 @@
             <v-layout>
               <v-text-field
                 v-model="search"
-                v-on:keyup.enter="filterAHS"
+                @keyup.enter="searchAll"
                 hide-details
                 background-color="white"
                 solo
                 dense
                 style="width:300px"
-                label="Search"
+                label="search..."
               >
               </v-text-field>  
               <v-btn 
@@ -28,7 +28,6 @@
                 color="blue"  
                 dark
                 @click="searchAll"
-                @v-on:keyup.enter="searchAll"
               >
               <v-icon>search</v-icon> 
               </v-btn>
@@ -564,11 +563,6 @@ import materialController from './../service/Material'
       select:-1,
       searchAHS:'',
       id_ahs:'',
-      
-      // id_project:'',
-      // id_structure:'',
-      // id_rab:'',
-      id_structure_details:'',
 
       ahs: [],
       job: [],
@@ -824,8 +818,13 @@ import materialController from './../service/Material'
           if(this.search=='')
             this.getallAHS()
           else 
-            this.ahs = (await rabDetails.search(this.search)).data
-          console.log('search ahs',this.ahs) 
+          {
+            await rabDetails.search(this.search).then(response=>{
+              this.ahs = response.data
+              this.current_page = response.meta.pagination.current_page
+              this.total_pages = response.meta.pagination.total_pages
+            })
+          }
         }catch(err){
           console.log(err)
         }

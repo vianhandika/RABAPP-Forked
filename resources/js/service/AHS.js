@@ -109,7 +109,7 @@ export default {
             Http.get('/api/ahs/show?page='+id,successCallback, errorCallback)
         })
     },
-    search(search,id){
+    search(search){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
                 const data = res.data
@@ -118,7 +118,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/ahs/search/'+search+'/?page='+id, successCallback, errorCallback)
+            Http.get('/api/ahs/search/'+search, successCallback, errorCallback)
         })
     },
     showbyID(id){

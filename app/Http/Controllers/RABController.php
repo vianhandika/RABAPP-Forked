@@ -41,22 +41,25 @@ class RABController extends RestController
 
     public function search($search)
     {
-        // $search = $request->get('search');
-        $project = Project::where('name','LIKE',"%{$search}%")->get();
-        $array=[];
-        foreach($project as $item)
-        {
-            $rab = RAB::where('id_project',$item->id_project)->get();
-            array_push($array,$rab);
-        }
-        $data = $this->paginate($array);
-        return $data;
+        $project = Project::where('name','LIKE',"%{$search}%")->get()->first();
+        // $array=[];
+        // foreach($project as $item)
+        // {
+        //     $rabItem = RAB::where('id_project',$item->id_project)->get();
+        //     array_push($array,$rabItem);
+        // }
+        $rabPaginator = RAB::where('id_project',$project->id_project)->paginate(5);
+        $rab = $this->generateCollection($rabPaginator);
+        $rab->setPaginator(new IlluminatePaginatorAdapter($rabPaginator));
+        $rab = $this->manager->createData($rab); 
+        return $rab->toArray(); 
+        
     }
-
+    
     public function paginate($items, $perPage = 5, $page = null, $options = [])
     {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
-        $items = $items instanceof Collection ? $items : Collection::make($items);
+        $items = new Collection($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
     }
 

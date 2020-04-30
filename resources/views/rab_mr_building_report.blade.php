@@ -127,62 +127,94 @@
                         <tr>
                             <th rowspan="2">No.</th>
                             <th rowspan="2" width="50px">ID. B&T</th>
-                            <th rowspan="2" width="100px">Item</th>
-                            <th>Adj.</th>
-                            <th rowspan="2" width="160px">Uraian Pekerjaan</th>
-                            <th rowspan="2">Koef.</th>
+                            <th rowspan="2" width="90px">Uraian Pekerjaan</th>
                             <th>Vol.</th>
+                            <th rowspan="2" width="100px">Item</th>
                             <th>Sat.</th>
+                            <th rowspan="2">Koef.</th>
+                            <th>Adj.</th>
                             <th colspan="2">Harga</th>
                             <th colspan="2">Harga Terhitung</th>
+                            <th colspan="2">Total</th>
                             <th>Kebutuhan</th>
                             <th>Total Vol.</th>
                         </tr>
                         <tr>
-                            <th>BT.</th>
                             <th>Pek.</th>
-                            <th>Pek.</th>
+                            <th>B&T</th>
+                            <th>B&T</th>
                             <th colspan="2">Bahan</th>
                             <th colspan="2">Bahan</th>
+                            <th colspan="2">Harga Terhitung</th>
                             <th>Bahan</th>
                             <th>Bahan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @php
-                            $i=1;
-                            $total=0;
-                            $count = count($rab);
-                            $total_rab_mr = 0;
-                            $nominal = 0;
-                        @endphp
-                        @foreach ($rab as $rab_data)
-                            @if ($structure_data->id_structure == $rab_data->id_structure)
-                                <tr>
-                                    <td class="bottomRight">{{$i}}</td>
-                                    <td class="bottomRight">{{$rab_data->kode}}</td>
-                                    <td class="bottomRight" align="left">{{$rab_data->materials}}</td>
-                                    <td class="bottomRight" align="center">{{$rab_data->adjustment}}</td>
-                                    <td class="bottomRight" align="left">{{$rab_data->job}}</td>
-                                    <td class="bottomRight">{{$rab_data->coefficient}}</td>
-                                    <td class="bottomRight">{{$rab_data->volume}}</td>
-                                    <td class="bottomRight">{{$rab_data->satuan}}</td>
-                                    <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
-                                    <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->price,2,',','.')}}</td>
-                                    <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
-                                    <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->HSP,2,',','.')}}</td>
+                    @php
+                        $nominal = 0;
+                        $i=1;
+                        $total=0;
+                        $count = count($rab);
+                        $total_rab_mr = 0;
+                        $total_terhitung = 0;
+                    @endphp
+                    @foreach ($rab as $rab_data)
+                        @if ($structure_data->id_structure == $rab_data->id_structure)
+                            <tr>
+                                <td class="bottomRight">{{$i}}</td>
+                                <td class="bottomRight">{{$rab_data->kode}}</td>
+                                <td class="bottomRight" align="left">{{$rab_data->job}}</td>
+                                <td class="bottomRight">{{$rab_data->volume}}</td>
+                                <td class="bottomRight" align="left">{{$rab_data->materials}}</td>
+                                <td class="bottomRight">{{$rab_data->sat_mat}}</td>
+                                <td class="bottomRight">{{$rab_data->coefficient}}</td>
+                                <td class="bottomRight" align="center">{{$rab_data->adjustment}}</td>
+                                <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->price,2,',','.')}}</td>
+                                <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->HSP,2,',','.')}}</td>
+                                @php
+                                    $rab_mr = $rab_data->volume * $rab_data->coefficient * $rab_data->adjustment;
+                                @endphp
+                                <td class="bottomRight" colspan="2"></td>
+                                <td class="bottomRight">{{number_format($rab_mr,2,',','.')}}</td>
+                                <td class="bottomRight"></td>
+                            </tr>
+                            <tr>
+                                @if ($a != $count-1)
                                     @php
-                                        $rab_mr = $rab_data->volume * $rab_data->coefficient * $rab_data->adjustment;
+                                        $total_rab_mr += $rab_mr;  
+                                        $total_terhitung += $rab_data->HSP; 
                                     @endphp
-                                    <td class="bottomRight">{{number_format($rab_mr,2,',','.')}}</td>
-                                    <td class="bottomRight"></td>
-                                </tr>
-                                <tr>
-                                    @if ($a != $count-1)
+                                    @if ($temp[$a]->materials != $temp[$a+1]->materials)
+                                        <td class="bottomRight"></td>
+                                        <td class="bottomRight"></td>
+                                        <td class="bottomRight"></td>
+                                        <td class="bottomRight"></td>
+                                        <td class="bottomRight"></td>
+                                        <td class="bottomRight"></td>
+                                        <td class="bottomRight" colspan="2"></td>
+                                        <td class="bottomRight" colspan="2"></td>
+                                        <td class="bottomRight" colspan="2"></td>
+                                        <td align="left" style="border-bottom: 3px solid black;border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                        <td align="right" style="border-bottom: 3px solid black;border-right: 1px solid black;padding-right:5px">{{number_format($total_terhitung,2,',','.')}}</td>
+                                        <td class="bottomRight"></td>
+                                        <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$total_rab_mr}}</td>
                                         @php
-                                            $total_rab_mr += $rab_mr;   
+                                            $total_rab_mr=0;
+                                            $total_terhitung=0;
                                         @endphp
-                                        @if ($temp[$a]->materials != $temp[$a+1]->materials)
+                                    @else
+                                        <td colspan="16"></td>
+                                    @endif
+                                @else
+                                    @if ($a==$count-1)
+                                        @php
+                                            $total_rab_mr += $rab_mr;  
+                                            $total_terhitung += $rab_data->HSP; 
+                                        @endphp
+                                        @if ($temp[$a-1]->materials == $temp[$a]->materials)
                                             <td class="bottomRight"></td>
                                             <td class="bottomRight"></td>
                                             <td class="bottomRight"></td>
@@ -192,50 +224,30 @@
                                             <td class="bottomRight" colspan="2"></td>
                                             <td class="bottomRight" colspan="2"></td>
                                             <td class="bottomRight" colspan="2"></td>
+                                            <td align="left" style="border-bottom: 3px solid black;border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                            <td align="right" style="border-bottom: 3px solid black;border-right: 1px solid black;padding-right:5px">{{number_format($total_terhitung,2,',','.')}}</td>
                                             <td class="bottomRight"></td>
                                             <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$total_rab_mr}}</td>
                                             @php
                                                 $total_rab_mr=0;
+                                                $total_terhitung=0;
                                             @endphp
                                         @else
-                                            <td colspan="14"></td>
-                                        @endif
-                                    @else
-                                        @if ($a==$count-1)
-                                            @php
-                                                $total_rab_mr += $rab_mr;   
-                                            @endphp
-                                            @if ($temp[$a-1]->materials == $temp[$a]->materials)
-                                                <td class="bottomRight"></td>
-                                                <td class="bottomRight"></td>
-                                                <td class="bottomRight"></td>
-                                                <td class="bottomRight"></td>
-                                                <td class="bottomRight"></td>
-                                                <td class="bottomRight"></td>
-                                                <td class="bottomRight" colspan="2"></td>
-                                                <td class="bottomRight" colspan="2"></td>
-                                                <td class="bottomRight" colspan="2"></td>
-                                                <td class="bottomRight"></td>
-                                                <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$total_rab_mr}}</td>
-                                                @php
-                                                    $total_rab_mr=0;
-                                                @endphp
-                                            @else
-                                                <td colspan="14"></td>
-                                            @endif
+                                            <td colspan="16"></td>
                                         @endif
                                     @endif
-                                </tr>
-                                @php
-                                    $i++;
-                                    $a++;
-                                @endphp    
-                            @endif
-                        @endforeach
-                        <tr>
-                            <td class="bottomRight">-</td>
-                            <td class="bottomRight" colspan="13"></td>
-                        </tr>
+                                @endif
+                            </tr>
+                            @php
+                                $i++;
+                                $a++;
+                            @endphp    
+                        @endif
+                    @endforeach
+                    <tr>
+                        <td class="bottomRight">-</td>
+                        <td class="bottomRight" colspan="15"></td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

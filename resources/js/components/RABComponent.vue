@@ -14,13 +14,13 @@
           <v-layout>
             <v-text-field
               v-model="search"
-              v-on:keyup.enter="filterAHS"
+              @keyup.enter="searchAll"
               hide-details
               background-color="white"
               solo
               dense
               style="width:300px"
-              label="Search"
+              label="search..."
             >
             </v-text-field>  
             <v-btn 
@@ -28,7 +28,6 @@
               color="blue"  
               dark
               @click="searchAll"
-              @v-on:keyup.enter="searchAll"
             >
             <v-icon>search</v-icon> 
             </v-btn>
@@ -107,11 +106,11 @@
                           ></v-select>
                         </v-layout>
                         
-                        <v-layout v-if="dialog7">
+                        <v-layout v-if="dialog7" @click="filterProjects">
                           <v-select
                             v-model="rab.id_project"
                             label="Project"
-                            :items="project"
+                            :items="filterProject"
                             item-text="project"
                             item-value="id_project" 
                             :return-object="false"
@@ -932,7 +931,7 @@
       </v-toolbar>
       
       <v-card elevation="10">
-        <v-list-group v-for="data in filtered" :key="data.id_rab">
+        <v-list-group v-for="data in RAB" :key="data.id_rab">
           <template v-slot:activator>
             <v-list-item-content>
               <v-layout>
@@ -1388,11 +1387,11 @@ import material from './../service/Material'
       this.filterStructures()
     },
     computed: {
-      filtered:function(){
-        return this.RAB.filter((data)=>{    
-          return data.project.toLowerCase().match(this.search);
-        });
-      },
+      // filtered:function(){
+      //   return this.RAB.filter((data)=>{    
+      //     return data.project.toLowerCase().match(this.search);
+      //   });
+      // },
     },
     methods: {
       save(){
@@ -1440,10 +1439,14 @@ import material from './../service/Material'
       {
         try{
           if(this.search=='')
-            this.getallAHS()
-          else 
-            this.ahs = (await ahsController.search(this.search)).data
-          console.log('search ahs',this.ahs) 
+            this.getallRAB()
+          else{
+            await rabController.search(this.search).then(response=>{
+              this.current_page = response.meta.pagination.current_page
+              this.RAB = response.data
+              this.total_pages = response.meta.pagination.total_pages
+            })
+          }
         }catch(err){
           console.log(err)
         }
@@ -1458,13 +1461,14 @@ import material from './../service/Material'
               this.RAB = response.data
               this.total_pages = response.meta.pagination.total_pages
             })
-          }else{
-            await rabController.search(this.search,this.current_page).then(response =>{
-              this.current_page = response.meta.pagination.current_page
-              this.ahs = response.data
-              this.total_pages = response.meta.pagination.total_pages
-            })
           }
+          // else{
+          //   await rabController.search(this.search,this.current_page).then(response =>{
+          //     this.current_page = response.meta.pagination.current_page
+          //     this.ahs = response.data
+          //     this.total_pages = response.meta.pagination.total_pages
+          //   })
+          // }
         }catch(err){
           console.log(err)
         }
@@ -1477,20 +1481,16 @@ import material from './../service/Material'
       },
       async itemEdit(item){
         this.init()
+        // this.filterProjects()
+        this.filterProject = (await Controller.getallItem()).data
         let tempS=[]
         let tempG=[]
         let tempT=[]
         let tempM=[]
 
-        // this.edit = true
         this.rab = item
-        // console.log(item)
         this.rab.id_project = item.id_project
         this.rab.total_rab = item.total
-        console.log('item')
-        console.log(this.rab)
-        console.log('total rab')
-        console.log(this.rab.total_rab)
 
         tempS = item.structure.data
         for(let detailS of tempS)
@@ -1605,11 +1605,9 @@ import material from './../service/Material'
             this.detailDetails.push(detail)
             tempM.push(ahs)
           }
-          console.log('Temp M')
-          console.log(tempM)
+          console.log('Temp M',tempM)
           this.Material=[]
-          console.log('Material')
-          console.log(this.Material)
+          console.log('Material',this.Material)
           for(let material of tempM)
           {
             for(let detail of material.detail.data)
@@ -1666,9 +1664,7 @@ import material from './../service/Material'
       },
       async filterProjects()
       {
-        // let RAB = (await rabController.getall()).data
         let RAB = (await rabController.getall()).data
-        console.log(RAB)
         let project = this.project
         this.filterProject = this.project
         
@@ -1677,20 +1673,19 @@ import material from './../service/Material'
           this.filterProject = project.filter(obj=>obj.id_project != rab.id_project)
           project = this.filterProject
         }
-        console.log(this.filterProject)
+        console.log('Filter Projects',this.filterProject)
       },
       async filterStructures()
       {
         this.structure_data.id_structure = ''
         this.filterStructure = (await structure.get()).data
         let st = (await structure.get()).data
-        console.log("Structure")
-        console.log(this.Structure)
         for(let structure of this.Structure)
         {
           this.filterStructure = st.filter(obj=>obj.id_structure != structure.id_structure) 
           st = this.filterStructure
         }
+        console.log('Filter Structures',this.filterStructure)
       },
       async filterGroups(item)
       {
@@ -1700,15 +1695,12 @@ import material from './../service/Material'
         this.filterGroup = this.sub
         let sub = this.sub
         let Groups = this.Groups.filter(obj=>obj.id_structure == this.structure_unit.id_structure)
-        console.log('Groups')
-        console.log(Groups)
         for(let group of Groups)
         {
           this.filterGroup = sub.filter(obj=>obj.id_group != group.id_groups)
           sub = this.filterGroup
         }
-        console.log('this filter groups')
-        console.log(this.filterGroup)
+        console.log('Filter Groups',this.filterGroup)
       },
       filterTaskGroups(item)
       {
@@ -1723,6 +1715,7 @@ import material from './../service/Material'
           this.filterTaskGroup = type.filter(obj=>obj.id_sub != task.id_sub)
           type = this.filterTaskGroup
         }
+        console.log('Filter Task Group',this.filterTaskGroup)
       },
       filterAHS(item)
       {
@@ -1732,27 +1725,21 @@ import material from './../service/Material'
         this.tasksub_unit = item
         this.filterAHSAll = this.ahs.filter(obj=>obj.id_sub == item.id_sub)
         let Detail = this.details.filter(obj=>obj.id_structure == this.tasksub_unit.id_structure && obj.id_groups == this.tasksub_unit.id_groups && obj.id_sub == this.tasksub_unit.id_sub)
-        console.log('ahs id sub sama')
-        console.log(this.filterAHSAll)
-        console.log('Detail')
-        console.log(Detail)
         for(let detail of Detail)
         {
           this.filterAHSAll = this.filterAHSAll.filter(obj=>obj.id_ahs != detail.id_ahs)
         }
-        console.log('Filter AHS ')
-        console.log(this.filterAHSAll)
+        console.log('Filter AHS',this.filterAHSAll)
       },
       getMaterialDetails(){
         if(this.ahs_lokal.adjusment != '')
         {
           let filterMaterials=[]
-
           let data = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
+
           for(let materials of data.ahs_details.data)
           {
             let each_materials = {
-              // id_ahs        : materials.id_ahs,
               id_job        : data.id_job,    
               id_material   : materials.id_material,
               kode          : materials.kode,
@@ -1766,8 +1753,7 @@ import material from './../service/Material'
             filterMaterials.push(each_materials)
           }
           this.filterMaterialsAll = filterMaterials
-          console.log('ini filter material')
-          console.log(this.filterMaterialsAll)
+          console.log('Filter Materials All',this.filterMaterialsAll)
         }
       },
       async addstructure(item)
@@ -1784,7 +1770,6 @@ import material from './../service/Material'
         }
         this.Structure.push(structure)
         this.detailStructure.push(detail)
-        // this.structure_data.id_structure = ''
 
         console.log('Detail Structure')
         console.log(this.Structure)
@@ -1992,10 +1977,6 @@ import material from './../service/Material'
       {
         let dataS = this.structure.find(obj=>obj.id_structure == this.structure_unit.id_structure)
         let data = this.sub.find(obj=>obj.id_group == this.group_data.id_groups)
-        console.log('hai')
-        console.log(dataS)
-        console.log(data)
-        console.log('end')
         let group = {
           id_group_details : null,
           id_structure  : this.structure_unit.id_structure,
@@ -2010,7 +1991,6 @@ import material from './../service/Material'
         }
         this.Groups.push(group)
         this.detailGroup.push(detail)
-        // this.group_data.id_groups = ''
 
         console.log('Detail Group')
         console.log(this.Groups)
@@ -2019,18 +1999,12 @@ import material from './../service/Material'
       },
       editfloor(detail)
       {
-        console.log('detail')
-        console.log(detail)
-        
         let data        = this.sub.find(obj=>obj.id_group == this.group_data.id_groups)
         let Task        = this.TaskSub.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups)
         let Detail     = this.details.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups)
         let group       = this.Groups.find(obj=>obj.id_groups == detail.id_groups && obj.id_structure == detail.id_structure)
         let DetailTask  = this.detailTask.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups)
         let Details      = this.detailDetails.filter(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups)
-
-        console.log(Details)
-        console.log(Detail)
 
         let each = {
           id_group_details : detail.id_group_details,
@@ -2205,16 +2179,12 @@ import material from './../service/Material'
           task          : data.name
         }
         this.detailTask.splice(this.detailTask.indexOf(detail),1,detail_task)
-        console.log('This Material Before Splice')
-        console.log(this.Material)
-        let temp = []
 
+        let temp = []
         for(let detail of Detail)
         {
           let filterAHS = this.ahs.filter(obj=>obj.id_sub == this.tasksub_data.id_sub)
           let ahs = filterAHS.find(obj=>obj.id_job == detail.id_job && obj.id_sub == this.tasksub_data.id_sub)
-          console.log('AHS Data Replace')
-          console.log(ahs)
           if(ahs != undefined)
           {
             console.log('before')
@@ -2338,29 +2308,29 @@ import material from './../service/Material'
           if(ahs!=null)
           {
             let detailAHS = {
-                id_ahs_lokal : detail.id_ahs_lokal,
-                id_structure : detail.id_structure,
-                id_groups : detail.id_groups,
-                id_sub : this.tasksub_data.id_sub,
-                structure : detail.structure,
-                floor : detail.floor,  
-                task : data.name,
-                id_job : ahs.id_job,
-                id_ahs : ahs.id_ahs,
-                name : ahs.name,
-                id_sub_details : ahs.id_sub_details,
-                total_labor : ahs.total_labor,
-                total_material : ahs.total_material,
-                total_equipment : ahs.total_equipment,
-                HSP_before_overhead: ahs.total_before_overhead,
-                overhead: ahs.overhead, 
-                HSP : ahs.total,
-                volume : detail.volume,
-                adjustment : detail.adjustment,
-                HP : parseFloat(ahs.total * detail.volume).toFixed(2),
-                HP_Adjust : parseFloat(ahs.total * detail.volume * detail.adjustment).toFixed(2),
-              }
-              this.detailDetails.splice(this.detailDetails.indexOf(detail),1,detailAHS)
+              id_ahs_lokal : detail.id_ahs_lokal,
+              id_structure : detail.id_structure,
+              id_groups : detail.id_groups,
+              id_sub : this.tasksub_data.id_sub,
+              structure : detail.structure,
+              floor : detail.floor,  
+              task : data.name,
+              id_job : ahs.id_job,
+              id_ahs : ahs.id_ahs,
+              name : ahs.name,
+              id_sub_details : ahs.id_sub_details,
+              total_labor : ahs.total_labor,
+              total_material : ahs.total_material,
+              total_equipment : ahs.total_equipment,
+              HSP_before_overhead: ahs.total_before_overhead,
+              overhead: ahs.overhead, 
+              HSP : ahs.total,
+              volume : detail.volume,
+              adjustment : detail.adjustment,
+              HP : parseFloat(ahs.total * detail.volume).toFixed(2),
+              HP_Adjust : parseFloat(ahs.total * detail.volume * detail.adjustment).toFixed(2),
+            }
+            this.detailDetails.splice(this.detailDetails.indexOf(detail),1,detailAHS)
           }else{
             this.detailDetails.splice(this.detailDetails.indexOf(detail),1)
           }
@@ -2373,8 +2343,6 @@ import material from './../service/Material'
         this.editList = false
       },
       deletetasksub(index){
-        console.log('index')
-        console.log(index)
         let tasks = this.detailTask.find(obj=>obj.id_groups == index.id_groups && obj.id_structure == index.id_structure && obj.id_sub == index.id_sub)
         let Details = this.details.filter(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub)
         let Detail = this.detailDetails.filter(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub)
@@ -2395,8 +2363,6 @@ import material from './../service/Material'
       async addList()
       {
         let data = this.filterAHSAll.find(obj=>obj.id_ahs == this.AHS.id_ahs)
-        console.log('hai ahs')
-        console.log(data)
         let structure = this.structure.find(obj=>obj.id_structure == this.tasksub_unit.id_structure)
         let floor = this.sub.find(obj=>obj.id_group == this.tasksub_unit.id_groups)
         let tasksub = this.type.find(obj=>obj.id_sub == this.tasksub_unit.id_sub)
@@ -2496,18 +2462,9 @@ import material from './../service/Material'
       },
       editAHS(detail)
       {
-        console.log('id_ahs')
-        console.log(this.ahs_lokal.id_ahs)
-        console.log('Item')
-        console.log(detail)
         let data = this.ahs.find(obj=>obj.id_ahs == this.ahs_lokal.id_ahs)
-        console.log('AHS')
-        console.log(data)
         let detail_ahs = this.details.find(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub && obj.id_ahs == detail.id_ahs) 
         let detail_AHS = this.detailDetails.find(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub && obj.id_ahs == detail.id_ahs) 
-        console.log('Index')
-        console.log(this.detailDetails.indexOf(detail))
-        console.log(this.details.indexOf(detail_ahs))
 
         let ahs = {
           id_ahs_lokal: detail.id_ahs_lokal,
@@ -2609,8 +2566,6 @@ import material from './../service/Material'
               sub_total     : Temp[j].sub_total,
               adjustment    : Temp[j].adjustment
             }
-            console.log('Data')
-            console.log(data)
             this.Material.splice(this.Material.indexOf(material),1,data)
             Temp.splice(j,1)
             j++
@@ -2738,8 +2693,6 @@ import material from './../service/Material'
         {
           this.Material.splice(this.Material.indexOf(each),1)
         }
-        // this.AHS = Object.assign({},this.AHSDefault)
-        // this.ahs_lokal = Object.assign({},this.AHSLokalDefault)
         console.log('Detail Structure')
         console.log(this.Structure)
         console.log('Detail Group')
@@ -2857,7 +2810,6 @@ import material from './../service/Material'
           }
           await rabController.addAllItem(payload).then(response=>{
             this.getallRAB()
-            // this.getall()
             this.loading = false
             this.close()
             this.save()
@@ -2993,11 +2945,7 @@ import material from './../service/Material'
 .marginBorder{
   margin-left: 10px;
 }
-.borderRab{
-  border-left: 4px solid #1565C0
-}
 .borderStructure{
-  /* margin-left: 10px; */
   border-left: 4px solid #0091EA;
 }
 .borderFloor{
@@ -3011,12 +2959,5 @@ import material from './../service/Material'
 .borderDetail{
  margin-left: 30px;
  border-left: 4px solid #18FFFF
-}
-.dialogEdit{
-  min-width: 36px;
-  top: 401px;
-  left: 392px;
-  transform-origin: right top;
-  z-index: 204;
 }
 </style>

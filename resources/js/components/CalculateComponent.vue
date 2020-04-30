@@ -9,14 +9,17 @@
             vertical
           ></v-divider>
 
-          <v-text-field
-            v-model="search"
-            append-icon="search"
-            label="Search"
-            single-line
-            hide-details
-          >
-          </v-text-field>
+          <v-col cols="5">
+            <v-text-field
+              v-model="search"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+            >
+            </v-text-field>
+          </v-col>
+          
         </v-toolbar>
         <v-card elevation="10">
           <template>
@@ -30,7 +33,7 @@
                     label="Project"
                     append-icon="expand_more"
                     v-model="id_project"
-                    @change="filterStructures"
+                    @input="filterStructures"
                   >
                   </v-select>
                 </v-col>
@@ -42,7 +45,7 @@
                     item-value="id_structure"
                     label="Building"
                     append-icon="expand_more"
-                    @change="filterGroups"
+                    @input="filterGroups"
                   >
                   </v-select>
                 </v-col>
@@ -54,7 +57,7 @@
                     label="Floor"
                     item-value="id_groups"
                     append-icon="expand_more"
-                    @change="filterTask"
+                    @input="filterTask"
                   >
                   </v-select>
                 </v-col>
@@ -67,7 +70,7 @@
                     item-value="id_sub"
                     label="Task Group"
                     append-icon="expand_more"
-                    @change="filterAHS"
+                    @input="filterAHS"
                   >
                   </v-select>
                 </v-col>
@@ -106,7 +109,7 @@
                 </v-col>
               </v-row>
 
-              <v-list-group v-for="ahs in AHSData" :key="ahs.id_ahs_lokal">
+              <v-list-group v-for="ahs in filtered" :key="ahs.index">
                 <template v-slot:activator>
                   <v-list-item-content>
                     <v-layout>
@@ -162,13 +165,13 @@
                       <v-toolbar-title>Edit Calculate</v-toolbar-title>
                       <v-spacer></v-spacer>
                       <v-toolbar-items>
-                        <v-btn dark text @click="editcalculate(AHS.id_ahs_lokal)" :loading="loading">Save</v-btn>
+                        <v-btn dark text @click="editcalculate(AHS.id_calculate)" :loading="loading">Save</v-btn>
                       </v-toolbar-items>
                     </v-toolbar>
                     
                     <template>
                       <v-card>
-                        <v-form ref="form" v-model="valid" lazy-validation>
+                        <v-form ref="form">
                           <v-card-text>
                             <v-layout>
                               <v-flex sm6 md6 xs6>      
@@ -225,14 +228,7 @@
                                   v-model="AHS.volume" 
                                   label="Volume"
                                   type="number"
-                                >
-                                </v-text-field>
-                              </v-flex>
-                              <v-flex sm3 md3 xs3a style="margin-left:10px">
-                                <v-text-field 
-                                  v-model="AHS.adjustment" 
-                                  label="Adjustment"
-                                  type="number"
+                                  @change="volume"
                                 >
                                 </v-text-field>
                               </v-flex>
@@ -452,17 +448,13 @@
 
 <script>
 import rabDetails from './../service/AHSLokal'
-import job from './../service/Job'
 import rab from './../service/RAB'
 import details from './../service/Details'
-import ahsLokalDetails from './../service/AHSLokalDetails'
 import ahs from './../service/AHS'
-import detailController from './../service/AHSLokalDetails'
 import materialController from './../service/Material'
 
   export default {
     data: () => ({
-      valid:true,
       dialogedit:false,
       detailTable: false,
       loading: false,
@@ -473,11 +465,10 @@ import materialController from './../service/Material'
       id_sub:'',
       id_ahs:'',
       id_project:'',
-      id_job:'',
       volume_new:0,
+      id:1,
 
       ahs: [],
-      job:[],
       rab:[],
       detailStructure:[],
       detailGroup:[],
@@ -504,25 +495,23 @@ import materialController from './../service/Material'
         {text: 'Coefficient', align: 'center', sortable: false, value: 'coefficient'},
         {text: 'Adj BT', align: 'center', sortable: false, value: 'adjustment'},
         {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total', },
-        // {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total_lokal'},
         {text: 'Requirements M/L', align: 'center', sortable: false, value: 'requirements_ml'},
         {text: 'Unit', align: 'center', sortable: false, value: 'satuan'},
       ],
     }),
     mounted(){
       this.getallAHS()
-      this.getJob()
       this.getRAB()
       this.getMaterial()
     },
     computed: {
       filtered:function(){
-        return this.ahs.filter((data)=>{
+        return this.AHSData.filter((data)=>{
             if(this.search == '')
               return data
             else{
-              return (data.name.match(this.search) || 
-                data.project.match(this.search)) 
+              return (data.name.toLowerCase().match(this.search) || 
+                data.project.toLowerCase().match(this.search)) 
             }
         });
       }
@@ -544,48 +533,64 @@ import materialController from './../service/Material'
           console.log(err)
         }
       },
-      itemHandler(ahs)
-      {
-        this.AHS = ahs
-        this.index = this.calculateTemp.indexOf(ahs)
-      },
       async itemEdit(item)
       {
-        console.log('Item Edit',item)
         this.Material = []
-        let ahsLokal = this.AHSData.find(obj=>obj.id_ahs_lokal == item.id_ahs_lokal)
-        console.log('ahs lokal',ahsLokal)
+        let ahsLokal = this.AHSData.find(obj=>obj.id_calculate == item.id_calculate)
         this.AHS = ahsLokal
-        console.log('AHS Lokal',this.AHS)
-        
         this.Material = this.AHS.detail.data
-        // (await detailController.getItem(this.AHS.id_ahs_lokal)).data
+
+        console.log('AHS Lokal',this.AHS)
         console.log('Material',this.Material)
       },
       deletecalculate(ahs)
       {
         this.AHSData.splice(this.AHSData.indexOf(ahs),1)
-        console.log('delete calculate',this.AHSData)
+      },
+      volume()
+      {
+        this.AHS.HP = this.AHS.HSP * this.AHS.volume
+        this.AHS.HP_Adjust = this.AHS.HP * this.AHS.adjustment
       },
       editcalculate(id)
       {
         this.loading = true
-        let data = this.AHSData.find(obj=>obj.id_ahs_lokal == id)
-        console.log('Edit AHS Data',data)
-        this.AHS.HP = this.AHS.HSP * this.AHS.volume
-        this.AHS.HP_Adjust = this.AHS.HP * this.AHS.adjustment
-        this.AHSData.splice(this.AHSData.indexOf(data),1,this.AHS)
-        console.log('After Edit',this.AHSData)
-        this.AHS.detail.data = this.Material
+        let data = this.AHSData.find(obj=>obj.id_calculate == id)
+        data.HP = this.AHS.HP
+        data.HP_Adjust = this.AHS.HP_Adjust 
+        data.HSP = this.AHS.HSP
+        data.HSP_before_overhead = this.AHS.HSP_before_overhead
+        data.total_labor = this.AHS.total_labor
+        data.total_material = this.AHS.total_material
+        data.total_equipment = this.AHS.total_equipment
+        data.volume = this.AHS.volume        
+        
         this.dialogedit = false
+        this.loading=false
+        
+        console.log('Edit AHS Data',data)
+        console.log('AHS Data',this.AHSData)
       },
-      addcalculate()
+      async addcalculate()
       {
-        let ahs_lokal = this.ahs.find(obj=>obj.id_ahs == this.id_ahs)
-        console.log('ahs lokal after search',ahs_lokal)
-        console.log('ahs_lokal.detail.data',ahs_lokal.detail.data)
-        let i=1
+        let ahs_lokal = this.detailDetails.find(obj=>obj.id_ahs == this.id_ahs)
+        for(let data of ahs_lokal.detail.data)
+        {
+          let newD = {
+            id_calculate: this.id,
+            id_material: data.id_material,
+            status: data.status,
+            adjustment: data.adjustment,
+            sub_total: data.sub_total,
+            name: data.name, 
+            price: data.price,
+            satuan: data.satuan,
+            coefficient: data.coefficient
+          }
+          ahs_lokal.detail.data.splice(ahs_lokal.detail.data.indexOf(data),1,newD)
+        }
         let newData = {
+          id_calculate: this.id,
           id_ahs_lokal: ahs_lokal.id_ahs_lokal,
           id_sub_details: ahs_lokal.id_sub_details,
           overhead: ahs_lokal.overhead,
@@ -616,17 +621,17 @@ import materialController from './../service/Material'
           kode: ahs_lokal.kode,
           detail: ahs_lokal.detail,
         }
-        this.AHSData.push(newData)   
-        console.log('ahs lokal',newData)
-        console.log('calculte Temp',this.AHSData)
+        this.AHSData.push(newData)
+        this.id++;   
+        this.ahs = (await rabDetails.get()).data
+        console.log('AHS Data',this.AHSData)
+        console.log('AHS Lokal After Edit',this.ahs)
       },
       updateAdjustmentLokal(item)
       {
-        console.log('Material Before Edit',this.Material)
-        console.log('Item',item)
         let materialData = this.material.find(obj=>obj.id_material == item.id_material)
         item.sub_total = item.adjustment * materialData.price * item.coefficient
-        console.log('Material After Edit', this.Material)
+        
         this.AHS.HSP_before_overhead=0
         this.AHS.total_material=0
         this.AHS.total_labor=0
@@ -640,89 +645,39 @@ import materialController from './../service/Material'
             this.AHS.total_material += data.sub_total
           this.AHS.HSP_before_overhead += data.sub_total
         }
-        console.log('Total Material',this.AHS.total_material)
-        console.log('Total Labor',this.AHS.total_labor)
+        
         this.AHS.HSP_before_overhead = parseFloat(this.AHS.HSP_before_overhead) + parseFloat(this.AHS.total_equipment)
         this.AHS.HSP = this.AHS.HSP_before_overhead + (this.AHS.HSP_before_overhead * this.AHS.overhead/100)
-        console.log('HSP Before Overhead',this.AHS.HSP_before_overhead)
-        console.log('HSP',this.AHS.HSP)
         this.AHS.HP = this.AHS.HSP * this.AHS.volume
         this.AHS.HP_Adjust = this.AHS.HP * this.AHS.adjustment
-        console.log('HP',this.AHS.HP)
-        console.log('HP_Adjust',this.AHS.HP_Adjust)
+        console.log('AHS',this.AHS)
         this.update()
       },
       updateAdjustmentLokalM(item)
       {
-        console.log('Item',item)
-        console.log('ahs',ahs)
-        let ahs_lokal = this.AHSData.find(obj=>obj.id_ahs_lokal == item.id_ahs_lokal)
-        console.log('AHS Lokal Before Edit',ahs_lokal)
-        console.log('AHS Detail',ahs_lokal.detail.data)
-        
+        let ahs_lokal = this.AHSData.find(obj=>obj.id_calculate == item.id_calculate)
         let materialData = this.material.find(obj=>obj.id_material == item.id_material)
+        
         item.sub_total = item.adjustment * materialData.price * item.coefficient
-        console.log('Material After Edit', ahs_lokal.detail.data)
-        let HSP_before_overhead=0
-        let total_material=0
-        let total_labor=0
+        ahs_lokal.HSP_before_overhead=0
+        ahs_lokal.total_material=0
+        ahs_lokal.total_labor=0
 
         for(let data of ahs_lokal.detail.data)
         {
           let materialData = this.material.find(obj=>obj.id_material == data.id_material)
           if(materialData.status == 'labor')
-            total_labor += data.sub_total
+            ahs_lokal.total_labor += data.sub_total
           else
-            total_material += data.sub_total
-          HSP_before_overhead += data.sub_total
+            ahs_lokal.total_material += data.sub_total
+          ahs_lokal.HSP_before_overhead += data.sub_total
         }
-        
-        HSP_before_overhead = parseFloat(HSP_before_overhead) + parseFloat(ahs_lokal.total_equipment)
-        let HSP = HSP_before_overhead + (HSP_before_overhead * ahs_lokal.overhead/100)
-        let HP = HSP * ahs_lokal.volume
-        let HP_Adjust = HP * ahs_lokal.adjustment
-
-        console.log('Total Material',total_material)
-        console.log('Total Labor',total_labor)
-        console.log('HSP Before Overhead',HSP_before_overhead)
-        console.log('HSP',HSP)
-        console.log('HP',HP)
-        console.log('HP_Adjust',HP_Adjust)
-
-        let newEdit = {
-          id_ahs_lokal: ahs_lokal.id_ahs_lokal,
-          id_sub_details: ahs_lokal.id_sub_details,
-          overhead: ahs_lokal.overhead,
-          adjustment: ahs_lokal.adjustment,
-          id_job: ahs_lokal.id_job,
-          name: ahs_lokal.name,
-          satuan: ahs_lokal.satuan,
-          status: ahs_lokal.status,
-          id_project: ahs_lokal.id_project,
-          project: ahs_lokal.project,
-          name_sub: ahs_lokal.name_sub,
-          id_structure: ahs_lokal.id_structure,
-          id_groups: ahs_lokal.id_groups,
-          id_sub: ahs_lokal.id_sub,
-          structure: ahs_lokal.structure,
-          floor: ahs_lokal.floor,
-          task: ahs_lokal.task,
-          id_rab: ahs_lokal.id_rab,
-          HP: HP,
-          HP_Adjust: HP_Adjust,
-          volume: ahs_lokal.volume,
-          total_labor: total_labor,
-          total_material: total_material,
-          total_equipment: ahs_lokal.total_equipment,
-          HSP_before_overhead: HSP_before_overhead,
-          HSP: HSP,
-          id_ahs: ahs_lokal.id_ahs,
-          kode: ahs_lokal.kode,
-          detail: ahs_lokal.detail,
-        }
-        this.AHSData.splice(this.AHSData.indexOf(ahs_lokal),1,newEdit)
-        console.log('AHS Data After Edit',this.AHSData)
+        ahs_lokal.HSP_before_overhead = parseFloat(ahs_lokal.HSP_before_overhead) + parseFloat(ahs_lokal.total_equipment)
+        ahs_lokal.HSP = ahs_lokal.HSP_before_overhead + (ahs_lokal.HSP_before_overhead * ahs_lokal.overhead/100)
+        ahs_lokal.HP = ahs_lokal.HSP * ahs_lokal.volume
+        ahs_lokal.HP_Adjust = ahs_lokal.HP * ahs_lokal.adjustment
         this.update()
+        console.log('AHS After Edit',this.AHSData)
       },
       equipment()
       {
@@ -744,9 +699,6 @@ import materialController from './../service/Material'
         this.detailGroup=[]
         this.detailTask=[]
         this.detailDetails=[]
-        // this.AHS = Object.assign({},this.AHSDefault)
-        console.log('id project',this.id_project)
-
         let rab = this.rab.find(obj=>obj.id_project == this.id_project)
         console.log('item',rab)
         this.detailStructure = (await details.show(rab.id_rab)).data
@@ -822,14 +774,6 @@ import materialController from './../service/Material'
       {
         try{
           this.ahs = (await rabDetails.get()).data
-        }catch(err){
-          console.log(err)
-        }
-      },
-      async getJob()
-      {
-        try{
-          this.job = (await job.getallItem()).data
         }catch(err){
           console.log(err)
         }

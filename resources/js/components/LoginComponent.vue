@@ -33,6 +33,7 @@
                     type="text"
                     color="blue"
                     :rules="usernameRules"
+                    @keyup.enter="login"
                   ></v-text-field>
 
                   <v-text-field
@@ -44,6 +45,7 @@
                     type="password"
                     color="blue"
                     :rules="passwordRules"
+                    @keyup.enter="login"
                   ></v-text-field>
                 </v-form>
               </v-card-text>
@@ -110,7 +112,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
       async login () {
         try{
           const payload = {
-            email : this.username,
+            name : this.username,
             password : this.password
           }
           this.load = true

@@ -19,7 +19,7 @@
 
                   <v-list-item-content>
                     <div class="overline text-right">Project</div>
-                    <v-list-item-title class="headline mb-1 text-right" v-model="countP">{{countP}}</v-list-item-title>
+                    <v-list-item-title class="headline mb-1 text-right">{{countP}}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
                 </v-list-item>
@@ -44,7 +44,7 @@
 
                   <v-list-item-content>
                     <div class="overline text-right">Materials/Labor</div>
-                    <v-list-item-title class="headline mb-1 text-right" v-model="countM">{{countM}}</v-list-item-title>
+                    <v-list-item-title class="headline mb-1 text-right">{{countM}}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
                 </v-list-item>
@@ -69,7 +69,7 @@
 
                   <v-list-item-content>
                     <div class="overline text-right">AHS Master</div>
-                    <v-list-item-title class="headline mb-1 text-right" v-model="countahs">{{countahs}}</v-list-item-title>
+                    <v-list-item-title class="headline mb-1 text-right">{{countahs}}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
                 </v-list-item>
@@ -94,7 +94,7 @@
 
                   <v-list-item-content>
                     <div class="overline text-right">RAB</div>
-                    <v-list-item-title class="headline mb-1 text-right" v-model="countrab">{{countrab}}</v-list-item-title>
+                    <v-list-item-title class="headline mb-1 text-right">{{countrab}}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
                 </v-list-item>
@@ -148,6 +148,7 @@
                       single-line
                       hide details    
                       color="green darken-3"
+                      @keyup.enter="searchRAB"
                     >
                     </v-text-field>
                   </v-col>
@@ -196,7 +197,7 @@
                 </v-row>
                 <!-- RAB Report -->
                 <v-list v-if="select==null">
-                  <v-list-item v-for="data in filtered" :key="data.id_rab">
+                  <v-list-item v-for="data in RAB" :key="data.id_rab">
                     <v-list-item-avatar color="green darken-3">
                       <v-icon dark @click="generateRAB(data.id_rab)">picture_as_pdf</v-icon>
                     </v-list-item-avatar>
@@ -220,7 +221,12 @@
                     <v-list-item-content>
                       <v-list-item-subtitle align="right">Nominal</v-list-item-subtitle>
                       <v-layout>
-                        <v-list-item-title align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on" align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                          </template>
+                          <span>{{ Number(data.total).toLocaleString('id-ID') }}</span>
+                        </v-tooltip>
                       </v-layout>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
@@ -243,7 +249,7 @@
                 </div>
                 <!-- BQ Report -->
                 <v-list v-if="select=='1'">
-                  <v-list-item v-for="data in filtered" :key="data.id_rab">
+                  <v-list-item v-for="data in RAB" :key="data.id_rab">
                     <v-list-item-avatar color="green">
                       <v-icon dark @click="generaterabBQ(data.id_rab)">picture_as_pdf</v-icon>
                     </v-list-item-avatar>
@@ -267,7 +273,12 @@
                     <v-list-item-content>
                       <v-list-item-subtitle align="right">Nominal</v-list-item-subtitle>
                       <v-layout>
-                        <v-list-item-title align="right">0</v-list-item-title>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on" align="right">0</v-list-item-title>
+                          </template>
+                          <span>0</span>
+                        </v-tooltip>
                       </v-layout>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
@@ -290,7 +301,7 @@
                 </div>
                 <!-- Materials Requirements Report -->
                 <v-list v-if="select=='2'">
-                  <v-list-item v-for="data in filtered" :key="data.id_rab">
+                  <v-list-item v-for="data in RAB" :key="data.id_rab">
                     <v-list-item-avatar color="green accent-4">
                       <v-icon dark @click="generaterabMR(data.id_rab)">picture_as_pdf</v-icon>
                     </v-list-item-avatar>
@@ -314,7 +325,12 @@
                     <v-list-item-content>
                       <v-list-item-subtitle align="right">Nominal</v-list-item-subtitle>
                       <v-layout>
-                        <v-list-item-title align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on" align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                          </template>
+                          <span>{{ Number(data.total).toLocaleString('id-ID') }}</span>
+                        </v-tooltip>
                       </v-layout>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
@@ -337,7 +353,7 @@
                 </div>
                 <!-- RAP Report -->
                 <v-list v-if="select=='3'">
-                  <v-list-item v-for="data in filtered" :key="data.id_rab">
+                  <v-list-item v-for="data in RAB" :key="data.id_rab">
                     <v-list-item-avatar color="green darken-2">
                       <v-icon dark @click="generaterabRAP(data.id_rab)">picture_as_pdf</v-icon>
                     </v-list-item-avatar>
@@ -361,7 +377,12 @@
                     <v-list-item-content>
                       <v-list-item-subtitle align="right">Nominal</v-list-item-subtitle>
                       <v-layout>
-                        <v-list-item-title align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on" align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                          </template>
+                          <span>{{ Number(data.total).toLocaleString('id-ID') }}</span>
+                        </v-tooltip>
                       </v-layout>
                       <div><v-divider></v-divider></div>
                     </v-list-item-content>
@@ -419,13 +440,26 @@
                       single-line
                       hide details    
                       color="blue darken-3"
+                      @keyup.enter="searchAllAHS"
+                      v-if="selectahs==null"
+                    >
+                    </v-text-field>
+                    <v-text-field
+                      v-model="searchAHSLokal"
+                      append-icon="search"
+                      label="Search"
+                      single-line
+                      hide details    
+                      color="blue darken-3"
+                      @keyup.enter="searchAllAHSLokal"
+                      v-if="selectahs==1"
                     >
                     </v-text-field>
                   </v-col>
                 </v-row>
                 <!-- AHS -->
                 <v-list v-if="selectahs==null">
-                  <v-list-item v-for="data in filteredAHS" :key="data.id_ahs">
+                  <v-list-item v-for="data in ahs" :key="data.id_ahs">
                     <v-list-item-avatar color="blue darken-3">
                         <v-btn icon dark @click="generateAHS(data.id_ahs)" :loading="load">
                           <v-icon>picture_as_pdf</v-icon> 
@@ -433,17 +467,34 @@
                     </v-list-item-avatar>
                     <v-list-item-content>
                       <v-list-item-subtitle>{{data.kode}}</v-list-item-subtitle>
-                      <v-list-item-title>{{data.name}}</v-list-item-title>
-                      <div><v-divider></v-divider></div>
-                    </v-list-item-content>
-                    <v-list-item-content align="right">
-                      <v-list-item-subtitle>HSP</v-list-item-subtitle>
                       <v-layout>
-                        <v-list-item-title style="padding-left:30px">Rp.</v-list-item-title>
-                        <v-list-item-title align="right">{{ Number(data.total).toLocaleString('id-ID')}}</v-list-item-title>  
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on">{{ data.name }}</v-list-item-title>
+                          </template>
+                          <span>{{ data.name }}</span>
+                        </v-tooltip>
                       </v-layout>
                       <div><v-divider></v-divider></div>
-                    </v-list-item-content>                    
+                    </v-list-item-content>
+
+                    <v-list-item-content>
+                      <v-list-item-subtitle style="text-color:white">.</v-list-item-subtitle>
+                      <v-list-item-title align="right">Rp.</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content>
+                      <v-list-item-subtitle align="right">HSP</v-list-item-subtitle>
+                      <v-layout>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on" align="right">{{ Number(data.total).toLocaleString('id-ID') }}</v-list-item-title>
+                          </template>
+                          <span>{{ Number(data.total).toLocaleString('id-ID') }}</span>
+                        </v-tooltip>
+                      </v-layout>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
                   </v-list-item>
                 </v-list>
                 <div>
@@ -463,7 +514,7 @@
               </div>
               <!-- AHS Lokal  -->
               <v-list v-if="selectahs=='1'">
-                <v-list-item v-for="data in filteredAHSLokal" :key="data.id_ahs_lokal">
+                <v-list-item v-for="data in ahs_lokal" :key="data.id_ahs_lokal">
                   <v-list-item-avatar color="light-blue accent-4">
                       <v-btn icon dark @click="generateAHSLokal(data.id_ahs_lokal)" :loading="load">
                         <v-icon>picture_as_pdf</v-icon> 
@@ -471,17 +522,34 @@
                   </v-list-item-avatar>
                   <v-list-item-content>
                     <v-list-item-subtitle>{{data.project}}</v-list-item-subtitle>
-                    <v-list-item-title>{{data.name}}</v-list-item-title>
+                    <v-layout>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on">{{ data.name }}</v-list-item-title>
+                          </template>
+                          <span>{{ data.name }}</span>
+                        </v-tooltip>
+                      </v-layout>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content>
-                  <v-list-item-content align="right">
-                    <v-list-item-subtitle>HSP</v-list-item-subtitle>
-                    <v-layout>
-                      <v-list-item-title style="padding-left:30px">Rp.</v-list-item-title>
-                      <v-list-item-title align="right">{{ Number(data.HP_Adjust).toLocaleString('id-ID')}}</v-list-item-title>  
-                    </v-layout>
-                    <div><v-divider></v-divider></div>
-                  </v-list-item-content>                    
+
+                  <v-list-item-content>
+                      <v-list-item-subtitle style="text-color:white">.</v-list-item-subtitle>
+                      <v-list-item-title align="right">Rp.</v-list-item-title>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
+                    <v-list-item-content>
+                      <v-list-item-subtitle align="right">HSP</v-list-item-subtitle>
+                      <v-layout>
+                        <v-tooltip bottom>
+                          <template v-slot:activator="{ on }">
+                            <v-list-item-title v-on="on" align="right">{{ Number(data.HP_Adjust).toLocaleString('id-ID') }}</v-list-item-title>
+                          </template>
+                          <span>{{ Number(data.HP_Adjust).toLocaleString('id-ID') }}</span>
+                        </v-tooltip>
+                      </v-layout>
+                      <div><v-divider></v-divider></div>
+                    </v-list-item-content>
                 </v-list-item>
               </v-list>
               <div>
@@ -518,7 +586,6 @@ import Controller from './../service/Project'
 import RAB from './../service/RAB'
 import ahs from './../service/AHS'
 import ahsLokal from './../service/AHSLokal'
-// import report from './../service/Reports'
 import Http from '../service/Http'
 import project from './../service/Project'
 import materials from './../service/Material'
@@ -531,9 +598,7 @@ import materials from './../service/Material'
       current_page_ahs: 1,
       current_page_ahs_lokal: 1,
       current_page_rab: 1,
-      current_page_bq: 1,
       total_pages_rab: 0,
-      total_pages_bq: 0,
       total_pages_ahs: 0,
       total_pages_ahs_lokal: 0,
 
@@ -600,21 +665,6 @@ import materials from './../service/Material'
           error: state => state.Token.error,
           token: state => state.Token.token,
         }),
-      filtered:function(){
-        return this.RAB.filter((data)=>{
-          return data.project.toLowerCase().match(this.search);
-        });
-      },
-      filteredAHS:function(){
-        return this.ahs.filter((data)=>{
-          return data.name.toLowerCase().match(this.searchAHS)
-        })
-      },
-      filteredAHSLokal:function(){
-        return this.ahs_lokal.filter((data)=>{
-          return data.name.toLowerCase().match(this.searchAHSLokal)
-        })
-      }
     },
     methods: {
       ...mapActions({
@@ -668,7 +718,7 @@ import materials from './../service/Material'
       async getPagination()
       {
         try{
-            await RAB.pagination(this.current_page_rab).then(response => {
+          await RAB.pagination(this.current_page_rab).then(response => {
             this.current_page_rab = response.meta.pagination.current_page
             this.RAB = response.data
             this.total_pages_rab = response.meta.pagination.total_pages
@@ -680,7 +730,7 @@ import materials from './../service/Material'
       async getPaginationAHS()
       {
         try{
-            await ahs.getahswodetails(this.current_page_ahs).then(response => {
+          await ahs.getahswodetails(this.current_page_ahs).then(response => {
             this.current_page_ahs = response.meta.pagination.current_page
             console.log(this.current_page_ahs)
             this.ahs = response.data
@@ -780,16 +830,61 @@ import materials from './../service/Material'
           this.overlay = false
           console.log(err)
         }
-      }
+      },
+      async searchAllAHS()
+      {
+        try{
+          if(this.searchAHS=='')
+            this.getPaginationAHS()
+          else
+          {
+            await ahs.search(this.searchAHS).then(response=>{
+              this.current_page_ahs = response.meta.pagination.current_page
+              this.ahs = response.data
+              this.total_pages_ahs = response.meta.pagination.total_pages
+            })
+          } 
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async searchAllAHSLokal()
+      {
+        try{
+          if(this.searchAHSLokal=='')
+            this.getPaginationAHSLokal()
+          else
+          {
+            await ahsLokal.search(this.searchAHSLokal).then(response=>{
+              this.current_page_ahs_lokal = response.meta.pagination.current_page
+              this.ahs_lokal = response.data
+              this.total_pages_ahs_lokal = response.meta.pagination.total_pages
+            })
+          } 
+        }catch(err){
+          console.log(err)
+        }
+      },
+      async searchRAB()
+      {
+        try{
+          if(this.search=='')
+            this.getPagination()
+          else
+          {
+            await RAB.search(this.search).then(response=>{
+              this.current_page_rab = response.meta.pagination.current_page
+              this.RAB = response.data
+              this.total_pages_rab = response.meta.pagination.total_pages
+            })
+          } 
+        }catch(err){
+          console.log(err)
+        }
+      },
     }
   }
 </script>
 
 <style>
-.border{
-  border-left: 4px solid rgb(4, 110, 180);
-}
-.rounded{
-  border-radius: 30px
-}
 </style>

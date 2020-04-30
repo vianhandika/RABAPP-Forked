@@ -2,22 +2,18 @@
     <head>
         <title>Rencana Anggaran Biaya (BQ) {{$rab[0]->name}}</title>
         <style>
-            /* .border{
-                border: 1px solid black;
-            } */
             .title{
                 border-top: 1px solid black;
                 border-bottom: 1px solid black;
                 font-size: 35px;
                 text-align: right;
-                /* margin-top: 100px */
                 font-family: Calibri, sans-serif;
             }
             .table-section table{
                 border: 3px solid black;
                 text-align: center;
                 border-collapse: collapse;
-                font-size: 12px;
+                font-size: 11px;
                 font-family: Calibri, sans-serif;
                 width: 700px;
                 margin-top: 10px;
@@ -28,7 +24,6 @@
                 font-family: Calibri, sans-serif;
                 margin: 10px;
                 border-top:3px solid black;
-                /* padding: 10px; */
             }
             .table-section table tbody tr td {
                 border-bottom: 1px solid black;
@@ -49,7 +44,6 @@
                 margin-bottom: 10px;
                 text-align: right;
                 font-size: 20px;
-                /* border-top: 1px solid black */
                 font-family: Calibri, sans-serif
             }
             .rekapitulasi{
@@ -259,12 +253,12 @@
                             <td rowspan="5" align="center" style="padding-right:2px;font-style:bold"></td>
                         </tr>
                         <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PAJAK</td>
+                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PAJAK ( %)</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
                             <td align="right" style="padding-right:5px;font-style:bold"></td>
                         </tr>
                         <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">JASA</td>
+                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">JASA ( %)</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
                             <td align="right" style="padding-right:5px;font-style:bold"></td>
                         </tr>

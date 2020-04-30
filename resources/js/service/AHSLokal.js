@@ -63,7 +63,7 @@ export default {
             Http.get('/api/rab_details/showByID/'+id, successCallback, errorCallback)
         })
     },
-    search(search,id){
+    search(search){
         return new Promise((resolve, reject) => {
             const successCallback = (res) => {
                 const data = res.data
@@ -72,7 +72,7 @@ export default {
             const errorCallback = (err) => {
                 reject(err)
             }
-            Http.get('/api/rab_details/search/'+search+'/?page='+id, successCallback, errorCallback)
+            Http.get('/api/rab_details/search/'+search, successCallback, errorCallback)
         })
     },
     updateItem(payload,id){

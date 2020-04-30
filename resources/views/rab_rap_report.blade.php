@@ -2,22 +2,18 @@
     <head>
         <title>Rencana Anggaran Pelaksanaan {{$rab[0]->name}}</title>
         <style>
-            /* .border{
-                border: 1px solid black;
-            } */
             .title{
                 border-top: 1px solid black;
                 border-bottom: 1px solid black;
                 font-size: 35px;
                 text-align: right;
-                /* margin-top: 100px */
                 font-family: Calibri, sans-serif;
             }
             .table-section table{
                 border: 3px solid black;
                 text-align: center;
                 border-collapse: collapse;
-                font-size: 12px;
+                font-size: 11px;
                 font-family: Calibri, sans-serif;
                 width: 700px;
                 margin-top: 10px;
@@ -28,7 +24,6 @@
                 font-family: Calibri, sans-serif;
                 margin: 10px;
                 border-top:3px solid black;
-                /* padding: 10px; */
             }
             .table-section table tbody tr td {
                 border-bottom: 1px solid black;
@@ -49,7 +44,6 @@
                 margin-bottom: 10px;
                 text-align: right;
                 font-size: 20px;
-                /* border-top: 1px solid black */
                 font-family: Calibri, sans-serif
             }
             .rekapitulasi{
@@ -77,7 +71,7 @@
             <br>
         </div>
         <div class="footerDate">
-            <p>Yogyakarta, {{date('d M Y'),strtotime($rab[0]->date)}}
+            <p>Yogyakarta, {{$newDate}}
         </div>
     </body>
     @foreach ($structure as $structure_data)
@@ -94,7 +88,7 @@
                 <br>
             </div>
             <div class="footerDate">
-                <p>Yogyakarta, {{date('d M Y'),strtotime($rab[0]->date)}}
+                <p>Yogyakarta, {{$newDate}}
             </div>
         </body>
         <body>
@@ -120,7 +114,7 @@
                         <td style="padding-right:20px"></td>
                         <td style="font-size:15px">Tanggal</td>
                         <td style="font-size:15px">:</td>
-                        <td colspan="2" style="font-size:15px">{{date('d M Y'),strtotime($rab[0]->date)}}</td>
+                        <td colspan="2" style="font-size:15px">{{$newDate}}</td>
                     </tr>
                 </thead>
             </table>
@@ -266,39 +260,18 @@
                             <td></td>
                             <td></td>
                         </tr>
-                        {{-- <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">SUB TOTAL</td>
-                            <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
-                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($nominal,2,',','.')}}</td>
-                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>}}
-                            <td rowspan="2" align="right" style="border-top: 3px solid black;padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>}}
-                        </tr> --}}
-                        @php
-                            // $Pajak = $nominal * $ppn /100;
-                            // $Jasa = $nominal * $jasa /100;
-                            // $Total_Nominal = $nominal + $Pajak + $Jasa;
-                        @endphp
-                        {{-- <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PAJAK</td>
-                            <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
-                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($Pajak,2,',','.')}}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="8" align="left" style="font-style:bold;padding-left:10px">JASA</td>
-                            <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
-                            <td align="right" style="padding-right:5px;font-style:bold">{{number_format($Jasa,2,',','.')}}</td>
-                        </tr> --}}
                         <tr>
                             <td colspan="8" align="left" style="font-style:bold;padding-left:10px;border-top: 3px solid black">TOTAL</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold;border-top: 3px solid black">Rp.</td>
                             <td align="right" style="padding-right:5px;font-style:bold;border-top: 3px solid black">{{number_format($nominal,2,',','.')}}</td>
-                            <td colspan="2"></td>
+                            <td rowspan="2" align="center" style="padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>
+                            <td rowspan="2" align="center" style="padding-right:2px;font-style:bold">{{number_format($total_proc,0,',','.')}}%</td>
                         </tr>
                         <tr>
                             <td colspan="8" align="left" style="font-style:bold;padding-left:10px">PEMBULATAN</td>
                             <td align="left" style="border-right: 1px solid none;padding-left:5px;font-style:bold">Rp.</td>
                             <td align="right" style="padding-right:5px;font-style:bold">{{number_format($nominal,0,',','.')}}</td>
-                            <td colspan="2"></td>
+                            
                         </tr>
                     </tbody>
                 </table>

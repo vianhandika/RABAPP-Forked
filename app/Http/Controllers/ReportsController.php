@@ -158,6 +158,7 @@ class ReportsController extends Controller
             ->whereNull('ahs_lokals.deleted_at')
             ->get();
         // dd($rab);
+        $newDate = $this->tanggal_ind($rab[0]->date);
         $totalSt = DB::table('rabs')
             ->select(DB::raw('SUM(ahs_lokals.HP_Adjust) as Total,structure_details.id_structure'))
             ->join('projects','projects.id_project','=','rabs.id_project')
@@ -223,7 +224,7 @@ class ReportsController extends Controller
         // dd($roman);
         $pdf = PDF::loadView('rab_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
                             'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,'totalSt'=>$totalSt,
-                            'ppn'=>$ppn, 'jasa'=>$jasa]);
+                            'ppn'=>$ppn, 'jasa'=>$jasa,'newDate'=>$newDate]);
         $pdf->setPaper('A4','potrait');
         return $pdf->stream();
     }
@@ -314,8 +315,9 @@ class ReportsController extends Controller
                     'ahs_lokals.adjustment','ahs_lokals.volume','ahs_lokals.HSP',
                     'ahs_lokals.HP_Adjust','jobs.name as job', 'jobs.satuan','jobs.status',
                     'ahs_lokal_details.id_material','materials.kode','materials.name as materials',
-                    'materials.price', 'ahs_lokals.id_sub_details','ahs_lokal_details.coefficient',
-                    'ahs_lokals.adjustment','ahs_lokal_details.sub_total','ahs_lokal_details.adjustment')
+                    'materials.price', 'materials.satuan as sat_mat','ahs_lokals.id_sub_details',
+                    'ahs_lokal_details.coefficient','ahs_lokals.adjustment',
+                    'ahs_lokal_details.sub_total','ahs_lokal_details.adjustment')
             ->join('projects','projects.id_project','=','rabs.id_project')
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
             ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
@@ -328,7 +330,7 @@ class ReportsController extends Controller
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
             ->where('rabs.id_rab','=',$id)
-            ->where('materials.status','=','material')
+            // ->where('materials.status','=','material')
             // ->orderBy('structure_details.id_structure')
             ->orderBy('materials.name')
             ->whereNull('rabs.deleted_at')
@@ -508,6 +510,7 @@ class ReportsController extends Controller
             ->whereNull('ahs_lokals.deleted_at')
             ->get();
         // dd($rab);
+        $newDate = $this->tanggal_ind($rab[0]->date);
         $totalSt = DB::table('rabs')
             ->select(DB::raw('SUM(ahs_lokals.HP_Adjust) as Total, structure_details.id_structure'))
             ->join('projects','projects.id_project','=','rabs.id_project')
@@ -576,7 +579,7 @@ class ReportsController extends Controller
         // dd($roman);
         $pdf = PDF::loadView('rab_rap_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
                             'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,
-                            'totalSt'=>$totalSt,'rap'=>$rap]);
+                            'totalSt'=>$totalSt,'rap'=>$rap,'newDate'=>$newDate]);
         $pdf->setPaper('A4','potrait');
         return $pdf->stream();
     }
