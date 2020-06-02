@@ -15,13 +15,15 @@ class CreateJobsTable extends Migration
     {
         Schema::create('jobs', function (Blueprint $table) {
             $table->increments('id_job');
+            $table->unsignedInteger('id_satuan');
             $table->string('kode');
             $table->string('name')->unique();
-            $table->string('satuan');
             $table->string('status');
             $table->string('details');
             $table->softDeletes();
             $table->timestamps();
+
+            $table->foreign('id_satuan')->references('id_satuan')->on('satuans');
         });
     }
 

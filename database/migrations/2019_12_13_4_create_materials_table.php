@@ -16,17 +16,18 @@ class CreateMaterialsTable extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->increments('id_material');
             $table->unsignedInteger('id_store');
+            $table->unsignedInteger('id_satuan');
             $table->string('kode');
             $table->string('status');
             $table->string('name');
             $table->string('type');
             $table->double('price');
-            $table->string('satuan');
             $table->string('spesification');
             $table->softDeletes();
             $table->timestamps();
 
             $table->foreign('id_store')->references('id_store')->on('stores');
+            $table->foreign('id_satuan')->references('id_satuan')->on('satuans');
 
         });
     }

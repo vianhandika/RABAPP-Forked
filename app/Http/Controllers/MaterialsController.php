@@ -26,7 +26,7 @@ class MaterialsController extends RestController
             'id_store' => $request->id_store,
             'name' => $request->name,
             'type' => $request->type,
-            'satuan' => $request->satuan,
+            'id_satuan' => $request->satuan,
             'spesification' => $request->spesification,
             'price' => $request->price,
             'status' => $request->status,
@@ -118,7 +118,7 @@ class MaterialsController extends RestController
         $material->name = $request->name;
         $material->type = $request->type;
         $material->spesification = $request->spesification;
-        $material->satuan = $request->satuan;
+        $material->id_satuan = $request->satuan;
         $material->price = $request->price;
         $material->save();
 
@@ -129,11 +129,6 @@ class MaterialsController extends RestController
         ]);
     }
 
-    public function showbyID($id)
-    {
-        $material = Materials::findOrFail($id);
-        return response()->json($material,200);
-    }
 
     public function destroy($id)
     {

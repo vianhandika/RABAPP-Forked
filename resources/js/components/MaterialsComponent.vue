@@ -94,12 +94,13 @@
                     </v-layout>
 
                     <v-select row
-                      v-model="Material.satuan"
+                      v-model="Material.id_satuan"
                       :items="satuan"
                       item-text="name"
-                      item-value="name"
+                      item-value="id_satuan"
                       label="Unit"
                       :rules="satuanRules"
+                      append-icon="expand_more"
                     ></v-select>
                       
                     <v-layout>
@@ -132,6 +133,7 @@
                         item-text="name"
                         item-value="id_store"
                         label="Store"
+                        append-icon="expand_more"
                         :rules="storeRules"
                       >
                       </v-select>
@@ -222,7 +224,7 @@ import storeController from './../service/Store'
         type: '',
         price: 0,
         spesification: '',
-        satuan: '',
+        id_satuan: '',
         status: '',
       },
       MaterialDefault: {
@@ -232,7 +234,7 @@ import storeController from './../service/Store'
         type: '',
         price: 0,
         spesification: '',
-        satuan: '',
+        id_satuan: '',
         status: '',
       },
       items: [
@@ -377,7 +379,7 @@ import storeController from './../service/Store'
             name            : this.Material.name,
             price           : this.Material.price,
             type            : this.Material.type,
-            satuan          : this.Material.satuan,
+            satuan          : this.Material.id_satuan,
             status          : this.Material.status,
             spesification   : this.Material.spesification
           }
@@ -397,7 +399,7 @@ import storeController from './../service/Store'
             name            : this.Material.name,
             price           : this.Material.price,
             type            : this.Material.type,
-            satuan          : this.Material.satuan,
+            satuan          : this.Material.id_satuan,
             status          : this.Material.status,
             spesification   : this.Material.spesification
           } 

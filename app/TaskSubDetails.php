@@ -31,7 +31,8 @@ class TaskSubDetails extends Model
         return $this->hasMany('App\RABDetails','id_sub_details');
     }
 
-    public function sub(){
+    public function sub()
+    {
         return $this->belongsTo('App\GroupDetails','id_group_details');
     }
 }

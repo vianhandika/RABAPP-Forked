@@ -121,16 +121,4 @@ export default {
             Http.get('/api/ahs/search/'+search, successCallback, errorCallback)
         })
     },
-    showbyID(id){
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
-            const errorCallback = (err) => {
-                reject(err)
-            }
-            Http.get('/api/ahs/show/'+id,successCallback, errorCallback)
-        })
-    },
 }

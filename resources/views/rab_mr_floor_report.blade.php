@@ -61,8 +61,8 @@
     <body>
         <img src="{{public_path('images/logo.png')}}" width="400px">
         <div class="title">
-            <h3>Rencana Anggaran Biaya</h3>
-            <h3>(RAB-Kebutuhan-Bahan)</h3>
+            <h3>Kebutuhan</h3>
+            <h3>Bahan & Tenaga Kerja</h3>
         </div>
         <div class="footer" style="margin-top:350px">
             <h3>Proyek</h3>
@@ -96,7 +96,7 @@
         </body>
         <body>
             <div class="headerTable">
-                <h3>RENCANA ANGGARAN BIAYA</h3>
+                <h3>KEBUTUHAN BAHAN & TENAGA KERJA</h3>
                 <h3>PEMBANGUNAN {{strtoupper($structure_data->name)}}</h3>
             </div>
             <table>
@@ -183,7 +183,7 @@
                                                 <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
                                                 <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->price,2,',','.')}}</td>
                                                 <td class="bottomRight" align="left" style="border-right: 1px solid none;padding-left:5px">Rp.</td>
-                                                <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->HSP,2,',','.')}}</td>
+                                                <td class="bottomRight" align="right" style="padding-right:5px">{{number_format($rab_data->sub_total,2,',','.')}}</td>
                                                 @php
                                                     $rab_mr = $rab_data->volume * $rab_data->coefficient * $rab_data->adjustment;
                                                 @endphp
@@ -195,7 +195,7 @@
                                                 @if ($a != $count-1)
                                                     @php
                                                         $total_rab_mr += $rab_mr;  
-                                                        $total_terhitung += $rab_data->HSP; 
+                                                        $total_terhitung += $rab_data->sub_total; 
                                                     @endphp
                                                     @if ($temp[$a]->materials != $temp[$a+1]->materials)
                                                         <td class="bottomRight"></td>
@@ -216,13 +216,25 @@
                                                             $total_terhitung=0;
                                                         @endphp
                                                     @else
-                                                        <td colspan="16"></td>
+                                                        <td class="bottomRight"></td>
+                                                        <td class="bottomRight"></td>
+                                                        <td class="bottomRight"></td>
+                                                        <td class="bottomRight"></td>
+                                                        <td class="bottomRight"></td>
+                                                        <td class="bottomRight"></td>
+                                                        <td class="bottomRight" colspan="2"></td>
+                                                        <td class="bottomRight" colspan="2"></td>
+                                                        <td class="bottomRight" colspan="2"></td>
+                                                        <td align="left" style="border-bottom: 3px solid black;border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                                        <td align="right" style="border-bottom: 3px solid black;border-right: 1px solid black;padding-right:5px">{{number_format($total_terhitung,2,',','.')}}</td>
+                                                        <td class="bottomRight"></td>
+                                                        <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$total_rab_mr}}</td>
                                                     @endif
                                                 @else
                                                     @if ($a==$count-1)
                                                         @php
                                                             $total_rab_mr += $rab_mr;  
-                                                            $total_terhitung += $rab_data->HSP; 
+                                                            $total_terhitung += $rab_data->sub_total; 
                                                         @endphp
                                                         @if ($temp[$a-1]->materials == $temp[$a]->materials)
                                                             <td class="bottomRight"></td>
@@ -243,7 +255,19 @@
                                                                 $total_terhitung=0;
                                                             @endphp
                                                         @else
-                                                            <td colspan="16"></td>
+                                                            <td class="bottomRight"></td>
+                                                            <td class="bottomRight"></td>
+                                                            <td class="bottomRight"></td>
+                                                            <td class="bottomRight"></td>
+                                                            <td class="bottomRight"></td>
+                                                            <td class="bottomRight"></td>
+                                                            <td class="bottomRight" colspan="2"></td>
+                                                            <td class="bottomRight" colspan="2"></td>
+                                                            <td class="bottomRight" colspan="2"></td>
+                                                            <td align="left" style="border-bottom: 3px solid black;border-right: 1px solid none;padding-left:5px">Rp.</td>
+                                                            <td align="right" style="border-bottom: 3px solid black;border-right: 1px solid black;padding-right:5px">{{number_format($total_terhitung,2,',','.')}}</td>
+                                                            <td class="bottomRight"></td>
+                                                            <td style="border-bottom: 3px solid black;border-right: 1px solid black">{{$total_rab_mr}}</td>
                                                         @endif
                                                     @endif
                                                 @endif

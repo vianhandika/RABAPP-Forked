@@ -18,4 +18,9 @@ class Structure extends Model
     protected $dates = [
         'created_at', 'deleted_at','updated_at'
     ];
+
+    public function structure_details()
+    {
+        return $this->hasMany('App\StructureDetails','id_structure');
+    }
 }

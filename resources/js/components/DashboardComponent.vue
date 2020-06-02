@@ -117,7 +117,7 @@
                     <v-card-title class="headline light-green accent-2--text">RAB</v-card-title>
                   </v-col>
                   <v-col cols="5" align-center v-if="select=='1'">
-                    <v-card-title class="headline light-green accent-2--text">BQ</v-card-title>
+                    <v-card-title class="headline light-green accent-2--text">BOQ</v-card-title>
                   </v-col>
                   <v-col cols="5" align-center v-if="select=='2'">
                     <v-card-title class="headline light-green accent-2--text">MR</v-card-title>
@@ -633,7 +633,7 @@ import materials from './../service/Material'
       items:[
         {name:'RAB Report',value:null},
         {name:'RAP Report',value:'3'},
-        {name:'BQ Report',value:'1'},
+        {name:'BOQ Report',value:'1'},
         {name:'Materials Requirements Report',value:'2'},
       ],
       itemsahs:[
@@ -784,9 +784,10 @@ import materials from './../service/Material'
       },
       async generateRAB(id)
       {
+        console.log('cek cek')
         try{
           this.overlay = true
-          Http.download('/api/rab_report/'+id+'/'+ppn+'/'+jasa).then(() => {
+          Http.download('/api/rab_report/'+id+'/'+this.ppn+'/'+this.jasa).then(() => {
             this.overlay = false
           })
         }catch(err){

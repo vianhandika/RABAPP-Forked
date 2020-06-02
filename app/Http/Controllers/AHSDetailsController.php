@@ -76,7 +76,7 @@ class AHSDetailsController extends RestController
         return $this->sendResponse($response,200);
     }
 
-    public function showbyID($id)
+    public function show($id)
     {
         $ahs = AHSDetails::where('id_ahs',$id)->get();
         $response = $this->generateCollection($ahs);

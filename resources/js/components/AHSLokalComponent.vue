@@ -43,7 +43,7 @@
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Edit Adjustment</v-toolbar-title>
+                <v-toolbar-title>Edit Adjustment Materials/Labor</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
                   <v-btn dark text @click="updateItemAdj(AHSAdj.id_rab)" :loading="loading">Save</v-btn>

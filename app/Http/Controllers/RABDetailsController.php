@@ -138,13 +138,6 @@ class RABDetailsController extends RestController
         return $ahs;
     }
 
-    public function showByID($id)
-    {
-        $ahs = RABDetails::where('id_sub_details',$id)->get();
-        $response = $this->generateCollection($ahs);
-        return $this->sendResponse($response,200);
-    }
-
     public function show($id)
     {
         $rab_details = RABDetails::where('id_ahs_lokal',$id)->get();

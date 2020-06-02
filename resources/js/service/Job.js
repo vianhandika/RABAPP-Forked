@@ -15,20 +15,20 @@ export default {
             Http.get('/api/jobs/code/', successCallback, errorCallback)
         })
     },
-    getItem(){
-        return new Promise((resolve, reject) => {
-            const successCallback = (res) => {
-                const data = res.data
-                resolve(data)
-            }
+    // getItem(){
+    //     return new Promise((resolve, reject) => {
+    //         const successCallback = (res) => {
+    //             const data = res.data
+    //             resolve(data)
+    //         }
 
-            const errorCallback = (err) => {
-                reject(err)
-            }
+    //         const errorCallback = (err) => {
+    //             reject(err)
+    //         }
 
-            Http.get('/api/jobs/show/'+id, payload, successCallback, errorCallback)
-        })
-    },
+    //         Http.get('/api/jobs/show/'+id, payload, successCallback, errorCallback)
+    //     })
+    // },
     getSatuan(){
         return new Promise((resolve, reject) => {
             

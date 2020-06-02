@@ -22,7 +22,7 @@ class JobController extends RestController
         $job = Job::create([
             'kode' => $request->kode,
             'name' => $request->name, 
-            'satuan' => $request->satuan, 
+            'id_satuan' => $request->satuan, 
             'status' => $request->status, 
             'details' => $request->details, 
         ]);
@@ -43,11 +43,11 @@ class JobController extends RestController
             'status' => 'required|max:255',
             'details' => 'required|max:255',
         ]);
-
+        
         $job = Job::findOrFail($id);
         $job->kode = $request->kode;
         $job->name = $request->name;
-        $job->satuan = $request->satuan;
+        $job->id_satuan = $request->satuan;
         $job->status = $request->status;
         $job->details = $request->details;
         $job->save();
@@ -68,12 +68,6 @@ class JobController extends RestController
             'status'=> $status,
             'message'=> $status ? 'Success' : 'Error Delete'
         ]);
-    }
-
-    public function showbyID($id)
-    {
-        $job = Job::findOrFail($id);
-        return response()->json($job,200);
     }
 
     public function code()

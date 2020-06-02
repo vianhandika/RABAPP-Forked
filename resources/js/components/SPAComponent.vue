@@ -94,7 +94,7 @@ import Structure from '../service/Structure'
         {icon: 'money', title: 'AHS Master', route: '/analisa'},
         {icon: 'payment', title: 'RAB', route: '/rab'},
         {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
-        {icon: 'account_balance_wallet', title: 'Calculate', route: '/calculate'},
+        // {icon: 'account_balance_wallet', title: 'Calculate', route: '/calculate'},
       ],
       rab : [
         {icon: 'home',title: 'Building', route:''},

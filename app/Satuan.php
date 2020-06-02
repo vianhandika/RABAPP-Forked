@@ -21,4 +21,14 @@ class Satuan extends Model
     protected $dates = [
         'created_at', 'updated_at','deleted_at',
     ];
+
+    public function satuan_materials()
+    {
+        return $this->hasMany('App\Materials','id_satuan');
+    }
+
+    public function satuan_jobs()
+    {
+        return $this->hasMany('App\Job','id_satuan');
+    }
 }

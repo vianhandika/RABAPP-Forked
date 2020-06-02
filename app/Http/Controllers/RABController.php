@@ -25,6 +25,13 @@ class RABController extends RestController
 
     public function index()
     {
+        $rab = RAB::all();
+        $response = $this->generateCollection($rab);
+        return $this->sendResponse($response);
+    }
+
+    public function getPagination()
+    {
         $rabPaginator = RAB::orderBy('id_rab','DESC')->paginate(5);
         $rab = $this->generateCollection($rabPaginator);
         $rab->setPaginator(new IlluminatePaginatorAdapter($rabPaginator));
@@ -32,28 +39,14 @@ class RABController extends RestController
         return $rab->toArray(); 
     }
 
-    public function all()
-    {
-        $rab = RAB::all();
-        $response = $this->generateCollection($rab);
-        return $this->sendResponse($response);
-    }
-
     public function search($search)
     {
         $project = Project::where('name','LIKE',"%{$search}%")->get()->first();
-        // $array=[];
-        // foreach($project as $item)
-        // {
-        //     $rabItem = RAB::where('id_project',$item->id_project)->get();
-        //     array_push($array,$rabItem);
-        // }
         $rabPaginator = RAB::where('id_project',$project->id_project)->paginate(5);
         $rab = $this->generateCollection($rabPaginator);
         $rab->setPaginator(new IlluminatePaginatorAdapter($rabPaginator));
         $rab = $this->manager->createData($rab); 
         return $rab->toArray(); 
-        
     }
     
     public function paginate($items, $perPage = 5, $page = null, $options = [])

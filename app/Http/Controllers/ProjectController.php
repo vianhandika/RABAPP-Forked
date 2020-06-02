@@ -80,12 +80,6 @@ class ProjectController extends RestController
         ]);
     }
 
-    public function showbyID($id)
-    {
-        $project = Project::find($id);
-        return response()->json($project,200);
-    }
-
     public function destroy($id)
     {
         $project = Project::find($id);

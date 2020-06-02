@@ -66,12 +66,6 @@ class StoreController extends RestController
         ]);
     }
 
-    public function showbyID($id)
-    {
-        $store = Store::find($id);
-        return response()->json($store,200);
-    }
-
     public function destroy($id)
     {
         $store = Store::find($id);

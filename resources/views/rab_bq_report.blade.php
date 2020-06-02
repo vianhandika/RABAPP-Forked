@@ -71,7 +71,7 @@
             <br>
         </div>
         <div class="footerDate">
-            <p>Yogyakarta, {{date('d M Y'),strtotime($rab[0]->date)}}
+            <p>Yogyakarta, {{$newDate}}
         </div>
     </body>
     @foreach ($structure as $structure_data)
@@ -88,12 +88,12 @@
                 <br>
             </div>
             <div class="footerDate">
-                <p>Yogyakarta, {{date('d M Y'),strtotime($rab[0]->date)}}
+                <p>Yogyakarta, {{$newDate}}
             </div>
         </body>
         <body>
             <div class="headerTable">
-                <h3>RENCANA ANGGARAN BIAYA</h3>
+                <h3>RENCANA ANGGARAN BIAYA (BQ)</h3>
                 <h3>PEMBANGUNAN {{strtoupper($structure_data->name)}}</h3>
             </div>
             <table>
@@ -114,7 +114,7 @@
                         <td style="padding-right:20px"></td>
                         <td style="font-size:15px">Tanggal</td>
                         <td style="font-size:15px">:</td>
-                        <td colspan="2" style="font-size:15px">{{date('d M Y'),strtotime($rab[0]->date)}}</td>
+                        <td colspan="2" style="font-size:15px">{{$newDate}}</td>
                     </tr>
                 </thead>
             </table>

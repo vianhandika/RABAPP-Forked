@@ -103,6 +103,7 @@
                             item-value="id_project" 
                             :items="filterProject"
                             :return-object="false"
+                            append-icon="expand_more"
                           ></v-select>
                         </v-layout>
                         
@@ -200,6 +201,7 @@
                                 item-text="structure"
                                 item-value="id_structure"
                                 :items="detailStructure"
+                                append-icon="expand_more"
                               ></v-select>
                             </v-flex>
                             <v-flex v-if="editList">
@@ -209,6 +211,7 @@
                                 item-text="name"
                                 item-value="id_structure"
                                 :items="filterStructure"
+                                append-icon="expand_more"
                               ></v-select>
                             </v-flex>
                           </template>
@@ -301,6 +304,7 @@
                                     item-text="name"
                                     item-value="id_group"
                                     required
+                                    append-icon="expand_more"
                                     ></v-select>
                                   </v-flex>
 
@@ -363,6 +367,7 @@
                                   :items="detailGroup"
                                   item-text="floor"
                                   item-value="id_groups"
+                                  append-icon="expand_more"
                                 ></v-select>
                               </v-flex>
                               <v-flex v-if="editList">
@@ -372,6 +377,7 @@
                                   item-text="name"
                                   item-value="id_group"
                                   :items="filterGroup"
+                                  append-icon="expand_more"
                                 ></v-select>
                               </v-flex>
                             </template>
@@ -475,6 +481,7 @@
                                   item-value="id_sub"
                                   :items="filterTaskGroup"
                                   required 
+                                  append-icon="expand_more"
                                   ></v-select>
                                 </v-flex>
                                 </v-card-title>
@@ -536,6 +543,7 @@
                                 item-text="task"
                                 item-value="id_sub"
                                 :items="detailTask"
+                                append-icon="expand_more"
                               ></v-select>
                             </v-flex>
                             <v-flex v-if="editList">
@@ -545,6 +553,7 @@
                                 item-text="name"
                                 item-value="id_sub"
                                 :items="filterTaskGroup"
+                                append-icon="expand_more"
                               ></v-select>
                             </v-flex>
                           </template>
@@ -662,6 +671,7 @@
                                       :items="filterAHSAll"
                                       required 
                                       @input="detailCard=true;change();adjust()"
+                                      append-icon="expand_more"
                                     ></v-select>
                                   </v-flex>
 
@@ -858,6 +868,7 @@
                                   v-model="item.id_ahs"
                                   item-text="name"
                                   item-value="id_ahs"
+                                  append-icon="expand_more"
                                   :items="detailDetails"
                                 ></v-select>
                               </v-flex>
@@ -868,6 +879,7 @@
                                   item-text="name"
                                   item-value="id_ahs"
                                   :items="filterAHSAll"
+                                  append-icon="expand_more"
                                 ></v-select>
                               </v-flex>
                             </template>
@@ -1356,7 +1368,8 @@ import material from './../service/Material'
           {text: 'Actions',value:'action'}
         ],
         headers_ahs_details:[
-          {text: 'ID',value:'id_ahs_lokal'},
+          {text: 'Actions',value:'action'},
+          // {text: 'ID',value:'id_ahs_lokal'},
           {text: 'Builiding',value:'structure'},
           {text: 'Floor',value:'floor'},
           {text: 'Task Group',value:'task'},
@@ -1366,7 +1379,6 @@ import material from './../service/Material'
           {text: 'Adjustment',value:'adjustment',align: 'center'},
           {text: 'HP',value:'HP',width:'15%'},
           {text: 'HP Adjustment',value:'HP_Adjust'},
-          {text: 'Actions',value:'action'},
         ],
         tab : 'tab-1',
       }

@@ -30,7 +30,7 @@ class RABDetailsTransformers extends TransformerAbstract
 
             'id_job'                => $rab_details->id_job,
             'name'                  => $rab_details->jobs->name,
-            'satuan'                => $rab_details->jobs->satuan,
+            'satuan'                => $rab_details->jobs->satuan->name,
             'status'                => $rab_details->jobs->status,
                         
             'id_project'            => $rab_details->task_group->sub->structure->rab->projects->id_project,

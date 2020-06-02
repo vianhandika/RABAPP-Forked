@@ -291,11 +291,11 @@ import { parseISO } from 'date-fns'
       //validation
       nameRules: [
         v => !!v || 'Name is required',
-        v => v && v.length < 30 || 'Name must be at most 30 characters long'
+        v => v && v.length < 32 || 'Name must be at most 32 characters long'
       ],
       addressRules: [
         v => !!v || 'Address is required',
-        v => v && v.length < 45 || 'Address must be at most 44 characters long'
+        v => v && v.length < 46 || 'Address must be at most 46 characters long'
       ],
       ownerRules:[
         v => !!v || 'Owner is required',

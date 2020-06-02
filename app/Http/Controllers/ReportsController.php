@@ -5,34 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-use App\AHS;
 use PDF;
-use App\RAB;
-use App\StructureDetails;
-use App\GroupDetails;
-use App\TaskSubDetails;
+use App\AHS;
 use App\RABDetails;
-use App\AHSLokalDetails;
-use App\Structure;
-use App\Groups;
-use App\TaskSub;
 
 class ReportsController extends Controller
 {
-    public function analisa_task($id)
+    public function ahs_master($id)
     {
         $ahs = AHS::findOrFail($id);
         $datas = DB::table('a_h_s_s')
                 ->select('a_h_s_s.kode as kode_ahs','jobs.kode as kode_task','jobs.name as task',
-                        'jobs.satuan as satuan_task','ahs_details.coefficient as coefficient',
+                        'satuans.name as satuan_task','ahs_details.coefficient as coefficient',
                         'ahs_details.sub_total as price_satuan','materials.kode as kode_material',
-                        'materials.name as material','materials.satuan as satuan_material',
+                        'materials.name as material','satuanM.name as satuan_material',
                         'materials.price','materials.status','a_h_s_s.total_labor',
                         'a_h_s_s.total_material', 'a_h_s_s.total_before_overhead',
                         'a_h_s_s.total_equipment','a_h_s_s.overhead','a_h_s_s.total')
                 ->join('jobs','jobs.id_job','=','a_h_s_s.id_job')
+                ->join('satuans','satuans.id_satuan','=','jobs.id_satuan',)
                 ->join('ahs_details','ahs_details.id_ahs','=','a_h_s_s.id_ahs')
                 ->join('materials','materials.id_material','=','ahs_details.id_material')
+                ->join('satuans as satuanM','satuanM.id_satuan','=','materials.id_satuan',)
                 ->where('a_h_s_s.id_ahs','=',$id)
                 ->whereNull('ahs_details.deleted_at')
                 ->orderBy('materials.status','DESC')
@@ -55,14 +49,14 @@ class ReportsController extends Controller
         return $pdf->stream();
     }
 
-    public function analisa_lokal($id)
+    public function ahs_lokal($id)
     {
         $ahs = RABDetails::findOrFail($id);
         $datas = DB::table('ahs_lokals')
-                ->select('projects.name as project','jobs.kode as kode_task','jobs.name as task','jobs.satuan as satuan_task',
+                ->select('projects.name as project','jobs.kode as kode_task','jobs.name as task','satuans.name as satuan_task',
                         'ahs_lokal_details.coefficient as coefficient','ahs_lokal_details.sub_total as price_satuan',
                         'materials.kode as kode_material','materials.name as material',
-                        'materials.satuan as satuan_material','materials.price','materials.status','jobs.status as status_job',
+                        'satuanM.name as satuan_material','materials.price','materials.status','jobs.status as status_job',
                         'ahs_lokals.total_labor','ahs_lokals.total_material','ahs_lokals.total_equipment',
                         'ahs_lokals.HSP as total', 'ahs_lokals.adjustment', 'ahs_lokals.volume',
                         'ahs_lokals.overhead','ahs_lokals.HSP_before_overhead as total_before_overhead')
@@ -74,6 +68,8 @@ class ReportsController extends Controller
                 ->join('structure_details','structure_details.id_structure_details','=','group_details.id_structure_details')
                 ->join('rabs','rabs.id_rab','=','structure_details.id_rab')
                 ->join('projects','projects.id_project','=','rabs.id_project')
+                ->join('satuans','satuans.id_satuan','=','jobs.id_satuan')
+                ->join('satuans as satuanM','satuanM.id_satuan','=','materials.id_satuan')
                 ->where('ahs_lokals.id_ahs_lokal','=',$id)
                 ->whereNull('ahs_lokal_details.deleted_at')
                 ->orderBy('materials.status','DESC')
@@ -132,13 +128,14 @@ class ReportsController extends Controller
         $pecahkan = explode('-', $tanggal);
         return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
     }
+
     public function rab($id,$ppn,$jasa)
     {
         $rab = DB::table('rabs')
             ->select('projects.name','projects.owner','projects.date','projects.address', 'projects.type','rabs.total_rab',
                         'task_subs.id_sub','groups.id_groups','structures.id_structure','ahs_lokals.adjustment',
                         'ahs_lokals.volume','ahs_lokals.HSP',
-                        'ahs_lokals.HP_Adjust','jobs.name as job', 'jobs.satuan','jobs.status',
+                        'ahs_lokals.HP_Adjust','jobs.name as job', 'satuans.name as satuan','jobs.status',
                         'task_sub_details.id_sub_details','ahs_lokals.id_ahs_lokal', 
                         'ahs_lokals.id_sub_details')
             ->join('projects','projects.id_project','=','rabs.id_project')
@@ -150,6 +147,7 @@ class ReportsController extends Controller
             ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
+            ->join('satuans','satuans.id_satuan','=','jobs.id_satuan')
             ->where('rabs.id_rab','=',$id)
             ->whereNull('rabs.deleted_at')
             ->whereNull('structure_details.deleted_at')
@@ -235,7 +233,7 @@ class ReportsController extends Controller
             ->select('projects.name','projects.owner','projects.date','projects.address', 'projects.type',
                         'task_subs.id_sub','groups.id_groups','structures.id_structure','ahs_lokals.adjustment',
                         'ahs_lokals.volume','ahs_lokals.HSP','ahs_lokals.HP_Adjust','jobs.name as job', 
-                        'jobs.satuan','jobs.status')
+                        'satuans.name as satuan','jobs.status')
             ->join('projects','projects.id_project','=','rabs.id_project')
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
             ->join('group_details','group_details.id_structure_details','=','structure_details.id_structure_details')
@@ -245,6 +243,7 @@ class ReportsController extends Controller
             ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
+            ->join('satuans','satuans.id_satuan','=','jobs.id_satuan')
             ->where('rabs.id_rab','=',$id)
             ->whereNull('rabs.deleted_at')
             ->whereNull('structure_details.deleted_at')
@@ -253,6 +252,7 @@ class ReportsController extends Controller
             ->whereNull('ahs_lokals.deleted_at')
             ->get();
         // dd($rab);
+        $newDate = $this->tanggal_ind($rab[0]->date);
         $structure = DB::table('rabs')
             ->select('structures.id_structure','structures.name')
             ->join('structure_details','rabs.id_rab','=','structure_details.id_rab')
@@ -302,7 +302,7 @@ class ReportsController extends Controller
         }
         // dd($roman);
         $pdf = PDF::loadView('rab_bq_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
-                            'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman]);
+                            'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman, 'newDate'=>$newDate]);
         $pdf->setPaper('A4','potrait');
         return $pdf->stream();
     }
@@ -313,9 +313,9 @@ class ReportsController extends Controller
             ->select('projects.name','projects.owner','projects.date','projects.address', 'projects.type',
                     'task_subs.id_sub','groups.id_groups','structures.id_structure','ahs_lokals.id_ahs_lokal',
                     'ahs_lokals.adjustment','ahs_lokals.volume','ahs_lokals.HSP',
-                    'ahs_lokals.HP_Adjust','jobs.name as job', 'jobs.satuan','jobs.status',
+                    'ahs_lokals.HP_Adjust','jobs.name as job', 'satuans.name as satuan','jobs.status',
                     'ahs_lokal_details.id_material','materials.kode','materials.name as materials',
-                    'materials.price', 'materials.satuan as sat_mat','ahs_lokals.id_sub_details',
+                    'materials.price', 'satuanM.name  as sat_mat','ahs_lokals.id_sub_details',
                     'ahs_lokal_details.coefficient','ahs_lokals.adjustment',
                     'ahs_lokal_details.sub_total','ahs_lokal_details.adjustment')
             ->join('projects','projects.id_project','=','rabs.id_project')
@@ -329,6 +329,8 @@ class ReportsController extends Controller
             ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
+            ->join('satuans','satuans.id_satuan','=','jobs.id_satuan')
+            ->join('satuans as satuanM','satuanM.id_satuan','=','materials.id_satuan')
             ->where('rabs.id_rab','=',$id)
             // ->where('materials.status','=','material')
             // ->orderBy('structure_details.id_structure')
@@ -421,7 +423,6 @@ class ReportsController extends Controller
                     }
                 }
             }
-            // dd($temp);
             $pdf = PDF::loadView('rab_mr_report',['rab' => $rab,'structure'=>$structure,'group'=>$group,
                         'tasksub'=>$tasksub, 'alphabet'=>$alphabet,'roman'=>$roman,
                         'temp'=>$temp,'newDate'=>$newDate]);
@@ -479,7 +480,7 @@ class ReportsController extends Controller
         }
     }
 
-    public function rab_rap($id,$rap)
+    public function rap($id,$rap)
     {
         if($rap == 0)
             $rap = 1;
@@ -490,7 +491,7 @@ class ReportsController extends Controller
             ->select('projects.name','projects.owner','projects.date','projects.address', 'projects.type','rabs.total_rab',
                         'task_subs.id_sub','groups.id_groups','structures.id_structure','ahs_lokals.adjustment',
                         'ahs_lokals.volume','ahs_lokals.HSP',
-                        'ahs_lokals.HP_Adjust','jobs.name as job', 'jobs.satuan','jobs.status',
+                        'ahs_lokals.HP_Adjust','jobs.name as job', 'satuans.name as satuan','jobs.status',
                         'task_sub_details.id_sub_details','ahs_lokals.id_ahs_lokal', 
                         'ahs_lokals.id_sub_details')
             ->join('projects','projects.id_project','=','rabs.id_project')
@@ -502,6 +503,7 @@ class ReportsController extends Controller
             ->join('task_subs','task_subs.id_sub','=','task_sub_details.id_sub')
             ->join('groups','groups.id_groups','=','group_details.id_groups')
             ->join('structures','structures.id_structure','=','structure_details.id_structure')
+            ->join('satuans','satuans.id_satuan','=','jobs.id_satuan')
             ->where('rabs.id_rab','=',$id)
             ->whereNull('rabs.deleted_at')
             ->whereNull('structure_details.deleted_at')

@@ -13,7 +13,7 @@ class Job extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'kode','name','satuan','status','details' 
+        'id_satuan','kode','name','status','details' 
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'
@@ -22,5 +22,15 @@ class Job extends Model
     public function ahs()
     {
         return $this->hasMany('App\AHS','id_ahs');
+    }
+
+    public function ahs_lokal()
+    {
+        return $this->hasMany('App\RABDetails','id_ahs_lokal');
+    }
+
+    public function satuan()
+    {
+        return $this->belongsTo('App\Satuan','id_satuan');
     }
 }

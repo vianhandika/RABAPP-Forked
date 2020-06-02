@@ -20,19 +20,17 @@ class AHSController extends RestController
 
     public function index()
     {
+        $ahs = AHS::all();
+        $response = $this->generateCollection($ahs);
+        return $this->sendResponse($response);
+    }
+
+    public function getPagination()
+    {
         $ahsPaginator = AHS::orderBy('id_ahs','DESC')->paginate(5);
         $ahs = $this->generateCollection($ahsPaginator);
         $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
         $ahs = $this->manager->createData($ahs); 
-        return $ahs->toArray();
-    }
-    
-    public function filter(Request $request)
-    {
-        $ahsPaginator = AHS::where('id_job',$id)->paginate(5);
-        $ahs = $this->generateCollection($ahsPaginator);
-        $ahs->setPaginator(new IlluminatePaginatorAdapter($ahsPaginator));
-        $ahs = $this->manager->createData($ahs);
         return $ahs->toArray();
     }
 
@@ -70,13 +68,6 @@ class AHSController extends RestController
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = new Collection($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);
-    }
-
-    public function all()
-    {
-        $ahs = AHS::all();
-        $response = $this->generateCollection($ahs);
-        return $this->sendResponse($response);
     }
 
     public function store(Request $request)
@@ -193,13 +184,6 @@ class AHSController extends RestController
             'status' => $status,
             'message' => $status ? 'Deleted' : 'Error Delete'
         ]);
-    }
-
-    public function showbyID($id)
-    {
-        $ahs = AHS::findOrFail($id);
-        $response = $this->generateItem($ahs);
-        return $this->sendResponse($response);
     }
 
     public function show_detailsNotNull()

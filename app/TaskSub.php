@@ -20,4 +20,14 @@ class TaskSub extends Model
     protected $dates = [
         'created_at', 'updated_at','deleted_at',
     ];
+
+    public function ahs()
+    {
+        return $this->hasMany('App\AHS','id_sub');
+    }
+
+    public function task_sub_details()
+    {
+        return $this->hasMany('App\TaskSubDetails','id_sub');
+    }
 }

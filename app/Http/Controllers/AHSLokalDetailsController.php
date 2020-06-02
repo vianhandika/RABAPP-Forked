@@ -27,7 +27,7 @@ class AHSLokalDetailsController extends RestController
         return $this->sendResponse($response,200);
     }
 
-    public function showByID($id)
+    public function show($id)
     {
         $ahs = AHSLokalDetails::where('id_ahs_lokal',$id)->get();
         $response = $this->generateCollection($ahs);

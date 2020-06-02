@@ -14,7 +14,7 @@ class Materials extends Model
     public $timestamp = true;
 
     protected $fillable = [
-        'id_store', 'kode', 'name', 'type', 'spesification', 'price','satuan', 'status'
+        'id_store', 'id_satuan','kode', 'name', 'type', 'spesification', 'price','status'
     ];
     protected $dates = [
         'created_at', 'deleted_at','updated_at'
@@ -23,5 +23,20 @@ class Materials extends Model
     public function stores()
     {
         return $this->belongsTo('App\Store','id_store');
+    }
+    
+    public function detail_ahs()
+    {
+        return $this->hasMany('App\AHSDetails','id_material');
+    }
+
+    public function detail_ahs_lokal()
+    {
+        return $this->hasMany('App\AHSLokalDetails','id_material');
+    }
+
+    public function satuan()
+    {
+        return $this->belongsTo('App\Satuan','id_satuan');
     }
 }

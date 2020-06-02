@@ -52,31 +52,33 @@
                   </v-layout>
 
                   <v-layout>
-                      <v-flex>
-                        <v-text-field 
-                          v-model="Job.name" 
-                          label="Name"
-                          :rules="nameRules"
-                        >
-                        </v-text-field>
-                      </v-flex>
-                    </v-layout>
+                    <v-flex>
+                      <v-text-field 
+                        v-model="Job.name" 
+                        label="Name"
+                        :rules="nameRules"
+                      >
+                      </v-text-field>
+                    </v-flex>
+                  </v-layout>
 
                     <v-select row
-                      v-model="Job.satuan"
+                      v-model="Job.id_satuan"
                       :items="satuan"
                       item-text="name"
-                      item-value="name"
+                      item-value="id_satuan"
                       label="Unit"
                       :rules="satuanRules"
+                      append-icon="expand_more"
                     ></v-select>
                       
                     <v-select row
-                        v-model="Job.status"
-                        :items="items"
-                        label="Status"
-                        :rules="statusRules"
-                      ></v-select>
+                      v-model="Job.status"
+                      :items="items"
+                      label="Status"
+                      :rules="statusRules"
+                      append-icon="expand_more"
+                    ></v-select>
 
                     <v-layout>
                       <v-flex>
@@ -167,7 +169,7 @@ import Controller from './../service/Job'
       Job: {
         kode:'',
         name:'',
-        satuan: '',
+        id_satuan: '',
         details: '',
         id_job: '',
         status: ''
@@ -175,7 +177,7 @@ import Controller from './../service/Job'
       JobDefault: {
         kode:'',
         name:'',
-        satuan: '',
+        id_satuan: '',
         details: '',
         id_job: '',
         status: ''
@@ -276,11 +278,12 @@ import Controller from './../service/Job'
         }
       },
       async addItem(){
+        console.log('satuan',this.Job.id_satuan)
         try{
           const payload = {
             kode        : this.Job.kode,
             name        : this.Job.name,
-            satuan      : this.Job.satuan,
+            satuan      : this.Job.id_satuan,
             status      : this.Job.status,
             details     : this.Job.details,
           }
@@ -293,11 +296,12 @@ import Controller from './../service/Job'
         }
       },
       async updateItem(id){
+        console.log(this.Job.id_satuan)
         try{
           const payload = {
             kode        : this.Job.kode,
             name        : this.Job.name,
-            satuan      : this.Job.satuan,
+            satuan      : this.Job.id_satuan,
             status      : this.Job.status,
             details     : this.Job.details,
           } 
@@ -321,6 +325,7 @@ import Controller from './../service/Job'
       },
       itemHandler(item){
         this.Job = item
+        console.log(this.Job)
       },
       reset(){
         this.getallItem()
