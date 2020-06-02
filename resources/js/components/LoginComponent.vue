@@ -107,26 +107,40 @@ import { mapGetters, mapState, mapActions } from 'vuex'
     },
     methods: {
       ...mapActions({
-        retrieveToken: 'Token/retrieveToken'
+        retrieveToken: 'Token/retrieveToken',
+        authenticate: 'Token/authenticate'
       }),
-      async login () {
-        try{
-          const payload = {
-            name : this.username,
-            password : this.password
+      async login(){
+        try {
+          const data = {
+            username : this.username,
+            password : this.password,
           }
-          this.load = true
-          await this.retrieveToken(payload)
-          .then(response=>{
-            this.load = false
-            this.$router.push({name: 'dashboard'})
-          })
-        }catch(err){
+          console.log('data',data)
+          await this.retrieveToken(data)
+          this.$router.push({ name: 'dashboard' })
+        } catch (err) {
           this.load = false
-          console.log(err)
-          this.snackbar()
         }
       },
+      // async login () {
+      //   try{
+      //     const payload = {
+      //       username : this.username,
+      //       password : this.password
+      //     }
+      //     this.load = true
+      //     await this.retrieveToken(payload)
+      //     .then(response=>{
+      //       this.load = false
+      //       this.$router.push({name: 'dashboard'})
+      //     })
+      //   }catch(err){
+      //     this.load = false
+      //     console.log(err)
+      //     this.snackbar()
+      //   }
+      // },
       snackbar()
       {
         this.snack = true

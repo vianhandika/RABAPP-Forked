@@ -1,4 +1,7 @@
 import axios from "axios"
+import Http from '../../service/Http'
+import Cookie from 'js-cookie'
+import Store from '../modules'
 
 const state = {
     token : localStorage.getItem('access_token') ||  null,
@@ -25,11 +28,12 @@ const getters = {
 const actions = {
     async retrieveToken(context, credentials){
         return new Promise((resolve, reject) => {
-            axios.post('/api/auth/login',{
-                name       : credentials.name,
-                password    : credentials.password,
+            axios.post('/api/authenticate',{
+                username   : credentials.username,
+                password   : credentials.password,
             })
             .then(response => {
+                console.log(response.data)
                 const token = response.data.access_token
                 localStorage.setItem('access_token', token)
                 resolve(response)
@@ -47,12 +51,12 @@ const actions = {
 
         if(localStorage.getItem('access_token')){
             return new Promise((resolve, reject) => {
-                axios.post('/api/auth/logout')
-                .then(response => {
+                // axios.post('/api/logout')
+                // .then(response => {
                     localStorage.removeItem('access_token')
                     context.commit('destroyToken')
-                    resolve(response)
-                })
+                    resolve()
+                // })
                 .catch(error => {
                     console.log(error)
                     context.commit('destroyToken')

@@ -12,24 +12,26 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+Route::post('/authenticate', 'AkunController@authenticate');
+Route::post('/logout', 'AkunController@logout');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-//User
-Route::group([
-    'prefix' => 'auth'
-], function () {
-    Route::post('/login','UserController@login');
-    Route::post('/register','UserController@create');
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+// //User
+// Route::group([
+//     'prefix' => 'auth'
+// ], function () {
+//     Route::post('/login','UserController@login');
+//     Route::post('/register','UserController@create');
 
-    Route::group([
-      'middleware' => 'auth:api'
-    ], function() {
-        Route::post('/logout', 'UserController@logout');
-        Route::get('/user', 'UserController@user');
-    });
-});
+//     Route::group([
+//       'middleware' => 'auth:api'
+//     ], function() {
+//         Route::post('/logout', 'UserController@logout');
+//         Route::get('/user', 'UserController@user');
+//     });
+// });
 //Project
 Route::get('/projects','ProjectController@index');
 Route::post('/projects/store', 'ProjectController@store');
