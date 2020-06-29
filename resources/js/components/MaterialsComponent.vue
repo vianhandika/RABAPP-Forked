@@ -20,7 +20,7 @@
       
         <template v-slot:top>
           <v-toolbar dark color="light-blue accent-3">
-            <v-toolbar-title>Materials/Labor</v-toolbar-title>
+            <v-toolbar-title>Bahan/Tenaga Kerja</v-toolbar-title>
             <v-divider
               class="mx-4"
               inset
@@ -30,7 +30,7 @@
             <v-text-field
               v-model="search"
               append-icon="search"
-              label="Search"
+              label="Cari"
               single-line
               hide-details
               style="width: 5px"
@@ -40,12 +40,12 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">Tambah</v-btn>
               </template>
               <v-card>
                 <v-card-title>
-                  <span class="headline" v-if="!edit">New Materials/Labor</span>
-                  <span class="headline" v-if="edit">Edit Materials/Labor</span>
+                  <span class="headline" v-if="!edit">Tambah Bahan/Tenaga Kerja</span>
+                  <span class="headline" v-if="edit">Ubah Bahan/Tenaga Kerja</span>
                 </v-card-title>
                 
                 <v-form ref="form" v-model="valid" lazy-validation>
@@ -75,7 +75,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Material.name" 
-                          label="Name"
+                          label="Nama"
                           :rules="nameRules"
                         >
                         </v-text-field>
@@ -86,7 +86,7 @@
                       <v-flex>
                         <v-text-field
                           v-model="Material.type"
-                          label="Type"
+                          label="Tipe"
                           :rules="typeRules"
                         >
                         </v-text-field>
@@ -98,7 +98,7 @@
                       :items="satuan"
                       item-text="name"
                       item-value="id_satuan"
-                      label="Unit"
+                      label="Satuan"
                       :rules="satuanRules"
                       append-icon="expand_more"
                     ></v-select>
@@ -107,7 +107,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Material.price"
-                          label="Price"
+                          label="Harga"
                           :rules="priceRules"
                           type="number"
                         >
@@ -119,7 +119,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Material.spesification" 
-                          label="Spesification"
+                          label="Spesifikasi"
                           :rules="specRules"
                         >
                         </v-text-field>
@@ -132,7 +132,7 @@
                         :items="store"
                         item-text="name"
                         item-value="id_store"
-                        label="Store"
+                        label="Toko"
                         append-icon="expand_more"
                         :rules="storeRules"
                       >
@@ -143,9 +143,9 @@
 
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
-                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Save</v-btn>
-                  <v-btn v-if="edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(Material.id_material)">Save</v-btn>
+                  <v-btn class="ma-2" rounded color="green" dark @click="close">Batal</v-btn>
+                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Simpan</v-btn>
+                  <v-btn v-if="edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(Material.id_material)">Simpan</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -174,12 +174,12 @@
               </v-icon>
             </template>
               <v-card>
-                <v-card-title class="headline">Confirmation</v-card-title>
-                  <v-card-text>Are you sure want to delete this material/labor?</v-card-text>
+                <v-card-title class="headline">Konfirmasi</v-card-title>
+                  <v-card-text>Anda yakin ingin menghapus bahan/tenaga kerja ini?</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Material.id_material)">Yes</v-btn>
-                  <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                  <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Material.id_material)">Ya</v-btn>
+                  <v-btn color="red darken-1" text @click="dialog2 = false">Tidak</v-btn>
                 </v-card-actions>
               </v-card>
           </v-dialog>
@@ -256,7 +256,7 @@ import storeController from './../service/Store'
           value: 'status',
         },
         {
-          text: 'Name',
+          text: 'Nama',
           align: 'left',
           sortable: false,
           value: 'name',
@@ -268,27 +268,27 @@ import storeController from './../service/Store'
         },
         {
           sortable: false,
-          text: 'Price',
+          text: 'Harga',
           value: 'price',
           width: '15%',
         },
         {
           sortable: false,
-          text: 'Unit',
+          text: 'Satuan',
           value: 'satuan'
         },
         { 
           sortable: false,
-          text: 'Spesification', 
+          text: 'Spesifikasi', 
           value: 'spesification'
         },
         { 
           sortable: false,
-          text: 'Store', 
+          text: 'Toko', 
           value: 'store'
         },
         { 
-          text: 'Actions', 
+          text: 'Aksi', 
           value: 'action', 
           sortable: false 
         },
@@ -413,7 +413,7 @@ import storeController from './../service/Store'
       },
       async deleteItem(id){
         try{
-          (await Controller.deleteItem(id).data).then(()=>{
+          await Controller.deleteItem(id).then(()=>{
             this.getallItem()
             this.delete()
           })

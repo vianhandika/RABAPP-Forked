@@ -20,7 +20,7 @@
                 solo
                 dense
                 style="width:300px"
-                label="search..."
+                label="cari..."
               >
               </v-text-field>  
               <v-btn 
@@ -36,17 +36,17 @@
           <div class="flex-grow-1"></div>
           <v-dialog v-model="dialog" width="850px">  
             <template v-slot:activator="{ on }">
-              <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="itemadjhandler();">Edit</v-btn>
+              <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="itemadjhandler();">Ubah</v-btn>
             </template>
             <template>
               <v-toolbar dark color="light-blue accent-4">
                 <v-btn icon dark @click="dialog = false">
                   <v-icon>close</v-icon>
                 </v-btn>
-                <v-toolbar-title>Edit Adjustment Materials/Labor</v-toolbar-title>
+                <v-toolbar-title>Ubah Penyesuaian Bahan/Tenaga Kerja</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
-                  <v-btn dark text @click="updateItemAdj(AHSAdj.id_rab)" :loading="loading">Save</v-btn>
+                  <v-btn dark text @click="updateItemAdj(AHSAdj.id_rab)" :loading="loading">Simpan</v-btn>
                 </v-toolbar-items>
               </v-toolbar>
               <v-card>
@@ -56,7 +56,7 @@
                       <v-flex sm6 md6 xs6>      
                         <v-select
                           v-model="AHSAdj.id_project"
-                          label="Project"
+                          label="Proyek"
                           :items="project"
                           item-value="id_project"
                           item-text="project"
@@ -67,7 +67,7 @@
                       <v-flex sm2 md2 xs2 style="margin-left:10px">
                         <v-select
                           v-model="AHSAdj.id_structure"
-                          label="Structure"
+                          label="Gedung"
                           item-text="structure"
                           item-value="id_structure"
                           :items="detailStructure"
@@ -89,7 +89,7 @@
                   >
                     <template v-slot:top>
                       <v-toolbar dark color="light-blue accent-2">
-                        <v-toolbar-title>Detail Materials/Labor</v-toolbar-title>
+                        <v-toolbar-title>Detail Bahan/Tenaga Kerja</v-toolbar-title>
                         <v-divider
                           class="mx-4"
                           inset
@@ -99,7 +99,7 @@
                           <v-text-field
                             v-model="searchDetails"
                             append-icon="search"
-                            label="Search"
+                            label="Cari"
                             single-line
                             hide-details
                           ></v-text-field>
@@ -144,12 +144,12 @@
                   </v-data-table>
                   <v-dialog v-model="updatedialog" max-width="290px">
                       <v-card>
-                        <v-card-title class="headline">Confirmation</v-card-title>
-                          <v-card-text>Are you sure want to update all of?</v-card-text>
+                        <v-card-title class="headline">Konfirmasi</v-card-title>
+                          <v-card-text>Anda yakin ingin melakukan perubahan?</v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="green darken-1" text @click="updatedialog = false; deleteItem(AHS.id_ahs_lokal)">Yes</v-btn>
-                          <v-btn color="red darken-1" text @click="updatedialog = false">No</v-btn>
+                          <v-btn color="green darken-1" text @click="updatedialog = false; deleteItem(AHS.id_ahs_lokal)">Ya</v-btn>
+                          <v-btn color="red darken-1" text @click="updatedialog = false">Tidak</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
@@ -177,7 +177,7 @@
                   <div>{{ data.status }}</div>
                 </v-flex>
                 <v-flex xs5 style="padding-left:10px">
-                  <div class="caption grey--text">HSP (LBO)</div>
+                  <div class="caption grey--text">HSP (L)</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
                     <div style="text-align:right;width:120px">{{ Number(data.HSP_before_overhead).toLocaleString('id-ID') }}</div>
@@ -188,18 +188,18 @@
                   <div>{{ data.overhead }}</div>
                 </v-flex>
                 <v-flex xs3 style="padding-left:10px">
-                  <div class="caption grey--text">Adjustment</div>
+                  <div class="caption grey--text">Penyesuaian</div>
                   <div>{{ data.adjustment }}</div>
                 </v-flex>
                 <v-flex xs5 style="padding-left:10px">
-                  <div class="caption grey--text">HSP (LAO)</div>
+                  <div class="caption grey--text">HSP (LSO)</div>
                   <v-layout>
                     <div style="text-align:left;width:25px">Rp.</div>
                     <div style="text-align:right;width:120px">{{ Number(data.HSP).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
                 <v-flex style="padding-left:10px">
-                  <div class="caption grey--text">Actions</div>
+                  <div class="caption grey--text">Aksi</div>
                   <v-layout>
                   <v-dialog v-model="dialogedit" width="850px">
                     <template v-slot:activator="{ on }">
@@ -210,10 +210,10 @@
                       <v-btn icon dark @click="dialogedit = false">
                         <v-icon>close</v-icon>
                       </v-btn>
-                      <v-toolbar-title>Edit AHS Lokal</v-toolbar-title>
+                      <v-toolbar-title>Ubah AHS Lokal</v-toolbar-title>
                       <v-spacer></v-spacer>
                       <v-toolbar-items>
-                        <v-btn dark text @click="updateItem(AHS.id_ahs_lokal)" :loading="loading">Save</v-btn>
+                        <v-btn dark text @click="updateItem(AHS.id_ahs_lokal)" :loading="loading">Simpan</v-btn>
                       </v-toolbar-items>
                     </v-toolbar>
                     
@@ -225,7 +225,7 @@
                               <v-flex>      
                                 <v-text-field
                                   v-model="AHS.project"
-                                  label="Project"
+                                  label="Proyek"
                                   readonly
                                 ></v-text-field>
                               </v-flex >
@@ -235,28 +235,28 @@
                               <v-flex sm2 md2 xs2>
                                 <v-text-field
                                   v-model="AHS.structure"
-                                  label="Structure"
+                                  label="Gedung"
                                   readonly
                                 ></v-text-field>
                               </v-flex>
                               <v-flex sm2 md2 xs2 style="margin-left:10px">
                                 <v-text-field
                                   v-model="AHS.floor"
-                                  label="Floor"
+                                  label="Lantai"
                                   readonly
                                 ></v-text-field>
                               </v-flex>
                               <v-flex sm2 md2 xs2 style="margin-left:10px">
                                 <v-text-field
                                   v-model="AHS.task"
-                                  label="Task Group"
+                                  label="Grup Pekerjaan"
                                   readonly
                                 ></v-text-field>
                               </v-flex>
                               <v-flex sm6 md6 xs6 style="margin-left:10px">
                                 <v-text-field
                                   v-model="AHS.name"
-                                  label="Task"
+                                  label="Pekerjaan"
                                   :return-object="false"
                                   readonly
                                 ></v-text-field>
@@ -267,7 +267,7 @@
                               <v-flex sm3 md3 xs3>
                                 <v-text-field
                                   v-model="AHS.total_equipment"
-                                  label="Total Of Equipment"
+                                  label="Total Peralatan"
                                   type="number"
                                   @change="equipment"
                                 ></v-text-field>
@@ -275,7 +275,7 @@
                               <v-flex sm3 md3 xs3 style="margin-left:20px">
                                 <v-text-field 
                                   v-model="AHS.HSP_before_overhead" 
-                                  label="Total"
+                                  label="HSP"
                                   readonly
                                 >
                                 </v-text-field>
@@ -292,7 +292,7 @@
                               <v-flex sm3 md3 xs3 style="margin-left:20px">
                                 <v-text-field 
                                   v-model="AHS.HSP" 
-                                  label="Total After Overhead"
+                                  label="HSP (LSO)"
                                   readonly
                                 >
                                 </v-text-field>
@@ -311,7 +311,7 @@
                           >
                             <template v-slot:top>
                               <v-toolbar dark color="light-blue accent-2">
-                                <v-toolbar-title>Detail Materials/Labor</v-toolbar-title>
+                                <v-toolbar-title>Detail Bahan/Tenaga Kerja</v-toolbar-title>
                                 <v-divider
                                   class="mx-4"
                                   inset
@@ -321,7 +321,7 @@
                                   <v-text-field
                                     v-model="searchDetails"
                                     append-icon="search"
-                                    label="Search"
+                                    label="Cari"
                                     single-line
                                     hide-details
                                   ></v-text-field>
@@ -356,12 +356,12 @@
                                   </v-icon>
                                 </template>
                                   <v-card>
-                                    <v-card-title class="headline">Confirmation</v-card-title>
-                                      <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                                    <v-card-title class="headline">Konfirmasi</v-card-title>
+                                      <v-card-text>Anda yakin ingin menghapus detail?</v-card-text>
                                     <v-card-actions>
                                       <v-spacer></v-spacer>
-                                      <v-btn color="green darken-1" text @click="dialog8 = false; deletematerials(ahs_details)">Yes</v-btn>
-                                      <v-btn color="red darken-1" text @click="dialog8 = false">No</v-btn>
+                                      <v-btn color="green darken-1" text @click="dialog8 = false; deletematerials(ahs_details)">Ya</v-btn>
+                                      <v-btn color="red darken-1" text @click="dialog8 = false">Tidak</v-btn>
                                     </v-card-actions>
                                   </v-card>
                               </v-dialog>
@@ -403,12 +403,12 @@
 
           <v-dialog v-model="dialog6" max-width="290px">
             <v-card>
-              <v-card-title class="headline">Confirmation</v-card-title>
-                <v-card-text>Are you sure want to delete this AHS LOkal?</v-card-text>
+              <v-card-title class="headline">Konfirmasi</v-card-title>
+                <v-card-text>Anda yakin ingin menghapus AHS Lokal?</v-card-text>
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="green darken-1" text @click="dialog6 = false; deleteItem(AHS.id_ahs_lokal)">Yes</v-btn>
-                <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
+                <v-btn color="green darken-1" text @click="dialog6 = false; deleteItem(AHS.id_ahs_lokal)">Ya</v-btn>
+                <v-btn color="red darken-1" text @click="dialog6 = false">Tidak</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -426,19 +426,19 @@
               <v-layout style="padding:10px">
                 <v-flex>
                   <v-layout>
-                    <div class="body-2 black--text font-weight-bold">Total of Labor : Rp.</div>
+                    <div class="body-2 black--text font-weight-bold">Total Tenaga Kerja : Rp.</div>
                     <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_labor).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
                 <v-flex>
                   <v-layout>
-                    <div class="body-2 black--text font-weight-bold">Total of Materials : Rp.</div>
+                    <div class="body-2 black--text font-weight-bold">Total Bahan : Rp.</div>
                     <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_material).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
                 <v-flex>
                   <v-layout>
-                    <div class="body-2 black--text font-weight-bold">Total of Equipment : Rp.</div>
+                    <div class="body-2 black--text font-weight-bold">Total Peralatan: Rp.</div>
                     <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(data.total_equipment).toLocaleString('id-ID') }}</div>
                   </v-layout>
                 </v-flex>
@@ -494,12 +494,12 @@
                   </v-icon>
                 </template>
                     <v-card>
-                      <v-card-title class="headline">Confirmation</v-card-title>
-                        <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                      <v-card-title class="headline">Konfirmasi</v-card-title>
+                        <v-card-text>Anda yakin ingin menghapus detail ini?</v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green darken-1" text @click="dialog8 = false; deleteDetail(ahs_details.id_ahs_lokal_details)">Yes</v-btn>
-                        <v-btn color="red darken-1" text @click="dialog8 = false">No</v-btn>
+                        <v-btn color="green darken-1" text @click="dialog8 = false; deleteDetail(ahs_details.id_ahs_lokal_details)">Ya</v-btn>
+                        <v-btn color="red darken-1" text @click="dialog8 = false">Tidak</v-btn>
                       </v-card-actions>
                     </v-card>
               </v-dialog>
@@ -612,20 +612,20 @@ import materialController from './../service/Material'
         sub_total : 0,
       },
       headers: [
-        {text: 'Type', align: 'left', sortable: false, value: 'status',},
-        {text: 'Item', align: 'left', sortable: true, value: 'name'},
-        {text: 'Price', align: 'left', sortable: false, value: 'price',},
-        {text: 'Coefficient', align: 'center', sortable: false, value: 'coefficient'},
-        {text: 'Adj BT', align: 'left', sortable: false, value: 'adjustment', align: 'center'},
+        {text: 'Tipe', align: 'left', sortable: false, value: 'status',},
+        {text: 'Nama', align: 'left', sortable: true, value: 'name'},
+        {text: 'Harga', align: 'left', sortable: false, value: 'price',},
+        {text: 'Koefisien', align: 'center', sortable: false, value: 'coefficient'},
+        {text: 'Penyesuian BT', align: 'left', sortable: false, value: 'adjustment', align: 'center'},
         {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total'},
         {text: 'Actions', align: 'center', sortable: false, value: 'action'},
       ],
       headersEdit: [
-        {text: 'Type', align: 'left', sortable: false, value: 'status',},
-        {text: 'Item', align: 'left', sortable: true, value: 'name'},
-        {text: 'Price', align: 'left', sortable: false, value: 'price',},
-        {text: 'Coefficient', align: 'center', sortable: false, value: 'coefficient'},
-        {text: 'Adj BT', align: 'left', sortable: false, value: 'adjustment', align: 'center'},
+        {text: 'Tipe', align: 'left', sortable: false, value: 'status',},
+        {text: 'Nama', align: 'left', sortable: true, value: 'name'},
+        {text: 'Harga', align: 'left', sortable: false, value: 'price',},
+        {text: 'Koefisien', align: 'center', sortable: false, value: 'coefficient'},
+        {text: 'Penyesuian BT', align: 'left', sortable: false, value: 'adjustment', align: 'center'},
         {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total'},
       ],
     }),
@@ -672,6 +672,7 @@ import materialController from './../service/Material'
       deletematerials(item)
       {
         console.log('item',item)
+        console.log('cek hapus detail')
         if(item.status == "labor")
           this.AHS.total_labor = parseFloat(this.AHS.total_labor) - parseFloat(item.sub_total)
         else
@@ -679,6 +680,9 @@ import materialController from './../service/Material'
         this.AHS.HSP_before_overhead = parseFloat(this.AHS.HSP_before_overhead) - parseFloat(item.sub_total) 
         this.AHS.HSP = parseFloat(this.AHS.HSP_before_overhead+(this.AHS.HSP_before_overhead*this.AHS.overhead/100))
         this.Material.splice(this.Material.indexOf(item),1)
+        this.detailMaterial.splice(this.detailMaterial.indexOf(item),1)
+        console.log('detail material',this.detailMaterial)
+        console.log('material',this.Material)
       },
       async getRAB()
       {
@@ -742,8 +746,7 @@ import materialController from './../service/Material'
         let temp = parseFloat(this.AHS.HSP_before_overhead * this.AHS.overhead/100).toFixed(2)
         console.log(temp)
         this.AHS.HSP = parseFloat(this.AHS.HSP_before_overhead) + parseFloat(temp)
-        console.log('AHS Total')
-        console.log(this.AHS.total)
+        console.log('AHS Total', this.AHS.total)
       },
       equipment()
       {
@@ -800,17 +803,6 @@ import materialController from './../service/Material'
             }
         }
         console.log('material All',this.detailM)
-      },
-      async filterTask(id)
-      {
-        console.log('Id Sub',id)
-        this.ahsAll = (await ahs.getall()).data
-        console.log('AHS All',this.ahsAll)
-        this.detailAHS = this.ahsAll.filter(obj=>obj.id_sub == id)
-        console.log('Choose AHS',this.detailAHS)
-        let task_sub = this.detailTask.find(obj=>obj.id_structure == this.AHS.id_structure && obj.id_groups == this.AHS.id_groups && obj.id_sub == this.AHS.id_sub)
-        console.log('task_sub',task_sub)
-        this.AHS.id_sub_details = task_sub.id_sub_details
       },
       async searchAll()
       {
@@ -878,7 +870,7 @@ import materialController from './../service/Material'
       {
         console.log('Item Edit',item)
         this.Material = []
-        
+        this.detailMaterial = []
         let ahs = (await rabDetails.getItem(item.id_ahs_lokal)).data
         this.AHS = ahs[0]
         console.log('AHS Lokal',this.AHS)

@@ -51,29 +51,15 @@ class RABDetailsTransformers extends TransformerAbstract
         ];
         if($data['status'] == 'Volume')
         {
-            // $data['volume'] = $rab_details->volume;
-            // $data['total_labor'] = $rab_details->total_labor;
-            // $data['total_material'] = $rab_details->total_material;
-            // $data['total_equipment'] = $rab_details->total_equipment;
-            // $data['HSP_before_overhead'] = $rab_details->HSP_before_overhead;
-            // $data['HSP'] = $rab_details->HSP;
-
             $data['volume_adj'] = $rab_details->volume * $rab_details->adjustment;
             $data['total_labor_adj'] = $rab_details->total_labor;
             $data['total_material_adj'] = $rab_details->total_material;
             $data['total_equipment_adj'] = $rab_details->total_equipment;
             $data['HSP_before_overhead_adj'] = $rab_details->HSP_before_overhead;
             $data['HSP_adj'] = $rab_details->HSP;
-            // $data['HP_Adjust'] = $rab_details->HP; 
         }
         if($data['status'] == 'Price')
         {
-            // $data['volume'] = $rab_details->volume;
-            // $data['total_labor'] = $rab_details->total_labor;
-            // $data['total_material'] = $rab_details->total_material;
-            // $data['total_equipment'] = $rab_details->total_equipment;
-            // $data['HSP_before_overhead'] = $rab_details->HSP_before_overhead;
-            // $data['HSP'] = $rab_details->HSP;
 
             $data['volume_adj'] = $rab_details->volume;
             $data['total_labor_adj'] = $rab_details->total_labor * $rab_details->adjustment;
@@ -81,7 +67,6 @@ class RABDetailsTransformers extends TransformerAbstract
             $data['total_equipment_adj'] = $rab_details->total_equipment * $rab_details->adjustment;
             $data['HSP_before_overhead_adj'] = $rab_details->HSP_before_overhead * $rab_details->adjustment;
             $data['HSP_adj'] = $rab_details->HSP * $rab_details->adjustment;
-            // $data['HP_Adjust'] = $rab_details->HP * $rab_details->adjustment;
         }
         $task = TaskSubDetails::find($data['id_sub_details']);
         $ahs = AHS::all();

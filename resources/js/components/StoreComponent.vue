@@ -9,7 +9,7 @@
       >
         <template v-slot:top>
           <v-toolbar dark color="light-blue accent-3">
-            <v-toolbar-title>Store</v-toolbar-title>
+            <v-toolbar-title>Toko</v-toolbar-title>
             <v-divider
               class="mx-4"
               inset
@@ -19,7 +19,7 @@
             <v-text-field
               v-model="search"
               append-icon="search"
-              label="Search"
+              label="Cari"
               single-line
               hide-details
               style="width: 5px"
@@ -29,13 +29,13 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" v-on="on" @click="reset">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" v-on="on" @click="reset;edit=false">Tambah</v-btn>
               </template>
 
               <v-card>
                 <v-card-title>
-                  <span class="headline" v-if="!edit">New Store</span>
-                  <span class="headline" v-if="edit">Edit Store</span>
+                  <span class="headline" v-if="!edit">Tambah Toko</span>
+                  <span class="headline" v-if="edit">Ubah Toko</span>
                 </v-card-title>
                 
                 <v-form 
@@ -48,7 +48,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Store.kode" 
-                          label="ID Store"
+                          label="ID Toko"
                           readonly
                         >
                         </v-text-field>
@@ -59,7 +59,7 @@
                         <v-flex>
                           <v-text-field 
                             v-model="Store.name" 
-                            label="Name"
+                            label="Nama"
                             :rules="nameRules"
                           >
                           </v-text-field>
@@ -70,7 +70,7 @@
                         <v-flex>
                           <v-text-field 
                             v-model="Store.address" 
-                            label="Address"
+                            label="Alamat"
                             :rules="addressRules"
                           >
                             </v-text-field>
@@ -81,7 +81,7 @@
                         <v-flex>
                           <v-text-field 
                             v-model="Store.type" 
-                            label="Type of Materials"
+                            label="Tipe Bahan"
                             :rules="typeRules"
                           >
                             </v-text-field>
@@ -92,8 +92,9 @@
                         <v-flex>
                           <v-text-field 
                             v-model="Store.no_telp" 
-                            label="Telephone Number"
+                            label="Nomor Telepon"
                             :rules="noRules"
+                            type="number"
                           >
                             </v-text-field>
                         </v-flex>
@@ -103,8 +104,9 @@
                         <v-flex>
                           <v-text-field 
                             v-model="Store.phone" 
-                            label="Phone Number"
+                            label="Nomor HP"
                             :rules="phoneRules"
+                            type="number"
                           >
                             </v-text-field>
                         </v-flex>
@@ -114,7 +116,7 @@
                         <v-flex>
                           <v-text-field 
                             v-model="Store.owner" 
-                            label="Owner"
+                            label="Pemilik"
                             :rules="ownerRules"
                           >
                             </v-text-field>
@@ -125,9 +127,9 @@
 
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
-                  <v-btn class="ma-2" rounded color="green" dark @click="dialog=false">Cancel</v-btn>
-                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="!edit" @click="addItem();dialog=false">Save</v-btn>
-                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="edit" @click="updateItem(Store.id_store);dialog=false">Save</v-btn>
+                  <v-btn class="ma-2" rounded color="green" dark @click="dialog=false">Batal</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="!edit" @click="addItem();dialog=false">Simpan</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="edit" @click="updateItem(Store.id_store);dialog=false">Simpan</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -156,12 +158,12 @@
               </v-icon>
             </template>
               <v-card>
-                <v-card-title class="headline">Confirmation</v-card-title>
-                <v-card-text>Are you sure want to delete this store?</v-card-text>
+                <v-card-title class="headline">Konfirmasi</v-card-title>
+                <v-card-text>Anda yakin ingin menghapus toko ini?</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(Store.id_store)">Yes</v-btn>
-                  <v-btn color="red darken-1" text @click="dialogDelete=false">No</v-btn>
+                  <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(Store.id_store)">Ya</v-btn>
+                  <v-btn color="red darken-1" text @click="dialogDelete=false">Tidak</v-btn>
                 </v-card-actions>
               </v-card>
           </v-dialog>
@@ -218,68 +220,66 @@ import Controller from './../service/Store'
           value : 'kode'
         },
         {
-          text: 'Name',
+          text: 'Nama',
           align: 'left',
           sortable: false,
           value: 'name',
         },
         { 
           sortable: false,
-          text: 'Address', 
+          text: 'Alamat', 
           value: 'address'
         },
         { 
           sortable: false,
-          text: 'Type of Materials', 
+          text: 'Tipe Bahan', 
           value: 'type'
         },
         { 
           sortable: false,
-          text: 'Telp Number', 
+          text: 'Nomor Telepon', 
           value: 'no_telp'
         },
         { 
           sortable: false,
-          text: 'Phone Number', 
+          text: 'Nomor HP', 
           value: 'phone'
         },
         { 
           sortable: false,
-          text: 'Owner', 
+          text: 'Pemilik', 
           value: 'owner'
         },
         { 
-          text: 'Actions', 
+          text: 'Aksi', 
           value: 'action', 
           sortable: false 
         },
       ],
       //validation
       nameRules: [
-        v => !!v || 'Name is required',
-        v => v && v.length <= 30 || 'Name must be at most 30 characters long'
+        v => !!v || 'Nama harus diisi',
+        v => v && v.length <= 30 || 'Nama harus antara 1-30 karakter'
       ],
       addressRules: [
-        v => !!v || 'Address is required',
-        v => v && v.length <= 50 || 'Address must be at most 50 characters long'
+        v => !!v || 'Alamat harus diisi',
+        v => v && v.length <= 50 || 'Alamat harus antara anatara 1-50 karakter'
       ],
       typeRules: [
-        v => !!v || 'Type is required',
-        v => v && v.length <= 30 || 'Type must be at most 30 characters long'
+        v => !!v || 'Tipe harus diisi',
+        v => v && v.length <= 30 || 'Tipe harus antara 1-30 karakter'
       ],
       phoneRules: [
-        v => !!v || 'Phone is required',
-        // v => (v && !v.numeric) || 'Phone number must be numeric',
-        v => v && v.length <= 15 || 'Phone number must be at most 15 characters long'
+        v => !!v || 'Nomor HP harus diisi',
+        v => v && v.length <= 15 || 'Nomoh HP harus antara 1-15 karakter'
       ],
       noRules: [
-        v => !!v || 'Telephone number is required',
-        v => v && v.length <= 15 || 'Telephone number must be at most 15 characters long'
-        // v => (v && !v.numeric) || 'Telephone number must be numeric'
+        v => !!v || 'Nomor Telepon harus diisi',
+        v => v && v.length <= 15 || 'Nomor Telepon harus antara 1-15 karakter'
       ],
       ownerRules:[
-        v => !!v || 'Owner is required',
-        v => v && v.length <= 40 || 'Owner must be at most 40 characters long'
+        v => !!v || 'Nama pemilik harus diisi',
+        v => v && v.length <= 40 || 'Nama pemiliki harus antara 1-40 karakter'
       ]
     }),
     mounted(){
@@ -293,17 +293,17 @@ import Controller from './../service/Store'
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
-        this.snackText = 'Data Save Successfully'
+        this.snackText = 'Data Berhasil Disimpan'
       },
       update(){
         this.snack = true
         this.snackColor = 'teal darken-1'
-        this.snackText = 'Data Update Successfully'
+        this.snackText = 'Data Berhasil Diubah'
       },
       delete(){
         this.snack = true
         this.snackColor = 'red darken-1'
-        this.snackText = 'Data Delete Successfully'
+        this.snackText = 'Data Berhasil Dihapus'
       },
       async getallItem(){
         try{
@@ -361,7 +361,7 @@ import Controller from './../service/Store'
       },
       async deleteItem(id){
         try{
-          (await Controller.deleteItem(id).data).then(()=>{
+          await Controller.deleteItem(id).then(()=>{
             this.getallItem()
             this.delete()
           })

@@ -21,7 +21,7 @@
 
         <template v-slot:top>
           <v-toolbar dark color="light-blue accent-3">
-            <v-toolbar-title>Project</v-toolbar-title>
+            <v-toolbar-title>Proyek</v-toolbar-title>
             <v-divider
               class="mx-4"
               inset
@@ -31,7 +31,7 @@
             <v-text-field
               v-model="search"
               append-icon="search"
-              label="Search"
+              label="Cari"
               single-line
               hide-details
               style="width: 5px"
@@ -41,12 +41,12 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">Tambah</v-btn>
               </template>
               <v-card>
                 <v-card-title>
-                  <span class="headline" v-if="!edit">New Project</span>
-                  <span class="headline" v-if="edit">Edit Project</span>
+                  <span class="headline" v-if="!edit">Tambah Proyek</span>
+                  <span class="headline" v-if="edit">Ubah Proyek</span>
                 </v-card-title>
 
                 <v-form ref="form" lazy-validation v-model="valid">
@@ -55,7 +55,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Project.kode" 
-                          label="ID Project"
+                          label="ID Proyek"
                           readonly
                         >
                         </v-text-field>
@@ -66,7 +66,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Project.project" 
-                          label="Project"
+                          label="Proyek"
                           :rules="nameRules"
                         >
                         </v-text-field>
@@ -77,7 +77,7 @@
                       <v-flex>
                         <v-text-field
                           v-model="Project.address"
-                          label="Address"
+                          label="Alamat"
                           :rules="addressRules"
                           ></v-text-field>
                       </v-flex>
@@ -87,7 +87,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Project.owner" 
-                          label="Owner"
+                          label="Pemilik"
                           :rules="ownerRules"
                         ></v-text-field>
                       </v-flex>
@@ -110,7 +110,7 @@
 
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          label="Date"
+                          label="Tanggal"
                           required
                           v-on="on"
                           :rules="dateRules"
@@ -126,7 +126,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Project.no_telp" 
-                          label="Telp Number"
+                          label="Nomor Telepon"
                           :rules="noRules"
                           type="number"
                         ></v-text-field>
@@ -137,7 +137,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Project.phone" 
-                          label="Phone Number"
+                          label="Nomor HP"
                           :rules="phoneRules"
                           type="number"
                         >
@@ -149,7 +149,7 @@
                       <v-flex>
                         <v-select
                           v-model="Project.type"
-                          label="Type"
+                          label="Tipe"
                           :rules="typeRules"
                           :items="typeProject"
                           append-icon="expand_more"
@@ -172,8 +172,8 @@
 
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
-                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem()">Save</v-btn>
+                  <v-btn class="ma-2" rounded color="green" dark @click="close">Batal</v-btn>
+                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem()">Simpan</v-btn>
                   <v-btn v-if="edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Project.id_project)">Save</v-btn>
                 </v-card-actions>
               </v-card>
@@ -203,12 +203,12 @@
               </v-icon>
             </template>
               <v-card>
-                <v-card-title class="headline">Confirmation</v-card-title>
-                  <v-card-text>Are you sure want to delete this project?</v-card-text>
+                <v-card-title class="headline">Konfirmasi</v-card-title>
+                  <v-card-text>Anda yakin ingin menghapus proyek ini?</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(Project.id_project)">Yes</v-btn>
-                  <v-btn color="red darken-1" text @click="dialogDelete = false">No</v-btn>
+                  <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(Project.id_project)">Ya</v-btn>
+                  <v-btn color="red darken-1" text @click="dialogDelete = false">Tidak</v-btn>
                 </v-card-actions>
               </v-card>
           </v-dialog>
@@ -278,15 +278,15 @@ import { parseISO } from 'date-fns'
       },
       headers: [
         {text: 'ID',align: 'left',sortable: false,value: 'kode',width: '8%'},
-        {text: 'Project',align: 'left',sortable: false,value: 'project'},
-        {text: 'Address',sortable: false,value: 'address'},
-        {text: 'Owner',sortable: false,value: 'owner'},
-        {text: 'Date', sortable: false,value: 'date',width: '12%'},
-        {text: 'Telp Number', sortable: false,value: 'no_telp',align: 'left'},
-        {sortable: false,text: 'Phone Number',value: 'phone',align: 'left'},
-        {sortable: false,text: 'Type',value: 'type',align: 'center'},
+        {text: 'Proyek',align: 'left',sortable: false,value: 'project'},
+        {text: 'Alamat',sortable: false,value: 'address'},
+        {text: 'Pemilik',sortable: false,value: 'owner'},
+        {text: 'Tanggal', sortable: false,value: 'date',width: '12%'},
+        {text: 'Nomor Telepon', sortable: false,value: 'no_telp',align: 'left'},
+        {sortable: false,text: 'Nomor HP',value: 'phone',align: 'left'},
+        {sortable: false,text: 'Tipe',value: 'type',align: 'center'},
         {sortable: false,text: 'Nominal',value: 'nominal',width: '15%'},
-        {text: 'Actions',value: 'action',sortable: false,width: '8%' },
+        {text: 'Aksi',value: 'action',sortable: false,width: '8%' },
       ],
       //validation
       nameRules: [
@@ -408,7 +408,7 @@ import { parseISO } from 'date-fns'
       },
       async deleteItem(id){
         try{
-          (await Controller.deleteItem(id).data).then(()=>{
+          await Controller.deleteItem(id).then(()=>{
             this.getallItem()
             this.delete()
           })

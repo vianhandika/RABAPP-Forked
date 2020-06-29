@@ -104,6 +104,7 @@ class AHSLokalDetailsController extends RestController
         $ahs->HSP = $ahs->HSP_before_overhead + ($ahs->HSP_before_overhead * $ahs->overhead/100);
         $ahs->HP = $ahs->HSP * $ahs->volume;
         $ahs->HP_Adjust =  $ahs->HP * $ahs->adjustment;
+        
         if($material->status == 'material')
             $ahs->total_material += $detail->sub_total;
         else
@@ -199,7 +200,11 @@ class AHSLokalDetailsController extends RestController
         }
         $rab->total_rab = $total;
         $rab->save();
-        dd($rab);
+
+        $project = Project::findOrFail($rab->id_project);
+        $project->nominal = $rab->total_rab;
+        $project->save();
+
         return response()->json([
             'ahs' => $ahs,
             'rab' => $rab,

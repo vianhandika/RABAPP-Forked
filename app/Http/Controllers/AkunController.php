@@ -52,7 +52,8 @@ class AkunController extends Controller
 
             return $user;
         } catch(ModelNotFoundException $e) {
-            return $this->sendIseResponse($e->getMessage());
+            throw $e;
+            // return $this->sendIseResponse($e->getMessage());
         }
     }
     

@@ -11,7 +11,7 @@
           >
             <template v-slot:top>
               <v-toolbar dark color="light-blue accent-3">
-                <v-toolbar-title>Building</v-toolbar-title>
+                <v-toolbar-title>Gedung</v-toolbar-title>
                 <v-divider
                   class="mx-4"
                   inset
@@ -21,7 +21,7 @@
                 <v-text-field
                   v-model="searchstructure"
                   append-icon="search"
-                  label="Search"
+                  label="Cari"
                   single-line
                   hide-details
                   style="width: 45px"
@@ -30,7 +30,7 @@
                 <v-spacer></v-spacer>
                 <v-text-field
                   v-model="building"
-                  label="Building"
+                  label="Gedung"
                   single-line
                   hide-details
                   style="width: 40px"
@@ -44,7 +44,7 @@
                   dark
                   @click="addStructure"
                 >
-                  Add
+                  Tambah
                 </v-btn>
               </v-toolbar>
             </template>
@@ -82,12 +82,12 @@
                   </v-icon>
                 </template>
                     <v-card>
-                      <v-card-title class="headline">Confirmation</v-card-title>
-                        <v-card-text>Are you sure want to delete this structure?</v-card-text>
+                      <v-card-title class="headline">Konfirmasi</v-card-title>
+                        <v-card-text>Anda yakin ingin menghapus gedung ini?</v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green darken-1" text @click="dialogDelete = false; deleteStructure(Structure.id_structure)">Yes</v-btn>
-                        <v-btn color="red darken-1" text @click="dialogDelete = false">No</v-btn>
+                        <v-btn color="green darken-1" text @click="dialogDelete = false; deleteStructure(Structure.id_structure)">Ya</v-btn>
+                        <v-btn color="red darken-1" text @click="dialogDelete = false">Tidak</v-btn>
                       </v-card-actions>
                     </v-card>
               </v-dialog>
@@ -103,7 +103,7 @@
           >
             <template v-slot:top>
               <v-toolbar dark color="light-blue accent-3">
-                <v-toolbar-title>Floor</v-toolbar-title>
+                <v-toolbar-title>Lantai</v-toolbar-title>
                 <v-divider
                   class="mx-4"
                   inset
@@ -113,7 +113,7 @@
                 <v-text-field
                   v-model="searchfloor"
                   append-icon="search"
-                  label="Search"
+                  label="Cari"
                   single-line
                   hide-details
                   style="width: 45px"
@@ -122,7 +122,7 @@
                 <v-spacer></v-spacer>
                 <v-text-field
                   v-model="floor_data"
-                  label="Floor"
+                  label="Lantai"
                   single-line
                   hide-details
                   style="width: 40px"
@@ -136,7 +136,7 @@
                   dark
                   @click="addFloor"
                 >
-                  Add
+                  Tambah
                 </v-btn>
               </v-toolbar>
             </template>
@@ -174,12 +174,12 @@
                   </v-icon>
                 </template>
                     <v-card>
-                      <v-card-title class="headline">Confirmation</v-card-title>
-                        <v-card-text>Are you sure want to delete this floor?</v-card-text>
+                      <v-card-title class="headline">Konfirmasi</v-card-title>
+                        <v-card-text>Anda yakin ingin menghapus lantai ini?</v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green darken-1" text @click="dialogDeleteFloor = false; deleteFloor(Floor.id_group)">Yes</v-btn>
-                        <v-btn color="red darken-1" text @click="dialogDeleteFloor = false">No</v-btn>
+                        <v-btn color="green darken-1" text @click="dialogDeleteFloor = false; deleteFloor(Floor.id_group)">Ya</v-btn>
+                        <v-btn color="red darken-1" text @click="dialogDeleteFloor = false">Tidak</v-btn>
                       </v-card-actions>
                     </v-card>
               </v-dialog>
@@ -199,7 +199,7 @@
         
             <template v-slot:top>
               <v-toolbar dark color="light-blue accent-3">
-                <v-toolbar-title>Task Group</v-toolbar-title>
+                <v-toolbar-title>Grup Pekerjaan</v-toolbar-title>
                 <v-divider
                   class="mx-4"
                   inset
@@ -209,7 +209,7 @@
                 <v-text-field
                   v-model="searchtask"
                   append-icon="search"
-                  label="Search"
+                  label="Cari"
                   single-line
                   hide-details
                   style="width: 45px"
@@ -218,7 +218,7 @@
                 <v-spacer></v-spacer>
                 <v-text-field
                   v-model="task"
-                  label="Task Group"
+                  label="Grup Pekerjaan"
                   single-line
                   hide-details
                   style="width: 40px"
@@ -232,7 +232,7 @@
                   dark
                   @click="addTaskSub"
                 >
-                  Add
+                  Tambah
                 </v-btn>
               </v-toolbar>
             </template>
@@ -270,12 +270,12 @@
                   </v-icon>
                 </template>
                     <v-card>
-                      <v-card-title class="headline">Confirmation</v-card-title>
-                        <v-card-text>Are you sure want to delete this task group?</v-card-text>
+                      <v-card-title class="headline">Konfirmasi</v-card-title>
+                        <v-card-text>Anda yakin ingin menghapus grup pekerjaan ini?</v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green darken-1" text @click="dialogDeleteTask = false; deleteTaskSub(Task.id_sub)">Yes</v-btn>
-                        <v-btn color="red darken-1" text @click="dialogDeleteTask = false">No</v-btn>
+                        <v-btn color="green darken-1" text @click="dialogDeleteTask = false; deleteTaskSub(Task.id_sub)">Ya</v-btn>
+                        <v-btn color="red darken-1" text @click="dialogDeleteTask = false">Tidak</v-btn>
                       </v-card-actions>
                     </v-card>
               </v-dialog>
@@ -292,7 +292,7 @@
           >
             <template v-slot:top>
               <v-toolbar dark color="light-blue accent-3">
-                <v-toolbar-title>Unit</v-toolbar-title>
+                <v-toolbar-title>Satuan</v-toolbar-title>
                 <v-divider
                   class="mx-4"
                   inset
@@ -302,7 +302,7 @@
                 <v-text-field
                   v-model="searchsatuan"
                   append-icon="search"
-                  label="Search"
+                  label="Cari"
                   single-line
                   hide-details
                   style="width: 45px"
@@ -311,7 +311,7 @@
                 <v-spacer></v-spacer>
                 <v-text-field
                   v-model="satuan_data"
-                  label="Unit"
+                  label="Satuan"
                   single-line
                   hide-details
                   style="width: 40px"
@@ -325,7 +325,7 @@
                   dark
                   @click="addSatuan"
                 >
-                  Add
+                  Tambah
                 </v-btn>
               </v-toolbar>
             </template>
@@ -363,12 +363,12 @@
                   </v-icon>
                 </template>
                     <v-card>
-                      <v-card-title class="headline">Confirmation</v-card-title>
-                        <v-card-text>Are you sure want to delete this satuan?</v-card-text>
+                      <v-card-title class="headline">Konfirmasi</v-card-title>
+                        <v-card-text>Anda yakin ingin menghapus satuan ini?</v-card-text>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn color="green darken-1" text @click="dialogDeleteSatuan = false; deleteSatuan(Satuan.id_satuan)">Yes</v-btn>
-                        <v-btn color="red darken-1" text @click="dialogDeleteSatuan = false">No</v-btn>
+                        <v-btn color="green darken-1" text @click="dialogDeleteSatuan = false; deleteSatuan(Satuan.id_satuan)">Ya</v-btn>
+                        <v-btn color="red darken-1" text @click="dialogDeleteSatuan = false">Tidak</v-btn>
                       </v-card-actions>
                     </v-card>
               </v-dialog>
@@ -436,23 +436,23 @@ import satuan from './../service/Satuan'
       },
       headersStructure: [
         {text: 'ID', value:'id_structure'},
-        {text: 'Name', value:'name'},
-        {text: 'Actions', value:'action'},
+        {text: 'Nama', value:'name'},
+        {text: 'Aksi', value:'action'},
       ],
       headersFloor: [
         {text: 'ID', value: 'id_group'},
-        {text: 'Name', value: 'name'},
-        {text: 'Actions', value: 'action'},
+        {text: 'Nama', value: 'name'},
+        {text: 'Aksi', value: 'action'},
       ],
       headersTask: [
         {text: 'ID', value:'id_sub'},
-        {text: 'Name', value:'name'},
-        {text: 'Actions', value:'action'},
+        {text: 'Nama', value:'name'},
+        {text: 'Aksi', value:'action'},
       ],
       headersSatuan: [
         {text: 'ID', value: 'id_satuan'},
-        {text: 'Name', value: 'name'},
-        {text: 'Actions', value: 'action'},
+        {text: 'Nama', value: 'name'},
+        {text: 'Aksi', value: 'action'},
       ]
     }),
     mounted(){
@@ -468,18 +468,18 @@ import satuan from './../service/Satuan'
       save () {
         this.snack = true
         this.snackColor = 'green'
-        this.snackText = 'Data Save Successfully'
+        this.snackText = 'Data Berhasil Disimpan'
       },
       update()
       {
         this.snack = true
         this.snackColor = 'teal darken-1'
-        this.snackText = 'Data Update Successfully'
+        this.snackText = 'Data Berhasil Diubah'
       },
       delete(){
         this.snack = true
         this.snackColor = 'red'
-        this.snackText = 'Data Deleted Sucessfully'
+        this.snackText = 'Data Berhasil Dihapus'
       },
       itemHandler(item)
       {
@@ -534,7 +534,7 @@ import satuan from './../service/Satuan'
       },
       async deleteStructure(id){
         try{
-          (await structure.delete(id).data).then(()=>{
+          await structure.delete(id).then(()=>{
             this.getStructure()
             this.delete()
           })
@@ -579,7 +579,7 @@ import satuan from './../service/Satuan'
       },
       async deleteFloor(id){
         try{
-          (await floor.delete(id).data).then(()=>{
+          await floor.delete(id).then(()=>{
             this.getFloor()
             this.delete()
           })
@@ -624,7 +624,7 @@ import satuan from './../service/Satuan'
       },
       async deleteTaskSub(id){
         try{
-          (await task.delete(id).data).then(()=>{
+          await task.delete(id).then(()=>{
             this.getTaskSub()
             this.delete()
           })
@@ -662,7 +662,7 @@ import satuan from './../service/Satuan'
       },
       async deleteSatuan(id){
         try{
-          (await satuan.delete(id).data).then(()=>{
+          await satuan.delete(id).then(()=>{
             this.getSatuan()
             this.delete()
           })

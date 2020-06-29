@@ -18,7 +18,7 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <div class="overline text-right">Project</div>
+                    <div class="overline text-right">Proyek</div>
                     <v-list-item-title class="headline mb-1 text-right">{{countP}}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
@@ -43,7 +43,7 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <div class="overline text-right">Materials/Labor</div>
+                    <div class="overline text-right">Bahan/Tenaga Kerja</div>
                     <v-list-item-title class="headline mb-1 text-right">{{countM}}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
@@ -107,7 +107,7 @@
             </v-flex>
           </v-layout>
         </v-container>
-        <v-col class="body-2 grey--text"><h1>Reports</h1></v-col>
+        <v-col class="body-2 grey--text"><h1>Laporan</h1></v-col>
         <v-row>
           <v-col cols="12" sm="6" md="6">
             <v-container>
@@ -120,7 +120,7 @@
                     <v-card-title class="headline light-green accent-2--text">BOQ</v-card-title>
                   </v-col>
                   <v-col cols="5" align-center v-if="select=='2'">
-                    <v-card-title class="headline light-green accent-2--text">MR</v-card-title>
+                    <v-card-title class="headline light-green accent-2--text">KB</v-card-title>
                   </v-col>
                   <v-col cols="5" align-center v-if="select=='3'">
                     <v-card-title class="headline light-green accent-2--text">RAP</v-card-title>
@@ -129,7 +129,7 @@
                 <v-row>
                   <v-col cols="5" style="margin-left:10px">
                     <v-select
-                      label="Select"
+                      label="Pilih"
                       v-model="select"
                       :items="items"
                       item-text="name"
@@ -144,7 +144,7 @@
                     <v-text-field
                       v-model="search"
                       append-icon="search"
-                      label="Search"
+                      label="Cari"
                       single-line
                       hide details    
                       color="green darken-3"
@@ -184,7 +184,7 @@
                     >
                     </v-text-field>
                     <v-select
-                      label="Select"
+                      label="Pilih"
                       v-model="selectMR"
                       :items="itemsMR"
                       item-text="name"
@@ -420,7 +420,7 @@
                 <v-row>
                   <v-col cols="5" style="margin-left:10px">
                     <v-select
-                      label="Select"
+                      label="Pilih"
                       v-model="selectahs"
                       :items="itemsahs"
                       item-text="name"
@@ -436,7 +436,7 @@
                     <v-text-field
                       v-model="searchAHS"
                       append-icon="search"
-                      label="Search"
+                      label="Cari"
                       single-line
                       hide details    
                       color="blue darken-3"
@@ -447,7 +447,7 @@
                     <v-text-field
                       v-model="searchAHSLokal"
                       append-icon="search"
-                      label="Search"
+                      label="Cari"
                       single-line
                       hide details    
                       color="blue darken-3"
@@ -631,23 +631,23 @@ import materials from './../service/Material'
       project:[],
 
       items:[
-        {name:'RAB Report',value:null},
-        {name:'RAP Report',value:'3'},
-        {name:'BOQ Report',value:'1'},
-        {name:'Materials Requirements Report',value:'2'},
+        {name:'Laporan RAB',value:null},
+        {name:'Laporan RAP',value:'3'},
+        {name:'Laporan BOQ',value:'1'},
+        {name:'Laporan KB',value:'2'},
       ],
       itemsahs:[
         {name:'AHS Master',value:null},
         {name:'AHS Lokal',value:'1'}
       ],
       itemsMR:[
-        {name:'By All',value:1},
-        {name:'By Building',value:2},
-        {name:'By Floor',value:3},
+        {name:'Semua',value:1},
+        {name:'Gedung',value:2},
+        {name:'Lantai',value:3},
       ],
       //validaton
       rapRules:[
-        v => !!v.rap || 'RAP is required'
+        v => !!v.rap || 'RAP harus diisi'
       ]
     }),
     mounted() {
@@ -784,7 +784,6 @@ import materials from './../service/Material'
       },
       async generateRAB(id)
       {
-        console.log('cek cek')
         try{
           this.overlay = true
           Http.download('/api/rab_report/'+id+'/'+this.ppn+'/'+this.jasa).then(() => {

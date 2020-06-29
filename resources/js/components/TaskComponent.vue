@@ -10,7 +10,7 @@
       >
         <template v-slot:top>
           <v-toolbar dark color="light-blue accent-3">
-            <v-toolbar-title>Task</v-toolbar-title>
+            <v-toolbar-title>Pekerjaan</v-toolbar-title>
             <v-divider
               class="mx-4"
               inset
@@ -20,7 +20,7 @@
             <v-text-field
               v-model="search"
               append-icon="search"
-              label="Search"
+              label="Cari"
               single-line
               hide-details
               style="width: 5px"
@@ -30,12 +30,12 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
-                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">New</v-btn>
+                <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">Tambah</v-btn>
               </template>
               <v-card>
                 <v-card-title>
-                  <span class="headline" v-if="!edit">New Task</span>
-                  <span class="headline" v-if="edit">Edit Task</span>
+                  <span class="headline" v-if="!edit">Tambah Pekerjaan</span>
+                  <span class="headline" v-if="edit">Ubah Pekerjaan</span>
                 </v-card-title>
                 
               <v-form ref="form" v-model="valid" lazy-validation>
@@ -44,7 +44,7 @@
                     <v-flex>
                       <v-text-field 
                         v-model="Job.kode" 
-                        label="ID Task"
+                        label="ID Pekerjaan"
                         readonly
                       >
                       </v-text-field>
@@ -55,7 +55,7 @@
                     <v-flex>
                       <v-text-field 
                         v-model="Job.name" 
-                        label="Name"
+                        label="Nama"
                         :rules="nameRules"
                       >
                       </v-text-field>
@@ -67,7 +67,7 @@
                       :items="satuan"
                       item-text="name"
                       item-value="id_satuan"
-                      label="Unit"
+                      label="Satuan"
                       :rules="satuanRules"
                       append-icon="expand_more"
                     ></v-select>
@@ -84,7 +84,7 @@
                       <v-flex>
                         <v-text-field 
                           v-model="Job.details" 
-                          label="Spesification"
+                          label="Spesifikasi"
                           :rules="specRules"
                         >
                         </v-text-field>
@@ -95,9 +95,9 @@
 
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
-                  <v-btn class="ma-2" rounded color="green" dark @click="close">Cancel</v-btn>
-                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Save</v-btn>
-                  <v-btn v-if="edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(Job.id_job)">Save</v-btn>
+                  <v-btn class="ma-2" rounded color="green" dark @click="close">Batal</v-btn>
+                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Simpan</v-btn>
+                  <v-btn v-if="edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(Job.id_job)">Simpan</v-btn>
                 </v-card-actions>
               </v-card>
 
@@ -127,12 +127,12 @@
               </v-icon>
             </template>
                 <v-card>
-                  <v-card-title class="headline">Confirmation</v-card-title>
-                    <v-card-text>Are you sure want to delete this task?</v-card-text>
+                  <v-card-title class="headline">Konfirmasi</v-card-title>
+                    <v-card-text>Anda yakin ingin menghapus pekerjaan ini?</v-card-text>
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Job.id_job)">Yes</v-btn>
-                    <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+                    <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Job.id_job)">Ya</v-btn>
+                    <v-btn color="red darken-1" text @click="dialog2 = false">Tidak</v-btn>
                   </v-card-actions>
                 </v-card>
           </v-dialog>
@@ -162,7 +162,7 @@ import Controller from './../service/Job'
       edit: false,
       items : [
         'Volume',
-        'Price'
+        'Harga'
       ],
       job: [],
       satuan: [],
@@ -189,14 +189,14 @@ import Controller from './../service/Job'
           value : 'kode'
         },
         {
-          text: 'Item',
+          text: 'Nama',
           align: 'left',
           sortable: false,
           value: 'name',
         },
         { 
           sortable: false,
-          text: 'Unit', 
+          text: 'Satuan', 
           value: 'satuan'
         },
         {
@@ -206,27 +206,27 @@ import Controller from './../service/Job'
         },
         { 
           sortable: false,
-          text: 'Spesification', 
+          text: 'Spesifikasi', 
           value: 'details'
         },
         { 
-          text: 'Actions', 
+          text: 'Aksi', 
           value: 'action', 
           sortable: false 
         },
       ],
       //validation
       nameRules: [
-        v => !!v || 'Name is required',
+        v => !!v || 'Nama harus diisi',
       ],
       satuanRules: [
-        v => !!v || 'Unit is required',
+        v => !!v || 'Satuan harus diisi',
       ],
       statusRules:[
-        v => !!v || 'Status is required'
+        v => !!v || 'Status harus diisi'
       ],
       specRules: [
-        v => !!v || 'Spesification is required'
+        v => !!v || 'Spesifikasi harus diisi'
       ],
     }),
     mounted(){
@@ -241,17 +241,17 @@ import Controller from './../service/Job'
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
-        this.snackText = 'Data Save Successfully'
+        this.snackText = 'Data Berhasil Disimpan'
       },
       update(){
         this.snack = true
         this.snackColor = 'teal darken-1'
-        this.snackText = 'Data Update Successfully'
+        this.snackText = 'Data Berhasil Diubah'
       },
       delete(){
         this.snack = true
         this.snackColor = 'red darken-1'
-        this.snackText = 'Data Delete Successfully'
+        this.snackText = 'Data Berhasil Dihapus'
       },
       async getSatuan()
       {
@@ -315,7 +315,7 @@ import Controller from './../service/Job'
       },
       async deleteItem(id){
         try{
-          (await Controller.deleteItem(id).data).then(()=>{
+          await Controller.deleteItem(id).then(()=>{
             this.getallItem()
             this.delete()
           })

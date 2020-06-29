@@ -145,11 +145,40 @@ class RABDetailsController extends RestController
         return $this->sendResponse($response,200);
     }
 
+    public function showByID($id)
+    {
+        $rab_details = RABDetails::where('id_sub_details',$id)->get();
+        $response = $this->generateCollection($rab_details);
+        return $this->sendResponse($response,200);
+    }
+
     public function update(Request $request,$id)
     {
         if($request->has('detail'))
         {
             $detail = $request->get('detail');
+        }
+        //Edit Delete AHS Lokal Details
+        $Detail = AHSLokalDetails::where('id_ahs_lokal',$id)->get();
+        $collection = collect($detail);
+        if($collection->isNotEmpty())
+        {
+            foreach($collection as $item)
+            {
+                $filtered = $Detail->filter(function ($value, $key) use ($item){
+                    return $value->id_ahs_lokal_details != $item['id_ahs_lokal_details'];
+                });
+                $Detail = $filtered;
+            }
+        }else{
+            $filtered = $Detail;
+        }
+        $filtered->all();
+        // dd($filtered); 
+        foreach($filtered as $filtered_data)
+        {
+            if($filtered->isNotEmpty())
+                $delete = AHSLokalDetails::where('id_ahs_lokal_details',$filtered_data->id_ahs_lokal_details)->delete();
         }
         //Edit AHS Lokal Details
         foreach($detail as $detail_ahs)
@@ -162,14 +191,29 @@ class RABDetailsController extends RestController
             $detail_data->save();
         }
         $ahs = RABDetails::findOrFail($id);
+        $task = TaskSubDetails::findOrFail($ahs->id_sub_details);
+        $group = GroupDetails::findOrFail($task->id_group_details);
+        $structure = StructureDetails::findOrFail($group->id_structure_details);
+        $rab = RAB::findOrFail($structure->id_rab);
+        $rab->total_rab -= $ahs->HP_Adjust;
+        $rab->save();
+
         $ahs->total_labor = $request->total_labor; 
         $ahs->total_material = $request->total_material;
         $ahs->total_equipment = $request->total_equipment;
         $ahs->HSP_before_overhead = $request->HSP_before_overhead;
         $ahs->overhead = $request->overhead;
+        $ahs->volume = $request->volume;
         $ahs->HSP = $request->HSP;
         $ahs->HP = $request->HP;
         $ahs->HP_Adjust = $request->HP_Adjust;
         $ahs->save();
+
+        $rab->total_rab += $ahs->HP_Adjust;
+        $rab->save();
+
+        $project = Project::findOrFail($rab->id_project);
+        $project->nominal = $rab->total_rab;
+        $project->save();
     }
 }

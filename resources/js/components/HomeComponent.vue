@@ -1,6 +1,6 @@
 <template>
     <div class="team">
-    <h1 class="subheading grey--text">Dashboard</h1>
+    <h1 class="subheading grey--text">Dasbor</h1>
     <v-container >
         <v-layout row wrap>
         <v-flex
@@ -21,7 +21,7 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-                <div class="overline text-right">Project</div>
+                <div class="overline text-right">Proyek</div>
                 <v-list-item-title class="headline mb-1 text-right" v-for="projects in counter" :key="projects.count">{{ projects.count }}</v-list-item-title>
                 <div><v-divider></v-divider></div>
             </v-list-item-content> 
@@ -52,7 +52,7 @@
             </v-list-item-avatar>
 
             <v-list-item-content>
-                <div class="overline text-right">Store</div>
+                <div class="overline text-right">Toko</div>
                 <v-list-item-title class="headline mb-1 text-right" v-for="counts in store" :key="counts.count">{{ counts.count }}</v-list-item-title>
                 <div><v-divider></v-divider></div>
             </v-list-item-content> 
@@ -96,10 +96,10 @@
         </v-flex>
 
         <v-flex
-        sm6
-        xs12
-        md6
-        lg3
+          sm6
+          xs12
+          md6
+          lg3
         >
         <v-card class="ma-3">
         <v-list-item >

@@ -2,7 +2,7 @@
   <v-app class="grey lighten-4">
     <v-container>
       <v-toolbar dark color="light-blue accent-3">
-        <v-toolbar-title>Calculate AHS</v-toolbar-title>
+        <v-toolbar-title>Kalkulator AHS</v-toolbar-title>
           <v-divider
             class="mx-4"
             inset
@@ -13,7 +13,7 @@
             <v-text-field
               v-model="search"
               append-icon="search"
-              label="Search"
+              label="Cari"
               single-line
               hide-details
             >
@@ -30,7 +30,7 @@
                     :items="rab"
                     item-text="project"
                     item-value="id_project"
-                    label="Project"
+                    label="Proyek"
                     append-icon="expand_more"
                     v-model="id_project"
                     @input="filterStructures"
@@ -43,7 +43,7 @@
                     :items="detailStructure"
                     item-text="structure"
                     item-value="id_structure"
-                    label="Building"
+                    label="Gedung"
                     append-icon="expand_more"
                     @input="filterGroups"
                   >
@@ -54,7 +54,7 @@
                     v-model="id_groups"
                     :items="detailGroup"
                     item-text="floor"
-                    label="Floor"
+                    label="Lantai"
                     item-value="id_groups"
                     append-icon="expand_more"
                     @input="filterTask"
@@ -68,7 +68,7 @@
                     :items="detailTask"
                     item-text="task"
                     item-value="id_sub"
-                    label="Task Group"
+                    label="Grup Pekerjaan"
                     append-icon="expand_more"
                     @input="filterAHS"
                   >
@@ -104,7 +104,7 @@
                     rounded
                     @click="addcalculate"
                     style="margin-top:18px"
-                  >Add
+                  >Tambah
                   </v-btn>
                 </v-col>
               </v-row>
@@ -138,7 +138,7 @@
                         <div style>{{ ahs.adjustment }}</div>
                       </v-flex>
                       <v-flex xs7>
-                        <div class="caption grey--text">HSP (LAO)</div>
+                        <div class="caption grey--text">HSP (LSO)</div>
                         <v-layout>
                           <div style="text-align:left;width:25px">Rp.</div>
                           <div style="text-align:right;width:120px">{{ Number(ahs.HSP).toLocaleString('id-ID') }}</div>
@@ -162,10 +162,10 @@
                       <v-btn icon dark @click="dialogedit = false">
                         <v-icon>close</v-icon>
                       </v-btn>
-                      <v-toolbar-title>Edit Calculate</v-toolbar-title>
+                      <v-toolbar-title>Edit Kalkulator</v-toolbar-title>
                       <v-spacer></v-spacer>
                       <v-toolbar-items>
-                        <v-btn dark text @click="editcalculate(AHS.id_calculate)" :loading="loading">Save</v-btn>
+                        <v-btn dark text @click="editcalculate(AHS.id_calculate)" :loading="loading">Simpan</v-btn>
                       </v-toolbar-items>
                     </v-toolbar>
                     
@@ -177,14 +177,14 @@
                               <v-flex sm6 md6 xs6>      
                                 <v-text-field 
                                   v-model="AHS.project"
-                                  label="Project"
+                                  label="Proyek"
                                   readonly
                                 ></v-text-field>
                               </v-flex>
                               <v-flex sm3 md3 xs3 style="margin-left:10px">
                                 <v-text-field
                                   v-model="AHS.structure"
-                                  label="Structure"
+                                  label="Gedung"
                                   :return-object="false" 
                                   readonly
                                 ></v-text-field>
@@ -192,7 +192,7 @@
                               <v-flex sm3 md3 xs3 style="margin-left:10px">
                                 <v-text-field
                                   v-model="AHS.floor"
-                                  label="Floor"
+                                  label="Lantai"
                                   :return-object="false" 
                                   readonly
                                 ></v-text-field>
@@ -200,7 +200,7 @@
                               <v-flex sm3 md3 xs3 style="margin-left:10px">
                                 <v-text-field
                                   v-model="AHS.task"
-                                  label="Task Group"
+                                  label="Grup Pekerjaan"
                                   readonly
                                 ></v-text-field>
                               </v-flex>
@@ -210,7 +210,7 @@
                               <v-flex sm6 md6 xs6>
                                 <v-text-field
                                   v-model="AHS.name"
-                                  label="Task"
+                                  label="Pekerjaan"
                                   :return-object="false"
                                   readonly
                                 ></v-text-field>
@@ -238,7 +238,7 @@
                               <v-flex sm3 md3 xs3>
                                 <v-text-field
                                   v-model="AHS.total_equipment"
-                                  label="Total Of Equipment"
+                                  label="Total Peralatan"
                                   type="number"
                                   @change="equipment"
                                 ></v-text-field>
@@ -263,7 +263,7 @@
                               <v-flex sm3 md3 xs3 style="margin-left:20px">
                                 <v-text-field 
                                   v-model="AHS.HSP" 
-                                  label="Total After Overhead"
+                                  label="Total Setelah Overhead"
                                   readonly
                                 >
                                 </v-text-field>
@@ -281,7 +281,7 @@
                           >
                             <template v-slot:top>
                               <v-toolbar dark color="light-blue accent-2">
-                                <v-toolbar-title>Detail Materials/Labor</v-toolbar-title>
+                                <v-toolbar-title>Detail Bahan/Tenaga Kerja</v-toolbar-title>
                                 <v-divider
                                   class="mx-4"
                                   inset
@@ -317,12 +317,12 @@
                                   </v-icon>
                                 </template>
                                   <v-card>
-                                    <v-card-title class="headline">Confirmation</v-card-title>
-                                      <v-card-text>Are you sure want to delete this detail?</v-card-text>
+                                    <v-card-title class="headline">Konfirmasi</v-card-title>
+                                      <v-card-text>Anda yakin ingin menghapus detail ini?</v-card-text>
                                     <v-card-actions>
                                       <v-spacer></v-spacer>
-                                      <v-btn color="green darken-1" text @click="dialog8 = false; deletematerials(ahs_details)">Yes</v-btn>
-                                      <v-btn color="red darken-1" text @click="dialog8 = false">No</v-btn>
+                                      <v-btn color="green darken-1" text @click="dialog8 = false; deletematerials(ahs_details)">Ya</v-btn>
+                                      <v-btn color="red darken-1" text @click="dialog8 = false">Tidak</v-btn>
                                     </v-card-actions>
                                   </v-card>
                               </v-dialog>
@@ -376,19 +376,19 @@
                     <v-layout style="padding:10px">
                       <v-flex>
                         <v-layout>
-                          <div class="body-2 black--text font-weight-bold">Total of Labor : Rp.</div>
+                          <div class="body-2 black--text font-weight-bold">Total Tenaga Kerja : Rp.</div>
                           <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_labor).toLocaleString('id-ID') }}</div>
                         </v-layout>
                       </v-flex>
                       <v-flex>
                         <v-layout>
-                          <div class="body-2 black--text font-weight-bold">Total of Materials : Rp.</div>
+                          <div class="body-2 black--text font-weight-bold">Total Bahan : Rp.</div>
                           <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_material).toLocaleString('id-ID') }}</div>
                         </v-layout>
                       </v-flex>
                       <v-flex>
                         <v-layout>
-                          <div class="body-2 black--text font-weight-bold">Total of Equipment : Rp.</div>
+                          <div class="body-2 black--text font-weight-bold">Total Peralatan : Rp.</div>
                           <div style="width:120px;padding-left:10px" class="body-2 black--text font-weight-bold">{{ Number(ahs.total_equipment).toLocaleString('id-ID') }}</div>
                         </v-layout>
                       </v-flex>
@@ -490,13 +490,13 @@ import materialController from './../service/Material'
 
       headers: [
         {text: 'Status', align: 'left', sortable: true, value: 'status'},
-        {text: 'Item', align: 'left', sortable: false, value: 'name'},
-        {text: 'Price', align: 'left', sortable: false, value: 'price'},
-        {text: 'Coefficient', align: 'center', sortable: false, value: 'coefficient'},
-        {text: 'Adj BT', align: 'center', sortable: false, value: 'adjustment'},
+        {text: 'Nama', align: 'left', sortable: false, value: 'name'},
+        {text: 'Harga', align: 'left', sortable: false, value: 'price'},
+        {text: 'Koefisien', align: 'center', sortable: false, value: 'coefficient'},
+        {text: 'Penyesuaian BT', align: 'center', sortable: false, value: 'adjustment'},
         {text: 'Sub Total (L)', align: 'left', sortable: false, value: 'sub_total', },
-        {text: 'Requirements M/L', align: 'center', sortable: false, value: 'requirements_ml'},
-        {text: 'Unit', align: 'center', sortable: false, value: 'satuan'},
+        {text: 'Kebutuhan M/L', align: 'center', sortable: false, value: 'requirements_ml'},
+        {text: 'Satuan', align: 'center', sortable: false, value: 'satuan'},
       ],
     }),
     mounted(){
@@ -521,6 +521,7 @@ import materialController from './../service/Material'
       {
         try{
           this.material = (await materialController.getallItem()).data
+          console.log('this material',this.material)
         }catch(err){
           console.log(err)
         }
@@ -574,6 +575,7 @@ import materialController from './../service/Material'
       async addcalculate()
       {
         let ahs_lokal = this.detailDetails.find(obj=>obj.id_ahs == this.id_ahs)
+        console.log('ahs_lokal',ahs_lokal)
         for(let data of ahs_lokal.detail.data)
         {
           let newD = {

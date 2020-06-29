@@ -20,7 +20,7 @@
               solo
               dense
               style="width:300px"
-              label="search..."
+              label="cari..."
             >
             </v-text-field>  
             <v-btn 
@@ -37,21 +37,21 @@
         <div class="flex-grow-1"></div>
         <v-dialog v-model="dialog" width="850px">  
           <template v-slot:activator="{ on }">
-            <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="dialog8=true;reset()">New</v-btn>
+            <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="dialog8=true;reset()">Tambah</v-btn>
           </template>
           <v-card>
             <v-toolbar dark color="light-blue accent-4">
               <v-btn icon dark @click="dialog = false; dialog7=false;dialog8=false">
                 <v-icon>close</v-icon>
               </v-btn>
-              <v-toolbar-title v-if="dialog8">New RAB</v-toolbar-title>
-              <v-toolbar-title v-if="dialog7">Edit RAB</v-toolbar-title>
+              <v-toolbar-title v-if="dialog8">Tambah RAB</v-toolbar-title>
+              <v-toolbar-title v-if="dialog7">Ubah RAB</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-toolbar-items v-if="dialog8">
-                <v-btn dark text @click="addAllItem" :loading="loading">Save</v-btn>
+                <v-btn dark text @click="addAllItem" :loading="loading">Simpan</v-btn>
               </v-toolbar-items>
               <v-toolbar-items v-if="dialog7">
-                <v-btn dark text @click="updateItem(rab.id_rab)" :loading="loading">Save</v-btn>
+                <v-btn dark text @click="updateItem(rab.id_rab)" :loading="loading">Simpan</v-btn>
               </v-toolbar-items>
             </v-toolbar>
 
@@ -68,15 +68,15 @@
                   </v-tab>
                   <v-tab ripple href='#tab-2'>
                     <v-icon>home</v-icon>
-                    Building
+                    Gedung
                   </v-tab>
                   <v-tab ripple href='#tab-3'>
                     <v-icon left>group_work</v-icon>
-                    Floor
+                    Lantai
                   </v-tab>
                   <v-tab ripple href='#tab-4'>
                     <v-icon left>work</v-icon>
-                    Task Group
+                    Grup Pekerjaan
                   </v-tab>
                   <v-tab ripple href='#tab-5'>
                     <v-icon left>payment</v-icon>
@@ -98,7 +98,7 @@
                         <v-layout v-if="dialog8">
                           <v-select
                             v-model="rab.id_project"
-                            label="Project"
+                            label="Proyek"
                             item-text="project"
                             item-value="id_project" 
                             :items="filterProject"
@@ -110,7 +110,7 @@
                         <v-layout v-if="dialog7" @click="filterProjects">
                           <v-select
                             v-model="rab.id_project"
-                            label="Project"
+                            label="Proyek"
                             :items="filterProject"
                             item-text="project"
                             item-value="id_project" 
@@ -121,7 +121,7 @@
                         <v-layout>
                           <v-text-field
                             v-model="rab.desc"
-                            label="Note"
+                            label="Catatan"
                             >
                           </v-text-field>
                         </v-layout>
@@ -146,7 +146,7 @@
                       >
                       <template v-slot:top>
                         <v-toolbar color="light-blue accent-2">
-                          <v-toolbar-title>Building</v-toolbar-title>
+                          <v-toolbar-title>Gedung</v-toolbar-title>
                           <v-divider
                             class="mx-4"
                             inset
@@ -174,7 +174,7 @@
                       >
                       <template v-slot:top>
                         <v-toolbar color="light-blue accent-2">
-                          <v-toolbar-title>Detail Building</v-toolbar-title>
+                          <v-toolbar-title>Detail Gedung</v-toolbar-title>
                           <v-divider
                             class="mx-4"
                             inset
@@ -196,7 +196,7 @@
                               v-if="!editList"
                             >
                               <v-select
-                                label="Building" 
+                                label="Gedung" 
                                 v-model="item.id_structure"
                                 item-text="structure"
                                 item-value="id_structure"
@@ -206,7 +206,7 @@
                             </v-flex>
                             <v-flex v-if="editList">
                               <v-select
-                                label="Building" 
+                                label="Gedung" 
                                 v-model="structure_data.id_structure"
                                 item-text="name"
                                 item-value="id_structure"
@@ -231,8 +231,8 @@
                             </v-btn>
                           </template>
                           <v-card>
-                            <v-card-title class="headline">Confirmation</v-card-title>
-                              <v-card-text>Are you sure want to delete this building?</v-card-text>
+                            <v-card-title class="headline">Konfirmasi</v-card-title>
+                              <v-card-text>Anda yakin ingin menghapus detail gedung ini?</v-card-text>
                             <v-card-actions>
                               <v-spacer></v-spacer>
                               <v-btn color="green darken-1" text @click="dialogdeletestructure = false; deletestructure(structure_data)">Yes</v-btn>
@@ -256,7 +256,7 @@
                       >
                         <template v-slot:top>
                           <v-toolbar color="light-blue accent-2">
-                            <v-toolbar-title>Detail Building</v-toolbar-title>
+                            <v-toolbar-title>Detail Gedung</v-toolbar-title>
                             <v-divider
                               class="mx-4"
                               inset
@@ -285,7 +285,7 @@
                                 <!-- buat pertama kali input data untuk addList -->
                                   <v-flex xs12 sm4 md4>
                                     <v-select
-                                      label="Building" 
+                                      label="Gedung" 
                                       class="pa-1"
                                       v-model="structure_unit.id_structure"
                                       item-text="structure"
@@ -297,7 +297,7 @@
                                   
                                   <v-flex xs12 sm4 md4>
                                     <v-select
-                                    label="Floor" 
+                                    label="Lantai" 
                                     class="pa-1"
                                     v-model="group_data.id_groups"
                                     :items="filterGroup"
@@ -340,7 +340,7 @@
                       >
                         <template v-slot:top>
                           <v-toolbar color="light-blue accent-2">
-                            <v-toolbar-title>Detail Floor</v-toolbar-title>
+                            <v-toolbar-title>Detail Lantai</v-toolbar-title>
                             <v-divider
                               class="mx-4"
                               inset
@@ -362,7 +362,7 @@
                                 v-if="!editList"
                               >
                                 <v-select
-                                  label="Floor" 
+                                  label="Lantai" 
                                   v-model="item.id_groups"
                                   :items="detailGroup"
                                   item-text="floor"
@@ -372,7 +372,7 @@
                               </v-flex>
                               <v-flex v-if="editList">
                                 <v-select
-                                  label="Floor" 
+                                  label="Lantai" 
                                   v-model="group_data.id_groups"
                                   item-text="name"
                                   item-value="id_group"
@@ -398,12 +398,12 @@
                               </v-btn>
                             </template>
                             <v-card>
-                              <v-card-title class="headline">Confirmation</v-card-title>
-                                <v-card-text>Are you sure want to delete this floor?</v-card-text>
+                              <v-card-title class="headline">Konfirmasi</v-card-title>
+                                <v-card-text>Anda yakin ingin menghapus lantai ini?</v-card-text>
                               <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="green darken-1" text @click="dialogdeletefloor = false; deletefloor(group_data)">Yes</v-btn>
-                                <v-btn color="red darken-1" text @click="dialogdeletefloor = false">No</v-btn>
+                                <v-btn color="green darken-1" text @click="dialogdeletefloor = false; deletefloor(group_data)">Ya</v-btn>
+                                <v-btn color="red darken-1" text @click="dialogdeletefloor = false">Tidak</v-btn>
                               </v-card-actions>
                             </v-card>
                           </v-dialog>
@@ -422,7 +422,7 @@
 
                         <template v-slot:top>
                           <v-toolbar color="light-blue accent-2">
-                            <v-toolbar-title>Detail Floor</v-toolbar-title>
+                            <v-toolbar-title>Detail Lantai</v-toolbar-title>
                             <v-divider
                               class="mx-4"
                               inset
@@ -450,7 +450,7 @@
                                 </v-btn>
                                 <v-flex xs11 sm3 md3>
                                   <v-select
-                                    label="Building" 
+                                    label="Gedung" 
                                     class="pa-1"
                                     v-model="group_unit.id_structure"
                                     item-text="structure"
@@ -462,7 +462,7 @@
                               
                                 <v-flex xs11 sm3 md3>
                                   <v-select
-                                  label="Floor" 
+                                  label="Lantai" 
                                   class="pa-1"
                                   v-model="group_unit.id_groups"
                                   :items="detailGroup"
@@ -474,7 +474,7 @@
 
                                 <v-flex xs12 sm4 md4>
                                   <v-select
-                                  label="Task Group" 
+                                  label="Grup Pekerjaan" 
                                   class="pa-1"
                                   v-model="tasksub_data.id_sub"
                                   item-text="name"
@@ -502,7 +502,7 @@
                               <v-icon>add_box</v-icon>
                               </v-btn>
                             </template>
-                            <span>Add Task Group</span>
+                            <span>Tambah Grup Pekerjaan</span>
                           </v-tooltip>
                         </template>
                       </v-data-table>
@@ -516,7 +516,7 @@
                       >
                       <template v-slot:top>
                         <v-toolbar color="light-blue accent-2">
-                          <v-toolbar-title>Detail Task Group</v-toolbar-title>
+                          <v-toolbar-title>Detail Grup Pekerjaan</v-toolbar-title>
                           <v-divider
                             class="mx-4"
                             inset
@@ -538,7 +538,7 @@
                               v-if="!editList"
                             >
                               <v-select
-                                label="Task Group" 
+                                label="Grup Pekerjaan" 
                                 v-model="item.id_sub"
                                 item-text="task"
                                 item-value="id_sub"
@@ -548,7 +548,7 @@
                             </v-flex>
                             <v-flex v-if="editList">
                               <v-select
-                                label="Task Group" 
+                                label="Grup Pekerjaan" 
                                 v-model="tasksub_data.id_sub"
                                 item-text="name"
                                 item-value="id_sub"
@@ -574,12 +574,12 @@
                             </v-btn>
                           </template>
                           <v-card>
-                            <v-card-title class="headline">Confirmation</v-card-title>
-                              <v-card-text>Are you sure want to delete this task group?</v-card-text>
+                            <v-card-title class="headline">Konfirmasi</v-card-title>
+                              <v-card-text>Anda yakin ingin menghapus grup pekerjaan ini?</v-card-text>
                             <v-card-actions>
                               <v-spacer></v-spacer>
-                              <v-btn color="green darken-1" text @click="dialogdeletetask = false; deletetasksub(tasksub_data)">Yes</v-btn>
-                              <v-btn color="red darken-1" text @click="dialogdeletetask = false">No</v-btn>
+                              <v-btn color="green darken-1" text @click="dialogdeletetask = false; deletetasksub(tasksub_data)">Ya</v-btn>
+                              <v-btn color="red darken-1" text @click="dialogdeletetask = false">Tidak</v-btn>
                             </v-card-actions>
                           </v-card>
                         </v-dialog>
@@ -598,7 +598,7 @@
 
                         <template v-slot:top>
                           <v-toolbar color="light-blue accent-2">
-                            <v-toolbar-title>Detail Task Group</v-toolbar-title>
+                            <v-toolbar-title>Detail Grup Pekerjaan</v-toolbar-title>
                             <v-divider
                               class="mx-4"
                               inset
@@ -627,7 +627,7 @@
 
                                   <v-flex xs11 sm3 md3>
                                     <v-select
-                                      label="Building" 
+                                      label="Gedung" 
                                       class="pa-1"
                                       v-model="tasksub_unit.id_structure"
                                       item-text="structure"
@@ -639,7 +639,7 @@
 
                                   <v-flex xs11 sm3 md3>
                                     <v-select
-                                      label="Floor" 
+                                      label="Lantai" 
                                       class="pa-1"
                                       v-model="tasksub_unit.id_groups"
                                       item-text="floor"
@@ -651,7 +651,7 @@
 
                                   <v-flex xs12 sm4 md4>
                                     <v-select
-                                      label="Task Group" 
+                                      label="Grup Pekerjaan" 
                                       class="pa-1"
                                       v-model="tasksub_unit.id_sub"
                                       item-text="task"
@@ -701,7 +701,7 @@
                                   <v-flex xs1 v-if="detailCard">
                                     <v-text-field
                                       v-model="ahs_lokal.adjustment"
-                                      label="Adjustment"
+                                      label="Penyesuaian"
                                       class="pa-1"
                                       @change="adjust"
                                       v-on:keyup.enter="adjustM=true;getMaterialDetails()"
@@ -724,7 +724,7 @@
                                   <v-flex xs10 sm2 md2 v-if="detailCard">
                                     <v-text-field
                                       v-model="ahs_lokal.HP_Adjust"
-                                      label="HP Adjustment"
+                                      label="HP Penyesuaian"
                                       class="pa-1"
                                       readonly
                                       type="number"
@@ -766,7 +766,7 @@
                       >
                       <template v-slot:top>
                         <v-toolbar color="light-blue accent-2">
-                          <v-toolbar-title>Detail Materials/Labor</v-toolbar-title>
+                          <v-toolbar-title>Detail Bahan/Tenaga Kerja</v-toolbar-title>
                           <v-divider
                             class="mx-4"
                             inset
@@ -819,12 +819,12 @@
                               </v-btn>
                             </template>
                             <v-card>
-                              <v-card-title class="headline">Confirmation</v-card-title>
-                                <v-card-text>Are you sure want to delete this detail task?</v-card-text>
+                              <v-card-title class="headline">Konfirmasi</v-card-title>
+                                <v-card-text>Anda yakin ingin menghapus detail pekerjaan ini?</v-card-text>
                               <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="green darken-1" text @click="dialogdeletedetail = false; deleteList(ahs_lokal)">Yes</v-btn>
-                                <v-btn color="red darken-1" text @click="dialogdeletedetail = false">No</v-btn>
+                                <v-btn color="green darken-1" text @click="dialogdeletedetail = false; deleteList(ahs_lokal)">Ya</v-btn>
+                                <v-btn color="red darken-1" text @click="dialogdeletedetail = false">Tidak</v-btn>
                               </v-card-actions>
                             </v-card>
                           </v-dialog>
@@ -952,7 +952,7 @@
                   <div>{{ data.kode }}</div>
                 </v-flex>
                 <v-flex xs8 style="padding-left:10px">
-                  <div class="caption grey--text">Project</div>
+                  <div class="caption grey--text">Proyek</div>
                   <div>{{ data.project }}</div>
                 </v-flex>
                 <v-flex xs5 style="padding-left:10px">
@@ -963,7 +963,7 @@
                   </v-layout>
                 </v-flex>
                 <v-flex xs4 style="padding-left:10px">
-                  <div class="caption grey--text">Description</div>
+                  <div class="caption grey--text">Deskripsi</div>
                   <div>{{ data.desc }}</div>
                 </v-flex>
               </v-layout>
@@ -976,12 +976,12 @@
           <!-- dialog copy rab -->
             <v-dialog v-model="dialogcopy" max-width="290px">
               <v-card>
-                <v-card-title class="headline">Confirmation</v-card-title>
-                  <v-card-text>Are you sure want to copy this rab?</v-card-text>
+                <v-card-title class="headline">Konfirmasi</v-card-title>
+                  <v-card-text>Anda yakin ingin melakukan copy RAB ini?</v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" text @click="dialogcopy = false; copy(rab.id_rab)">Yes</v-btn>
-                  <v-btn color="red darken-1" text @click="dialogcopy = false">No</v-btn>
+                  <v-btn color="green darken-1" text @click="dialogcopy = false; copy(rab.id_rab)">Ya</v-btn>
+                  <v-btn color="red darken-1" text @click="dialogcopy = false">Tidak</v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -997,12 +997,12 @@
               <!-- dialog delete structure -->
                 <v-dialog v-model="dialog3" max-width="290px">
                   <v-card>
-                    <v-card-title class="headline">Confirmation</v-card-title>
-                      <v-card-text>Are you sure want to delete this building?</v-card-text>
+                    <v-card-title class="headline">Konfirmasi</v-card-title>
+                      <v-card-text>Anda yakin ingin menghapus gedung ini?</v-card-text>
                     <v-card-actions>
                       <v-spacer></v-spacer>
-                      <v-btn color="green darken-1" text @click="dialog3 = false; deleteStructureDetails(detail.id_structure_details)">Yes</v-btn>
-                      <v-btn color="red darken-1" text @click="dialog3 = false">No</v-btn>
+                      <v-btn color="green darken-1" text @click="dialog3 = false; deleteStructureDetails(detail.id_structure_details)">Ya</v-btn>
+                      <v-btn color="red darken-1" text @click="dialog3 = false">Tidak</v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
@@ -1018,12 +1018,12 @@
                   <!-- dialog delete floor -->
                     <v-dialog v-model="dialog4" max-width="290px">
                       <v-card>
-                        <v-card-title class="headline">Confirmation</v-card-title>
-                          <v-card-text>Are you sure want to delete this floor?</v-card-text>
+                        <v-card-title class="headline">Konfirmasi</v-card-title>
+                          <v-card-text>Anda yakin ingin menghapus lantai ini?</v-card-text>
                         <v-card-actions>
                           <v-spacer></v-spacer>
-                          <v-btn color="green darken-1" text @click="dialog4 = false; deleteGroupDetails(detail.id_group_details)">Yes</v-btn>
-                          <v-btn color="red darken-1" text @click="dialog4 = false">No</v-btn>
+                          <v-btn color="green darken-1" text @click="dialog4 = false; deleteGroupDetails(detail.id_group_details)">Ya</v-btn>
+                          <v-btn color="red darken-1" text @click="dialog4 = false">Tidak</v-btn>
                         </v-card-actions>
                       </v-card>
                     </v-dialog>
@@ -1038,12 +1038,12 @@
                     <!-- dialog delete task group -->
                       <v-dialog v-model="dialog5" max-width="290px">
                         <v-card>
-                          <v-card-title class="headline">Confirmation</v-card-title>
-                            <v-card-text>Are you sure want to delete this task group?</v-card-text>
+                          <v-card-title class="headline">Konfirmasi</v-card-title>
+                            <v-card-text>Anda yakin ingin menghapus grup pekerjaan ini?</v-card-text>
                           <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="green darken-1" text @click="dialog5 = false; deleteTaskDetails(detail.id_sub_details)">Yes</v-btn>
-                            <v-btn color="red darken-1" text @click="dialog5 = false">No</v-btn>
+                            <v-btn color="green darken-1" text @click="dialog5 = false; deleteTaskDetails(detail.id_sub_details)">Ya</v-btn>
+                            <v-btn color="red darken-1" text @click="dialog5 = false">Tidak</v-btn>
                           </v-card-actions>
                         </v-card>
                       </v-dialog>
@@ -1053,7 +1053,7 @@
                         <v-list-item-content class="borderDetail">
                           <v-layout class="marginBorder">
                             <v-flex xs4>
-                              <div class="caption grey--text">Task</div>
+                              <div class="caption grey--text">Pekerjaan</div>
                               <div>{{ detail_ahs.name }}</div>
                             </v-flex>
                             <v-flex xs2 style="padding-left:10px">
@@ -1069,11 +1069,11 @@
                               <div>{{ detail_ahs.satuan }}</div>
                             </v-flex>
                             <v-flex xs2>
-                              <div class="caption grey--text">Adjust</div>
+                              <div class="caption grey--text">Penyesuian</div>
                               <div >{{ detail_ahs.adjustment.toFixed(2).toString().replace(".", ",")}}</div>
                             </v-flex>
                             <v-flex xs4>
-                              <div class="caption grey--text">HSP (LAO)</div>
+                              <div class="caption grey--text">HSP AHS Lokal</div>
                               <v-layout>
                                 <div style="text-align:left;width:25px">Rp.</div>
                                 <div style="text-align:right;width:120px">{{ Number(detail_ahs.HSP).toLocaleString('id-ID') }}</div>
@@ -1093,12 +1093,12 @@
                       <!-- dialog delete detail -->
                         <v-dialog v-model="dialog6" max-width="290px">
                           <v-card>
-                            <v-card-title class="headline">Confirmation</v-card-title>
-                              <v-card-text>Are you sure want to delete this task?</v-card-text>
+                            <v-card-title class="headline">Konfirmasi</v-card-title>
+                              <v-card-text>Anda yakin ingin menghapus detail pekerjaan ini?</v-card-text>
                             <v-card-actions>
                               <v-spacer></v-spacer>
-                              <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(detail.id_ahs_lokal)">Yes</v-btn>
-                              <v-btn color="red darken-1" text @click="dialog6 = false">No</v-btn>
+                              <v-btn color="green darken-1" text @click="dialog6 = false; deleteDetail(detail.id_ahs_lokal)">Ya</v-btn>
+                              <v-btn color="red darken-1" text @click="dialog6 = false">Tidak</v-btn>
                             </v-card-actions>
                           </v-card>
                         </v-dialog>
@@ -1127,12 +1127,12 @@
 
       <v-dialog v-model="dialog2" max-width="290px">
         <v-card>
-          <v-card-title class="headline">Confirmation</v-card-title>
-            <v-card-text>Are you sure want to delete this rab?</v-card-text>
+          <v-card-title class="headline">Konfirmasi</v-card-title>
+            <v-card-text>Anda yakin ingin menghapus RAB ini?</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(rab.id_rab)">Yes</v-btn>
-            <v-btn color="red darken-1" text @click="dialog2 = false">No</v-btn>
+            <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(rab.id_rab)">Ya</v-btn>
+            <v-btn color="red darken-1" text @click="dialog2 = false">Tidak</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -1319,66 +1319,66 @@ import material from './../service/Material'
         },
         headers_filter_materials: [
           {text: 'ID', align: 'left', sortable: false, value: 'kode'},
-          {text: 'Type', align: 'left', sortable: true, value: 'status'},
-          {text: 'Item', align: 'left', sortable: false, value: 'name'},
-          {text: 'Price', align: 'left', sortable: false, value: 'price'},
-          {text: 'Coefficient', align: 'left', sortable: false, value: 'coefficient'},
+          {text: 'Tipe', align: 'left', sortable: true, value: 'status'},
+          {text: 'Nama', align: 'left', sortable: false, value: 'name'},
+          {text: 'Harga', align: 'left', sortable: false, value: 'price'},
+          {text: 'Koefisien', align: 'left', sortable: false, value: 'coefficient'},
           {text: 'Sub Total', align: 'left', sortable: false, value: 'sub_total'},
-          {text: 'Adjustment', align: 'left', sortable: false, value: 'adjustment'}
+          {text: 'Penyesuaian', align: 'left', sortable: false, value: 'adjustment'}
         ],
         headers_detail_floor: [
           {text: 'ID', align: 'left', sortable: false, value: 'id_groups'},
-          {text: 'Building', align: 'left', sortable: false, value: 'structure'},
-          {text: 'Floor', align: 'left', sortable: false, value: 'floor'},
-          {text: 'Task Group', align: 'left', sortable: false, value: 'action'}
+          {text: 'Gedung', align: 'left', sortable: false, value: 'structure'},
+          {text: 'Lantai', align: 'left', sortable: false, value: 'floor'},
+          {text: 'Grup Pekerjaan', align: 'left', sortable: false, value: 'action'}
         ],
         headers_detail_task: [
           {text: 'ID', align: 'left', sortable: false, value: 'id_sub'},
-          {text: 'Building', align: 'left', sortable: false, value: 'structure'},
-          {text: 'Floor', align: 'left', sortable: false, value: 'floor'},
-          {text: 'Task Group', align: 'left', sortable: false, value: 'task'},
-          {text: 'Detail', align: 'left', sortable: false, value: 'action'}
+          {text: 'Gedung', align: 'left', sortable: false, value: 'structure'},
+          {text: 'Lantai', align: 'left', sortable: false, value: 'floor'},
+          {text: 'Grup Pekerjaan', align: 'left', sortable: false, value: 'task'},
+          {text: 'AHS', align: 'left', sortable: false, value: 'action'}
         ],
         headers_detail_building: [
           {text: 'ID', align: 'left', sortable: false, value: 'id_structure'},
-          {text: 'Building', align: 'left', sortable: false, value: 'structure'},
-          {text: 'Floor', align: 'left', sortable: false, value: 'action'},
+          {text: 'Gedung ', align: 'left', sortable: false, value: 'structure'},
+          {text: 'Lantai', align: 'left', sortable: false, value: 'action'},
         ],
         headers_structure: [
           {text: 'ID',value:'id_structure'},
-          {text: 'Building',value:'name'},
-          {text: 'Actions',value:'action'}
+          {text: 'Gedung',value:'name'},
+          {text: 'Aksi',value:'action'}
         ],
         headers_building_details:[
           {text: 'ID',value:'id_structure'},
-          {text: 'Building', value:'structure'},
-          {text: 'Actions',value:'action'}
+          {text: 'Gedung', value:'structure'},
+          {text: 'Aksi',value:'action'}
         ],
         headers_floor_details:[
           {text: 'ID',value:'id_structure'},
-          {text: 'Building', value:'structure'},
-          {text: 'Floor', value:'floor'},
-          {text: 'Actions',value:'action'}
+          {text: 'Gedung', value:'structure'},
+          {text: 'Lantai', value:'floor'},
+          {text: 'Aksi',value:'action'}
         ],
         headers_task_details:[
           {text: 'ID',value:'id_structure'},
-          {text: 'Building', value:'structure'},
-          {text: 'Floor', value:'floor'},
-          {text: 'Task Group', value:'task'},
-          {text: 'Actions',value:'action'}
+          {text: 'Gedung', value:'structure'},
+          {text: 'Lantai', value:'floor'},
+          {text: 'Grup Pekerjaan', value:'task'},
+          {text: 'Aksi',value:'action'}
         ],
         headers_ahs_details:[
-          {text: 'Actions',value:'action'},
+          {text: 'Aksi',value:'action'},
           // {text: 'ID',value:'id_ahs_lokal'},
-          {text: 'Builiding',value:'structure'},
-          {text: 'Floor',value:'floor'},
-          {text: 'Task Group',value:'task'},
+          {text: 'Grup Pekerjaan',value:'structure'},
+          {text: 'Lantai',value:'floor'},
+          {text: 'Grup Pekerjaan',value:'task'},
           {text: 'AHS',value:'name', width:'25%'},
           {text: 'HSP', value: 'HSP'},
           {text: 'Volume',value:'volume',align: 'center'},
-          {text: 'Adjustment',value:'adjustment',align: 'center'},
+          {text: 'Penyesuaian',value:'adjustment',align: 'center'},
           {text: 'HP',value:'HP',width:'15%'},
-          {text: 'HP Adjustment',value:'HP_Adjust'},
+          {text: 'HP Penyesuaian',value:'HP_Adjust'},
         ],
         tab : 'tab-1',
       }
@@ -1399,11 +1399,7 @@ import material from './../service/Material'
       this.filterStructures()
     },
     computed: {
-      // filtered:function(){
-      //   return this.RAB.filter((data)=>{    
-      //     return data.project.toLowerCase().match(this.search);
-      //   });
-      // },
+      
     },
     methods: {
       save(){
@@ -1474,13 +1470,6 @@ import material from './../service/Material'
               this.total_pages = response.meta.pagination.total_pages
             })
           }
-          // else{
-          //   await rabController.search(this.search,this.current_page).then(response =>{
-          //     this.current_page = response.meta.pagination.current_page
-          //     this.ahs = response.data
-          //     this.total_pages = response.meta.pagination.total_pages
-          //   })
-          // }
         }catch(err){
           console.log(err)
         }
@@ -1493,7 +1482,6 @@ import material from './../service/Material'
       },
       async itemEdit(item){
         this.init()
-        // this.filterProjects()
         this.filterProject = (await Controller.getallItem()).data
         let tempS=[]
         let tempG=[]

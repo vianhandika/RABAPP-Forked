@@ -18,9 +18,4 @@ class Akun extends Model
         'Username',
         'Password'
     ];
-    
-    public function tokens()
-    {
-        return $this->hasMany('App\Token','Id_Akun');
-    }
 }

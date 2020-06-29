@@ -27,7 +27,7 @@
                 <v-form>
                   <v-text-field
                     v-model="username"
-                    label="username"
+                    label="nama pengguna"
                     name="username"
                     prepend-inner-icon="people"
                     type="text"
@@ -39,8 +39,8 @@
                   <v-text-field
                     v-model="password"
                     id="password"
-                    label="password"
-                    name="password"
+                    label="kata sandi"
+                    name="kata sandi"
                     prepend-inner-icon="lock"
                     type="password"
                     color="blue"
@@ -116,31 +116,18 @@ import { mapGetters, mapState, mapActions } from 'vuex'
             username : this.username,
             password : this.password,
           }
-          console.log('data',data)
+          this.load = true
           await this.retrieveToken(data)
-          this.$router.push({ name: 'dashboard' })
+          .then(response=>{
+            this.load = false
+            this.$router.push({name: 'dashboard'})
+          })
         } catch (err) {
           this.load = false
+          console.log(err)
+          this.snackbar()
         }
       },
-      // async login () {
-      //   try{
-      //     const payload = {
-      //       username : this.username,
-      //       password : this.password
-      //     }
-      //     this.load = true
-      //     await this.retrieveToken(payload)
-      //     .then(response=>{
-      //       this.load = false
-      //       this.$router.push({name: 'dashboard'})
-      //     })
-      //   }catch(err){
-      //     this.load = false
-      //     console.log(err)
-      //     this.snackbar()
-      //   }
-      // },
       snackbar()
       {
         this.snack = true

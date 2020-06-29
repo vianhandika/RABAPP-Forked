@@ -28,7 +28,7 @@
       <v-app-bar-nav-icon @click.stop="drawer= !drawer">
         <v-icon>reorder</v-icon>
       </v-app-bar-nav-icon>
-      <v-toolbar-title>Dashboard</v-toolbar-title>
+      <v-toolbar-title>Dasbor</v-toolbar-title>
 
       <!-- <v-flex class="padding">
         <v-tooltip bottom>
@@ -55,12 +55,12 @@
     <template>
       <v-dialog v-model="dialog" max-width="290px">
         <v-card>
-          <v-card-title class="headline">Confirmation</v-card-title>
-            <v-card-text>Are you sure want to log out?</v-card-text>
+          <v-card-title class="headline">Konfirmasi</v-card-title>
+            <v-card-text>Anda yakin ingin keluar dari sistem?</v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" text @click="dialog = false; logout()">Yes</v-btn>
-            <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+            <v-btn color="green darken-1" text @click="dialog = false; logout()">Ya</v-btn>
+            <v-btn color="red darken-1" text @click="dialog = false">Tidak</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -85,16 +85,16 @@ import Structure from '../service/Structure'
       dialog:false,
       overlay:false,
       links : [
-        {icon: 'dashboard', title: 'Dashboard', route: '/dashboard'},
-        {icon: 'home_work', title: 'Project', route: '/project'},
-        {icon: 'store', title: 'Store', route: '/store'},
-        {icon: 'work', title: 'Task', route: '/task'},
-        {icon: 'waves', title: 'Materials/Labor', route: '/materials'},
-        {icon: 'post_add', title: 'Reference Detail', route: '/reference'},
+        {icon: 'dashboard', title: 'Dasbor', route: '/dashboard'},
+        {icon: 'post_add', title: 'Detail Referensi', route: '/reference'},
+        {icon: 'home_work', title: 'Proyek', route: '/project'},
+        {icon: 'store', title: 'Toko', route: '/store'},
+        {icon: 'work', title: 'Pekerjaan', route: '/task'},
+        {icon: 'waves', title: 'Bahan/Tenaga Kerja', route: '/materials'},
         {icon: 'money', title: 'AHS Master', route: '/analisa'},
         {icon: 'payment', title: 'RAB', route: '/rab'},
         {icon: 'trending_up', title: 'AHS Lokal', route: '/analisa_lokal'},
-        // {icon: 'account_balance_wallet', title: 'Calculate', route: '/calculate'},
+        {icon: 'account_balance_wallet', title: 'Kalkulator', route: '/calculate'},
       ],
       rab : [
         {icon: 'home',title: 'Building', route:''},
