@@ -28,7 +28,7 @@
       <v-app-bar-nav-icon @click.stop="drawer= !drawer">
         <v-icon>reorder</v-icon>
       </v-app-bar-nav-icon>
-      <v-toolbar-title>Dasbor</v-toolbar-title>
+      <v-toolbar-title>Beranda</v-toolbar-title>
 
       <!-- <v-flex class="padding">
         <v-tooltip bottom>
@@ -85,7 +85,7 @@ import Structure from '../service/Structure'
       dialog:false,
       overlay:false,
       links : [
-        {icon: 'dashboard', title: 'Dasbor', route: '/dashboard'},
+        {icon: 'dashboard', title: 'Beranda', route: '/dashboard'},
         {icon: 'post_add', title: 'Detail Referensi', route: '/reference'},
         {icon: 'home_work', title: 'Proyek', route: '/project'},
         {icon: 'store', title: 'Toko', route: '/store'},
