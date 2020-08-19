@@ -26,9 +26,10 @@ class CreateMaterialsTable extends Migration
             $table->softDeletes();
             $table->timestamps();
 
+            // $table->foreign('id_store')->references('id_store')->on('stores')->onChange('cascade')->onDelete('cascade');
+            // $table->foreign('id_satuan')->references('id_satuan')->on('satuans')->onChange('cascade')->onDelete('cascade');
             $table->foreign('id_store')->references('id_store')->on('stores');
             $table->foreign('id_satuan')->references('id_satuan')->on('satuans');
-
         });
     }
 

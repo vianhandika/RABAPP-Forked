@@ -24,6 +24,6 @@ class Store extends Model
 
     public function materials()
     {
-        return $this->hasMany('App\Materials','id_material');
+        return $this->hasMany('App\Materials','id_store');
     }
 }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Transformers\JobTransformers;
 use App\Job;
+use App\AHS;
+use App\AHSDetails;
 
 class JobController extends RestController
 {
@@ -62,6 +64,16 @@ class JobController extends RestController
     public function destroy($id)
     {
         $job = Job::find($id);
+        $ahs = AHS::where('id_job',$id)->get();
+        foreach($ahs as $ahs_data)
+        {
+            $ahs_details = AHSDetails::where('id_ahs',$ahs_data->id_ahs)->get();
+            foreach($ahs_details as $detail)
+            {
+                $delete = $detail->delete();
+            }
+            $ahs_data->delete();
+        }
         $status = $job->delete();
 
         return response()->json([
