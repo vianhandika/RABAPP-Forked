@@ -144,14 +144,12 @@ class ProjectController extends RestController
         }
         else if(($parts[1]+1)<10) {
             $kode = 'Pr'.'-'.'000'.($parts[1]+1);
-        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<=99){
             $kode = 'Pr'.'-'.'00'.($parts[1]+1);
-        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+        }else if(($parts[1]+1)>=100 && ($parts[1]+1)<=999){
             $kode = 'Pr'.'-'.'0'.($parts[1]+1);
-        }else if(($parts[1]+1)==1000){
-            $kode = 'Pr'.'-'.($parts[1]+1);
         }else{
-            $kode = 'Pr'.'-'.'001';
+            $kode = 'Pr'.'-'.($parts[1]+1);
         }
         return $kode;
     }

@@ -14,6 +14,7 @@ class JobTransformers extends TransformerAbstract
             'id_job'    => $job->id_job,
             'id_satuan' => $job->id_satuan,
             'name'      => $job->name,
+            'group'     => $job->group,
             'satuan'    => $job->satuan->name,
             'status'    => $job->status,
             'details'   => $job->details

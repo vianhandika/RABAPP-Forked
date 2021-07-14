@@ -32,6 +32,7 @@ class RABDetailsTransformers extends TransformerAbstract
             'name'                  => $rab_details->jobs->name,
             'satuan'                => $rab_details->jobs->satuan->name,
             'status'                => $rab_details->jobs->status,
+            'keterangan'            => $rab_details->keterangan,
                         
             'id_project'            => $rab_details->task_group->sub->structure->rab->projects->id_project,
             'project'               => $rab_details->task_group->sub->structure->rab->projects->name,
@@ -49,6 +50,10 @@ class RABDetailsTransformers extends TransformerAbstract
             'HP_Adjust'             => $rab_details->HP_Adjust, 
 
         ];
+        if($data['keterangan']==null)
+        {
+            $data['keterangan']=" ";
+        }
         if($data['status'] == 'Volume')
         {
             $data['volume_adj'] = $rab_details->volume * $rab_details->adjustment;

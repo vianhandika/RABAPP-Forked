@@ -151,6 +151,24 @@ class RABController extends RestController
             }
         }
 
+        // foreach($task_sub_data as $task)
+        // {
+        //     foreach($detail as $detail_o)
+        //     {
+        //         $group = GroupDetails::findOrFail($task->id_group_details);
+        //         $structure = StructureDetails::findOrFail($group->id_structure_details);
+                
+        //         if($structure->id_structure == $detail_o['id_structure'])
+        //         {
+        //             if($group->id_groups == $detail_o['id_groups']) 
+        //             {
+        //                 if($task->id_sub == $detail_o['id_sub'])
+        //                     array_push($detail_data,$task->detail_rab()->create($detail_o));
+        //             }
+        //         }
+        //     }
+        // }
+
         foreach($task_sub_data as $task)
         {
             foreach($detail as $detail_o)
@@ -163,38 +181,48 @@ class RABController extends RestController
                     if($group->id_groups == $detail_o['id_groups']) 
                     {
                         if($task->id_sub == $detail_o['id_sub'])
-                            array_push($detail_data,$task->detail_rab()->create($detail_o));
-                    }
-                }
-            }
-        }
-
-        foreach($detail_data as $detail_o)
-        {
-            foreach($Material as $material)
-            {
-                $task = TaskSubDetails::findOrFail($detail_o->id_sub_details);
-                $group = GroupDetails::findOrFail($task->id_group_details);
-                $structure = StructureDetails::findOrFail($group->id_structure_details);
-                
-                $ahs = AHS::where([
-                    'id_job' => $detail_o->id_job,
-                    'id_sub' => $task->id_sub,
-                ])->get()->first();
-
-                if($structure->id_structure == $material['id_structure'])
-                {
-                    if($group->id_groups == $material['id_groups']) 
-                    {
-                        if($task->id_sub == $material['id_sub'])
                         {
-                            if($ahs->id_ahs == $material['id_ahs'])
-                                array_push($material_data,$detail_o->detail_ahs_lokal()->create($material));
+                            $ahs_lokal = $detail_o;
+                            unset($ahs_lokal->detail);
+                            $created= $task->detail_rab()->create($ahs_lokal);
+                            array_push($detail_data,$created);
+                            foreach($detail_o['detail'] as $material)
+                            {
+                                array_push($material_data,$created->detail_ahs_lokal()->create($material));
+                            }
                         }
+
                     }
                 }
             }
         }
+
+        // foreach($detail_data as $detail_o)
+        // {
+        //     foreach($Material as $material)
+        //     {
+        //         $task = TaskSubDetails::findOrFail($detail_o->id_sub_details);
+        //         $group = GroupDetails::findOrFail($task->id_group_details);
+        //         $structure = StructureDetails::findOrFail($group->id_structure_details);
+                
+        //         $ahs = AHS::where([
+        //             'id_job' => $detail_o->id_job,
+        //             'id_sub' => $task->id_sub,
+        //         ])->get()->first();
+
+        //         if($structure->id_structure == $material['id_structure'])
+        //         {
+        //             if($group->id_groups == $material['id_groups']) 
+        //             {
+        //                 if($task->id_sub == $material['id_sub'])
+        //                 {
+        //                     if($ahs->id_ahs == $material['id_ahs'])
+        //                         array_push($material_data,$detail_o->detail_ahs_lokal()->create($material));
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
     public function update(Request $request,$id)
     {
@@ -209,6 +237,7 @@ class RABController extends RestController
         $detail_temp=[];
         $material_new=[];
         $material_temp=[];
+        $deleted_details=[];
         
         if($request->has('detail_structure'))
         {
@@ -230,10 +259,15 @@ class RABController extends RestController
         {
             $Material = $request->get('detail_material');
         }
+        if($request->has('deleted_details'))
+        {
+            $deleted_details = $request->get('deleted_details');
+        }
+
         // Edit Delete Detail Structure
         foreach($Structure as $structure_data)
         {
-            if($structure_data['id_structure_details'] != null)
+            if($structure_data['id_structure_details'] != null) 
             {
                 array_push($structure_temp,$structure_data);
             }
@@ -244,7 +278,7 @@ class RABController extends RestController
         {
             foreach($collection as $item)
             {
-                $filtered = $Detail_Structure->filter(function($value, $key) use ($item){
+                $filtered = $Detail_Structure->filter(function($value, $key) use ($item){ 
                     return $value->id_structure_details != $item['id_structure_details'];
                 });
                 $Detail_Structure = $filtered;
@@ -336,123 +370,128 @@ class RABController extends RestController
                     if($filtered->isNotEmpty())
                         $delete = TaskSubDetails::where('id_sub_details',$filtered_data->id_sub_details)->delete();
                 }
-                //Edit AHS
-                foreach($tasksub_temp as $task_sub_unit)
-                {
-                    foreach($detail as $detail_data)
-                    {
-                        if($detail_data['id_ahs_lokal'] != null)
-                        {
-                            if($task_sub_unit['id_structure'] == $detail_data['id_structure'])
-                            {
-                                if($task_sub_unit['id_groups'] == $detail_data['id_groups'])
-                                {
-                                    if($task_sub_unit['id_sub'] == $detail_data['id_sub'])
-                                        array_push($detail_temp,$detail_data);
-                                }
-                            }
-                        }
-                    }
-                    //Edit Delete Detail AHS
-                    $Detail_AHS = DB::table('ahs_lokals')
-                        ->select('id_ahs_lokal', 'structure_details.id_structure','group_details.id_groups',
-                                'task_sub_details.id_sub', 'a_h_s_s.id_ahs','jobs.name',
-                                'ahs_lokals.id_sub_details','ahs_lokals.id_job',
-                                'ahs_lokals.total_labor','ahs_lokals.total_material', 'ahs_lokals.total_equipment',
-                                'HSP_before_overhead','ahs_lokals.overhead','HSP',
-                                'volume','adjustment','HP','HP_Adjust')
-                        ->join('task_sub_details','task_sub_details.id_sub_details','=','ahs_lokals.id_sub_details')
-                        ->join('group_details','task_sub_details.id_group_details','=','group_details.id_group_details')
-                        ->join('structure_details','group_details.id_structure_details','=','structure_details.id_structure_details')
-                        ->join('a_h_s_s','a_h_s_s.id_job','=','ahs_lokals.id_job')
-                        ->join('jobs','jobs.id_job','=','a_h_s_s.id_job')
-                        ->where([
-                            'a_h_s_s.id_sub' => $task_sub_unit['id_sub'],
-                            'ahs_lokals.id_sub_details' => $task_sub_unit['id_sub_details'],
-                        ])
-                        ->whereNull('ahs_lokals.deleted_at')
-                        ->whereNull('a_h_s_s.deleted_at')
-                        ->get();
-                    $collection = collect($detail_temp);
-                    if($collection->isNotEmpty())
-                    {
-                        foreach($collection as $item)
-                        {
-                            $filtered = $Detail_AHS->filter(function($value,$key) use ($item){
-                                return $value->id_ahs_lokal != $item['id_ahs_lokal'];
-                            });
-                            $Detail_AHS = $filtered;
-                        }
-                    }else{
-                        $filtered = $Detail_AHS;
-                    }
-                    $filtered->all();
-                    foreach($filtered as $filtered_data)
-                    {
-                        if($filtered->isNotEmpty())
-                            $delete = RABDetails::where('id_ahs_lokal',$filtered_data->id_ahs_lokal)->delete();
-                    }
-                    //Edit Delete Detail AHS Lokal (Material)
-                    foreach($detail_temp as $detail_unit)
-                    {
-                        foreach($Material as $material_data)
-                        {
-                            if($material_data['id_ahs_lokal_details'] != null)
-                            {
-                                if($detail_unit['id_structure'] == $material_data['id_structure'])
-                                {
-                                    if($detail_unit['id_groups'] == $material_data['id_groups'])
-                                    {
-                                        if($detail_unit['id_sub'] == $material_data['id_sub'])
-                                        {
-                                            if($detail_unit['id_ahs'] == $material_data['id_ahs'])
-                                                array_push($material_temp,$material_data);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        $Detail_Material = DB::table('ahs_lokal_details')
-                            ->select('ahs_lokal_details.id_ahs_lokal_details','structure_details.id_structure',
-                                    'group_details.id_groups','task_sub_details.id_sub','a_h_s_s.id_ahs','jobs.id_job',
-                                    'ahs_lokal_details.id_material','ahs_lokal_details.kode',
-                                    'ahs_lokal_details.coefficient', 'ahs_lokal_details.sub_total','ahs_lokal_details.adjustment')
-                            ->join('ahs_lokals','ahs_lokals.id_ahs_lokal','=','ahs_lokal_details.id_ahs_lokal')
-                            ->join('task_sub_details','task_sub_details.id_sub_details','=','ahs_lokals.id_sub_details')
-                            ->join('group_details','task_sub_details.id_group_details','=','group_details.id_group_details')
-                            ->join('structure_details','group_details.id_structure_details','=','structure_details.id_structure_details')
-                            ->join('a_h_s_s','a_h_s_s.id_job','=','ahs_lokals.id_job')
-                            ->join('jobs','jobs.id_job','=','a_h_s_s.id_job')
-                            ->where([
-                                'a_h_s_s.id_sub' => $detail_unit['id_sub'],
-                                'ahs_lokal_details.id_ahs_lokal' => $detail_unit['id_ahs_lokal'],
-                            ])
-                            ->whereNull('ahs_lokal_details.deleted_at')
-                            ->whereNull('a_h_s_s.deleted_at')
-                            ->get();
-                        // dd($Detail_Material);
-                        $collection = collect($material_temp); 
-                        if($collection->isNotEmpty())
-                        {
-                            foreach($collection as $item)
-                            {
-                                $filtered = $Detail_Material->filter(function ($value,$key) use ($item){
-                                    return $value->id_ahs_lokal_details != $item['id_ahs_lokal_details'];
-                                });
-                                $Detail_Material = $filtered;
-                            }
-                        }else{
-                            $filtered = $Detail_Material;
-                        }
-                        foreach($filtered as $filtered)
-                        {
-                            // if($filtered->isNotEmpty())
-                            $delete = AHSLokalDetails::where('id_ahs_lokal_details',$filtered->id_ahs_lokal_details)->delete();
-                        }
-                        $material_temp=[];
-                    }
-                    $detail_temp=[];
-                }
+                // Edit AHS
+                // foreach($tasksub_temp as $task_sub_unit)
+                // {
+                //     foreach($detail as $detail_data)
+                //     {
+                //         if($detail_data['id_ahs_lokal'] != null)
+                //         {
+                //             if($task_sub_unit['id_structure'] == $detail_data['id_structure'])
+                //             {
+                //                 if($task_sub_unit['id_groups'] == $detail_data['id_groups'])
+                //                 {
+                //                     if($task_sub_unit['id_sub'] == $detail_data['id_sub'])
+                //                         array_push($detail_temp,$detail_data);
+                //                 }
+                //             }
+                //         }
+                //     }
+                //     //Edit Delete Detail AHS
+                //     $Detail_AHS = DB::table('ahs_lokals')
+                //         ->select('id_ahs_lokal', 'structure_details.id_structure','group_details.id_groups',
+                //                 'task_sub_details.id_sub', 'a_h_s_s.id_ahs','jobs.name',
+                //                 'ahs_lokals.id_sub_details','ahs_lokals.id_job',
+                //                 'ahs_lokals.total_labor','ahs_lokals.total_material', 'ahs_lokals.total_equipment',
+                //                 'HSP_before_overhead','ahs_lokals.overhead','HSP',
+                //                 'volume','adjustment','HP','HP_Adjust')
+                //         ->join('task_sub_details','task_sub_details.id_sub_details','=','ahs_lokals.id_sub_details')
+                //         ->join('group_details','task_sub_details.id_group_details','=','group_details.id_group_details')
+                //         ->join('structure_details','group_details.id_structure_details','=','structure_details.id_structure_details')
+                //         ->join('a_h_s_s','a_h_s_s.id_job','=','ahs_lokals.id_job')
+                //         ->join('jobs','jobs.id_job','=','a_h_s_s.id_job')
+                //         ->where([
+                //             'a_h_s_s.id_sub' => $task_sub_unit['id_sub'],
+                //             'ahs_lokals.id_sub_details' => $task_sub_unit['id_sub_details'],
+                //         ])
+                //         ->whereNull('ahs_lokals.deleted_at')
+                //         ->whereNull('a_h_s_s.deleted_at')
+                //         ->get();
+                //     $collection = collect($detail_temp);
+                //     if($collection->isNotEmpty())
+                //     {
+                //         foreach($collection as $item)
+                //         {
+                //             $filtered = $Detail_AHS->filter(function($value,$key) use ($item){
+                //                 return $value->id_ahs_lokal != $item['id_ahs_lokal'];
+                //             });
+                //             $Detail_AHS = $filtered;
+                //         }
+                //     }else{
+                //         $filtered = $Detail_AHS;
+                //     }
+                //     $filtered->all();
+                //     foreach($filtered as $filtered_data)
+                //     {
+                //         if($filtered->isNotEmpty()){
+                //             $delete = RABDetails::where('id_ahs_lokal',$filtered_data->id_ahs_lokal)->first();
+                //             // return $delete;
+                //             // optional($delete->detail_ahs_lokal())->delete();
+                //             // $delete->delete();
+
+                //         }
+                //     }
+                //     //Edit Delete Detail AHS Lokal (Material)
+                //     // foreach($detail_temp as $detail_unit)
+                //     // {
+                //     //     foreach($Material as $material_data)
+                //     //     {
+                //     //         if($material_data['id_ahs_lokal_details'] != null)
+                //     //         {
+                //     //             if($detail_unit['id_structure'] == $material_data['id_structure'])
+                //     //             {
+                //     //                 if($detail_unit['id_groups'] == $material_data['id_groups'])
+                //     //                 {
+                //     //                     if($detail_unit['id_sub'] == $material_data['id_sub'])
+                //     //                     {
+                //     //                         if($detail_unit['id_ahs'] == $material_data['id_ahs'])
+                //     //                             array_push($material_temp,$material_data);
+                //     //                     }
+                //     //                 }
+                //     //             }
+                //     //         }
+                //     //     }
+                //     //     $Detail_Material = DB::table('ahs_lokal_details')
+                //     //         ->select('ahs_lokal_details.id_ahs_lokal_details','structure_details.id_structure',
+                //     //                 'group_details.id_groups','task_sub_details.id_sub','a_h_s_s.id_ahs','jobs.id_job',
+                //     //                 'ahs_lokal_details.id_material','ahs_lokal_details.kode',
+                //     //                 'ahs_lokal_details.coefficient', 'ahs_lokal_details.sub_total','ahs_lokal_details.adjustment')
+                //     //         ->join('ahs_lokals','ahs_lokals.id_ahs_lokal','=','ahs_lokal_details.id_ahs_lokal')
+                //     //         ->join('task_sub_details','task_sub_details.id_sub_details','=','ahs_lokals.id_sub_details')
+                //     //         ->join('group_details','task_sub_details.id_group_details','=','group_details.id_group_details')
+                //     //         ->join('structure_details','group_details.id_structure_details','=','structure_details.id_structure_details')
+                //     //         ->join('a_h_s_s','a_h_s_s.id_job','=','ahs_lokals.id_job')
+                //     //         ->join('jobs','jobs.id_job','=','a_h_s_s.id_job')
+                //     //         ->where([
+                //     //             'a_h_s_s.id_sub' => $detail_unit['id_sub'],
+                //     //             'ahs_lokal_details.id_ahs_lokal' => $detail_unit['id_ahs_lokal'],
+                //     //         ])
+                //     //         ->whereNull('ahs_lokal_details.deleted_at')
+                //     //         ->whereNull('a_h_s_s.deleted_at')
+                //     //         ->get();
+                //     //     // dd($Detail_Material);
+                //     //     $collection = collect($material_temp); 
+                //     //     if($collection->isNotEmpty())
+                //     //     {
+                //     //         foreach($collection as $item)
+                //     //         {
+                //     //             $filtered = $Detail_Material->filter(function ($value,$key) use ($item){
+                //     //                 return $value->id_ahs_lokal_details != $item['id_ahs_lokal_details'];
+                //     //             });
+                //     //             $Detail_Material = $filtered;
+                //     //         }
+                //     //     }else{
+                //     //         $filtered = $Detail_Material;
+                //     //     }
+                //     //     foreach($filtered as $filtered)
+                //     //     {
+                //     //         // if($filtered->isNotEmpty())
+                //     //         $delete = AHSLokalDetails::where('id_ahs_lokal_details',$filtered->id_ahs_lokal_details)->delete();
+                //     //     }
+                //     //     $material_temp=[];
+                //     // }
+                //     $detail_temp=[];
+                // }
                 $tasksub_temp=[];
             }
             $group_temp=[];
@@ -522,12 +561,68 @@ class RABController extends RestController
                 }
             }
         }
-        //Edit AHS
+        //Edit AHS Lokal
+        // foreach($TaskSub as $task_sub_data)
+        // {
+        //     foreach($detail as $detail_data)
+        //     {
+        //         if($detail_data['id_ahs_lokal'] == null)
+        //         {
+        //             $detail_structure = StructureDetails::where([
+        //                 'id_rab' => $id,
+        //                 'id_structure' => $task_sub_data['id_structure'],
+        //             ])->get()->first();
+
+        //             $detail_group = GroupDetails::where([
+        //                 'id_structure_details' => $detail_structure->id_structure_details,
+        //                 'id_groups' => $task_sub_data['id_groups']
+        //             ])->get()->first();
+
+        //             $detail_task = TaskSubDetails::where([
+        //                 'id_group_details' => $detail_group->id_group_details,
+        //                 'id_sub' => $task_sub_data['id_sub']
+        //             ])->get()->first();
+                    
+        //             if($detail_structure->id_structure == $detail_data['id_structure'])
+        //             {
+        //                 if($detail_group->id_groups == $detail_data['id_groups'])
+        //                 {
+        //                     if($detail_task->id_sub == $detail_data['id_sub'])
+        //                     {                                
+        //                         array_push($detail_new,$detail_task->detail_rab()->create($detail_data));
+        //                     }
+        //                 }
+        //             }
+        //         }else{
+        //             $ahs = RABDetails::findOrFail($detail_data['id_ahs_lokal']);
+        //             $ahs->id_job = $detail_data['id_job'];
+        //             $ahs->total_labor = $detail_data['total_labor'];
+        //             $ahs->total_material = $detail_data['total_material'];
+        //             $ahs->total_equipment = $detail_data['total_equipment'];
+        //             $ahs->HSP_before_overhead = $detail_data['HSP_before_overhead'];
+        //             $ahs->overhead = $detail_data['overhead'];
+        //             $ahs->HSP = $detail_data['HSP'];
+        //             $ahs->volume = $detail_data['volume'];
+        //             $ahs->adjustment = $detail_data['adjustment'];
+        //             $ahs->HP = $detail_data['HP'];
+        //             $ahs->HP_Adjust = $detail_data['HP_Adjust'];
+        //             $ahs->save();
+        //         }
+        //     }
+        // }
+        if(!empty($deleted_details)){
+            foreach($deleted_details as $details){
+                $delete = RABDetails::where('id_ahs_lokal',$details['id_ahs_lokal'])->first();
+                // return $delete;
+                optional($delete->detail_ahs_lokal())->delete();
+                $delete->delete();
+            }
+        }
         foreach($TaskSub as $task_sub_data)
         {
             foreach($detail as $detail_data)
             {
-                if($detail_data['id_ahs_lokal'] == null)
+                if($detail_data['id_ahs_lokal'] == null) //kalau data baru
                 {
                     $detail_structure = StructureDetails::where([
                         'id_rab' => $id,
@@ -550,12 +645,70 @@ class RABController extends RestController
                         {
                             if($detail_task->id_sub == $detail_data['id_sub'])
                             {                                
-                                array_push($detail_new,$detail_task->detail_rab()->create($detail_data));
+                                // array_push($detail_new,$detail_task->detail_rab()->create($detail_data));
+                                
+                                $ahs_lokal = $detail_data;
+                                unset($ahs_lokal->detail);
+                                $created= $detail_task->detail_rab()->create($ahs_lokal);
+                                array_push($detail_new,$created);
+                                foreach($detail_data['detail'] as $material)
+                                {
+                                    array_push($material_new,$created->detail_ahs_lokal()->create($material));
+                                }
                             }
                         }
                     }
-                }else{
+                }
+                // if else($detail_Data['id_ahs_lokal'] != null)
+                // {
+                //     $detail_structure = StructureDetails::where([
+                //         'id_rab' => $id,
+                //         'id_structure' => $task_sub_data['id_structure'],
+                //     ])->get()->first();
+
+                //     $detail_group = GroupDetails::where([
+                //         'id_structure_details' => $detail_structure->id_structure_details,
+                //         'id_groups' => $task_sub_data['id_groups']
+                //     ])->get()->first();
+
+                //     $detail_task = TaskSubDetails::where([
+                //         'id_group_details' => $detail_group->id_group_details,
+                //         'id_sub' => $task_sub_data['id_sub']
+                //     ])->get()->first();
+                    
+                //     if($detail_structure->id_structure == $detail_data['id_structure'])
+                //     {
+                //         if($detail_group->id_groups == $detail_data['id_groups'])
+                //         {
+                //             if($detail_task->id_sub == $detail_data['id_sub'])
+                //             {                                
+                //                 // array_push($detail_new,$detail_task->detail_rab()->create($detail_data));
+                                
+                //                 $ahs_lokal = $detail_data;
+                //                 unset($ahs_lokal->detail);
+                //                 $updated = RABDetails::findOrFail($detail_data['id_ahs_lokal'])->update($ahs_lokal->All());
+                //                 array_push($detail_new,$created);
+                //                 foreach($detail_data['detail'] as $material)
+                //                 {
+                //                     array_push($material_new,$created->detail_ahs_lokal()->create($material));
+                //                 }
+                //             }
+                //         }
+                //     }
+                   
+
+                // }
+                else
+                {
                     $ahs = RABDetails::findOrFail($detail_data['id_ahs_lokal']);
+                    if($ahs->id_job != $detail_data['id_job'])
+                    {
+                        optional($ahs->detail_ahs_lokal())->delete();
+                        foreach($detail_data['detail'] as $material)
+                        {
+                            array_push($material_new,$ahs->detail_ahs_lokal()->create($material));
+                        }
+                    }
                     $ahs->id_job = $detail_data['id_job'];
                     $ahs->total_labor = $detail_data['total_labor'];
                     $ahs->total_material = $detail_data['total_material'];
@@ -567,61 +720,64 @@ class RABController extends RestController
                     $ahs->adjustment = $detail_data['adjustment'];
                     $ahs->HP = $detail_data['HP'];
                     $ahs->HP_Adjust = $detail_data['HP_Adjust'];
+                    $ahs->keterangan = $detail_data['keterangan'];
                     $ahs->save();
+
                 }
             }
         }
         //Edit AHS Lokal Details (Materials)
-        foreach($detail as $detail_data)
-        {
-            foreach($Material as $material_data)
-            {
-                // dd($detail_data);
-                if($material_data['id_ahs_lokal_details'] == null)
-                {
-                    $detail_structure = StructureDetails::where([
-                        'id_rab' => $id,
-                        'id_structure' => $detail_data['id_structure'],
-                    ])->get()->first();
+        // foreach($detail as $detail_data)
+        // {
+        //     foreach($Material as $material_data)
+        //     {
+        //         // dd($detail_data);
+        //         if($material_data['id_ahs_lokal_details'] == null)
+        //         {
+        //             $detail_structure = StructureDetails::where([
+        //                 'id_rab' => $id,
+        //                 'id_structure' => $detail_data['id_structure'],
+        //             ])->get()->first();
 
-                    $detail_group = GroupDetails::where([
-                        'id_structure_details' => $detail_structure->id_structure_details,
-                        'id_groups' => $detail_data['id_groups']
-                    ])->get()->first();
+        //             $detail_group = GroupDetails::where([
+        //                 'id_structure_details' => $detail_structure->id_structure_details,
+        //                 'id_groups' => $detail_data['id_groups']
+        //             ])->get()->first();
 
-                    $detail_task = TaskSubDetails::where([
-                        'id_group_details' => $detail_group->id_group_details,
-                        'id_sub' => $detail_data['id_sub']
-                    ])->get()->first();
+        //             $detail_task = TaskSubDetails::where([
+        //                 'id_group_details' => $detail_group->id_group_details,
+        //                 'id_sub' => $detail_data['id_sub']
+        //             ])->get()->first();
 
-                    $detail_ahs = RABDetails::where([
-                        'id_sub_details' => $detail_task->id_sub_details,
-                        'id_job' => $detail_data['id_job']  
-                    ])->get()->first();
+        //             $detail_ahs = RABDetails::where([
+        //                 'id_sub_details' => $detail_task->id_sub_details,
+        //                 'id_job' => $detail_data['id_job']  
+        //             ])->get()->first();
+                    
 
-                    $ahs_unit = AHS::findOrFail($detail_data['id_ahs']);
-                    if($detail_structure->id_structure == $material_data['id_structure'])
-                    {
-                        if($detail_group->id_groups == $material_data['id_groups'])
-                        {
-                            if($detail_task->id_sub == $material_data['id_sub'])
-                            { 
-                                if($ahs_unit->id_ahs == $material_data['id_ahs'])                               
-                                    array_push($material_new,$detail_ahs->detail_ahs_lokal()->create($material_data));
-                            }
-                        }
-                    }
-                }else{
-                    $ahs_lokal = AHSLokalDetails::findOrFail($material_data['id_ahs_lokal_details']);
-                    $ahs_lokal->id_material = $material_data['id_material'];
-                    $ahs_lokal->kode = $material_data['kode'];
-                    $ahs_lokal->coefficient = $material_data['coefficient'];
-                    $ahs_lokal->sub_total = $material_data['sub_total'];
-                    $ahs_lokal->adjustment = $material_data['adjustment'];
-                    $ahs_lokal->save();
-                }
-            }
-        } 
+        //             $ahs_unit = AHS::findOrFail($detail_data['id_ahs']);
+        //             if($detail_structure->id_structure == $material_data['id_structure'])
+        //             {
+        //                 if($detail_group->id_groups == $material_data['id_groups'])
+        //                 {
+        //                     if($detail_task->id_sub == $material_data['id_sub'])
+        //                     { 
+        //                         if($ahs_unit->id_ahs == $material_data['id_ahs'])                               
+        //                             array_push($material_new,$detail_ahs->detail_ahs_lokal()->create($material_data));
+        //                     }
+        //                 }
+        //             }
+        //         }else{
+        //             $ahs_lokal = AHSLokalDetails::findOrFail($material_data['id_ahs_lokal_details']);
+        //             $ahs_lokal->id_material = $material_data['id_material'];
+        //             $ahs_lokal->kode = $material_data['kode'];
+        //             $ahs_lokal->coefficient = $material_data['coefficient'];
+        //             $ahs_lokal->sub_total = $material_data['sub_total'];
+        //             $ahs_lokal->adjustment = $material_data['adjustment'];
+        //             $ahs_lokal->save();
+        //         }
+        //     }
+        // } 
         $rab->id_project = $request->id_project;  
         $rab->desc = $request->desc;
         $rab->total_rab = $request->total_rab;
@@ -699,14 +855,12 @@ class RABController extends RestController
         }
         else if(($parts[1]+1)<10) {
             $kode = 'RAB'.'-'.'000'.($parts[1]+1);
-        }else if(($partsTj[1]+1)>=10 && ($parts[1]+1)<99){
+        }else if(($partsTj[1]+1)>=10 && ($parts[1]+1)<=99){
             $kode = 'RAB'.'-'.'00'.($parts[1]+1);
-        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+        }else if(($parts[1]+1)>=100 && ($parts[1]+1)<=999){
             $kode = 'RAB'.'-'.'0'.($parts[1]+1);
-        }else if(($parts[1]+1)==1000){
-            $kode = 'RAB'.'-'.($parts[1]+1);
         }else{
-            $kode = 'RAB'.'-'.'001';
+            $kode = 'RAB'.'-'.($parts[1]+1);
         }
         return $kode;
     }

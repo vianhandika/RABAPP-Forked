@@ -20,7 +20,7 @@ class MaterialsTransformers extends TransformerAbstract
             'price'             => $material->price,
             'spesification'     => $material->spesification,
             'id_store'          => $material->stores->id_store,
-            'store'             => $material->stores->name,
+	    'store'             => $material->stores->name,
             'coefficient'       => 0,
         ];
     }

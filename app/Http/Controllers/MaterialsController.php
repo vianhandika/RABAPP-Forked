@@ -171,14 +171,32 @@ class MaterialsController extends RestController
         }
         else if(($parts[1]+1)<10) {
             $kode = 'M/L'.'-'.'000'.($parts[1]+1);
-        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<=99){
             $kode = 'M/L'.'-'.'00'.($parts[1]+1);
-        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+        }else if(($parts[1]+1)>=100 && ($parts[1]+1)<=999){
             $kode = 'M/L'.'-'.'0'.($parts[1]+1);
-        }else if(($parts[1]+1)==1000){
-            $kode = 'M/L'.'-'.($parts[1]+1);
         }else{
-            $kode = 'M/L'.'-'.'001';
+            $kode = 'M/L'.'-'.($parts[1]+1);
+        }
+        return $kode;
+    }
+
+    public function code2(Request $request)
+    {
+        // $job = Materials::all()->last();
+        // if($job != null)
+        $parts = $request->last;
+        if($parts==0){
+            $kode = 'M/L'.'-'.'0001';
+        }
+        else if(($parts+1)<10) {
+            $kode = 'M/L'.'-'.'000'.($parts+1);
+        }else if(($parts+1)>=10 && ($parts+1)<=99){
+            $kode = 'M/L'.'-'.'00'.($parts+1);
+        }else if(($parts+1)>=100 && ($parts+1)<=999){
+            $kode = 'M/L'.'-'.'0'.($parts+1);
+        }else{
+            $kode = 'M/L'.'-'.($parts+1);
         }
         return $kode;
     }

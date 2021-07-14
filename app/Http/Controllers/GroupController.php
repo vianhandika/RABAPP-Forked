@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Group;
+use App\Job;
 use App\Transformers\GroupTransformers;
 
 class GroupController extends RestController
@@ -37,9 +38,20 @@ class GroupController extends RestController
         ]);
 
         $group = Group::findOrFail($id);
+        
+        
+        // $jobs = Job::where('group',$group->name)->get();
+        // if(!empty($jobs))
+        // {
+        //     foreach($jobs as $job)
+        //     {
+        //         $job->group = $request->name;
+        //         $job->save();
+        //     }
+        // }  
+
         $group->name = $request->name;
         $group->save();
-
         return response()->json([
             'status' => (bool) $group,
             'data' => $group,

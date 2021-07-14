@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\TaskSub;
+use App\Job;
 use App\Transformers\TaskSubTransformers;
 
 use Illuminate\Http\Request;
@@ -37,6 +38,16 @@ class TaskSubController extends RestController
         ]);
 
         $tasksub = TaskSub::findOrFail($id);
+
+        $jobs = Job::where('group',$tasksub->name)->get();
+        if(!empty($jobs))
+        {
+            foreach($jobs as $job)
+            {
+                $job->group = $request->name;
+                $job->save();
+            }
+        }  
         $tasksub->name = $request->name;
         $tasksub->save();
 

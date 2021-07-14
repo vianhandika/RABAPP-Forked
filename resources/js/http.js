@@ -2,7 +2,8 @@ import axios from 'axios'
 
 export default {
     init () {
-        axios.defaults.baseURL = '127.0.0.1';
+        //axios.defaults.baseURL = '/budgeting';
+        axios.defaults.baseURL='/';
     },
 
     get (url, successCallback, errorCallback) {

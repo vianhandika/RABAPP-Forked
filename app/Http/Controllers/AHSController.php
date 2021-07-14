@@ -234,10 +234,10 @@ class AHSController extends RestController
         $job = AHS::all()->last();
         if($job != null)
         {
-            $strlen = strlen($job->kode);
-            if($strlen == "12")
-                $parts = explode('CPY-AHS-',$job->kode);
-            else    
+            // $strlen = strlen($job->kode);
+            // if($strlen == "12")
+            //     $parts = explode('CPY-AHS-',$job->kode);
+            // else    
                 $parts = explode('-',$job->kode);
         }
         if($job==null){
@@ -245,14 +245,12 @@ class AHSController extends RestController
         }
         else if(($parts[1]+1)<10) {
             $kode = 'AHS'.'-'.'000'.($parts[1]+1);
-        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<=99){
             $kode = 'AHS'.'-'.'00'.($parts[1]+1);
-        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+        }else if(($parts[1]+1)>=100 && ($parts[1]+1)<=999){
             $kode = 'AHS'.'-'.'0'.($parts[1]+1);
-        }else if(($parts[1]+1)==1000){
+        }else {
             $kode = 'AHS'.'-'.($parts[1]+1);
-        }else{
-            $kode = 'AHS'.'-'.'001';
         }
         return $kode;
     }

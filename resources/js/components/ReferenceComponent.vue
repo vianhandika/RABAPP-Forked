@@ -36,7 +36,9 @@
                   style="width: 40px"
                 >
                 </v-text-field>
-                <v-btn 
+                <v-btn
+                  :disabled="Access('R-DetailReferensi-C')!=true"
+ 
                   class="ma-3" 
                   color="green darken-1" 
                   elevation="8" 
@@ -49,7 +51,7 @@
               </v-toolbar>
             </template>
 
-            <template v-slot:item.name="props">
+            <template v-if="Access('R-DetailReferensi-U')==true" v-slot:item.name="props">
               <v-edit-dialog
                 :return-value.sync="props.item.name"
                 @save="updateStructure(props)"
@@ -70,16 +72,16 @@
             </template> 
 
             <template v-slot:item.action="{ item }">
-              <v-dialog v-model="dialogDelete" max-width="290px">
-                <template v-slot:activator="{ on }">
-                  <v-icon
+              <v-icon
+                    
+                    :disabled="Access('R-DetailReferensi-D')!=true"
                     small
                     color="red"
-                    v-on="on"
-                    @click="itemHandler(item)"
+                    @click="dialogDelete=true;itemHandler(item)"
                   >
                     delete
                   </v-icon>
+<<<<<<< Updated upstream
                 </template>
                     <v-card>
                       <v-card-title class="headline">Konfirmasi</v-card-title>
@@ -91,8 +93,22 @@
                       </v-card-actions>
                     </v-card>
               </v-dialog>
+=======
+              
+>>>>>>> Stashed changes
             </template>
           </v-data-table>
+          <v-dialog v-model="dialogDelete" max-width="290px">
+                <v-card>
+                  <v-card-title class="headline">Konfirmasi</v-card-title>
+                    <v-card-text>Anda yakin ingin menghapus gedung ini?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" text @click="dialogDelete = false; deleteStructure(Structure.id_structure)">Ya</v-btn>
+                    <v-btn color="red darken-1" text @click="dialogDelete = false">Tidak</v-btn>
+                  </v-card-actions>
+                </v-card>
+          </v-dialog>
         </v-col>
         <v-col cols="12" md="6">
           <v-data-table
@@ -129,6 +145,7 @@
                 >
                 </v-text-field>
                 <v-btn 
+                  :disabled="Access('R-DetailReferensi-C')!=true"
                   class="ma-3" 
                   color="green darken-1" 
                   elevation="8" 
@@ -141,7 +158,7 @@
               </v-toolbar>
             </template>
 
-            <template v-slot:item.name="props">
+            <template v-if="Access('R-DetailReferensi-U')==true" v-slot:item.name="props">
               <v-edit-dialog
                 :return-value.sync="props.item.name"
                 @save="updateFloor(props)"
@@ -162,6 +179,7 @@
             </template>
 
             <template v-slot:item.action="{ item }">
+<<<<<<< Updated upstream
               <v-dialog v-model="dialogDeleteFloor" max-width="290px">
                 <template v-slot:activator="{ on }">
                   <v-icon
@@ -183,8 +201,30 @@
                       </v-card-actions>
                     </v-card>
               </v-dialog>
+=======
+              <v-icon
+                :disabled="Access('R-DetailReferensi-D')!=true"
+                small
+                color="red"
+                @click="dialogDeleteFloor=true;itemFloor(item)"
+              >
+                delete
+              </v-icon>
+              
+>>>>>>> Stashed changes
             </template>
           </v-data-table>
+          <v-dialog v-model="dialogDeleteFloor" max-width="290px">
+                <v-card>
+                  <v-card-title class="headline">Konfirmasi</v-card-title>
+                    <v-card-text>Anda yakin ingin menghapus lantai ini?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" text @click="dialogDeleteFloor = false; deleteFloor(Floor.id_group)">Ya</v-btn>
+                    <v-btn color="red darken-1" text @click="dialogDeleteFloor = false">Tidak</v-btn>
+                  </v-card-actions>
+                </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
 
@@ -225,6 +265,7 @@
                 >
                 </v-text-field>
                 <v-btn 
+                  :disabled="Access('R-DetailReferensi-C')!=true"
                   class="ma-3" 
                   color="green darken-1" 
                   elevation="8" 
@@ -237,7 +278,7 @@
               </v-toolbar>
             </template>
 
-            <template v-slot:item.name="props">
+            <template v-if="Access('R-DetailReferensi-U')==true" v-slot:item.name="props">
               <v-edit-dialog
                 :return-value.sync="props.item.name"
                 @save="updateTaskSub(props)"
@@ -258,6 +299,7 @@
             </template>
 
             <template v-slot:item.action="{ item }">
+<<<<<<< Updated upstream
               <v-dialog v-model="dialogDeleteTask" max-width="290px">
                 <template v-slot:activator="{ on }">
                   <v-icon
@@ -279,8 +321,30 @@
                       </v-card-actions>
                     </v-card>
               </v-dialog>
+=======
+              <v-icon
+                :disabled="Access('R-DetailReferensi-D')!=true"
+
+                small
+                color="red"
+                @click="dialogDeleteTask=true;itemTask(item)"
+              >
+                delete
+              </v-icon>
+>>>>>>> Stashed changes
             </template>
           </v-data-table>
+          <v-dialog v-model="dialogDeleteTask" max-width="290px">
+                <v-card>
+                  <v-card-title class="headline">Konfirmasi</v-card-title>
+                    <v-card-text>Anda yakin ingin menghapus grup pekerjaan ini?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" text @click="dialogDeleteTask = false; deleteTaskSub(Task.id_sub)">Ya</v-btn>
+                    <v-btn color="red darken-1" text @click="dialogDeleteTask = false">Tidak</v-btn>
+                  </v-card-actions>
+                </v-card>
+          </v-dialog>
         </v-col>
 
         <v-col cols="12" md="6"> 
@@ -318,6 +382,7 @@
                 >
                 </v-text-field>
                 <v-btn 
+                  :disabled="Access('R-DetailReferensi-C')!=true"
                   class="ma-3" 
                   color="green darken-1" 
                   elevation="8" 
@@ -330,7 +395,7 @@
               </v-toolbar>
             </template>
 
-            <template v-slot:item.name="props">
+            <template v-if="Access('R-DetailReferensi-U')==true" v-slot:item.name="props">
               <v-edit-dialog
                 :return-value.sync="props.item.name"
                 @save="updateSatuan(props)"
@@ -351,6 +416,7 @@
             </template>
 
             <template v-slot:item.action="{ item }">
+<<<<<<< Updated upstream
               <v-dialog v-model="dialogDeleteSatuan" max-width="290px">
                 <template v-slot:activator="{ on }">
                   <v-icon
@@ -372,8 +438,31 @@
                       </v-card-actions>
                     </v-card>
               </v-dialog>
+=======
+              <v-icon
+                :disabled="Access('R-DetailReferensi-D')!=true"
+                
+                small
+                color="red"
+                @click="dialogDeleteSatuan=true;itemSatuan(item)"
+              >
+                delete
+              </v-icon>
+              
+>>>>>>> Stashed changes
             </template>
           </v-data-table>
+          <v-dialog v-model="dialogDeleteSatuan" max-width="290px">
+                <v-card>
+                  <v-card-title class="headline">Konfirmasi</v-card-title>
+                    <v-card-text>Anda yakin ingin menghapus satuan ini?</v-card-text>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" text @click="dialogDeleteSatuan = false; deleteSatuan(Satuan.id_satuan)">Ya</v-btn>
+                    <v-btn color="red darken-1" text @click="dialogDeleteSatuan = false">Tidak</v-btn>
+                  </v-card-actions>
+                </v-card>
+          </v-dialog>
         </v-col>
       </v-row>
       <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
@@ -385,6 +474,7 @@
 </template>
 
 <script>
+import { mapGetters, mapState, mapActions } from 'vuex'
 import structure from './../service/Structure'
 import floor from './../service/Group'
 import task from './../service/TaskSub'
@@ -462,9 +552,25 @@ import satuan from './../service/Satuan'
       this.getSatuan()
     },
     computed: {
-      
+      ...mapGetters({
+            nama: 'LoggedUser/Name',
+            jabatan: 'LoggedUser/Jabatan',
+            divisi: 'LoggedUser/Divisi',
+            akses:'LoggedUser/Akses',
+        }),      
     },
     methods: {
+      Access(codeAccess){
+
+        var x;
+        for(x in this.akses.data){
+            if (codeAccess.includes(this.akses.data[x].Fitur)) {
+                return true
+            } 
+        }
+        return false
+            
+      },
       save () {
         this.snack = true
         this.snackColor = 'green'

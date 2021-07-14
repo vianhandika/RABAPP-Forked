@@ -35,13 +35,17 @@
         </v-col>
       
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" width="850px">  
+        <v-dialog v-model="dialog" persistent width="1000px">  
           <template v-slot:activator="{ on }">
+<<<<<<< Updated upstream
             <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="dialog8=true;reset()">Tambah</v-btn>
+=======
+            <v-btn color="green darken-1" elevation="8" :disabled="Access('R-RAB-C')!=true" rounded dark v-on="on" @click="dialog8=true;reset()">Tambah</v-btn>
+>>>>>>> Stashed changes
           </template>
           <v-card>
             <v-toolbar dark color="light-blue accent-4">
-              <v-btn icon dark @click="dialog = false; dialog7=false;dialog8=false">
+              <v-btn icon dark @click="dialog = false; dialog7=false;dialog8=false;ended()">
                 <v-icon>close</v-icon>
               </v-btn>
               <v-toolbar-title v-if="dialog8">Tambah RAB</v-toolbar-title>
@@ -661,8 +665,8 @@
                                     ></v-select>
                                   </v-flex>
                                   
-                                  <v-flex xs12 sm4 md4>
-                                    <v-select 
+                                  <v-flex xs12 sm6 md6>
+                                    <!-- <v-select 
                                       label="AHS" 
                                       class="pa-1"
                                       v-model="AHS.id_ahs"
@@ -672,7 +676,26 @@
                                       required 
                                       @input="detailCard=true;change();adjust()"
                                       append-icon="expand_more"
-                                    ></v-select>
+                                    ></v-select> -->
+                                    <v-autocomplete 
+                                      label="AHS" 
+                                      class="pa-1"
+                                      v-model="AHS.id_ahs"
+                                      item-text="name"
+                                      item-value="id_ahs"
+                                      :items="filterAHSAll"
+                                      required 
+                                      @input="detailCard=true;change();adjust()"
+                                      append-icon="expand_more"
+                                    ></v-autocomplete>
+                                  </v-flex>
+
+                                  <v-flex xs12 sm6 md6>
+                                    <v-text-field 
+                                      label="Keterangan" 
+                                      class="pa-1"
+                                      v-model="ahs_lokal.keterangan"
+                                    ></v-text-field >
                                   </v-flex>
 
                                   <v-flex xs10 sm2 md2>
@@ -857,30 +880,59 @@
                             lazy
                             large
                             persistent
-                          > {{ item.name }}
+                          > {{ item.name+" "+item.keterangan}}
                             <template v-slot:input>
                               <v-flex 
                                 @click="itemList(item)"
                                 v-if="!editList"
                               >
-                                <v-select
+                             
+                                <!-- <v-select
                                   label="AHS" 
                                   v-model="item.id_ahs"
                                   item-text="name"
                                   item-value="id_ahs"
                                   append-icon="expand_more"
                                   :items="detailDetails"
-                                ></v-select>
+                                  
+                                ></v-select> -->
+                                <v-autocomplete
+                                  label="AHS" 
+                                  v-model="item.id_ahs"
+                                  item-text="name"
+                                  item-value="id_ahs"
+                                  append-icon="expand_more"
+                                  :items="detailDetails"
+                                  
+                                ></v-autocomplete>
+                                <v-text-field 
+                                  label="Keterangan" 
+                                  class="pa-1"
+                                  v-model="item.keterangan"
+                                ></v-text-field >
                               </v-flex>
                               <v-flex v-if="editList">
-                                <v-select
+                                <!-- <v-select
                                   label="AHS" 
                                   v-model="ahs_lokal.id_ahs"
                                   item-text="name"
                                   item-value="id_ahs"
                                   :items="filterAHSAll"
                                   append-icon="expand_more"
-                                ></v-select>
+                                ></v-select> -->
+                                <v-autocomplete
+                                  label="AHS" 
+                                  v-model="ahs_lokal.id_ahs"
+                                  item-text="name"
+                                  item-value="id_ahs"
+                                  :items="filterAHSAll"
+                                  append-icon="expand_more"
+                                ></v-autocomplete>
+                                <v-text-field 
+                                  label="Keterangan" 
+                                  class="pa-1"
+                                  v-model="item.keterangan"
+                                ></v-text-field >
                               </v-flex>
                             </template>
                           </v-edit-dialog>
@@ -968,9 +1020,9 @@
                 </v-flex>
               </v-layout>
             </v-list-item-content>
-            <v-icon color="green" @click="itemEdit(data);dialog=true;dialog7=true;detailstructure=false">edit</v-icon>
-            <v-icon color="red" @click="itemDeleteRAB(data);dialog2=true;detailstructure=false">delete</v-icon>
-            <v-icon color="blue" @click="itemEdit(data);dialogcopy=true;detailstructure=false">file_copy</v-icon>
+            <v-icon color="green" :disabled="Access('R-RAB-U')!=true" @click="itemEdit(data);dialog=true;dialog7=true;detailstructure=false">edit</v-icon>
+            <v-icon color="red" :disabled="Access('R-RAB-D')!=true" @click="itemDeleteRAB(data);dialog2=true;detailstructure=false">delete</v-icon>
+            <v-icon color="blue" :disabled="Access('R-RAB-C')!=true" @click="itemEdit(data);dialogcopy=true;detailstructure=false">file_copy</v-icon>
             <v-icon color="light-blue accent-3" @click="detailstructure=true">expand_more</v-icon>
           </template>
           <!-- dialog copy rab -->
@@ -992,7 +1044,7 @@
                 <v-list-item-content class="borderStructure">
                   <v-list-item-title class="marginBorder">{{ structure.structure }}</v-list-item-title>
                 </v-list-item-content>
-                <v-icon color="blue darken-3" @click="dialog3=true;itemDetail(structure)">delete</v-icon>
+                <v-icon color="blue darken-3" :disabled="Access('R-RAB-D')!=true" @click="dialog3=true;itemDetail(structure)">delete</v-icon>
               </template>
               <!-- dialog delete structure -->
                 <v-dialog v-model="dialog3" max-width="290px">
@@ -1013,7 +1065,7 @@
                     <v-list-item-content class="borderFloor">
                       <v-list-item-title class="marginBorder">Lantai {{group.floor}}</v-list-item-title>
                     </v-list-item-content>
-                    <v-icon color="light-blue accent-3" @click="dialog4=true;itemDetail(group)">delete</v-icon>
+                    <v-icon color="light-blue accent-3" :disabled="Access('R-RAB-D')!=true" @click="dialog4=true;itemDetail(group)">delete</v-icon>
                   </template>
                   <!-- dialog delete floor -->
                     <v-dialog v-model="dialog4" max-width="290px">
@@ -1033,7 +1085,7 @@
                       <v-list-item-content class="borderTask">
                         <v-list-item-title class="marginBorder">Pekerjaan   {{task.task}}</v-list-item-title>
                       </v-list-item-content>
-                      <v-icon color="light-blue lighten-2" @click="dialog5=true;itemDetail(task)">delete</v-icon>
+                      <v-icon color="light-blue lighten-2" :disabled="Access('R-RAB-D')!=true" @click="dialog5=true;itemDetail(task)">delete</v-icon>
                     </template>
                     <!-- dialog delete task group -->
                       <v-dialog v-model="dialog5" max-width="290px">
@@ -1088,7 +1140,7 @@
                             </v-flex>
                           </v-layout>
                         </v-list-item-content>
-                        <v-icon style="padding-left:15px" color="cyan accent-2" @click="dialog6=true;itemDetail(detail_ahs)">delete</v-icon>
+                        <v-icon style="padding-left:15px" color="cyan accent-2" :disabled="Access('R-RAB-D')!=true" @click="dialog6=true;itemDetail(detail_ahs)">delete</v-icon>
                       </template>
                       <!-- dialog delete detail -->
                         <v-dialog v-model="dialog6" max-width="290px">
@@ -1155,6 +1207,7 @@ import task from './../service/TaskSub'
 import detail from './../service/Details'
 import job from './../service/Job'
 import material from './../service/Material'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
   export default {
     data (){
@@ -1225,6 +1278,7 @@ import material from './../service/Material'
         detailTask:[],
 
         details:[],
+        deleted_details:[],
         detailDetails:[],
 
         detail:{
@@ -1271,7 +1325,8 @@ import material from './../service/Material'
           volume: 0,
           adjustment: 1,
           HP: 0,
-          HP_Adjust:0
+          HP_Adjust:0,
+          keterangan:''
         },
         AHSLokalDefault:{
           id_ahs_lokal:'',
@@ -1284,6 +1339,7 @@ import material from './../service/Material'
           adjustment: 1,
           HP: 0,
           HP_Adjust: 0,
+          keterangan:''
         },
         AHS:{
           id_ahs:'',
@@ -1399,9 +1455,27 @@ import material from './../service/Material'
       this.filterStructures()
     },
     computed: {
+<<<<<<< Updated upstream
       
+=======
+      ...mapGetters({
+            nama: 'LoggedUser/Name',
+            jabatan: 'LoggedUser/Jabatan',
+            divisi: 'LoggedUser/Divisi',
+            akses:'LoggedUser/Akses',
+        }),
+>>>>>>> Stashed changes
     },
     methods: {
+      Access(codeAccess){
+        var x;
+        for(x in this.akses.data){
+            if (codeAccess.includes(this.akses.data[x].Fitur)) {
+                return true
+            } 
+        }
+        return false  
+      },
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
@@ -1574,6 +1648,8 @@ import material from './../service/Material'
               HSP : ahs.HSP,
               volume : ahs.volume,
               adjustment : ahs.adjustment,
+              keterangan : ahs.keterangan,
+
               HP : parseFloat(ahs.HP).toFixed(2),
               HP_Adjust : parseFloat(ahs.HP_Adjust).toFixed(2),
             }
@@ -1598,6 +1674,7 @@ import material from './../service/Material'
               HSP : ahs.HSP,
               volume : ahs.volume,
               adjustment : ahs.adjustment,
+              keterangan : ahs.keterangan,
               HP : parseFloat(ahs.HP).toFixed(2),
               HP_Adjust : parseFloat(ahs.HP_Adjust).toFixed(2),
             }
@@ -1724,11 +1801,11 @@ import material from './../service/Material'
 
         this.tasksub_unit = item
         this.filterAHSAll = this.ahs.filter(obj=>obj.id_sub == item.id_sub)
-        let Detail = this.details.filter(obj=>obj.id_structure == this.tasksub_unit.id_structure && obj.id_groups == this.tasksub_unit.id_groups && obj.id_sub == this.tasksub_unit.id_sub)
-        for(let detail of Detail)
-        {
-          this.filterAHSAll = this.filterAHSAll.filter(obj=>obj.id_ahs != detail.id_ahs)
-        }
+        // let Detail = this.details.filter(obj=>obj.id_structure == this.tasksub_unit.id_structure && obj.id_groups == this.tasksub_unit.id_groups && obj.id_sub == this.tasksub_unit.id_sub)
+        // for(let detail of Detail)
+        // {
+        //   this.filterAHSAll = this.filterAHSAll.filter(obj=>obj.id_ahs != detail.id_ahs)
+        // }
         console.log('Filter AHS',this.filterAHSAll)
       },
       getMaterialDetails(){
@@ -1936,6 +2013,9 @@ import material from './../service/Material'
         }
         for(let detail of Detail)
         {
+          if(detail.id_ahs_lokal != null){
+            this.deleted_details.push(detail)
+          }
           this.details.splice(this.details.indexOf(detail),1)
           this.rab.total_rab = parseFloat(this.rab.total_rab) - parseFloat(detail.HP_Adjust)
         }
@@ -2113,6 +2193,9 @@ import material from './../service/Material'
         }
         for(let detail of Details)
         {
+          if(detail.id_ahs_lokal != null){
+            this.deleted_details.push(detail)
+          }
             this.rab.total_rab = parseFloat(this.rab.total_rab) - parseFloat(detail.HP_Adjust)
             this.details.splice(this.details.indexOf(detail),1)
         }
@@ -2210,6 +2293,7 @@ import material from './../service/Material'
               HSP : ahs.total,
               volume : detail.volume,
               adjustment : detail.adjustment,
+              keterangan : detail.keterangan,
               HP : parseFloat(ahs.total * detail.volume).toFixed(2),
               HP_Adjust : parseFloat(ahs.total * detail.volume * detail.adjustment).toFixed(2),
             }
@@ -2327,6 +2411,7 @@ import material from './../service/Material'
               HSP : ahs.total,
               volume : detail.volume,
               adjustment : detail.adjustment,
+              keterangan :detail.keterangan,
               HP : parseFloat(ahs.total * detail.volume).toFixed(2),
               HP_Adjust : parseFloat(ahs.total * detail.volume * detail.adjustment).toFixed(2),
             }
@@ -2352,6 +2437,9 @@ import material from './../service/Material'
         
         for(let detail of Details)
         {
+          if(detail.id_ahs_lokal != null){
+            this.deleted_details.push(detail)
+          }
           this.rab.total_rab = parseFloat(this.rab.total_rab) - parseFloat(detail.HP_Adjust)
           this.details.splice(this.details.indexOf(detail),1)
         }
@@ -2386,6 +2474,7 @@ import material from './../service/Material'
           HSP : data.total,
           volume : this.ahs_lokal.volume,
           adjustment : this.ahs_lokal.adjustment,
+          keterangan : this.ahs_lokal.keterangan,
           HP : parseFloat(data.total * this.ahs_lokal.volume).toFixed(2),
           HP_Adjust : parseFloat(data.total * this.ahs_lokal.volume * this.ahs_lokal.adjustment).toFixed(2),
         }
@@ -2410,10 +2499,12 @@ import material from './../service/Material'
           HSP : data.total,
           volume : this.ahs_lokal.volume,
           adjustment : this.ahs_lokal.adjustment,
+          keterangan : this.ahs_lokal.keterangan,
           HP : parseFloat(data.total * this.ahs_lokal.volume).toFixed(2),
           HP_Adjust : parseFloat(data.total * this.ahs_lokal.volume * this.ahs_lokal.adjustment).toFixed(2),
+          // id_ahs_lokal_temp : Math.floor(Math.random() * 1000) + 1,
         }
-        this.details.push(ahs)
+        // this.details.push(ahs)
         this.detailDetails.push(detail)
 
         this.rab.total_rab = parseFloat(this.rab.total_rab) + parseFloat(ahs.HP_Adjust)
@@ -2426,13 +2517,21 @@ import material from './../service/Material'
         console.log(this.details)
         console.log('Detail AHSs')
         console.log(this.detailDetails)
-        
-        this.addDetails()
+       
+        this.addDetails(ahs)
+        this.details.push(ahs)
+        // this.detailDetails.push(detail)
+
+        // this.addDetails(detail.id_ahs_lokal_temp)
         this.AHS = Object.assign({},this.AHSDefault)
         this.ahs_lokal = Object.assign({},this.AHSLokalDefault)
       },
-      addDetails()
+      addDetails(ahs_lokal)
+      // addDetails(id_ahs_lokal_temp)
       {
+        ahs_lokal.detail=[]
+        console.log("This AHS")
+        console.log(this.AHS)
         let ahs = this.ahs.find(obj=>obj.id_ahs == this.AHS.id_ahs)
 
         for(let materials of ahs.ahs_details.data)
@@ -2448,9 +2547,11 @@ import material from './../service/Material'
             kode          : materials.kode,
             coefficient   : materials.coefficient,
             sub_total     : materials.sub_total,
-            adjustment    : 1
+            adjustment    : 1,
+            // id_ahs_lokal_temp: id_ahs_lokal_temp,
           }
           this.Material.push(each_materials)
+          ahs_lokal.detail.push(each_materials)
         }
         console.log("This Material")
         console.log(this.Material)
@@ -2465,7 +2566,6 @@ import material from './../service/Material'
         let data = this.ahs.find(obj=>obj.id_ahs == this.ahs_lokal.id_ahs)
         let detail_ahs = this.details.find(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub && obj.id_ahs == detail.id_ahs) 
         let detail_AHS = this.detailDetails.find(obj=>obj.id_structure == detail.id_structure && obj.id_groups == detail.id_groups && obj.id_sub == detail.id_sub && obj.id_ahs == detail.id_ahs) 
-
         let ahs = {
           id_ahs_lokal: detail.id_ahs_lokal,
           id_structure : detail.id_structure,
@@ -2483,6 +2583,7 @@ import material from './../service/Material'
           HSP : data.total,
           volume : detail.volume,
           adjustment : detail.adjustment,
+          keterangan : detail.keterangan,
           HP : parseFloat(data.total * detail.volume).toFixed(2),
           HP_Adjust : parseFloat(data.total * detail.volume * detail.adjustment).toFixed(2),
         }
@@ -2507,6 +2608,7 @@ import material from './../service/Material'
           HSP : data.total,
           volume : detail.volume,
           adjustment : detail.adjustment,
+          keterangan : detail.keterangan,
           HP : parseFloat(data.total * detail.volume).toFixed(2),
           HP_Adjust : parseFloat(data.total * detail.volume * detail.adjustment).toFixed(2),
         }
@@ -2524,6 +2626,7 @@ import material from './../service/Material'
         console.log('after edit')
         console.log(this.rab.total_rab)
         let Temp =[]
+        ahs.detail=[]
         for(let materials of data.ahs_details.data)
         {
           let each_materials = {
@@ -2540,7 +2643,9 @@ import material from './../service/Material'
             adjustment    : ahs.adjustment
           }
           Temp.push(each_materials)
+          ahs.detail.push(each_materials)
         }
+        this.details.splice(this.details.indexOf(detail_ahs),1,ahs)
         let Material = this.Material.filter(obj=>obj.id_ahs == detail.id_ahs)
         console.log('Material Hendak Dihapus')
         console.log(Material)
@@ -2640,6 +2745,7 @@ import material from './../service/Material'
           HP : parseFloat(detail.HSP * detail.volume).toFixed(2),
           HP_Adjust : parseFloat(detail.HSP * detail.volume * detail.adjustment).toFixed(2),
         }
+        ahs.detail=[]
         this.rab.total_rab = parseFloat(this.rab.total_rab) - parseFloat(detail.HP_Adjust)
         console.log('Total RAB')
         console.log(this.rab.total_rab)
@@ -2668,7 +2774,9 @@ import material from './../service/Material'
             adjustment : detail.adjustment            
           }
           this.Material.splice(this.Material.indexOf(material),1,each)
+          ahs.detail.push(each)
         }
+        this.details.splice(this.details.indexOf(data),1,ahs)
         this.update()
         console.log('This Detail')
         console.log(this.details)
@@ -2680,6 +2788,9 @@ import material from './../service/Material'
       deleteList(index){
         let data = this.details.find(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub && obj.id_ahs == index.id_ahs)
         console.log(data)
+        if(data.id_ahs_lokal!=null){
+          this.deleted_details.push(data);
+        }
         let detail = this.detailDetails.find(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub && obj.id_ahs == index.id_ahs) 
         let material = this.Material.filter(obj=>obj.id_structure == index.id_structure && obj.id_groups == index.id_groups && obj.id_sub == index.id_sub && obj.id_ahs == index.id_ahs)
         this.rab.total_rab = parseFloat(this.rab.total_rab - index.HP_Adjust).toFixed(2)
@@ -2711,6 +2822,32 @@ import material from './../service/Material'
         console.log(this.detailDetails)
         console.log('This Material')
         console.log(this.Material)
+      },
+      ended(){
+        this.deleted_details=[];
+      },
+      getMaterials(item){
+        let ahs = this.ahs.find(obj=>obj.id_ahs == item.id_ahs)
+        item.detail=[]
+        for(let materials of ahs.ahs_details.data)
+        {
+          let each_materials = {
+            id_ahs_lokal_details : null,
+            id_structure  : this.tasksub_unit.id_structure,
+            id_groups     : this.tasksub_unit.id_groups,
+            id_sub        : this.tasksub_unit.id_sub,
+            id_ahs        : ahs.id_ahs,
+            id_job        : ahs.id_job,    
+            id_material   : materials.id_material,
+            kode          : materials.kode,
+            coefficient   : materials.coefficient,
+            sub_total     : materials.sub_total,
+            adjustment    : 1,
+            // id_ahs_lokal_temp: id_ahs_lokal_temp,
+          }
+          item.detail.push(each_materials)
+        }
+        console.log(item)
       },
       async getStructure(){
         try{
@@ -2831,16 +2968,19 @@ import material from './../service/Material'
             detail_group      : this.Groups,
             detail_task       : this.TaskSub,
             detail            : this.details,
-            detail_material   : this.Material
+            detail_material   : this.Material,
+            deleted_details   : this.deleted_details,
           } 
           await rabController.updateItem(payload,id).then(response=>{
             this.getPagination()
             this.loading = false
             this.close()
             this.update()
+            this.deleted_details=[]
           })
         }catch(err){
           this.loading = false
+          this.deleted_details=[]
           console.log(err);
         }
       },

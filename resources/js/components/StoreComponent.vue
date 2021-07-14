@@ -29,7 +29,11 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
+<<<<<<< Updated upstream
                 <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" v-on="on" @click="reset;edit=false">Tambah</v-btn>
+=======
+                <v-btn color="green darken-1" :disabled="Access('R-Toko-C')!=true" elevation="8" rounded dark class="mb-2" v-on="on" @click="reset;edit=false">Tambah</v-btn>
+>>>>>>> Stashed changes
               </template>
 
               <v-card>
@@ -127,9 +131,15 @@
 
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
+<<<<<<< Updated upstream
                   <v-btn class="ma-2" rounded color="green" dark @click="dialog=false">Batal</v-btn>
                   <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="!edit" @click="addItem();dialog=false">Simpan</v-btn>
                   <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="edit" @click="updateItem(Store.id_store);dialog=false">Simpan</v-btn>
+=======
+                  <v-btn class="ma-2" rounded color="green" dark @click="$refs.form.resetValidation();dialog=false">Batal</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="!edit" @click="$refs.form.resetValidation();addItem();dialog=false">Simpan</v-btn>
+                  <v-btn class="ma-2" rounded color="orange" dark :disabled="!valid" v-if="edit" @click="$refs.form.resetValidation();updateItem(Store.id_store);dialog=false">Simpan</v-btn>
+>>>>>>> Stashed changes
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -138,6 +148,7 @@
 
         <template v-slot:item.action="{ item }">
           <v-icon
+            :disabled="Access('R-Toko-U')!=true"
             small
             class="mr-2"
             color="green"
@@ -145,6 +156,7 @@
           >
             edit
           </v-icon>
+<<<<<<< Updated upstream
 
           <v-dialog v-model="dialogDelete" max-width="290px">
             <template v-slot:activator="{ on }">
@@ -167,8 +179,30 @@
                 </v-card-actions>
               </v-card>
           </v-dialog>
+=======
+          <v-icon
+            :disabled="Access('R-Toko-D')!=true"
+            small
+            color="red"
+            @click="dialogDelete=true;itemHandler(item)"
+          >
+            delete
+          </v-icon>
+          
+>>>>>>> Stashed changes
         </template>
       </v-data-table>
+      <v-dialog v-model="dialogDelete" max-width="290px">
+          <v-card>
+            <v-card-title class="headline">Konfirmasi</v-card-title>
+            <v-card-text>Anda yakin ingin menghapus toko ini?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialogDelete = false; deleteItem(Store.id_store)">Ya</v-btn>
+              <v-btn color="red darken-1" text @click="dialogDelete=false">Tidak</v-btn>
+            </v-card-actions>
+          </v-card>
+      </v-dialog>
     </v-container>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
       <v-icon dark>done</v-icon>
@@ -179,7 +213,7 @@
 
 <script>
 import Controller from './../service/Store'
-
+import { mapGetters, mapState, mapActions } from 'vuex'
   export default {
     data: () => ({
       snack: false,
@@ -216,8 +250,9 @@ import Controller from './../service/Store'
       headers: [
         {
           text : 'ID',
-          sortable: false,
-          value : 'kode'
+          sortable: true,
+          value : 'kode',
+	  width: '10%'
         },
         {
           text: 'Nama',
@@ -228,7 +263,12 @@ import Controller from './../service/Store'
         { 
           sortable: false,
           text: 'Alamat', 
+<<<<<<< Updated upstream
           value: 'address'
+=======
+          value: 'address',
+	  width: '30%'
+>>>>>>> Stashed changes
         },
         { 
           sortable: false,
@@ -287,9 +327,25 @@ import Controller from './../service/Store'
       this.getKode()
     },
     computed: {
-
+        ...mapGetters({
+            nama: 'LoggedUser/Name',
+            jabatan: 'LoggedUser/Jabatan',
+            divisi: 'LoggedUser/Divisi',
+            akses:'LoggedUser/Akses',
+        }),
     },
     methods: {
+      Access(codeAccess){
+
+        var x;
+        for(x in this.akses.data){
+            if (codeAccess.includes(this.akses.data[x].Fitur)) {
+                return true
+            } 
+        }
+        return false
+            
+      },
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
@@ -376,7 +432,7 @@ import Controller from './../service/Store'
       reset()
       {
         this.getallItem()
-        this.$refs.form.resetValidation()
+        // this.$refs.form.resetValidation()
         this.Store = Object.assign({},this.StoreDefault)
       },
     },

@@ -35,7 +35,8 @@ class AkunController extends Controller
                 'token_type' => 'Bearer',
                 'expires_at' => Carbon::parse(
                     $tokenResult->token->expires_at
-                )->toDateTimeString()
+                )->toDateTimeString(),
+                'Id_Akun' => $user->Id_Akun
             ]);
         } catch (\Exception $e) {
             throw $e;

@@ -19,6 +19,8 @@ import 'vuetify/dist/vuetify.min.css';
 // import 'font-awesome/css/font-awesome.css';
 import App from './components/App'
 //setupComponents(Vue);
+import http from './http'
+http.init();
 
 Vue.use(VueRouter); 
 Vue.use(Vuetify);
@@ -26,6 +28,7 @@ Vue.use(Vuelidate);
 // Vue.component('apexchart', VueApexCharts)
 
 const router = new VueRouter({
+    //base:'/budgeting',
     base:'/',
     mode: 'history',
     routes,

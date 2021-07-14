@@ -41,7 +41,11 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
+<<<<<<< Updated upstream
                 <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">Tambah</v-btn>
+=======
+                <v-btn color="green darken-1" elevation="8" :disabled="Access('R-Proyek-C')!=true" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">Tambah</v-btn>
+>>>>>>> Stashed changes
               </template>
               <v-card>
                 <v-card-title>
@@ -172,9 +176,15 @@
 
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
+<<<<<<< Updated upstream
                   <v-btn class="ma-2" rounded color="green" dark @click="close">Batal</v-btn>
                   <v-btn v-if="!edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="addItem()">Simpan</v-btn>
                   <v-btn v-if="edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="updateItem(Project.id_project)">Save</v-btn>
+=======
+                  <v-btn class="ma-2" rounded color="green" dark @click="$refs.form.resetValidation();close">Batal</v-btn>
+                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="$refs.form.resetValidation();addItem()">Simpan</v-btn>
+                  <v-btn v-if="edit" class="ma-2" rounded color="orange" dark :disabled="!valid" @click="$refs.form.resetValidation();updateItem(Project.id_project)">Save</v-btn>
+>>>>>>> Stashed changes
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -183,6 +193,7 @@
 
         <template v-slot:item.action="{ item }">
           <v-icon
+            :disabled="Access('R-Proyek-U')!=true"
             small
             class="mr-2"
             color="green"
@@ -190,18 +201,18 @@
           >
             edit
           </v-icon>
-
-          <v-dialog v-model="dialogDelete" max-width="290px">
-            <template v-slot:activator="{ on }">
-              <v-icon
-                small
-                color="red"
-                v-on="on"
-                @click="itemHandler(item)"
-              >
-                delete
-              </v-icon>
-            </template>
+          <v-icon
+            :disabled="Access('R-Proyek-D')!=true"
+            small
+            color="red"
+            @click="dialogDelete=true;itemHandler(item)"
+          >
+            delete
+          </v-icon>
+          
+        </template>
+      </v-data-table>
+      <v-dialog v-model="dialogDelete" max-width="290px">
               <v-card>
                 <v-card-title class="headline">Konfirmasi</v-card-title>
                   <v-card-text>Anda yakin ingin menghapus proyek ini?</v-card-text>
@@ -212,8 +223,6 @@
                 </v-card-actions>
               </v-card>
           </v-dialog>
-        </template>
-      </v-data-table>
     </v-container>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
       <v-icon dark>done</v-icon>
@@ -223,6 +232,7 @@
 </template>
 
 <script>
+import { mapGetters, mapState, mapActions } from 'vuex'
 import Controller from './../service/Project'
 import format from 'date-fns/format'
 import parse from 'date-fns/parse'
@@ -277,7 +287,11 @@ import { parseISO } from 'date-fns'
         nominal: 0
       },
       headers: [
+<<<<<<< Updated upstream
         {text: 'ID',align: 'left',sortable: false,value: 'kode',width: '8%'},
+=======
+        {text: 'ID',align: 'left',sortable: true,value: 'kode',width: '8%'},
+>>>>>>> Stashed changes
         {text: 'Proyek',align: 'left',sortable: false,value: 'project'},
         {text: 'Alamat',sortable: false,value: 'address'},
         {text: 'Pemilik',sortable: false,value: 'owner'},
@@ -326,8 +340,25 @@ import { parseISO } from 'date-fns'
         let date = parseISO(this.Project.date)
         return this.Project.date ? format(date, 'dd MMMM yyyy',) : ''
       },
+      ...mapGetters({
+            nama: 'LoggedUser/Name',
+            jabatan: 'LoggedUser/Jabatan',
+            divisi: 'LoggedUser/Divisi',
+            akses:'LoggedUser/Akses',
+        }),
     },
     methods: {
+      Access(codeAccess){
+
+        var x;
+        for(x in this.akses.data){
+            if (codeAccess.includes(this.akses.data[x].Fitur)) {
+                return true
+            } 
+        }
+        return false
+            
+      },
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
@@ -421,7 +452,7 @@ import { parseISO } from 'date-fns'
       },
       reset(){
         this.getallItem()
-        this.$refs.form.resetValidation()
+        // this.$refs.form.resetValidation()
         this.Project = Object.assign({},this.ProjectDefault)
       },
       close () {

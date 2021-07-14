@@ -97,6 +97,10 @@ class AHSLokalDetailsController extends RestController
         $rab->save();
 
         $detail->adjustment  = $request->adjustment;
+        if($request->has('coefficient'))
+        {
+            $detail->coefficient = $request->coefficient;
+        }
         $detail->sub_total = $detail->coefficient * $material->price * $request->adjustment;
         $detail->save();
         

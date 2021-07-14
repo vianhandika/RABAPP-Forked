@@ -2,7 +2,7 @@
   <v-app class="blue lighten-4">
     <v-container>
       <v-layout row="ma-4"></v-layout>
-      <v-app style="background-color: grey lighten-2" class="elevation-8">
+      <v-app v-if="Access('R-Dashboard-R')==true" style="background-color: grey lighten-2" class="elevation-8">
         <v-container>
           <v-layout row wrap>
             <v-flex sm3>
@@ -43,7 +43,11 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
+<<<<<<< Updated upstream
                     <div class="overline text-right">Bahan/Tenaga Kerja</div>
+=======
+                    <div class="overline text-right">Bahan/Tenaga</div>
+>>>>>>> Stashed changes
                     <v-list-item-title class="headline mb-1 text-right">{{countM}}</v-list-item-title>
                     <div><v-divider></v-divider></div>
                   </v-list-item-content> 
@@ -665,8 +669,23 @@ import materials from './../service/Material'
           error: state => state.Token.error,
           token: state => state.Token.token,
         }),
+      ...mapGetters({
+          nama: 'LoggedUser/Name',
+          jabatan: 'LoggedUser/Jabatan',
+          divisi: 'LoggedUser/Divisi',
+          akses:'LoggedUser/Akses',
+      }),
     },
     methods: {
+      Access(codeAccess){
+        var x;
+        for(x in this.akses.data){
+            if (codeAccess.includes(this.akses.data[x].Fitur)) {
+                return true
+            } 
+        }
+        return false  
+      },
       ...mapActions({
         destroyToken: 'Token/deleteToken',
       }),

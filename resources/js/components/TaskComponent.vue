@@ -30,7 +30,11 @@
             <div class="flex-grow-1"></div>
             <v-dialog v-model="dialog" max-width="500px">
               <template v-slot:activator="{ on }">
+<<<<<<< Updated upstream
                 <v-btn color="green darken-1" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">Tambah</v-btn>
+=======
+                <v-btn color="green darken-1" :disabled="Access('R-Pekerjaan-C')!=true" elevation="8" rounded dark class="mb-2" @click="reset();getKode()" v-on="on">Tambah</v-btn>
+>>>>>>> Stashed changes
               </template>
               <v-card>
                 <v-card-title>
@@ -61,6 +65,15 @@
                       </v-text-field>
                     </v-flex>
                   </v-layout>
+                    <v-select row
+                      v-model="Job.group"
+                      :items="groupTask"
+                      item-text="name"
+                      item-value="name"
+                      label="Grup Pekerjaan"
+                      :rules="grupRules"
+                      append-icon="expand_more"
+                    ></v-select>
 
                     <v-select row
                       v-model="Job.id_satuan"
@@ -95,9 +108,15 @@
 
                 <v-card-actions>
                   <div class="flex-grow-1"></div>
+<<<<<<< Updated upstream
                   <v-btn class="ma-2" rounded color="green" dark @click="close">Batal</v-btn>
                   <v-btn v-if="!edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="addItem()">Simpan</v-btn>
                   <v-btn v-if="edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="updateItem(Job.id_job)">Simpan</v-btn>
+=======
+                  <v-btn class="ma-2" rounded color="green" dark @click="$refs.form.resetValidation();close()">Batal</v-btn>
+                  <v-btn v-if="!edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="$refs.form.resetValidation();addItem()">Simpan</v-btn>
+                  <v-btn v-if="edit" class="ma-2" rounded color="orange" :disabled="!valid" dark @click="$refs.form.resetValidation();updateItem(Job.id_job)">Simpan</v-btn>
+>>>>>>> Stashed changes
                 </v-card-actions>
               </v-card>
 
@@ -107,6 +126,7 @@
 
         <template v-slot:item.action="{ item }">
           <v-icon
+          :disabled="Access('R-Pekerjaan-U')!=true"
             small
             class="mr-2"
             color="green"
@@ -114,6 +134,7 @@
           >
             edit
           </v-icon>
+<<<<<<< Updated upstream
 
           <v-dialog v-model="dialog2" max-width="290px">
             <template v-slot:activator="{ on }">
@@ -136,8 +157,30 @@
                   </v-card-actions>
                 </v-card>
           </v-dialog>
+=======
+          <v-icon
+          :disabled="Access('R-Pekerjaan-D')!=true"
+            small
+            color="red"
+            @click="dialog2=true;itemHandler(item);"
+          >
+            delete
+          </v-icon>
+>>>>>>> Stashed changes
         </template>
+        
       </v-data-table>
+      <v-dialog v-model="dialog2" max-width="290px">
+          <v-card>
+            <v-card-title class="headline">Konfirmasi</v-card-title>
+              <v-card-text>Anda yakin ingin menghapus pekerjaan ini?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="green darken-1" text @click="dialog2 = false; deleteItem(Job.id_job)">Ya</v-btn>
+              <v-btn color="red darken-1" text @click="dialog2 = false">Tidak</v-btn>
+            </v-card-actions>
+          </v-card>
+      </v-dialog>
     </v-container>
     <v-snackbar v-model="snack" :timeout="3000" :color="snackColor" :top="y === 'top'">
       <v-icon dark>done</v-icon>
@@ -148,7 +191,8 @@
 
 <script>
 import Controller from './../service/Job'
-
+import GroupTask from './../service/TaskSub'
+import { mapGetters, mapState, mapActions } from 'vuex'
   export default {
     data: () => ({
       snack: false,
@@ -166,13 +210,15 @@ import Controller from './../service/Job'
       ],
       job: [],
       satuan: [],
+      groupTask:[],
       Job: {
         kode:'',
         name:'',
         id_satuan: '',
         details: '',
         id_job: '',
-        status: ''
+        status: '',
+        group:'',
       },
       JobDefault: {
         kode:'',
@@ -180,19 +226,26 @@ import Controller from './../service/Job'
         id_satuan: '',
         details: '',
         id_job: '',
-        status: ''
+        status: '',
+        group:'',
       },
       headers: [
         {
           text : 'ID',
-          sortable: false,
+          sortable: true,
           value : 'kode'
         },
         {
           text: 'Nama',
           align: 'left',
-          sortable: false,
+          sortable: true,
           value: 'name',
+        },
+        {
+          text: 'Grup',
+          align: 'left',
+          sortable: true,
+          value: 'group',
         },
         { 
           sortable: false,
@@ -227,17 +280,40 @@ import Controller from './../service/Job'
       ],
       specRules: [
         v => !!v || 'Spesifikasi harus diisi'
+<<<<<<< Updated upstream
+=======
+      ],
+      grupRules: [
+        v => !!v || 'Grup Pekerjaan harus diisi'
+>>>>>>> Stashed changes
       ],
     }),
     mounted(){
       this.getallItem()
       this.getSatuan()
       this.getKode()
+      this.getGroupTask()
     },
     computed: {
-      
+      ...mapGetters({
+            nama: 'LoggedUser/Name',
+            jabatan: 'LoggedUser/Jabatan',
+            divisi: 'LoggedUser/Divisi',
+            akses:'LoggedUser/Akses',
+        }),
     },
     methods: {
+      Access(codeAccess){
+
+        var x;
+        for(x in this.akses.data){
+            if (codeAccess.includes(this.akses.data[x].Fitur)) {
+                return true
+            } 
+        }
+        return false
+            
+      },
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
@@ -252,6 +328,17 @@ import Controller from './../service/Job'
         this.snack = true
         this.snackColor = 'red darken-1'
         this.snackText = 'Data Berhasil Dihapus'
+<<<<<<< Updated upstream
+=======
+      },
+      async getGroupTask()
+      {
+        try{
+          this.groupTask = (await GroupTask.get()).data
+        }catch(err){
+          console.log(err)
+        }
+>>>>>>> Stashed changes
       },
       async getSatuan()
       {
@@ -286,6 +373,7 @@ import Controller from './../service/Job'
             satuan      : this.Job.id_satuan,
             status      : this.Job.status,
             details     : this.Job.details,
+            group       : this.Job.group,
           }
           await Controller.addItem(payload).then(()=>{
             this.close()
@@ -304,6 +392,7 @@ import Controller from './../service/Job'
             satuan      : this.Job.id_satuan,
             status      : this.Job.status,
             details     : this.Job.details,
+            group       : this.Job.group,
           } 
           await Controller.updateItem(payload,id).then(()=>{
             this.close()
@@ -315,6 +404,10 @@ import Controller from './../service/Job'
       },
       async deleteItem(id){
         try{
+<<<<<<< Updated upstream
+=======
+          console.log(id)
+>>>>>>> Stashed changes
           await Controller.deleteItem(id).then(()=>{
             this.getallItem()
             this.delete()
@@ -329,7 +422,7 @@ import Controller from './../service/Job'
       },
       reset(){
         this.getallItem()
-        this.$refs.form.resetValidation()
+        // this.$refs.form.resetValidation()
         this.Job = Object.assign({},this.JobDefault)
       },
       close () {

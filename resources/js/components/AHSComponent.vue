@@ -34,13 +34,13 @@
           </v-row>
         </v-col>
         <div class="flex-grow-1"></div>
-        <v-dialog v-model="dialog" width="850px">
+        <v-dialog v-model="dialog" persistent width="850px">
           <template v-slot:activator="{ on }">
             <v-btn color="green darken-1" dark elevation="8" rounded class="mb-2" @click="dialogAdd=true;dialogEdit=false;reset()" v-on="on">Tambah</v-btn>
           </template>
           <v-toolbar dark color="light-blue accent-4">
-            <v-btn icon dark @click="dialog = false; dialogAdd=false;dialogEdit=false">
-              <v-icon @click="getPagination">close</v-icon>
+            <v-btn icon dark :disabled="Access('R-AHSMaster-C')!=true" @click="dialog = false; dialogAdd=false;dialogEdit=false">
+              <v-icon @click="$refs.form.resetValidation();getPagination()">close</v-icon>
             </v-btn>
             <v-toolbar-title v-if="dialogAdd">Tambah AHS Master</v-toolbar-title>
             <v-toolbar-title v-if="!dialogAdd">Ubah AHS Master</v-toolbar-title>
@@ -49,7 +49,11 @@
               <v-btn dark text @click="addItem" :loading="loading">Simpan</v-btn>
             </v-toolbar-items>
             <v-toolbar-items v-if="!dialogAdd">
+<<<<<<< Updated upstream
               <v-btn dark text @click="updateItem(AHS.id_ahs)" :loading="loading">Simpan</v-btn>
+=======
+              <v-btn dark text @click="$refs.form.resetValidation();updateItem(AHS.id_ahs)" :loading="loading">Simpan</v-btn>
+>>>>>>> Stashed changes
             </v-toolbar-items>
           </v-toolbar>
 
@@ -83,7 +87,7 @@
                   </v-flex>
 
                   <v-flex sm6 md6 xs6 style="margin-left:10px">
-                    <v-select
+                    <v-autocomplete
                       v-model="AHS.id_job"
                       label="Pekerjaan"
                       :items="temp"
@@ -91,7 +95,7 @@
                       item-value="id_job"
                       :return-object="false"
                       :rules="taskRules"
-                    ></v-select>
+                    ></v-autocomplete>
                     </v-flex>
                 </v-layout>
 
@@ -365,9 +369,9 @@
                 <v-flex>
                   <div class="caption grey--text">Aksi</div>
                   <v-layout>
-                    <v-icon color="green" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true;detailTable=false">edit</v-icon>
-                    <v-icon color="red" @click="itemHandler(data);dialogDelete=true;detailTable=false">delete</v-icon>
-                    <v-icon color="blue" @click="itemHandler(data);dialogCopy=true;detailTable=false">file_copy</v-icon>
+                    <v-icon color="green" :disabled="Access('R-AHSMaster-U')!=true" @click="itemHandler(data);dialogEdit=true;dialog=true;dialogAdd=false;detailAHS=true;detailTable=false">edit</v-icon>
+                    <v-icon color="red" :disabled="Access('R-AHSMaster-D')!=true" @click="itemHandler(data);dialogDelete=true;detailTable=false">delete</v-icon>
+                    <v-icon color="blue" :disabled="Access('R-AHSMaster-C')!=true" @click="itemHandler(data);dialogCopy=true;detailTable=false">file_copy</v-icon>
                     <v-icon color="light-blue accent-3" @click="detailTable=true">expand_more</v-icon>
                   </v-layout>
                 </v-flex>
@@ -420,7 +424,7 @@
               </v-layout>
             </template>
 
-            <template v-slot:item.coefficient="props">
+            <template v-if="Access('R-AHSMaster-U')==true" v-slot:item.coefficient="props">
               <v-edit-dialog
                 :return-value.sync="props.item.coefficient"
                 @save="updateDetail(props)"
@@ -445,6 +449,7 @@
               <v-dialog v-model="dialogDetail" max-width="290px">
                 <template v-slot:activator="{ on }">
                   <v-icon
+                    :disabled="Access('R-AHSMaster-D')!=true"
                     small
                     icon
                     color="red"
@@ -521,6 +526,7 @@ import materialController from './../service/Material'
 import ahsController from './../service/AHS'
 import detailController from './../service/AHSDetails'
 import task from './../service/TaskSub'
+import { mapGetters, mapState, mapActions } from 'vuex'
   export default {
     data: () => ({
       current_page: 1,
@@ -652,9 +658,23 @@ import task from './../service/TaskSub'
       this.getKode()
     },
     computed: {
-      
+      ...mapGetters({
+            nama: 'LoggedUser/Name',
+            jabatan: 'LoggedUser/Jabatan',
+            divisi: 'LoggedUser/Divisi',
+            akses:'LoggedUser/Akses',
+        }),
     },
     methods: {
+      Access(codeAccess){
+        var x;
+        for(x in this.akses.data){
+            if (codeAccess.includes(this.akses.data[x].Fitur)) {
+                return true
+            } 
+        }
+        return false  
+      },
       save(){
         this.snack = true
         this.snackColor = 'green darken-1'
@@ -714,16 +734,18 @@ import task from './../service/TaskSub'
       },
       async filterTask(id)
       {
-        this.ahsAll = (await ahsController.getall()).data
+        // this.ahsAll = (await ahsController.getall()).data
         this.job = (await Controller.getallItem()).data
-        let filterAHS = this.ahsAll.filter(obj=>obj.id_sub == id)
+        let group = this.task.find(obj=>obj.id_sub == this.AHS.id_sub)
+        this.job = this.job.filter(obj=>obj.group==group.name)
+        // let filterAHS = this.ahsAll.filter(obj=>obj.id_sub == id)
 
-        let job = this.job
-        for(let ahs of filterAHS)
-        {
-          job = this.job.filter(obj=>obj.id_job != ahs.id_job)
-          this.job = job
-        }
+        // let job = this.job
+        // for(let ahs of filterAHS)
+        // {
+        //   job = this.job.filter(obj=>obj.id_job != ahs.id_job)
+        //   this.job = job
+        // }
         this.temp = this.job
         console.log('Result',this.temp)
       },
@@ -1063,7 +1085,7 @@ import task from './../service/TaskSub'
         this.filterMaterials()
         this.ahs_details.coefficient = ''
         this.AHS = Object.assign({},this.AHSDefault)
-        this.$refs.form.resetValidation()
+        // this.$refs.form.resetValidation()
         this.details=[]
         this.detailsAHS=[]
         this.tambah = false

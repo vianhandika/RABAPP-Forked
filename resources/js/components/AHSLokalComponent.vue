@@ -36,7 +36,11 @@
           <div class="flex-grow-1"></div>
           <v-dialog v-model="dialog" width="850px">  
             <template v-slot:activator="{ on }">
+<<<<<<< Updated upstream
               <v-btn color="green darken-1" elevation="8" rounded dark v-on="on" @click="itemadjhandler();">Ubah</v-btn>
+=======
+              <v-btn color="green darken-1" :disabled="Access('R-AHSLokal-U')!=true" elevation="8" rounded dark v-on="on" @click="itemadjhandler();">Ubah</v-btn>
+>>>>>>> Stashed changes
             </template>
             <template>
               <v-toolbar dark color="light-blue accent-4">
@@ -89,7 +93,11 @@
                   >
                     <template v-slot:top>
                       <v-toolbar dark color="light-blue accent-2">
+<<<<<<< Updated upstream
                         <v-toolbar-title>Detail Bahan/Tenaga Kerja</v-toolbar-title>
+=======
+                        <v-toolbar-title>Detail Bahan/Tenaga Kerja 2</v-toolbar-title>
+>>>>>>> Stashed changes
                         <v-divider
                           class="mx-4"
                           inset
@@ -170,7 +178,7 @@
                 </v-flex>
                 <v-flex xs4 style="padding-left:15px">
                   <div class="caption grey--text">{{data.task}}</div>
-                  <div>{{ data.name }}</div>
+                  <div>{{ data.name+" "+data.keterangan}}</div>
                 </v-flex>
                 <v-flex xs2 style="padding-left:10px">
                   <div class="caption grey--text">Status</div>
@@ -203,7 +211,7 @@
                   <v-layout>
                   <v-dialog v-model="dialogedit" width="850px">
                     <template v-slot:activator="{ on }">
-                      <v-icon color="green" @click="itemEdit(data);dialogedit=true;detailTable=false" v-on="on">edit</v-icon>
+                      <v-icon color="green" :disabled="Access('R-AHSLokal-U')!=true" @click="itemEdit(data);dialogedit=true;detailTable=false" v-on="on">edit</v-icon>
                     </template>
 
                     <v-toolbar dark color="light-blue accent-4">
@@ -253,10 +261,21 @@
                                   readonly
                                 ></v-text-field>
                               </v-flex>
-                              <v-flex sm6 md6 xs6 style="margin-left:10px">
+                              <v-flex sm4 md4 xs4 style="margin-left:10px">
                                 <v-text-field
                                   v-model="AHS.name"
                                   label="Pekerjaan"
+<<<<<<< Updated upstream
+=======
+                                  :return-object="false"
+                                  readonly
+                                ></v-text-field>
+                              </v-flex>
+                              <v-flex sm2 md2 xs2 style="margin-left:10px">
+                                <v-text-field
+                                  v-model="AHS.keterangan"
+                                  label="Keterangan"
+>>>>>>> Stashed changes
                                   :return-object="false"
                                   readonly
                                 ></v-text-field>
@@ -311,7 +330,11 @@
                           >
                             <template v-slot:top>
                               <v-toolbar dark color="light-blue accent-2">
+<<<<<<< Updated upstream
                                 <v-toolbar-title>Detail Bahan/Tenaga Kerja</v-toolbar-title>
+=======
+                                <v-toolbar-title>Detail Bahan/Tenaga Kerja 3</v-toolbar-title>
+>>>>>>> Stashed changes
                                 <v-divider
                                   class="mx-4"
                                   inset
@@ -347,6 +370,7 @@
                               <v-dialog v-model="dialog8" max-width="290px">
                                 <template v-slot:activator="{ on }">
                                   <v-icon
+
                                     icon
                                     color="red"
                                     v-on="on"
@@ -367,10 +391,31 @@
                               </v-dialog>
                             </template>
 
+                            <template v-slot:item.coefficient="{item}">
+                              <v-edit-dialog
+                                :return-value.sync="item.coefficient"
+                                @save="updateLokal(item)"
+                                @cancel="cancel"
+                                lazy
+                                persistent
+                                dark
+                                large
+                              > {{ item.coefficient }}
+                                <template v-slot:input>
+                                  <v-text-field
+                                    v-model="item.coefficient"
+                                    label="Edit"
+                                    single-line
+                                    counter
+                                  ></v-text-field>
+                                </template>
+                              </v-edit-dialog>
+                            </template>
+
                             <template v-slot:item.adjustment="{item}">
                               <v-edit-dialog
                                 :return-value.sync="item.adjustment"
-                                @save="updateAdjustmentLokal(item)"
+                                @save="updateLokal(item)"
                                 @cancel="cancel"
                                 lazy
                                 persistent
@@ -392,7 +437,7 @@
                       </v-card>
                     </template>
                   </v-dialog>
-                  <v-icon color="red" @click="itemHandler(data);dialog6=true;detailTable=false">delete</v-icon>
+                  <v-icon color="red" :disabled="Access('R-AHSLokal-D')!=true" @click="itemHandler(data);dialog6=true;detailTable=false">delete</v-icon>
                   <v-icon color="blue" @click="itemHandler(data);detailTable=true">expand_more</v-icon>
                   </v-layout>
                 </v-flex>
@@ -460,7 +505,28 @@
               </v-layout>
             </template>
 
-            <template v-slot:item.adjustment="props">
+            <template v-if="Access('R-AHSLokal-U')==true" v-slot:item.coefficient="props">
+              <v-edit-dialog
+                :return-value.sync="props.item.coefficient"
+                @save="updateCoefficient(props)"
+                @cancel="cancel"
+                lazy
+                persistent
+                dark
+                large
+              > {{ props.item.coefficient }}
+                <template v-slot:input>
+                  <v-text-field
+                    v-model="props.item.coefficient"
+                    label="Edit"
+                    single-line
+                    counter
+                  ></v-text-field>
+                </template>
+              </v-edit-dialog>
+            </template>
+
+            <template v-if="Access('R-AHSLokal-U')==true" v-slot:item.adjustment="props">
               <v-edit-dialog
                 :return-value.sync="props.item.adjustment"
                 @save="updateAdjustment(props)"
@@ -485,6 +551,7 @@
               <v-dialog v-model="dialog8" max-width="290px">
                 <template v-slot:activator="{ on }">
                   <v-icon
+                  :disabled="Access('R-AHSLokal-D')!=true"
                     small
                     color="red"
                     v-on="on"
@@ -538,6 +605,7 @@ import task from './../service/TaskSub'
 import detailsRab from './../service/Details'
 import rabController from './../service/RAB'
 import materialController from './../service/Material'
+import { mapGetters, mapState, mapActions } from 'vuex'
 
   export default {
     data: () => ({
@@ -639,8 +707,23 @@ import materialController from './../service/Material'
       this.getMaterial()
     },
     computed: {
+      ...mapGetters({
+            nama: 'LoggedUser/Name',
+            jabatan: 'LoggedUser/Jabatan',
+            divisi: 'LoggedUser/Divisi',
+            akses:'LoggedUser/Akses',
+        }),
     },
     methods: {
+      Access(codeAccess){
+        var x;
+        for(x in this.akses.data){
+            if (codeAccess.includes(this.akses.data[x].Fitur)) {
+                return true
+            } 
+        }
+        return false  
+      },
       itemadjhandler()
       {
         console.log('cek')
@@ -921,7 +1004,23 @@ import materialController from './../service/Material'
           console.log(err);
         }
       }, 
-      updateAdjustmentLokal(item)
+      async updateCoefficient(props){
+        try{
+            const payload = {
+              adjustment   : props.item.adjustment,
+              coefficient : props.item.coefficient,
+              
+            } 
+            await detailController.updateDetail(payload,props.item.id_ahs_lokal_details)
+            this.getItem(props.item.id_ahs_lokal_details).then(response=>{
+              this.getPagination()
+              this.update()
+            })
+        }catch(err){
+          console.log(err);
+        }
+      }, 
+      updateLokal(item)
       {
         console.log('Detail Material',this.detailMaterial)
         console.log('Material Before Edit',this.Material)

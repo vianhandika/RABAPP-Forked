@@ -112,14 +112,12 @@ class StoreController extends RestController
         }
         else if(($parts[1]+1)<10) {
             $kode = 'St'.'-'.'000'.($parts[1]+1);
-        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<=99){
             $kode = 'St'.'-'.'00'.($parts[1]+1);
-        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
+        }else if(($parts[1]+1)>=100 && ($parts[1]+1)<=999){
             $kode = 'St'.'-'.'0'.($parts[1]+1);
-        }else if(($parts[1]+1)==1000){
+        }else {
             $kode = 'St'.'-'.($parts[1]+1);
-        }else{
-            $kode = 'St'.'-'.'001';
         }
         return $kode;
     }

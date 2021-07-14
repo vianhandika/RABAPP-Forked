@@ -75,7 +75,7 @@
                   </v-select>
                 </v-col>
                 <v-col cols="12" sm="3" md="3">
-                  <v-select
+                  <v-autocomplete
                     v-model="id_ahs"
                     :items="detailDetails"
                     item-text="name"
@@ -83,7 +83,7 @@
                     label="AHS"
                     append-icon="expand_more"
                   >
-                  </v-select>
+                  </v-autocomplete>
                 </v-col>
               </v-row>
               <v-row>

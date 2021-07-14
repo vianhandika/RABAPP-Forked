@@ -27,6 +27,7 @@ class JobController extends RestController
             'id_satuan' => $request->satuan, 
             'status' => $request->status, 
             'details' => $request->details, 
+            'group' => $request->group,
         ]);
 
         return response()->json([
@@ -52,6 +53,8 @@ class JobController extends RestController
         $job->id_satuan = $request->satuan;
         $job->status = $request->status;
         $job->details = $request->details;
+        $job->group = $request->group;
+
         $job->save();
 
         return response()->json([
@@ -88,18 +91,16 @@ class JobController extends RestController
         if($job != null)
             $parts = explode('-',$job->kode);
         if($job==null){
-            $kode = 'Tk'.'-'.'0001';
+            $kode = 'Pek'.'-'.'0001';
         }
         else if(($parts[1]+1)<10) {
-            $kode = 'Tk'.'-'.'000'.($parts[1]+1);
-        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<99){
-            $kode = 'Tk'.'-'.'00'.($parts[1]+1);
-        }else if(($parts[1]+1)>=99 && ($parts[1]+1)<999){
-            $kode = 'Tk'.'-'.'0'.($parts[1]+1);
-        }else if(($parts[1]+1)==1000){
-            $kode = 'Tk'.'-'.($parts[1]+1);
+            $kode = 'Pek'.'-'.'000'.($parts[1]+1);
+        }else if(($parts[1]+1)>=10 && ($parts[1]+1)<=99){
+            $kode = 'Pek'.'-'.'00'.($parts[1]+1);
+        }else if(($parts[1]+1)>=100 && ($parts[1]+1)<=999){
+            $kode = 'Pek'.'-'.'0'.($parts[1]+1);
         }else{
-            $kode = 'Tk'.'-'.'001';
+            $kode = 'Pek'.'-'.($parts[1]+1);
         }
         return $kode;
     }

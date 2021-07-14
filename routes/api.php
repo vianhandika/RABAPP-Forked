@@ -33,6 +33,7 @@ Route::post('/materials/store','MaterialsController@store');
 Route::patch('/materials/update/{id}', 'MaterialsController@update');
 Route::delete('/materials/delete/{id}','MaterialsController@destroy');
 Route::get('/materials/code/','MaterialsController@code');
+Route::post('/materials/code2','MaterialsController@code2');
 //AHS 
 Route::get('/ahs','AHSController@getPagination');
 Route::get('/ahs/index','AHSController@index');
